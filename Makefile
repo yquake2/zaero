@@ -91,7 +91,7 @@ ZAERO_OBJS = \
 	build/g_misc.o \
 	build/g_monster.o \
 	build/g_phys.o \
-	build/g_save.o \
+	build/savegame.o \
 	build/g_spawn.o \
 	build/g_svcmds.o \
 	build/g_target.o \
@@ -174,7 +174,7 @@ build/g_monster.o: 				src/g_monster.c
 build/g_phys.o:					src/g_phys.c
 	$(CC) $(CFLAGS) -o $@ -c $<
 
-build/g_save.o:					src/g_save.c
+build/savegame.o:					src/savegame/savegame.c
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 build/g_spawn.o:	   			src/g_spawn.c

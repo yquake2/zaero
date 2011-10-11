@@ -24,7 +24,7 @@
 #define Z_FREE(block)	gi.TagFree(block)
 
 // the "gamename" client command will print this plus compile date
-#define	GAMEVERSION	"Zaero 1.1"
+#define	GAMEVERSION	"zaero"
 
 // protocol bytes that can be directly added to messages
 #define	svc_muzzleflash		1
