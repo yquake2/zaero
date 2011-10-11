@@ -954,7 +954,7 @@ void Plasmaball_Explode (edict_t *ent)
 	ent->nextthink = level.time + FRAMETIME;
 }
 
-static void Plasmaball_Touch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *surf)
+void Plasmaball_Touch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *surf)
 {
 	if (other == ent->owner)
 		return;
