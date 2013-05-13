@@ -2,7 +2,7 @@
 # Makefile for the zaero game module for Quake II       #
 #                                                       #
 # Just type "make" to compile the                       #
-#  - Zaero Game (game.so)                               #
+#  - Zaero Game (game.so / game.dll)                    #
 #                                                       #
 # Dependencies:                                         #
 # - None, but you need a Quake II to play.              #
@@ -14,31 +14,34 @@
 # - FreeBSD                                             #
 # ----------------------------------------------------- #
 
-# Check the OS type
+# Detect the OS
+ifdef SystemRoot
+OSTYPE := Windows
+else
 OSTYPE := $(shell uname -s)
+endif
 
-# Some plattforms call it "amd64" and some "x86_64"
+# Detect the architecture
+ifeq ($(OSTYPE), Windows)
+# At this time only i386 is supported on Windows
+ARCH := i386
+else
+# Some platforms call it "amd64" and some "x86_64"
 ARCH := $(shell uname -m | sed -e s/i.86/i386/ -e s/amd64/x86_64/)
+endif
 
-# Refuse all other plattforms as a firewall against PEBKAC
+# Refuse all other platforms as a firewall against PEBKAC
 # (You'll need some #ifdef for your unsupported  plattform!)
-ifneq ($(ARCH),i386)
-ifneq ($(ARCH),x86_64)
+ifeq ($(findstring $(ARCH), i386 x86_64 sparc64 ia64),)
 $(error arch $(ARCH) is currently not supported)
 endif
-endif
 
 # ----------
 
-# The compiler
-CC := gcc
-
-# ----------
-
-# Base CFLAGS. 
+# Base CFLAGS.
 #
 # -O2 are enough optimizations.
-# 
+#
 # -fno-strict-aliasing since the source doesn't comply
 #  with strict aliasing rules and it's next to impossible
 #  to get it there...
@@ -53,13 +56,22 @@ CC := gcc
 # -fPIC for position independend code.
 #
 # -MMD to generate header dependencies.
+ifeq ($(OSTYPE), Darwin)
 CFLAGS := -O2 -fno-strict-aliasing -fomit-frame-pointer \
-		  -fPIC -Wall -pipe -g -MMD
+		  -Wall -pipe -g -arch i386 -arch x86_64
+else
+CFLAGS := -O2 -fno-strict-aliasing -fomit-frame-pointer \
+		  -Wall -pipe -g -MMD
+endif
 
 # ----------
 
 # Base LDFLAGS.
+ifeq ($(OSTYPE), Darwin)
+LDFLAGS := -shared -arch i386 -arch x86_64
+else
 LDFLAGS := -shared
+endif
 
 # ----------
 
@@ -68,23 +80,59 @@ all: zaero
 
 # ----------
 
+# When make is invoked by "make VERBOSE=1" print
+# the compiler and linker commands.
+
+ifdef VERBOSE
+Q :=
+else
+Q := @
+endif
+
+# ----------
+
+# Phony targets
+.PHONY : all clean zaero
+
+# ----------
+
 # Cleanup
+ifeq ($(OSTYPE), Windows)
 clean:
 	@echo "===> CLEAN"
-	@rm -Rf build release
+	@-rmdir /S /Q release build
+else
+clean:
+	@echo "===> CLEAN"
+	${Q}rm -Rf build release
+endif
 
 # ----------
 
 # The zaero game
+ifeq ($(OSTYPE), Windows)
 zaero:
-	@echo '===> Building game.so'
-	@mkdir -p release/
+	@echo "===> Building game.dll"
+	${Q}tools/mkdir.exe -p release
+	${MAKE} release/game.dll
+
+build/%.o: %.c
+	@echo "===> CC $<"
+	${Q}tools/mkdir.exe -p $(@D)
+	${Q}$(CC) -c $(CFLAGS) -o $@ $<
+else
+zaero:
+	@echo "===> Building game.so"
+	${Q}mkdir -p release
 	$(MAKE) release/game.so
 
 build/%.o: %.c
-	@echo '===> CC $<'
-	@mkdir -p $(@D)
-	@$(CC) -c $(CFLAGS) -o $@ $<
+	@echo "===> CC $<"
+	${Q}mkdir -p $(@D)
+	${Q}$(CC) -c $(CFLAGS) -o $@ $<
+
+release/game.so : CFLAGS += -fPIC
+endif 
 
 # ----------
 
@@ -168,8 +216,14 @@ ZAERO_DEPS= $(ZAERO_OBJS:.o=.d)
 
 # ----------
 
+ifeq ($(OSTYPE), Windows)
+release/game.dll : $(ZAERO_OBJS)
+	@echo "===> LD $@"
+	${Q}$(CC) $(LDFLAGS) -o $@ $(ZAERO_OBJS)
+else
 release/game.so : $(ZAERO_OBJS)
-	@echo '===> LD $@'
-	@$(CC) $(LDFLAGS) -o $@ $(ZAERO_OBJS)
+	@echo "===> LD $@"
+	${Q}$(CC) $(LDFLAGS) -o $@ $(ZAERO_OBJS)
+endif
 
 # ----------
