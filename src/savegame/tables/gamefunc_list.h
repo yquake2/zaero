@@ -1260,7 +1260,6 @@
 {"SelectPrevItem", (byte *)SelectPrevItem},
 {"SelectNextItem", (byte *)SelectNextItem},
 {"OnSameTeam", (byte *)OnSameTeam},
-{"ClientTeam", (byte *)ClientTeam},
 {"ai_run", (byte *)ai_run},
 {"ai_checkattack", (byte *)ai_checkattack},
 {"ai_fly_strafe", (byte *)ai_fly_strafe},

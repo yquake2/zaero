@@ -1260,7 +1260,6 @@ extern void ValidateSelectedItem ( edict_t * ent ) ;
 extern void SelectPrevItem ( edict_t * ent , int itflags ) ;
 extern void SelectNextItem ( edict_t * ent , int itflags ) ;
 extern qboolean OnSameTeam ( edict_t * ent1 , edict_t * ent2 ) ;
-extern char * ClientTeam ( edict_t * ent ) ;
 extern void ai_run ( edict_t * self , float dist ) ;
 extern qboolean ai_checkattack ( edict_t * self , float dist ) ;
 extern void ai_fly_strafe ( edict_t * self , float dist ) ;
