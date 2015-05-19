@@ -615,6 +615,7 @@ extern	cvar_t	*bettyammo;
 // and saving / loading games
 //
 #define FFL_SPAWNTEMP		1
+#define FFL_NOSPAWN			2
 
 typedef enum {
 	F_INT, 

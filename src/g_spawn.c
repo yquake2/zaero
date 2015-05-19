@@ -306,6 +306,11 @@ void ED_CallSpawn (edict_t *ent)
 	gitem_t	*item;
 	int		i;
 
+	if (!ent)
+	{
+		return;
+	}
+
 	if (!ent->classname)
 	{
 		gi.dprintf ("ED_CallSpawn: NULL classname\n");
@@ -346,6 +351,11 @@ char *ED_NewString (const char *string)
 	char	*newb, *new_p;
 	int		i,l;
 	
+	if (!string)
+	{
+		return NULL;
+	}
+
 	l = strlen(string) + 1;
 
 	newb = gi.TagMalloc (l, TAG_LEVEL);
@@ -384,9 +394,14 @@ void ED_ParseField (const char *key, const char *value, edict_t *ent)
 	float	v;
 	vec3_t	vec;
 
+	if (!ent || !value || !key)
+	{
+		return;
+	}
+
 	for (f=fields ; f->name ; f++)
 	{
-		if (!Q_stricmp(f->name, key))
+		if (!(f->flags & FFL_NOSPAWN) && !Q_stricmp(f->name, key))
 		{	// found it
 			if (f->flags & FFL_SPAWNTEMP)
 				b = (byte *)&st;
@@ -440,6 +455,11 @@ char *ED_ParseEdict (char *data, edict_t *ent)
 	qboolean	init;
 	char		keyname[256];
 	const char	*com_token;
+
+	if (!ent || !data)
+	{
+		return NULL;
+	}
 
 	init = false;
 	memset (&st, 0, sizeof(st));
@@ -530,6 +550,8 @@ void G_FindTeams (void)
 		}
 	}
 
+	// FIXME: DG: G_FixTeams(); like rogue?
+
 	gi.dprintf ("%i teams with %i entities\n", c, c2);
 }
 
@@ -610,6 +632,32 @@ void SpawnEntities (const char *mapname, char *entities, const char *spawnpoint)
 					continue;
 				}
 			}
+#if 0 // FIXME: DG: coop stuff from rogue
+			else if (coop->value)
+			{
+				if (ent->spawnflags & SPAWNFLAG_NOT_COOP)
+				{
+					G_FreeEdict(ent);
+					inhibit++;
+					continue;
+				}
+
+				/* stuff marked !easy & !med & !hard are coop only, all levels */
+				if (!((ent->spawnflags & SPAWNFLAG_NOT_EASY) &&
+					  (ent->spawnflags & SPAWNFLAG_NOT_MEDIUM) &&
+					  (ent->spawnflags & SPAWNFLAG_NOT_HARD)))
+				{
+					if (((skill->value == 0) && (ent->spawnflags & SPAWNFLAG_NOT_EASY)) ||
+						((skill->value == 1) && (ent->spawnflags & SPAWNFLAG_NOT_MEDIUM)) ||
+						(((skill->value == 2) || (skill->value == 3)) && (ent->spawnflags & SPAWNFLAG_NOT_HARD)))
+					{
+						G_FreeEdict(ent);
+						inhibit++;
+						continue;
+					}
+				}
+			}
+#endif // 0
 			else
 			{
 				if (((!coop->value) && (ent->spawnflags2 & SPAWNFLAG2_NOT_SINGLE)) ||
