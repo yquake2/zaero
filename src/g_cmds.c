@@ -36,7 +36,7 @@ qboolean OnSameTeam (edict_t *ent1, edict_t *ent2)
 	ClientTeam (ent1, ent1Team);
 	ClientTeam (ent2, ent2Team);
 
-	if (ent1Team[1] != '\0' && strcmp(ent1Team, ent2Team) == 0)
+	if (ent1Team[0] != '\0' && strcmp(ent1Team, ent2Team) == 0)
 		return true;
 	
 	return false;

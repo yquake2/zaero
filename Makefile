@@ -62,8 +62,8 @@ ifeq ($(OSTYPE), Darwin)
 CFLAGS := -O2 -fno-strict-aliasing -fomit-frame-pointer \
 		  -Wall -pipe -g -fwrapv -arch i386 -arch x86_64
 else
-CFLAGS := -O2 -fno-strict-aliasing -fomit-frame-pointer \
-		  -Wall -pipe -g -MMD -fwrapv
+CFLAGS := -O0 -fno-strict-aliasing -fomit-frame-pointer \
+		  -Wall -pipe -ggdb -MMD -fwrapv
 endif
 
 # ----------

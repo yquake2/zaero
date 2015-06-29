@@ -178,7 +178,7 @@ void G_UseTargets (edict_t *ent, edict_t *activator)
 	//
 	// print the message
 	//
-	if ((ent->message) && !(activator->svflags & SVF_MONSTER))
+	if (activator != NULL && (ent->message) && !(activator->svflags & SVF_MONSTER))
 	{
 		gi.centerprintf (activator, "%s", ent->message);
 		if (ent->noise_index)
