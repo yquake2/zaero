@@ -171,6 +171,7 @@ void tripbomb_laser_think (edict_t *self)
 	// randomly phase out or EMPNuke is in effect
 	if (EMPNukeCheck(self, self->s.origin) || random() < 0.1)
 	{
+		self->svflags |= SVF_NOCLIENT;
 		return;
 	}
 
@@ -1045,9 +1046,10 @@ void fire_sniper_bullet (edict_t *self, vec3_t start, vec3_t aimdir, int damage,
 	vec3_t end;
 	vec3_t s;
 	edict_t *ignore = self;
+	int i = 0;
 	VectorMA (start, 8192, aimdir, end);
 	VectorCopy(start, s);
-	while(1)
+	for(i=0;i<256;++i) // DG: prevent infinite loop (adapted from q2dos)
 	{
 		tr = gi.trace (s, NULL, NULL, end, ignore, MASK_SHOT_NO_WINDOW);
 		if (tr.fraction >= 1.0)

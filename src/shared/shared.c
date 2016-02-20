@@ -310,10 +310,10 @@ vec3_t corners[2];
 int
 BoxOnPlaneSide2(vec3_t emins, vec3_t emaxs, struct cplane_s *p)
 {
-	int i;
+	//int i; // DG: I think it's supposed to write to the global!
 	float dist1, dist2;
 	int sides;
-	vec3_t corners[2];
+	//vec3_t corners[2]; // DG: ditto
 
 	for (i = 0; i < 3; i++)
 	{
@@ -680,6 +680,12 @@ COM_FileBase(char *in, char *out)
 {
 	char *s, *s2;
 
+	if(!in[0])
+	{
+		out[0] = '\0';
+		return;
+	}
+
 	s = in + strlen(in) - 1;
 
 	while (s != in && *s != '.')
@@ -711,6 +717,12 @@ COM_FilePath(const char *in, char *out)
 {
 	const char *s;
 
+	if(!in[0])
+	{
+		out[0] = '\0';
+		return;
+	}
+
 	s = in + strlen(in) - 1;
 
 	while (s != in && *s != '/')
@@ -726,6 +738,11 @@ void
 COM_DefaultExtension(char *path, const char *extension)
 {
 	char *src;
+
+	if(!path[0])
+	{
+		return;
+	}
 
 	/* */
 	/* if path doesn't have a .EXT, append extension */
