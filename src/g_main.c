@@ -280,6 +280,8 @@ void ExitLevel (void)
 	level.fadeFrames = 0;
 	level.exitintermission = 0;
 	level.intermissiontime = 0;
+	gibsthisframe = 0;
+	lastgibframe = 0;
 }
 
 /*
