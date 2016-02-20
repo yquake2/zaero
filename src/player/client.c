@@ -50,39 +50,7 @@ void SP_FixCoopSpots (edict_t *self)
 
 void SP_CreateCoopSpots (edict_t *self)
 {
-	edict_t	*spot;
-
-	if(Q_stricmp(level.mapname, "security") == 0)
-	{
-		spot = G_Spawn();
-		spot->classname = "info_player_coop";
-		spot->spawnflags2 = 0;
-		spot->s.origin[0] = 188 - 64;
-		spot->s.origin[1] = -164;
-		spot->s.origin[2] = 80;
-		spot->targetname = "jail3";
-		spot->s.angles[1] = 90;
-
-		spot = G_Spawn();
-		spot->classname = "info_player_coop";
-		spot->spawnflags2 = 0;
-		spot->s.origin[0] = 188 + 64;
-		spot->s.origin[1] = -164;
-		spot->s.origin[2] = 80;
-		spot->targetname = "jail3";
-		spot->s.angles[1] = 90;
-
-		spot = G_Spawn();
-		spot->classname = "info_player_coop";
-		spot->spawnflags2 = 0;
-		spot->s.origin[0] = 188 + 128;
-		spot->s.origin[1] = -164;
-		spot->s.origin[2] = 80;
-		spot->targetname = "jail3";
-		spot->s.angles[1] = 90;
-
-		return;
-	}
+	// nothing, currently
 }
 
 
@@ -897,6 +865,11 @@ edict_t *SelectCoopSpawnPoint (edict_t *ent)
 	edict_t	*spot = NULL;
 	char	*target;
 
+	if (!ent)
+	{
+		return NULL;
+	}
+
 	index = ent->client - game.clients;
 
 	// player 0 starts in normal player spawn point
@@ -938,6 +911,15 @@ Chooses a player start, deathmatch start, coop start, etc
 void	SelectSpawnPoint (edict_t *ent, vec3_t origin, vec3_t angles)
 {
 	edict_t	*spot = NULL;
+	edict_t *coopspot = NULL;
+	int index;
+	int counter = 0;
+	vec3_t d;
+
+	if (!ent)
+	{
+		return;
+	}
 
 	if (deathmatch->value)
 		spot = SelectDeathmatchSpawnPoint ();
@@ -967,6 +949,44 @@ void	SelectSpawnPoint (edict_t *ent, vec3_t origin, vec3_t angles)
 			}
 			if (!spot)
 				gi.error ("Couldn't find spawn point %s\n", game.spawnpoint);
+		}
+	}
+
+	/* If we are in coop and we didn't find a coop
+	   spawnpoint due to map bugs (not correctly
+	   connected or the map was loaded via console
+	   and thus no previously map is known to the
+	   client) use one in 550 units radius. */
+	if (coop->value)
+	{
+		index = ent->client - game.clients;
+
+		if (Q_stricmp(spot->classname, "info_player_start") == 0 && index != 0)
+		{
+			while(counter < 3)
+			{
+				coopspot = G_Find(coopspot, FOFS(classname), "info_player_coop");
+
+				if (!coopspot)
+				{
+					break;
+				}
+
+				VectorSubtract(coopspot->s.origin, spot->s.origin, d);
+
+				if ((VectorLength(d) < 550))
+				{
+					if (index == counter)
+					{
+						spot = coopspot;
+						break;
+					}
+					else
+					{
+						counter++;
+					}
+				}
+			}
 		}
 	}
 
