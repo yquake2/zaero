@@ -21,6 +21,11 @@ else
 OSTYPE := $(shell uname -s)
 endif
 
+# Special case for MinGW
+ifneq (,$(findstring MINGW,$(OSTYPE)))
+OSTYPE := Windows
+endif
+
 # Detect the architecture
 ifeq ($(OSTYPE), Windows)
 # At this time only i386 is supported on Windows
