@@ -393,6 +393,7 @@ void infantry_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int dam
 	// regular death
 	self->deadflag = DEAD_DEAD;
 	self->takedamage = DAMAGE_YES;
+	self->s.skinnum = 1; /* switch to bloody skin */
 
 	n = rand() % 3;
 	if (n == 0)
