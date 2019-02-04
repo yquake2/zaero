@@ -28,19 +28,16 @@ endif
 
 # Detect the architecture
 ifeq ($(OSTYPE), Windows)
-# At this time only i386 is supported on Windows
-ARCH := i386
-# seems like mingw doesn't set CC by default
-CC := gcc
+ifdef PROCESSOR_ARCHITEW6432
+# 64 bit Windows
+ARCH := $(PROCESSOR_ARCHITEW6432)
 else
-# Some platforms call it "amd64" and some "x86_64"
-ARCH := $(shell uname -m | sed -e s/i.86/i386/ -e s/amd64/x86_64/)
+# 32 bit Windows
+ARCH := $(PROCESSOR_ARCHITECTURE)
 endif
-
-# Refuse all other platforms as a firewall against PEBKAC
-# (You'll need some #ifdef for your unsupported  plattform!)
-ifeq ($(findstring $(ARCH), i386 x86_64 sparc64 ia64),)
-$(error arch $(ARCH) is currently not supported)
+else
+# Normalize some abiguous ARCH strings
+ARCH := $(shell uname -m | sed -e 's/i.86/i386/' -e 's/amd64/x86_64/' -e 's/^arm.*/arm/')
 endif
 
 # ----------
@@ -70,6 +67,11 @@ else
 CFLAGS := -O0 -fno-strict-aliasing -fomit-frame-pointer \
 		  -Wall -pipe -ggdb -MMD -fwrapv
 endif
+
+# ----------
+
+# Defines the operating system and architecture
+CFLAGS += -DOSTYPE=\"$(OSTYPE)\" -DARCH=\"$(ARCH)\"
 
 # ----------
 

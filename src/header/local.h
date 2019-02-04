@@ -641,6 +641,7 @@ typedef struct
 	int		ofs;
 	fieldtype_t	type;
 	int		flags;
+	short	save_ver;
 } field_t;
 
 
