@@ -709,8 +709,6 @@ ReadClient(FILE *f, gclient_t *client, short save_ver)
 
 	for (field = clientfields; field->name; field++)
 	{
-		ReadField(f, field, (byte *)client);
-
 		if (field->save_ver <= save_ver)
 		{
 			ReadField(f, field, (byte *)client);
