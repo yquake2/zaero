@@ -37,6 +37,11 @@ void Weapon_LineDraw_Fire (edict_t *ent);
 
 void Weapon_LineDraw_Think (edict_t *ent)
 {
+	if(!ent)
+	{
+		return;
+	}
+
   Weapon_LineDraw_Fire (ent->owner);
 	ent->owner->client->ps.gunframe--;
 }
@@ -48,6 +53,11 @@ void Weapon_LineDraw_Fire (edict_t *ent)
 	vec3_t	start;
 	vec3_t	forward, right;
 	vec3_t	offset;
+
+	if(!ent)
+	{
+		return;
+	}
 
 	AngleVectors (ent->client->v_angle, forward, right, NULL);
 
@@ -96,6 +106,11 @@ void Weapon_LineDraw (edict_t *ent)
 {
 	static int	pause_frames[]	= {19, 32, 0};
 	static int	fire_frames[]	= {5, 0};
+
+	if(!ent)
+	{
+		return;
+	}
 
 	Weapon_Generic (ent, 4, 8, 52, 55, pause_frames, fire_frames, Weapon_LineDraw_Fire);
 }
@@ -297,6 +312,11 @@ void InitTestWeapon(void)
 
 void Weapon_Test_Fire (edict_t *ent)
 {
+	if(!ent)
+	{
+		return;
+	}
+
 	gi.sound(ent, CHAN_VOICE, gi.soundindex("weapons/blastf1a.wav"), 1, ATTN_NORM, 0);
 	ent->client->ps.gunframe++;
 }
@@ -305,6 +325,11 @@ void Weapon_Test_Fire (edict_t *ent)
 
 void Weapon_Test (edict_t *ent)
 {
+	if(!ent)
+	{
+		return;
+	}
+
 	Weapon_Generic (ent, testWeap_FRAME_ACTIVATE_LAST, 
         testWeap_FRAME_FIRE_LAST, testWeap_FRAME_IDLE_LAST, 
         testWeap_FRAME_DEACTIVATE_LAST, 
@@ -314,6 +339,11 @@ void Weapon_Test (edict_t *ent)
 
 void testitem_think (edict_t *ent)
 {
+	if(!ent)
+	{
+		return;
+	}
+
   if(testItem_aminationFrames[animUpto])
   {
     ent->s.frame++;
@@ -337,6 +367,11 @@ void testitem_think (edict_t *ent)
 void Cmd_TestItem (edict_t *ent)
 {
   char *cmd;
+
+	if(!ent)
+	{
+		return;
+	}
 
   cmd = gi.argv(1);
 
@@ -498,6 +533,11 @@ void InitTestItem(void)
 
 qboolean Pickup_TestItem (edict_t *ent, edict_t *other)
 {
+	if(!ent)
+	{
+		return;
+	}
+
 	other->client->pers.inventory[ITEM_INDEX(ent->item)]++;
 
 	return true;
@@ -509,6 +549,11 @@ void Drop_TestItem (edict_t *ent, gitem_t *item)
 {
 	vec3_t	forward, right;
 	vec3_t	offset;
+
+	if(!ent)
+	{
+		return;
+	}
 
   testitemOriginMove = false;
 

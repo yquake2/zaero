@@ -850,6 +850,11 @@ Only used for the world.
 */
 void SP_worldspawn (edict_t *ent)
 {
+	if(!ent)
+	{
+		return;
+	}
+
 	ent->movetype = MOVETYPE_PUSH;
 	ent->solid = SOLID_BSP;
 	ent->inuse = true;			// since the world doesn't use G_Spawn()

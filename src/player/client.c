@@ -23,6 +23,11 @@ void SP_FixCoopSpots (edict_t *self)
 	edict_t	*spot;
 	vec3_t	d;
 
+	if(!self)
+	{
+		return;
+	}
+
 	spot = NULL;
 
 	while(1)
@@ -50,6 +55,11 @@ void SP_FixCoopSpots (edict_t *self)
 
 void SP_CreateCoopSpots (edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	// nothing, currently
 }
 
@@ -59,6 +69,11 @@ The normal starting point for a level.
 */
 void SP_info_player_start(edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	if (!coop->value)
 		return;
 	if(Q_stricmp(level.mapname, "security") == 0)
@@ -74,6 +89,11 @@ potential spawning position for deathmatch games
 */
 void SP_info_player_deathmatch(edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	if (!deathmatch->value)
 	{
 		G_FreeEdict (self);
@@ -88,6 +108,11 @@ potential spawning position for coop games
 
 void SP_info_player_coop(edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	if (!coop->value)
 	{
 		G_FreeEdict (self);
@@ -122,6 +147,11 @@ Use 'angles' instead of 'angle', so you can set pitch or roll as well as yaw.  '
 */
 void SP_info_player_intermission(void)
 {
+	if(!self)
+	{
+		return;
+	}
+
 }
 
 
@@ -130,6 +160,11 @@ void SP_info_player_intermission(void)
 void stopCamera(edict_t *ent);
 void player_pain (edict_t *self, edict_t *other, float kick, int damage)
 {
+	if(!self || !other)
+	{
+		return;
+	}
+
 	// player pain is handled at the end of the frame in P_DamageFeedback
 	// if we're in a camera, get out
 	if (self->client->zCameraTrack)
@@ -142,6 +177,11 @@ void player_pain (edict_t *self, edict_t *other, float kick, int damage)
 qboolean IsFemale (edict_t *ent)
 {
 	char		*info;
+
+	if(!ent)
+	{
+		return;
+	}
 
 	if (!ent->client)
 		return false;
@@ -191,6 +231,11 @@ void ClientObituary (edict_t *self, edict_t *inflictor, edict_t *attacker)
 	char		*message;
 	char		*message2;
 	qboolean	ff;
+
+	if(!self || !inflictor || !attacker)
+	{
+		return;
+	}
 
 	if (coop->value && attacker->client)
 		meansOfDeath |= MOD_FRIENDLY_FIRE;
@@ -436,6 +481,11 @@ void TossClientWeapon (edict_t *self)
 	qboolean	quad;
 	float		spread;
 
+	if(!ent || !other)
+	{
+		return;
+	}
+
 	if (!deathmatch->value)
 		return;
 
@@ -486,6 +536,11 @@ void LookAtKiller (edict_t *self, edict_t *inflictor, edict_t *attacker)
 {
 	vec3_t		dir;
 
+	if(!self || !inflictor || !attacker)
+	{
+		return;
+	}
+
 	if (attacker && attacker != world && attacker != self)
 	{
 		VectorSubtract (attacker->s.origin, self->s.origin, dir);
@@ -515,7 +570,12 @@ void player_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damag
 {
 	int		n;
 
-	
+	if(!self || !inflictor || !attacker)
+	{
+		return;
+	}
+
+
 	// if we're in a camera, get out
 	if (self->client->zCameraTrack)
 	{
@@ -697,6 +757,11 @@ void SaveClientData (void)
 
 void FetchClientEntData (edict_t *ent)
 {
+	if(!ent)
+	{
+		return;
+	}
+
 	ent->health = ent->client->pers.health;
 	ent->max_health = ent->client->pers.max_health;
 	if (ent->client->pers.powerArmorActive)
@@ -730,6 +795,10 @@ float	PlayersRangeFromSpot (edict_t *spot)
 	int		n;
 	float	playerdistance;
 
+	if(!spot)
+	{
+		return;
+	}
 
 	bestplayerdistance = 9999999;
 
@@ -864,6 +933,11 @@ edict_t *SelectCoopSpawnPoint (edict_t *ent)
 	int		index;
 	edict_t	*spot = NULL;
 	char	*target;
+
+	if(!ent)
+	{
+		return;
+	}
 
 	if (!ent)
 	{
@@ -1015,6 +1089,11 @@ void body_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage,
 {
 	int	n;
 
+	if(!self || !inflictor || !attacker)
+	{
+		return;
+	}
+
 	if (self->health < -40)
 	{
 		gi.sound (self, CHAN_BODY, gi.soundindex ("misc/udeath.wav"), 1, ATTN_NORM, 0);
@@ -1029,6 +1108,11 @@ void body_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage,
 void CopyToBodyQue (edict_t *ent)
 {
 	edict_t		*body;
+
+	if(!ent)
+	{
+		return;
+	}
 
 	// grab a body que and cycle to the next one
 	body = &g_edicts[(int)maxclients->value + level.body_que + 1];
@@ -1062,6 +1146,11 @@ void CopyToBodyQue (edict_t *ent)
 
 void respawn (edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	if (deathmatch->value || coop->value)
 	{
 		// spectator's don't leave bodies
@@ -1107,6 +1196,11 @@ void PutClientInServer (edict_t *ent)
 	int		i;
 	client_persistant_t	saved;
 	client_respawn_t	resp;
+
+	if(!ent)
+	{
+		return;
+	}
 
 	// find a spawn point
 	// do it before setting health back up, so farthest
@@ -1261,6 +1355,11 @@ deathmatch mode, so clear everything out before starting them.
 */
 void ClientBeginDeathmatch (edict_t *ent)
 {
+	if(!ent)
+	{
+		return;
+	}
+
 	G_InitEdict (ent);
 
 	InitClientResp (ent->client);
@@ -1292,6 +1391,11 @@ to be placed into the game.  This will happen every level load.
 void ClientBegin (edict_t *ent)
 {
 	int		i;
+
+	if(!ent)
+	{
+		return;
+	}
 
 	ent->client = game.clients + (ent - g_edicts - 1);
 
@@ -1359,6 +1463,11 @@ void ClientUserinfoChanged (edict_t *ent, char *userinfo)
 {
 	char	*s;
 	int		playernum;
+
+	if(!ent)
+	{
+		return;
+	}
 
 	// check for malformed or illegal info strings
 	if (!Info_Validate(userinfo))
@@ -1429,6 +1538,11 @@ qboolean ClientConnect (edict_t *ent, char *userinfo)
 {
 	char	*value;
 
+	if(!ent)
+	{
+		return;
+	}
+
 	// check to see if they are on the banned IP list
 	value = Info_ValueForKey (userinfo, "ip");
 
@@ -1471,6 +1585,11 @@ Will not be called between levels.
 void ClientDisconnect (edict_t *ent)
 {
 	int		playernum;
+
+	if(!ent)
+	{
+		return;
+	}
 
 	if (!ent->client)
 		return;
@@ -1540,6 +1659,11 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 	edict_t	*other;
 	int		i, j;
 	pmove_t	pm;
+
+	if(!ent)
+	{
+		return;
+	}
 
 	level.current_entity = ent;
 	client = ent->client;
@@ -1694,6 +1818,11 @@ void ClientBeginServerFrame (edict_t *ent)
 {
 	gclient_t	*client;
 	int			buttonMask;
+
+	if(!ent)
+	{
+		return;
+	}
 
 	if (level.intermissiontime)
 		return;

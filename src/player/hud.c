@@ -12,6 +12,11 @@ INTERMISSION
 
 void MoveClientToIntermission (edict_t *ent)
 {
+	if(!ent)
+	{
+		return;
+	}
+
 	if (deathmatch->value || coop->value)
 		ent->client->showscores = true;
 	VectorCopy (level.intermission_origin, ent->s.origin);
@@ -55,6 +60,11 @@ void BeginIntermission (edict_t *targ)
 {
 	int		i, n;
 	edict_t	*ent, *client;
+
+	if(!targ)
+	{
+		return;
+	}
 
 	if (level.intermissiontime)
 		return;		// already activated
@@ -160,6 +170,11 @@ void DeathmatchScoreboardMessage (edict_t *ent, edict_t *killer)
 	edict_t		*cl_ent;
 	char	*tag;
 
+	if(!ent || !killer)
+	{
+		return;
+	}
+
 	// sort the clients by score
 	total = 0;
 	for (i=0 ; i<game.maxclients ; i++)
@@ -245,6 +260,11 @@ Note that it isn't that hard to overflow the 1400 byte message limit!
 */
 void DeathmatchScoreboard (edict_t *ent)
 {
+	if(!ent)
+	{
+		return;
+	}
+
 	DeathmatchScoreboardMessage (ent, ent->enemy);
 	gi.unicast (ent, true);
 }
@@ -259,6 +279,11 @@ Display the scoreboard
 */
 void Cmd_Score_f (edict_t *ent)
 {
+	if(!ent)
+	{
+		return;
+	}
+
 	ent->client->showinventory = false;
 	ent->client->showhelp = false;
 
@@ -287,6 +312,11 @@ void HelpComputer (edict_t *ent)
 {
 	char	string[1024];
 	char	*sk;
+
+	if(!ent)
+	{
+		return;
+	}
 
 	if (skill->value == 0)
 		sk = "easy";
@@ -329,6 +359,11 @@ Display the current help message
 */
 void Cmd_Help_f (edict_t *ent)
 {
+	if(!ent)
+	{
+		return;
+	}
+
 	// this is for backwards compatability
 	if (deathmatch->value)
 	{
@@ -363,6 +398,11 @@ void G_SetStats (edict_t *ent)
 	gitem_t		*item;
 	int			index, cells;
 	int			power_armor_type;
+
+	if(!ent)
+	{
+		return;
+	}
 
         cells = 0;
 

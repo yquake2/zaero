@@ -274,6 +274,11 @@ qboolean canShoot(edict_t *self, edict_t *e)
 {
 	vec3_t delta;
 	vec3_t dangles;
+	
+	if(!self || !e)
+	{
+		return;
+	}
 
 	VectorSubtract(e->s.origin, self->s.origin, delta);
 	vectoangles(delta, dangles);
@@ -305,6 +310,11 @@ qboolean autocannonInfront (edict_t *self, edict_t *other)
 	float min = -30.0;
 	float max = 30.0;
 	
+	if(!self || !other)
+	{
+		return;
+	}
+	
 	// what's the yaw distance between the 2?
 	VectorSubtract (other->s.origin, self->s.origin, vec);
 	vectoangles(vec, angle);
@@ -318,6 +328,11 @@ qboolean autocannonInfront (edict_t *self, edict_t *other)
 void monster_autocannon_findenemy(edict_t *self)
 {
 	edict_t *e = NULL;
+	
+	if(!self)
+	{
+		return;
+	}
 
 	// can we still use our enemy?
 	if (self->enemy)
@@ -407,6 +422,12 @@ void monster_autocannon_turn(edict_t *self)
 {
 	vec3_t old_angles;
 	VectorCopy(self->s.angles, old_angles);
+	
+	if(!self)
+	{
+		return;
+	}
+
 	if (!self->enemy)
 	{
 		if (self->monsterinfo.linkcount > 0)
@@ -517,6 +538,11 @@ void monster_autocannon_think(edict_t *self)
 	ac_anim_t anim;
 	int lefty = 0;
 	edict_t *old_enemy;
+	
+	if(!self)
+	{
+		return;
+	}
 
 	self->nextthink = level.time + FRAMETIME;
 
@@ -598,6 +624,11 @@ void monster_autocannon_think(edict_t *self)
 void monster_autocannon_explode (edict_t *ent)
 {
 	vec3_t origin;
+	
+	if(!ent)
+	{
+		return;
+	}
 
 	T_RadiusDamage(ent, ent, AC_EXPLODE_DMG, ent->enemy, AC_EXPLODE_RADIUS, MOD_TRIPBOMB);
 
@@ -631,6 +662,12 @@ void monster_autocannon_explode (edict_t *ent)
 
 void monster_autocannon_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
 {
+	
+	if(!self || !inflictor || !attacker)
+	{
+		return;
+	}
+
 	// explode
 	self->takedamage = DAMAGE_NO;
 	self->think = monster_autocannon_explode;
@@ -639,6 +676,12 @@ void monster_autocannon_die (edict_t *self, edict_t *inflictor, edict_t *attacke
 
 void monster_autocannon_pain (edict_t *self, edict_t *other, float kick, int damage)
 {
+
+	if(!self || !other)
+	{
+		return;
+	}
+
 	// keep the enemy
 	if (other->client || other->svflags & SVF_MONSTER)
 		self->enemy = other;
@@ -646,6 +689,11 @@ void monster_autocannon_pain (edict_t *self, edict_t *other, float kick, int dam
 
 void monster_autocannon_activate(edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	self->active = AC_S_ACTIVATING;
 	self->nextthink = level.time + FRAMETIME;
 
@@ -677,6 +725,11 @@ void monster_autocannon_activate(edict_t *self)
 
 void monster_autocannon_deactivate(edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	self->active = AC_S_DEACTIVATING;
 	self->nextthink = level.time + FRAMETIME;
 	
@@ -723,6 +776,11 @@ void monster_autocannon_deactivate(edict_t *self)
 
 void monster_autocannon_act(edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	if (self->active == AC_S_IDLE)
 	{
 		if (acActStart[self->style] != -1)
@@ -759,6 +817,11 @@ void monster_autocannon_act(edict_t *self)
 
 void monster_autocannon_use(edict_t *self, edict_t *other, edict_t *activator)
 {
+	if(!self || !other || !activator)
+	{
+		return;
+	}
+
 	// on/off or berserk toggle?
 	if (self->spawnflags & AC_SF_BERSERK_TOGGLE)
 	{
@@ -773,12 +836,22 @@ void monster_autocannon_use(edict_t *self, edict_t *other, edict_t *activator)
 
 void monster_autocannon_usestub(edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	// stub
 	monster_autocannon_act(self);
 }
 
 void SP_monster_autocannon(edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	edict_t *base, *turret;
 	vec3_t offset;
 
@@ -898,6 +971,11 @@ void SP_monster_autocannon(edict_t *self)
 
 void SP_monster_autocannon_floor(edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	if (self->style == 1)
 	{
 		gi.error("monster_autocannon_floor does not permit bullet style");

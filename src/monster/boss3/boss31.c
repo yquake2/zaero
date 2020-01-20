@@ -33,6 +33,11 @@ void MakronToss (edict_t *self);
 
 void jorg_search (edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	float r;
 
 	r = random();
@@ -119,28 +124,53 @@ mmove_t	jorg_move_stand = {FRAME_stand01, FRAME_stand51, jorg_frames_stand, NULL
 
 void jorg_idle (edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	gi.sound (self, CHAN_VOICE, sound_idle, 1, ATTN_NORM,0);
 }
 
 void jorg_death_hit (edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	gi.sound (self, CHAN_BODY, sound_death_hit, 1, ATTN_NORM,0);
 }
 
 
 void jorg_step_left (edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	gi.sound (self, CHAN_BODY, sound_step_left, 1, ATTN_NORM,0);
 }
 
 void jorg_step_right (edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	gi.sound (self, CHAN_BODY, sound_step_right, 1, ATTN_NORM,0);
 }
 
 
 void jorg_stand (edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	self->monsterinfo.currentmove = &jorg_move_stand;
 }
 
@@ -209,11 +239,21 @@ mmove_t jorg_move_end_walk = {FRAME_walk20, FRAME_walk25, jorg_frames_end_walk, 
 
 void jorg_walk (edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 		self->monsterinfo.currentmove = &jorg_move_walk;
 }
 
 void jorg_run (edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	if (self->monsterinfo.aiflags & AI_STAND_GROUND)
 		self->monsterinfo.currentmove = &jorg_move_stand;
 	else
@@ -374,6 +414,11 @@ mmove_t jorg_move_end_attack1 = {FRAME_attak115, FRAME_attak118, jorg_frames_end
 
 void jorg_reattack1(edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	if (visible(self, self->enemy))
 		if (random() < 0.9)
 			self->monsterinfo.currentmove = &jorg_move_attack1;
@@ -391,11 +436,20 @@ void jorg_reattack1(edict_t *self)
 
 void jorg_attack1(edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	self->monsterinfo.currentmove = &jorg_move_attack1;
 }
 
 void jorg_pain (edict_t *self, edict_t *other, float kick, int damage)
 {
+	if(!self || !other)
+	{
+		return;
+	}
 
 	if (self->health < (self->max_health / 2))
 			self->s.skinnum = 1;
@@ -460,6 +514,11 @@ void jorgBFG (edict_t *self)
 	vec3_t	dir;
 	vec3_t	vec;
 
+	if(!self)
+	{
+		return;
+	}
+
 	AngleVectors (self->s.angles, forward, right, NULL);
 	G_ProjectSource (self->s.origin, monster_flash_offset[MZ2_JORG_BFG_1], forward, right, start);
 
@@ -475,6 +534,11 @@ void jorg_firebullet_right (edict_t *self)
 {
 	vec3_t	forward, right, target;
 	vec3_t	start;
+
+	if(!self)
+	{
+		return;
+	}
 
 	AngleVectors (self->s.angles, forward, right, NULL);
 	G_ProjectSource (self->s.origin, monster_flash_offset[MZ2_JORG_MACHINEGUN_R1], forward, right, start);
@@ -498,6 +562,11 @@ void jorg_firebullet_left (edict_t *self)
 	vec3_t	forward, right, target;
 	vec3_t	start;
 
+	if(!self)
+	{
+		return;
+	}
+
 	AngleVectors (self->s.angles, forward, right, NULL);
 	G_ProjectSource (self->s.origin, monster_flash_offset[MZ2_JORG_MACHINEGUN_L1], forward, right, start);
 
@@ -517,6 +586,11 @@ void jorg_firebullet_left (edict_t *self)
 
 void jorg_firebullet (edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	jorg_firebullet_left(self);
 	jorg_firebullet_right(self);
 }
@@ -526,6 +600,11 @@ void jorg_attack(edict_t *self)
 	vec3_t	vec;
 	float	range;
 	
+	if(!self)
+	{
+		return;
+	}
+
 	VectorSubtract (self->enemy->s.origin, self->s.origin, vec);
 	range = VectorLength (vec);
 
@@ -544,11 +623,20 @@ void jorg_attack(edict_t *self)
 
 void jorg_dead (edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
 }
 
 
 void jorg_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
 {
+	if(!self || !inflictor || !attacker)
+	{
+		return;
+	}
+
 	gi.sound (self, CHAN_VOICE, sound_death, 1, ATTN_NORM, 0);
 	self->deadflag = DEAD_DEAD;
 	self->takedamage = DAMAGE_NO;
@@ -566,6 +654,11 @@ qboolean Jorg_CheckAttack (edict_t *self)
 	qboolean	enemy_infront;
 	int			enemy_range;
 	float		enemy_yaw;
+
+	if(!self)
+	{
+		return;
+	}
 
 	if (self->enemy->health > 0)
 	{
@@ -656,6 +749,11 @@ void MakronPrecache (void);
 */
 void SP_monster_jorg (edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	if (deathmatch->value)
 	{
 		G_FreeEdict (self);

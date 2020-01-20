@@ -108,6 +108,11 @@ anim_data_t *find_monster_animator(edict_t *monster)
    anim_data_t *anim;
    int i;
 
+	if(!monster)
+	{
+		return;
+	}
+
    for(i=0;i<animations_count;i++)
    {
       anim = animations[i];
@@ -122,6 +127,11 @@ anim_data_t *find_monster_animator(edict_t *monster)
 qboolean anim_player_correct_aim(edict_t *self, vec3_t aim)
 {
    anim_data_t *anim;
+
+	if(!self)
+	{
+		return;
+	}
 
    if(self->extra_data != animations)
       return false;
@@ -146,16 +156,31 @@ qboolean anim_player_correct_aim(edict_t *self, vec3_t aim)
   =========================================================================*/
 void no_pain(edict_t *self, edict_t *other, float kick, int damage)
 {
+	if(!self || !other)
+	{
+		return;
+	}
+
    return;
 }
 
 void no_die(edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
 {
+	if(!self || !inflictor || !attacker)
+	{
+		return;
+	}
+
    return;
 }
 
 void no_happen(edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
    return;
 }
 
@@ -165,6 +190,11 @@ void no_happen(edict_t *self)
 anim_data_t *anim_data_create(edict_t *monster)
 {
    anim_data_t *data;
+
+	if(!monster)
+	{
+		return;
+	}
 
    if(!z_frame_get_sequence(monster->classname))
       return NULL;
@@ -205,6 +235,11 @@ anim_data_t *anim_player_create(edict_t *monster)
 {
    anim_data_t *data;
    edict_t *anim_player;
+
+	if(!monster)
+	{
+		return;
+	}
 
    data = anim_data_create(monster);
    if(!data)
@@ -251,6 +286,11 @@ void advance_anim_frame(anim_data_t *anim, int count)
 void anim_player_think(edict_t *anim_player)
 {
    anim_data_t *data;
+
+	if(!anim_player)
+	{
+		return;
+	}
 
    data = (anim_data_t *)anim_player->extra_data;
 
@@ -306,6 +346,11 @@ void update_directions(anim_data_t *data)
   =========================================================================*/
 void ai_animator(edict_t *self, float dist)
 {
+	if(!self)
+	{
+		return;
+	}
+
    if(dist != 0.0)
    	M_walkmove (self, self->s.angles[YAW], dist);
 
@@ -648,6 +693,11 @@ void anim_player_set_active(char *targetname, qboolean active)
 void anim_player_cmd(edict_t *ent)
 {
    char *args, *arg1=NULL, *arg2=NULL;
+
+	if(!ent)
+	{
+		return;
+	}
 
    args = gi.args();
 

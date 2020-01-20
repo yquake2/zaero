@@ -24,6 +24,11 @@ static int	sound_attack;
 
 void handler_sight (edict_t *self, edict_t *other)
 {
+	if(!self || !other)
+	{
+		return;
+	}
+
 	hound_sight(self, other);
 	infantry_sight(self, other);
 }
@@ -73,6 +78,11 @@ mmove_t handler_stand1 = {FRAME_stand1start, FRAME_stand1end, handler_frames_sta
 
 void handler_scratch(edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 }
 
 mframe_t handler_frames_stand2 [] =
@@ -151,6 +161,11 @@ mmove_t handler_stand3 = {FRAME_stand3start, FRAME_stand3end, handler_frames_sta
 
 void handler_standup(edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 }
 
 mframe_t handler_frames_stand4 [] =
@@ -172,6 +187,11 @@ mmove_t handler_stand4 = {FRAME_stand4start, FRAME_stand4end, handler_frames_sta
 
 void handler_sitdown(edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 }
 
 mframe_t handler_frames_stand5 [] =
@@ -202,6 +222,11 @@ void handler_standWhatNext (edict_t *self)
 {
 	float r = random();
 
+	if(!self)
+	{
+		return;
+	}
+
 	if(r < 0.90)
 	{
 	  self->monsterinfo.currentmove = &handler_stand3;
@@ -216,6 +241,11 @@ void handler_standWhatNext (edict_t *self)
 void handler_standSitWhatNext (edict_t *self)
 {
 	float r = random();
+
+	if(!self)
+	{
+		return;
+	}
 
 	if(r < 0.70)
 	{
@@ -234,6 +264,11 @@ void handler_standSitWhatNext (edict_t *self)
 
 void handler_stand (edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	if(self->monsterinfo.currentmove != &handler_stand1 &&
 				self->monsterinfo.currentmove != &handler_stand2 &&
         self->monsterinfo.currentmove != &handler_stand3 &&
@@ -252,6 +287,11 @@ void handler_stand (edict_t *self)
 
 void handler_pain (edict_t *self, edict_t *other, float kick, int damage)
 {
+	if(!self || !other)
+	{
+		return;
+	}
+
 }
 
 //
@@ -260,6 +300,11 @@ void handler_pain (edict_t *self, edict_t *other, float kick, int damage)
 
 void handler_createHound(edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	self->s.modelindex2 = 0;
 	hound_createHound(self, (self->health / 175.0));
 }
@@ -267,6 +312,11 @@ void handler_createHound(edict_t *self)
 
 void CheckIdleLoop(edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	if(!self->powerarmor_time && self->spawnflags & 8)
 	{
 		self->powerarmor_time = level.time + (FRAMETIME * random() * 3);
@@ -280,6 +330,11 @@ void CheckIdleLoop(edict_t *self)
 
 void CheckForEnemy(edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	if(self->enemy && (self->enemy->client || (self->enemy->svflags & SVF_MONSTER)))
 	{
 		self->powerarmor_time = 0;
@@ -298,6 +353,11 @@ void CheckForEnemy(edict_t *self)
 
 void StartCount(edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	self->powerarmor_time = level.time + 3;
 }
 
@@ -329,6 +389,11 @@ mmove_t handler_move_attack1 = {FRAME_attack1Start, FRAME_attack1End, handler_fr
 
 void handler_attack (edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	gi.sound (self, CHAN_VOICE, sound_attack, 1, ATTN_NORM, 0);
 
 	self->monsterinfo.currentmove = &handler_move_attack1;
@@ -344,6 +409,11 @@ Death Stuff Starts
 
 void handler_dead (edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	VectorSet (self->mins, -16, -16, -24);
 	VectorSet (self->maxs, 16, 16, -8);
 	self->movetype = MOVETYPE_TOSS;
@@ -355,6 +425,11 @@ void handler_dead (edict_t *self)
 
 void handler_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	self->health = 1; // can't die while together...
 }
 
@@ -380,6 +455,11 @@ void SP_monster_handler_precache(void)
 */
 void SP_monster_handler (edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	if (deathmatch->value)
 	{
 		G_FreeEdict (self);

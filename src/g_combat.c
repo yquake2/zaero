@@ -15,6 +15,11 @@ qboolean CanDamage (edict_t *targ, edict_t *inflictor)
 	vec3_t	dest;
 	trace_t	trace;
 
+	if(!targ || !inflictor)
+	{
+		return;
+	}
+
 	// bmodels need special checking because their origin is 0,0,0
 	if (targ->movetype == MOVETYPE_PUSH)
 	{
@@ -72,6 +77,11 @@ Killed
 */
 void Killed (edict_t *targ, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
 {
+	if(!targ || !inflictor || !attacker)
+	{
+		return;
+	}
+
 	if (targ->health < -999)
 		targ->health = -999;
 
@@ -158,6 +168,11 @@ int CheckPowerArmor (edict_t *ent, vec3_t point, vec3_t normal, int damage, int 
 	int			pa_te_type;
 	int			power;
 	int			power_used;
+
+	if(!ent)
+	{
+		return;
+	}
 
 	if (!damage)
 		return 0;
@@ -264,6 +279,11 @@ int CheckArmor (edict_t *ent, vec3_t point, vec3_t normal, int damage, int te_sp
 	int			index;
 	gitem_t		*armor;
 
+	if(!ent)
+	{
+		return;
+	}
+
 	if (!damage)
 		return 0;
 
@@ -305,6 +325,11 @@ int CheckArmor (edict_t *ent, vec3_t point, vec3_t normal, int damage, int te_sp
 
 void M_ReactToDamage (edict_t *targ, edict_t *attacker)
 {
+	if(!targ || !attacker)
+	{
+		return;
+	}
+
 	if (!(attacker->client) && !(attacker->svflags & SVF_MONSTER) &&
 		(strcmp (attacker->classname, "monster_autocannon") != 0))
 		return;
@@ -371,6 +396,11 @@ void M_ReactToDamage (edict_t *targ, edict_t *attacker)
 
 qboolean CheckTeamDamage (edict_t *targ, edict_t *attacker)
 {
+	if(!targ || !attacker)
+	{
+		return;
+	}
+
 		//FIXME make the next line real and uncomment this block
 		// if ((ability to damage a teammate == OFF) && (targ's team == attacker's team))
 	return false;
@@ -384,6 +414,11 @@ void T_Damage (edict_t *targ, edict_t *inflictor, edict_t *attacker, vec3_t dir,
 	int			asave;
 	int			psave;
 	int			te_sparks;
+
+	if(!targ || !inflictor || !attacker)
+	{
+		return;
+	}
 
 	if (!targ->takedamage)
 		return;
@@ -582,6 +617,11 @@ void T_RadiusDamage (edict_t *inflictor, edict_t *attacker, float damage, edict_
 	vec3_t	v;
 	vec3_t	dir;
 
+	if(!inflictor || !attacker || !ignore)
+	{
+		return;
+	}
+
 	while ((ent = findradius(ent, inflictor->s.origin, radius)) != NULL)
 	{
 		if (ent == ignore)
@@ -618,6 +658,11 @@ void T_RadiusDamagePosition (vec3_t origin, edict_t *inflictor, edict_t *attacke
 	edict_t	*ent = NULL;
 	vec3_t	v;
 	vec3_t	dir;
+
+	if(!inflictor || !attacker || !ignore)
+	{
+		return;
+	}
 
 	while ((ent = findradius(ent, origin, radius)) != NULL)
 	{

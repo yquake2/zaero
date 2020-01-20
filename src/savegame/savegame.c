@@ -921,6 +921,11 @@ WriteEdict(FILE *f, edict_t *ent)
 	field_t *field;
 	edict_t temp;
 
+	if(!ent)
+	{
+		return;
+	}
+
 	/* all of the ints, floats, and vectors stay as they are */
 	temp = *ent;
 

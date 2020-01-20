@@ -10,6 +10,11 @@ Echo any sounds that are played within "dmg_radius" radius.
 
 void SP_sound_echo (edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	G_FreeEdict(self);
 }
 
@@ -19,6 +24,11 @@ void SP_sound_echo (edict_t *self)
 
 void SP_load_mirrorlevel (edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	G_FreeEdict(self);
 }
 
@@ -117,6 +127,11 @@ void trigger_laser_think (edict_t *self)
 	trace_t	tr;
 	int		count = 8;
 
+	if(!self)
+	{
+		return;
+	}
+
 	self->nextthink = level.time + FRAMETIME;
 	
 	VectorCopy (self->s.origin, start);
@@ -165,6 +180,11 @@ void trigger_laser_think (edict_t *self)
 
 void trigger_laser_on (edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	self->svflags &= ~SVF_NOCLIENT;
 	self->think = trigger_laser_think;
 	trigger_laser_think(self);
@@ -172,6 +192,11 @@ void trigger_laser_on (edict_t *self)
 
 void SP_trigger_laser(edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	// if no target
 	if (!self->target)
 	{
@@ -205,6 +230,11 @@ void SP_trigger_laser(edict_t *self)
 
 void Anim_CommDish(edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	self->s.frame++;
 
   if(self->s.frame >= 98)
@@ -219,6 +249,11 @@ void Anim_CommDish(edict_t *self)
  
 void Use_CommDish (edict_t *ent, edict_t *other, edict_t *activator)
 {
+	if(!ent || !other || !activator)
+	{
+		return;
+	}
+
   ent->nextthink = level.time + FRAMETIME;
 	ent->think = Anim_CommDish;
   ent->use = NULL;
@@ -227,6 +262,11 @@ void Use_CommDish (edict_t *ent, edict_t *other, edict_t *activator)
 
 void SP_misc_commdish (edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	if (deathmatch->value)
 	{	// auto-remove for deathmatch
 		G_FreeEdict (self);

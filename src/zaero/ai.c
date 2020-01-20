@@ -19,6 +19,11 @@ Creates a list of all entities in the raduis of Z_RADUISLISTSIZE
 */
 void zCreateRaduisList(edict_t *self)
 {
+	if(!self)
+	{
+		return;
+	}
+
 	edict_t *head, *list;
   vec3_t vec;
 
@@ -63,6 +68,11 @@ int zSchoolAllVisiable(edict_t *self)
   int max;
   edict_t *head, *list;
 
+	if(!self)
+	{
+		return;
+	}
+
   max = 0;
 
   zCreateRaduisList(self);
@@ -102,6 +112,11 @@ int zFindRoamYaw(edict_t *self, float distcheck)
 	trace_t	tr;
   float current = anglemod(self->s.angles[YAW]);
 	
+	if(!self)
+	{
+		return;
+	}
+
   if(current <= self->ideal_yaw - 1 || current > self->ideal_yaw + 1)
   {
     if(fabs(current - self->ideal_yaw) <= 359.0)
@@ -163,6 +178,11 @@ int zSchoolMonsters(edict_t *self, float dist, int runStyle, float *currentSpeed
 {
   int maxInsight;
   int newRunStyle;
+
+	if(!self)
+	{
+		return;
+	}
 
   maxInsight = zSchoolAllVisiable(self);
 
@@ -315,6 +335,11 @@ void ai_schoolStand (edict_t *self, float dist)
 {
   float speed;
 
+	if(!self)
+	{
+		return;
+	}
+
   if(!(self->monsterinfo.aiflags & AI_SCHOOLING))
   {
     ai_stand(self, dist);
@@ -361,6 +386,11 @@ void ai_schoolRun (edict_t *self, float dist)
 {
   float speed;
 
+	if(!self)
+	{
+		return;
+	}
+
   if(!(self->monsterinfo.aiflags & AI_SCHOOLING))
   {
     ai_run(self, dist);
@@ -406,6 +436,11 @@ void ai_schoolWalk (edict_t *self, float dist)
 {
   float speed;
 
+	if(!self)
+	{
+		return;
+	}
+
   if(!(self->monsterinfo.aiflags & AI_SCHOOLING))
   {
     ai_walk(self, dist);
@@ -450,6 +485,11 @@ Use this call with a distnace of 0 to replace ai_face
 */
 void ai_schoolCharge (edict_t *self, float dist)
 {
+	if(!self)
+	{
+		return;
+	}
+
   ai_charge(self, dist);
 }
 
