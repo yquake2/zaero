@@ -555,6 +555,13 @@ extern	int	body_armor_index;
 #define MOD_GL_POLYBLEND   	  40
 #define MOD_FRIENDLY_FIRE	  0x8000000
 
+/* Easier handling of AI skill levels */
+#define SKILL_EASY 0
+#define SKILL_MEDIUM 1
+#define SKILL_HARD 2
+#define SKILL_HARDPLUS 3
+
+
 extern	int	meansOfDeath;
 
 
