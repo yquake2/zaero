@@ -282,7 +282,7 @@ void tank_pain (edict_t *self, edict_t *other, float kick, int damage)
 			return;
 	
 	// If hard or nightmare, don't go into pain while attacking
-	if ( skill->value >= 2)
+	if ( skill->value >= SKILL_HARD)
 	{
 		if ( (self->s.frame >= FRAME_attak301) && (self->s.frame <= FRAME_attak330) )
 			return;
@@ -293,7 +293,7 @@ void tank_pain (edict_t *self, edict_t *other, float kick, int damage)
 	self->pain_debounce_time = level.time + 3;
 	gi.sound (self, CHAN_VOICE, sound_pain, 1, ATTN_NORM, 0);
 
-	if (skill->value == 3)
+	if (skill->value == SKILL_HARDPLUS)
 		return;		// no pain anims in nightmare
 
 	if (damage <= 30)
@@ -453,7 +453,7 @@ mmove_t tank_move_attack_post_blast = {FRAME_attak117, FRAME_attak122, tank_fram
 
 void tank_reattack_blaster (edict_t *self)
 {
-	if (skill->value >= 2)
+	if (skill->value >= SKILL_HARD)
 		if (visible (self, self->enemy))
 			if (self->enemy->health > 0)
 				if (random() <= 0.6)
@@ -623,7 +623,7 @@ mmove_t tank_move_attack_chain = {FRAME_attak401, FRAME_attak429, tank_frames_at
 void tank_refire_rocket (edict_t *self)
 {
 	// Only on hard or nightmare
-	if ( skill->value >= 2 )
+	if ( skill->value >= SKILL_HARD )
 		if (self->enemy->health > 0)
 			if (visible(self, self->enemy) )
 				if (random() <= 0.4)

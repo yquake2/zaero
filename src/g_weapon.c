@@ -18,7 +18,7 @@ void check_dodge (edict_t *self, vec3_t start, vec3_t dir, int speed)
 	float	eta;
 
 	// easy mode only ducks one quarter the time
-	if (skill->value == 0)
+	if (skill->value == SKILL_EASY)
 	{
 		if (random() > 0.25)
 			return;
@@ -41,7 +41,7 @@ void check_dodge (edict_t *self, vec3_t start, vec3_t dir, int speed)
 			tr.ent->monsterinfo.dodgetimeout = 0;
 		}
 
-		if(skill->value > 3)
+		if(skill->value > SKILL_HARDPLUS)
 		{
 			skilllevel = 3;
 		}

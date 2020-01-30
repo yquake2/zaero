@@ -475,7 +475,7 @@ void insane_pain (edict_t *self, edict_t *other, float kick, int damage)
 		l = 100;
 	gi.sound (self, CHAN_VOICE, gi.soundindex (va("player/male/pain%i_%i.wav", l, r)), 1, ATTN_IDLE, 0);
 
-	if (skill->value == 3)
+	if (skill->value == SKILL_HARDPLUS)
 		return;		// no pain anims in nightmare
 
 	// Don't go into pain frames if crucified.
