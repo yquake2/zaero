@@ -25,20 +25,20 @@ float SV_CalcRoll (vec3_t angles, vec3_t velocity)
 	float	sign;
 	float	side;
 	float	value;
-	
+
 	side = DotProduct (velocity, right);
 	sign = side < 0 ? -1 : 1;
 	side = fabs(side);
-	
+
 	value = sv_rollangle->value;
 
 	if (side < sv_rollspeed->value)
 		side = side * value / sv_rollspeed->value;
 	else
 		side = value;
-	
+
 	return side*sign;
-	
+
 }
 
 
@@ -59,6 +59,11 @@ void P_DamageFeedback (edict_t *player)
 	static	vec3_t	power_color = {0.0, 1.0, 0.0};
 	static	vec3_t	acolor = {1.0, 1.0, 1.0};
 	static	vec3_t	bcolor = {1.0, 0.0, 0.0};
+
+	if (!player)
+	{
+		return;
+	}
 
 	client = player->client;
 
@@ -90,18 +95,18 @@ void P_DamageFeedback (edict_t *player)
 			i = (i+1)%3;
 			switch (i)
 			{
-			case 0:
-				player->s.frame = FRAME_pain101-1;
-				client->anim_end = FRAME_pain104;
-				break;
-			case 1:
-				player->s.frame = FRAME_pain201-1;
-				client->anim_end = FRAME_pain204;
-				break;
-			case 2:
-				player->s.frame = FRAME_pain301-1;
-				client->anim_end = FRAME_pain304;
-				break;
+				case 0:
+					player->s.frame = FRAME_pain101-1;
+					client->anim_end = FRAME_pain104;
+					break;
+				case 1:
+					player->s.frame = FRAME_pain201-1;
+					client->anim_end = FRAME_pain204;
+					break;
+				case 2:
+					player->s.frame = FRAME_pain301-1;
+					client->anim_end = FRAME_pain304;
+					break;
 			}
 		}
 	}
@@ -162,10 +167,10 @@ void P_DamageFeedback (edict_t *player)
 
 		VectorSubtract (client->damage_from, player->s.origin, v);
 		VectorNormalize (v);
-		
+
 		side = DotProduct (v, right);
 		client->v_dmg_roll = kick*side*0.3;
-		
+
 		side = -DotProduct (v, forward);
 		client->v_dmg_pitch = kick*side*0.3;
 
@@ -208,6 +213,10 @@ void SV_CalcViewOffset (edict_t *ent)
 	float		delta;
 	vec3_t		v;
 
+	if (!ent)
+	{
+		return;
+	}
 
 	//===================================
 
@@ -252,7 +261,7 @@ void SV_CalcViewOffset (edict_t *ent)
 
 		delta = DotProduct (ent->velocity, forward);
 		angles[PITCH] += delta*run_pitch->value;
-		
+
 		delta = DotProduct (ent->velocity, right);
 		angles[ROLL] += delta*run_roll->value;
 
@@ -374,6 +383,11 @@ void SV_CalcGunOffset (edict_t *ent)
 	int		i;
 	float	delta;
 
+	if (!ent)
+	{
+		return;
+	}
+
 	// if we're using the sniper rifle, let's not do this
 	if (ent->client->pers.weapon &&
 		Q_stricmp(ent->client->pers.weapon->classname, "weapon_sniperrifle") != 0)
@@ -458,8 +472,13 @@ void SV_CalcBlend (edict_t *ent)
 	vec3_t	vieworg;
 	int		remaining;
 
+	if (!ent)
+	{
+		return;
+	}
+
 	ent->client->ps.blend[0] = ent->client->ps.blend[1] = 
-		ent->client->ps.blend[2] = ent->client->ps.blend[3] = 0;
+	ent->client->ps.blend[2] = ent->client->ps.blend[3] = 0;
 
 	// add for contents
 	VectorAdd (ent->s.origin, ent->client->ps.viewoffset, vieworg);
@@ -484,7 +503,7 @@ void SV_CalcBlend (edict_t *ent)
 			gi.sound(ent, CHAN_ITEM, gi.soundindex("items/damage2.wav"), 1, ATTN_NORM, 0);
 		if (remaining > 30 || (remaining & 4) )
 			SV_AddBlend (0, 0, 1, 0.08, ent->client->ps.blend);
-	}
+		}
 	else if (ent->client->invincible_framenum > level.framenum)
 	{
 		remaining = ent->client->invincible_framenum - level.framenum;
@@ -513,7 +532,7 @@ void SV_CalcBlend (edict_t *ent)
 	// add for damage
 	if (ent->client->damage_alpha > 0)
 		SV_AddBlend (ent->client->damage_blend[0],ent->client->damage_blend[1]
-		,ent->client->damage_blend[2], ent->client->damage_alpha, ent->client->ps.blend);
+			,ent->client->damage_blend[2], ent->client->damage_alpha, ent->client->ps.blend);
 
 	if (ent->client->bonus_alpha > 0)
 		SV_AddBlend (0.85, 0.7, 0.3, ent->client->bonus_alpha, ent->client->ps.blend);
@@ -555,6 +574,11 @@ void P_FallingDamage (edict_t *ent)
 	float	delta;
 	int		damage;
 	vec3_t	dir;
+
+	if (!ent)
+	{
+		return;
+	}
 
 	if (ent->s.modelindex != 255)
 		return;		// not in the player model
@@ -799,6 +823,11 @@ void G_SetClientEffects (edict_t *ent)
 	int		pa_type;
 	int		remaining;
 
+	if (!ent)
+	{
+		return;
+	}
+
 	ent->s.effects = 0;
 	ent->s.renderfx = 0;
 
@@ -840,14 +869,14 @@ void G_SetClientEffects (edict_t *ent)
 		ent->s.renderfx |= (RF_SHELL_RED|RF_SHELL_GREEN|RF_SHELL_BLUE);
 	}
 
-  if(ent->client->zCameraLocalEntity)
-  {
-  	VectorCopy (ent->s.origin, ent->client->zCameraLocalEntity->s.origin);
-  	VectorCopy (ent->s.angles, ent->client->zCameraLocalEntity->s.angles);
-  	VectorCopy (ent->s.old_origin, ent->client->zCameraLocalEntity->s.old_origin);
+	if(ent->client->zCameraLocalEntity)
+	{
+		VectorCopy (ent->s.origin, ent->client->zCameraLocalEntity->s.origin);
+		VectorCopy (ent->s.angles, ent->client->zCameraLocalEntity->s.angles);
+		VectorCopy (ent->s.old_origin, ent->client->zCameraLocalEntity->s.old_origin);
 
-    ent->client->zCameraLocalEntity->s.effects = ent->s.effects;
-  }
+		ent->client->zCameraLocalEntity->s.effects = ent->s.effects;
+	}
 }
 
 
@@ -860,6 +889,11 @@ void G_SetClientEvent (edict_t *ent)
 {
 	if (ent->s.event)
 		return;
+
+	if (!ent)
+	{
+		return;
+	}
 
 	if ( ent->groundentity && xyspeed > 225)
 	{
@@ -877,6 +911,11 @@ void G_SetClientSound (edict_t *ent)
 {
 	char	*weap;
 
+	if (!ent)
+	{
+		return;
+	}
+
 	if (ent->client->resp.game_helpchanged != game.helpchanged)
 	{
 		ent->client->resp.game_helpchanged = game.helpchanged;
@@ -889,7 +928,6 @@ void G_SetClientSound (edict_t *ent)
 		ent->client->resp.helpchanged++;
 		gi.sound (ent, CHAN_VOICE, gi.soundindex ("misc/pc_up.wav"), 1, ATTN_STATIC, 0);
 	}
-
 
 	if (ent->client->pers.weapon)
 		weap = ent->client->pers.weapon->classname;
@@ -919,6 +957,11 @@ void G_SetClientFrame (edict_t *ent)
 {
 	gclient_t	*client;
 	qboolean	duck, run;
+
+	if (!ent)
+	{
+		return;
+	}
 
 	if (ent->s.modelindex != 255)
 		return;		// not in the player model
@@ -960,7 +1003,7 @@ void G_SetClientFrame (edict_t *ent)
 		return;
 	}
 
-newanim:
+	newanim:
 	// return to either a running or standing frame
 	client->anim_priority = ANIM_BASIC;
 	client->anim_duck = duck;
@@ -970,7 +1013,7 @@ newanim:
 	{
 		client->anim_priority = ANIM_JUMP;
 		if (ent->s.frame != FRAME_jump2)
-			ent->s.frame = FRAME_jump1;
+		ent->s.frame = FRAME_jump1;
 		client->anim_end = FRAME_jump2;
 	}
 	else if (run && client->zCameraTrack == NULL)
@@ -1018,6 +1061,11 @@ void ClientEndServerFrame (edict_t *ent)
 {
 	float	bobtime;
 	int		i;
+
+	if (!ent)
+	{
+		return;
+	}
 
 	current_player = ent;
 	current_client = ent->client;
@@ -1093,7 +1141,7 @@ void ClientEndServerFrame (edict_t *ent)
 		else
 			bobmove = 0.0625;
 	}
-	
+
 	bobtime = (current_client->bobtime += bobmove);
 
 	if (current_client->ps.pmove.pm_flags & PMF_DUCKED)

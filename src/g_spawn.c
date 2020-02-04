@@ -311,6 +311,11 @@ void ED_CallSpawn (edict_t *ent)
 		return;
 	}
 
+	if (!ent)
+	{
+		return;
+	}
+
 	if (!ent->classname)
 	{
 		gi.dprintf ("ED_CallSpawn: NULL classname\n");
@@ -456,7 +461,7 @@ char *ED_ParseEdict (char *data, edict_t *ent)
 	char		keyname[256];
 	const char	*com_token;
 
-	if (!ent || !data)
+	if (!ent)
 	{
 		return NULL;
 	}
@@ -850,6 +855,11 @@ Only used for the world.
 */
 void SP_worldspawn (edict_t *ent)
 {
+	if (!ent)
+	{
+		return;
+	}
+
 	ent->movetype = MOVETYPE_PUSH;
 	ent->solid = SOLID_BSP;
 	ent->inuse = true;			// since the world doesn't use G_Spawn()

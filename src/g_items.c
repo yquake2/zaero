@@ -127,6 +127,11 @@ void precacheAllItems()
 
 void DoRespawn (edict_t *ent)
 {
+	if (!ent)
+	{
+		return;
+	}
+
 	if (ent->team)
 	{
 		edict_t	*master;
@@ -154,6 +159,11 @@ void DoRespawn (edict_t *ent)
 
 void SetRespawn (edict_t *ent, float delay)
 {
+	if (!ent)
+	{
+		return;
+	}
+
 	ent->flags |= FL_RESPAWN;
 	ent->svflags |= SVF_NOCLIENT;
 	ent->solid = SOLID_NOT;
@@ -168,6 +178,11 @@ void SetRespawn (edict_t *ent, float delay)
 qboolean Pickup_Powerup (edict_t *ent, edict_t *other)
 {
 	int		quantity;
+
+	if (!ent || !other)
+	{
+		return false;
+	}
 
 	quantity = other->client->pers.inventory[ITEM_INDEX(ent->item)];
 	if ((skill->value == SKILL_MEDIUM && quantity >= 2) || (skill->value >= SKILL_HARD && quantity >= 1))
@@ -205,6 +220,11 @@ void Drop_General (edict_t *ent, gitem_t *item)
 
 qboolean Pickup_Adrenaline (edict_t *ent, edict_t *other)
 {
+	if (!ent || !other)
+	{
+		return false;
+	}
+
 	if (!deathmatch->value)
 		other->max_health += 1;
 
@@ -219,6 +239,11 @@ qboolean Pickup_Adrenaline (edict_t *ent, edict_t *other)
 
 qboolean Pickup_AncientHead (edict_t *ent, edict_t *other)
 {
+	if (!ent || !other)
+	{
+		return false;
+	}
+
 	other->max_health += 2;
 
 	if (!(ent->spawnflags & DROPPED_ITEM) && (deathmatch->value))
@@ -231,6 +256,11 @@ qboolean Pickup_Bandolier (edict_t *ent, edict_t *other)
 {
 	gitem_t	*item;
 	int		index;
+
+	if (!ent || !other)
+	{
+		return false;
+	}
 
 	if (other->client->pers.max_bullets < 250)
 		other->client->pers.max_bullets = 250;
@@ -269,6 +299,11 @@ qboolean Pickup_Pack (edict_t *ent, edict_t *other)
 {
 	gitem_t	*item;
 	int		index;
+
+	if (!ent || !other)
+	{
+		return false;
+	}
 
 	if (other->client->pers.max_bullets < 300)
 		other->client->pers.max_bullets = 300;
@@ -393,6 +428,11 @@ void Use_Quad (edict_t *ent, gitem_t *item)
 {
 	int		timeout;
 
+	if (!ent || !item)
+	{
+		return;
+	}
+
 	ent->client->pers.inventory[ITEM_INDEX(item)]--;
 	ValidateSelectedItem (ent);
 
@@ -418,6 +458,11 @@ void Use_Quad (edict_t *ent, gitem_t *item)
 
 void Use_Breather (edict_t *ent, gitem_t *item)
 {
+	if (!ent || !item)
+	{
+		return;
+	}
+
 	ent->client->pers.inventory[ITEM_INDEX(item)]--;
 	ValidateSelectedItem (ent);
 
@@ -431,6 +476,11 @@ void Use_Breather (edict_t *ent, gitem_t *item)
 
 void Use_Envirosuit (edict_t *ent, gitem_t *item)
 {
+	if (!ent || !item)
+	{
+		return;
+	}
+
 	ent->client->pers.inventory[ITEM_INDEX(item)]--;
 	ValidateSelectedItem (ent);
 
@@ -444,6 +494,11 @@ void Use_Envirosuit (edict_t *ent, gitem_t *item)
 
 void	Use_Invulnerability (edict_t *ent, gitem_t *item)
 {
+	if (!ent || !item)
+	{
+		return;
+	}
+
 	ent->client->pers.inventory[ITEM_INDEX(item)]--;
 	ValidateSelectedItem (ent);
 
@@ -459,6 +514,11 @@ void	Use_Invulnerability (edict_t *ent, gitem_t *item)
 
 void	Use_Silencer (edict_t *ent, gitem_t *item)
 {
+	if (!ent || !item)
+	{
+		return;
+	}
+
 	ent->client->pers.inventory[ITEM_INDEX(item)]--;
 	ValidateSelectedItem (ent);
 	ent->client->silencer_shots += 30;
@@ -468,6 +528,11 @@ void	Use_Silencer (edict_t *ent, gitem_t *item)
 
 qboolean Pickup_Key (edict_t *ent, edict_t *other)
 {
+	if (!ent || !other)
+	{
+		return false;
+	}
+
 	if (coop->value)
 	{
 		if (strcmp(ent->classname, "key_power_cube") == 0)
@@ -495,6 +560,11 @@ qboolean Add_Ammo (edict_t *ent, gitem_t *item, int count)
 {
 	int			index;
 	int			max;
+
+	if (!ent || !item)
+	{
+		return false;
+	}
 
 	if (!ent->client)
 		return false;
@@ -543,6 +613,11 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 	int			count;
 	qboolean	weapon;
 
+	if (!ent || !other)
+	{
+		return false;
+	}
+
 	weapon = (ent->item->flags & IT_WEAPON);
 	if ( (weapon) && ( (int)dmflags->value & DF_INFINITE_AMMO ) )
 		count = 1000;
@@ -589,6 +664,11 @@ void Drop_Ammo (edict_t *ent, gitem_t *item)
 	edict_t	*dropped;
 	int		index;
 
+	if (!ent || !item)
+	{
+		return;
+	}
+
 	index = ITEM_INDEX(item);
 	dropped = Drop_Item (ent, item);
 	if (ent->client->pers.inventory[index] >= item->quantity)
@@ -601,6 +681,11 @@ void Drop_Ammo (edict_t *ent, gitem_t *item)
 
 qboolean Pickup_A2k (edict_t *ent, edict_t *other)
 {
+	if (!ent || !other)
+	{
+		return false;
+	}
+
 	// do we already have an a2k?
 	if (other->client->pers.inventory[ITEM_INDEX(ent->item)] == 1)
 	{
@@ -623,6 +708,11 @@ qboolean Pickup_A2k (edict_t *ent, edict_t *other)
 
 void MegaHealth_think (edict_t *self)
 {
+	if (!self)
+	{
+		return;
+	}
+
 	if (self->owner->health > self->owner->max_health)
 	{
 		self->nextthink = level.time + 1;
@@ -638,6 +728,11 @@ void MegaHealth_think (edict_t *self)
 
 qboolean Pickup_Health (edict_t *ent, edict_t *other)
 {
+	if (!ent || !other)
+	{
+		return false;
+	}
+
 	if (!(ent->style & HEALTH_IGNORE_MAX))
 		if (other->health >= other->max_health)
 			return false;
@@ -681,6 +776,11 @@ qboolean Pickup_Health (edict_t *ent, edict_t *other)
 
 int ArmorIndex (edict_t *ent)
 {
+	if (!ent)
+	{
+		return 0;
+	}
+
 	if (!ent->client)
 		return 0;
 
@@ -704,6 +804,11 @@ qboolean Pickup_Armor (edict_t *ent, edict_t *other)
 	int				newcount;
 	float			salvage;
 	int				salvagecount;
+
+	if (!ent || !other)
+	{
+		return false;
+	}
 
 	// get info on new armor
 	newinfo = (gitem_armor_t *)ent->item->info;
@@ -779,6 +884,11 @@ qboolean Pickup_Armor (edict_t *ent, edict_t *other)
 
 int PowerArmorType (edict_t *ent)
 {
+	if (!ent)
+	{
+		return 0;
+	}
+
 	if (!ent->client)
 		return POWER_ARMOR_NONE;
 
@@ -797,6 +907,11 @@ int PowerArmorType (edict_t *ent)
 void Use_PowerArmor (edict_t *ent, gitem_t *item)
 {
 	int		index;
+
+	if (!ent || !item)
+	{
+		return;
+	}
 
 	if (ent->flags & FL_POWER_ARMOR)
 	{
@@ -820,6 +935,11 @@ qboolean Pickup_PowerArmor (edict_t *ent, edict_t *other)
 {
 	int		quantity;
 
+	if (!ent || !other)
+	{
+		return false;
+	}
+
 	quantity = other->client->pers.inventory[ITEM_INDEX(ent->item)];
 
 	other->client->pers.inventory[ITEM_INDEX(ent->item)]++;
@@ -838,6 +958,11 @@ qboolean Pickup_PowerArmor (edict_t *ent, edict_t *other)
 
 void Drop_PowerArmor (edict_t *ent, gitem_t *item)
 {
+	if (!ent || !item)
+	{
+		return;
+	}
+
 	if ((ent->flags & FL_POWER_ARMOR) && (ent->client->pers.inventory[ITEM_INDEX(item)] == 1))
 		Use_PowerArmor (ent, item);
 	Drop_General (ent, item);
@@ -847,17 +972,22 @@ void Drop_PowerArmor (edict_t *ent, gitem_t *item)
 
 qboolean Pickup_PlasmaShield(edict_t *ent, edict_t *other)
 {
-  if(other->client->pers.inventory[ITEM_INDEX(ent->item)])
-  {
-    return false;
-  }
+	if (!ent || !other)
+	{
+		return false;
+	}
+
+	if(other->client->pers.inventory[ITEM_INDEX(ent->item)])
+	{
+		return false;
+	}
 
 	other->client->pers.inventory[ITEM_INDEX(ent->item)] = 1;
 
 	if (deathmatch->value)
 	{
 		if (!(ent->spawnflags & DROPPED_ITEM) )
-			SetRespawn (ent, ent->item->quantity);
+		SetRespawn (ent, ent->item->quantity);
 	}
 
 	return true;
@@ -866,6 +996,11 @@ qboolean Pickup_PlasmaShield(edict_t *ent, edict_t *other)
 
 qboolean Pickup_Visor(edict_t *ent, edict_t *other)
 {
+	if (!ent || !other)
+	{
+		return false;
+	}
+
 	// do we already have a visor?
 	if (other->client->pers.inventory[ITEM_INDEX(ent->item)] == 1 &&
 		other->client->pers.visorFrames == 300)
@@ -891,6 +1026,11 @@ qboolean Pickup_Visor(edict_t *ent, edict_t *other)
 
 void Drop_Visor(edict_t *ent, gitem_t *item)
 {
+	if (!ent || !item)
+	{
+		return;
+	}
+
 	edict_t *visor = Drop_Item (ent, item);
 	ent->client->pers.inventory[ITEM_INDEX(item)] = 0;
 	ValidateSelectedItem (ent);
@@ -908,6 +1048,11 @@ Touch_Item
 void Touch_Item (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *surf)
 {
 	qboolean	taken;
+
+	if (!ent || !other)
+	{
+		return;
+	}
 
 	if (!other->client)
 		return;
@@ -957,6 +1102,11 @@ void Touch_Item (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *surf
 
 void drop_temp_touch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *surf)
 {
+	if (!ent || !other)
+	{
+		return;
+	}
+
 	if (other == ent->owner)
 		return;
 
@@ -965,6 +1115,11 @@ void drop_temp_touch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t 
 
 void drop_make_touchable (edict_t *ent)
 {
+	if (!ent)
+	{
+		return;
+	}
+
 	ent->touch = Touch_Item;
 	if (deathmatch->value)
 	{
@@ -978,6 +1133,11 @@ edict_t *Drop_Item (edict_t *ent, gitem_t *item)
 	edict_t	*dropped;
 	vec3_t	forward, right;
 	vec3_t	offset;
+
+	if (!ent || !item)
+	{
+		return NULL;
+	}
 
 	dropped = G_Spawn();
 
@@ -1024,6 +1184,11 @@ edict_t *Drop_Item (edict_t *ent, gitem_t *item)
 
 void Use_Item (edict_t *ent, edict_t *other, edict_t *activator)
 {
+	if (!ent)
+	{
+		return;
+	}
+
 	ent->svflags &= ~SVF_NOCLIENT;
 	ent->use = NULL;
 
@@ -1053,6 +1218,11 @@ void droptofloor (edict_t *ent)
 	trace_t		tr;
 	vec3_t		dest;
 	float		*v;
+
+	if (!ent)
+	{
+		return;
+	}
 
 	v = tv(-15,-15,-15);
 	VectorCopy (v, ent->mins);
@@ -1193,6 +1363,11 @@ be on an entity that hasn't spawned yet.
 */
 void SpawnItem (edict_t *ent, gitem_t *item)
 {
+	if (!ent || !item)
+	{
+		return;
+	}
+
 	PrecacheItem (item);
 
 	if (ent->spawnflags)
@@ -2590,6 +2765,11 @@ security pass for the security level
 */
 void SP_item_health (edict_t *self)
 {
+	if (!self)
+	{
+		return;
+	}
+
 	if ( deathmatch->value && ((int)dmflags->value & DF_NO_HEALTH) )
 	{
 		G_FreeEdict (self);
@@ -2606,6 +2786,11 @@ void SP_item_health (edict_t *self)
 */
 void SP_item_health_small (edict_t *self)
 {
+	if (!self)
+	{
+		return;
+	}
+
 	if ( deathmatch->value && ((int)dmflags->value & DF_NO_HEALTH) )
 	{
 		G_FreeEdict (self);
@@ -2623,6 +2808,11 @@ void SP_item_health_small (edict_t *self)
 */
 void SP_item_health_large (edict_t *self)
 {
+	if (!self)
+	{
+		return;
+	}
+
 	if ( deathmatch->value && ((int)dmflags->value & DF_NO_HEALTH) )
 	{
 		G_FreeEdict (self);
@@ -2639,6 +2829,11 @@ void SP_item_health_large (edict_t *self)
 */
 void SP_item_health_mega (edict_t *self)
 {
+	if (!self)
+	{
+		return;
+	}
+
 	if ( deathmatch->value && ((int)dmflags->value & DF_NO_HEALTH) )
 	{
 		G_FreeEdict (self);
