@@ -426,12 +426,13 @@ void monster_autocannon_findenemy(edict_t *self)
 void monster_autocannon_turn(edict_t *self)
 {
 	vec3_t old_angles;
-	VectorCopy(self->s.angles, old_angles);
 
 	if (!self)
 	{
 		return;
 	}
+
+	VectorCopy(self->s.angles, old_angles);
 
 	if (!self->enemy)
 	{

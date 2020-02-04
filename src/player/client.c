@@ -531,11 +531,11 @@ void LookAtKiller (edict_t *self, edict_t *inflictor, edict_t *attacker)
 		return;
 	}
 
-	if (attacker && attacker != world && attacker != self)
+	if (attacker != world && attacker != self)
 	{
 		VectorSubtract (attacker->s.origin, self->s.origin, dir);
 	}
-	else if (inflictor && inflictor != world && inflictor != self)
+	else if (inflictor != world && inflictor != self)
 	{
 		VectorSubtract (inflictor->s.origin, self->s.origin, dir);
 	}

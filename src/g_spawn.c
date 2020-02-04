@@ -311,11 +311,6 @@ void ED_CallSpawn (edict_t *ent)
 		return;
 	}
 
-	if (!ent)
-	{
-		return;
-	}
-
 	if (!ent->classname)
 	{
 		gi.dprintf ("ED_CallSpawn: NULL classname\n");
@@ -369,7 +364,7 @@ char *ED_NewString (const char *string)
 
 	for (i=0 ; i< l ; i++)
 	{
-		if (string[i] == '\\' && i < l-1)
+		if ((i < l-1) && (string[i] == '\\'))
 		{
 			i++;
 			if (string[i] == 'n')

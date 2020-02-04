@@ -1157,7 +1157,7 @@ Info_ValueForKey(char *s, char *key)
 
 		o = value[valueindex];
 
-		while (*s != '\\' && *s)
+		while (*s != '\\')
 		{
 			if (!*s)
 			{
@@ -1222,7 +1222,7 @@ Info_RemoveKey(char *s, char *key)
 
 		o = value;
 
-		while (*s != '\\' && *s)
+		while (*s != '\\')
 		{
 			if (!*s)
 			{
@@ -1274,6 +1274,11 @@ Info_SetValueForKey(char *s, char *key, char *value)
 	int c;
 	int maxsize = MAX_INFO_STRING;
 
+	if (!value || !strlen(value))
+	{
+		return;
+	}
+
 	if (strstr(key, "\\") || strstr(value, "\\"))
 	{
 		Com_Printf("Can't use keys or values with a \\\n");
@@ -1299,11 +1304,6 @@ Info_SetValueForKey(char *s, char *key, char *value)
 	}
 
 	Info_RemoveKey(s, key);
-
-	if (!value || !strlen(value))
-	{
-		return;
-	}
 
 	Com_sprintf(newi, sizeof(newi), "\\%s\\%s", key, value);
 

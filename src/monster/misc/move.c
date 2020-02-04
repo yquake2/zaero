@@ -439,10 +439,6 @@ void SV_NewChaseDir (edict_t *actor, edict_t *enemy, float dist)
 		return;
 	}
 
-	//FIXME: how did we get here with no enemy
-	if (!enemy)
-		return;
-
 	olddir = anglemod( (int)(actor->ideal_yaw/45)*45 );
 	turnaround = anglemod(olddir - 180);
 
