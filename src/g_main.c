@@ -45,6 +45,7 @@ cvar_t  *gamedir;
 
 cvar_t	*sv_cheats;
 
+cvar_t *aimfix;
 
 void SpawnEntities (char *mapname, char *entities, char *spawnpoint);
 void ClientThink (edict_t *ent, usercmd_t *cmd);

@@ -609,6 +609,8 @@ extern	cvar_t	*grenadeammotype;
 extern	cvar_t	*grenadeammo;
 extern	cvar_t	*bettyammo;
 
+extern cvar_t *aimfix;
+
 #define world	(&g_edicts[0])
 
 // item spawnflags
