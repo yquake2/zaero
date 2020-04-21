@@ -887,13 +887,13 @@ G_SetClientEvent
 */
 void G_SetClientEvent (edict_t *ent)
 {
-	if (ent->s.event)
-		return;
-
 	if (!ent)
 	{
 		return;
 	}
+
+	if (ent->s.event)
+		return;
 
 	if ( ent->groundentity && xyspeed > 225)
 	{

@@ -304,7 +304,7 @@ extern void AddPointToBounds ( vec3_t v , vec3_t mins , vec3_t maxs ) ;
 extern void ClearBounds ( vec3_t mins , vec3_t maxs ) ;
 extern int BoxOnPlaneSide2 ( vec3_t emins , vec3_t emaxs , struct cplane_s * p ) ;
 extern float anglemod ( float a ) ;
-extern float LerpAngle ( float a2 , float a1 , float frac ) ;
+extern float LerpAngle(float a2, float a1, float frac);
 extern float Q_fabs ( float f ) ;
 extern void R_ConcatTransforms ( float in1 [ 3 ] [ 4 ] , float in2 [ 3 ] [ 4 ] , float out [ 3 ] [ 4 ] ) ;
 extern void R_ConcatRotations ( float in1 [ 3 ] [ 3 ] , float in2 [ 3 ] [ 3 ] , float out [ 3 ] [ 3 ] ) ;

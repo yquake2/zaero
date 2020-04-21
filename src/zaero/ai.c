@@ -102,12 +102,14 @@ int zFindRoamYaw(edict_t *self, float distcheck)
 {
 	vec3_t	forward, end, angles;
 	trace_t	tr;
-	float current = anglemod(self->s.angles[YAW]);
+	float current;
 
 	if (!self)
 	{
 		return 0;
 	}
+
+	current = anglemod(self->s.angles[YAW]);
 
 	if(current <= self->ideal_yaw - 1 || current > self->ideal_yaw + 1)
 	{

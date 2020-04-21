@@ -153,11 +153,6 @@ void ThrowGib (edict_t *self, char *gibname, int damage, int type)
 	vec3_t	size;
 	float	vscale;
 
-	if (!self)
-	{
-		return;
-	}
-
 	if (!self || !gibname)
 	{
 		return;
@@ -333,11 +328,6 @@ void ThrowDebris (edict_t *self, char *modelname, float speed, vec3_t origin)
 {
 	edict_t	*chunk;
 	vec3_t	v;
-
-	if (!self)
-	{
-		return;
-	}
 
 	if (!self || !modelname)
 	{

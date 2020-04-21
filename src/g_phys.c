@@ -1102,7 +1102,7 @@ void SV_Physics_Step (edict_t *ent)
 
 void SV_Physics_FallFloat (edict_t *ent)
 {
-	float gravVal = ent->gravity * sv_gravity->value * FRAMETIME;
+	float gravVal;
 	qboolean wasonground = false;
 	qboolean hitsound = false;
 
@@ -1110,6 +1110,8 @@ void SV_Physics_FallFloat (edict_t *ent)
 	{
 		return;
 	}
+
+	gravVal = ent->gravity * sv_gravity->value * FRAMETIME;
 
 	// check velocity
 	SV_CheckVelocity (ent);

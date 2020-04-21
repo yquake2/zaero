@@ -415,12 +415,14 @@ mmove_t zboss_move_pain3 = {FRAME_pain3Start, FRAME_pain3End, zboss_frames_pain3
 void zboss_pain (edict_t *self, edict_t *other, float kick, int damage)
 {
 	float r;
-	float hbreak = (self->max_health / 3.0);
+	float hbreak;
 
 	if (!self)
 	{
 		return;
 	}
+
+	hbreak = (self->max_health / 3.0);
 
 	// set the skin
 	if (self->health < hbreak)
@@ -742,14 +744,17 @@ void zboss_reelInGraaple2(edict_t *self)
 {
 	vec3_t	vec, dir;
 	float length;
-	edict_t *enemy = self->laser->enemy;
-	vec3_t	hookoffset	= {-5, -24, 34};
+	edict_t *enemy;
+	vec3_t	hookoffset;
 	vec3_t	forward, right;
 
 	if (!self)
 	{
 		return;
 	}
+
+	enemy = self->laser->enemy;
+	hookoffset	= {-5, -24, 34};
 
 	AngleVectors (self->s.angles, forward, right, NULL);
 	G_ProjectSource(self->s.origin, hookoffset, forward, right, vec);
@@ -1026,13 +1031,13 @@ mmove_t zboss_move_prehook = {FRAME_preHookStart, FRAME_preHookEnd, zboss_frames
 
 void PlasmaballBlastAnim(edict_t *ent)
 {
-	ent->s.frame++;
-	ent->s.skinnum++;
-
 	if (!ent)
 	{
 		return;
 	}
+
+	ent->s.frame++;
+	ent->s.skinnum++;
 
 	if(ent->s.frame > 1)
 	{

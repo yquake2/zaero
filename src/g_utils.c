@@ -28,14 +28,14 @@ edict_t *G_Find (edict_t *from, int fieldofs, char *match)
 	char	*s;
 
 	if (!from)
-	{
-		return NULL;
-	}
-
-	if (!from)
 		from = g_edicts;
 	else
 		from++;
+
+	if (!match)
+	{
+		return NULL;
+	}
 
 	for ( ; from < &g_edicts[globals.num_edicts] ; from++)
 	{
@@ -67,14 +67,10 @@ edict_t *findradius (edict_t *from, vec3_t org, float rad)
 	int		j;
 
 	if (!from)
-	{
-		return NULL;
-	}
-
-	if (!from)
 		from = g_edicts;
 	else
 		from++;
+
 	for ( ; from < &g_edicts[globals.num_edicts]; from++)
 	{
 		if (!from->inuse)
