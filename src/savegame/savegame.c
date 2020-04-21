@@ -225,6 +225,9 @@ InitGame(void)
 	bob_pitch = gi.cvar ("bob_pitch", "0.002", 0);
 	bob_roll = gi.cvar ("bob_roll", "0.002", 0);
 
+	/* others */
+	aimfix = gi.cvar("aimfix", "0", CVAR_ARCHIVE);
+
 	/* items */
 	InitItems ();
 
