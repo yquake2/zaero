@@ -745,8 +745,8 @@ void zboss_reelInGraaple2(edict_t *self)
 	vec3_t	vec, dir;
 	float length;
 	edict_t *enemy;
-	vec3_t	hookoffset;
-	vec3_t	forward, right;
+	vec3_t hookoffset = {-5, -24, 34};
+	vec3_t forward, right;
 
 	if (!self)
 	{
@@ -754,7 +754,6 @@ void zboss_reelInGraaple2(edict_t *self)
 	}
 
 	enemy = self->laser->enemy;
-	hookoffset	= {-5, -24, 34};
 
 	AngleVectors (self->s.angles, forward, right, NULL);
 	G_ProjectSource(self->s.origin, hookoffset, forward, right, vec);
