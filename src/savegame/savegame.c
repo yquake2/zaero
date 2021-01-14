@@ -54,19 +54,19 @@
  * in tables/ are changed, otherwise
  * strange things may happen.
  */
-#define SAVEGAMEVER "YQ2-3"
+#define SAVEGAMEVER "YQ2-4"
 
 /*
  * This macros are used to prohibit loading of savegames
  * created on other systems or architectures. This will
  * crash q2 in spectacular ways
  */
-#ifndef OSTYPE
-#error OSTYPE should be defined by the build system
+#ifndef YQ2OSTYPE
+#error YQ2OSTYPE should be defined by the build system
 #endif
 
-#ifndef ARCH
-#error ARCH should be defined by the build system
+#ifndef YQ2ARCH
+#error YQ2ARCH should be defined by the build system
 #endif
 
 /*
@@ -766,8 +766,8 @@ WriteGame(const char *filename, qboolean autosave)
 
 	strncpy(str_ver, SAVEGAMEVER, sizeof(str_ver));
 	strncpy(str_game, GAMEVERSION, sizeof(str_game));
-	strncpy(str_os, OSTYPE, sizeof(str_os) - 1);
-    strncpy(str_arch, ARCH, sizeof(str_arch));
+	strncpy(str_os, YQ2OSTYPE, sizeof(str_os) - 1);
+	strncpy(str_arch, YQ2ARCH, sizeof(str_arch));
 
 	fwrite(str_ver, sizeof(str_ver), 1, f);
 	fwrite(str_game, sizeof(str_game), 1, f);
@@ -817,85 +817,87 @@ ReadGame(const char *filename)
 	fread(str_os, sizeof(str_os), 1, f);
 	fread(str_arch, sizeof(str_arch), 1, f);
 
-	if (!strcmp(str_ver, SAVEGAMEVER))
-	{
-		save_ver = 3;
+	static const struct {
+		const char* verstr;
+		int vernum;
+	} version_mappings[] = {
+		{"YQ2-1", 1},
+		{"YQ2-2", 2},
+		{"YQ2-3", 3},
+		{"YQ2-4", 4},
+	};
 
-		if (strcmp(str_game, GAMEVERSION))
+	for (i=0; i < sizeof(version_mappings)/sizeof(version_mappings[0]); ++i)
+	{
+		if (strcmp(version_mappings[i].verstr, str_ver) == 0)
 		{
-			fclose(f);
-			gi.error("Savegame from an other game.so.\n");
-		}
-		else if (strcmp(str_os, OSTYPE))
-		{
-			fclose(f);
-			gi.error("Savegame from an other os.\n");
-		}
-		else if (strcmp(str_arch, ARCH))
-		{
-			fclose(f);
-			gi.error("Savegame from an other architecure.\n");
+			save_ver = version_mappings[i].vernum;
+			break;
 		}
 	}
-	else if (!strcmp(str_ver, "YQ2-2"))
-	{
-		save_ver = 2;
 
-		if (strcmp(str_game, GAMEVERSION))
-		{
-			fclose(f);
-			gi.error("Savegame from an other game.so.\n");
-		}
-		else if (strcmp(str_os, OSTYPE))
-		{
-			fclose(f);
-			gi.error("Savegame from an other os.\n");
-		}
-		else if (strcmp(str_arch, ARCH))
-		{
-			fclose(f);
-			gi.error("Savegame from an other architecure.\n");
-		}
-	}
-	else if (!strcmp(str_ver, "YQ2-1"))
-	{
-		save_ver = 1;
-
-		if (strcmp(str_game, GAMEVERSION))
-		{
-			fclose(f);
-			gi.error("Savegame from an other game.so.\n");
-		}
-		else if (strcmp(str_os, OSTYPE_1))
-		{
-			fclose(f);
-			gi.error("Savegame from an other os.\n");
-		}
-
-		if (!strcmp(str_os, "Windows"))
-		{
-			/* Windows was forced to i386 */
-			if (strcmp(str_arch, "i386"))
-			{
-				fclose(f);
-				gi.error("Savegame from an other architecure.\n");
-			}
-		}
-		else
-		{
-			if (strcmp(str_arch, ARCH_1))
-			{
-				fclose(f);
-				gi.error("Savegame from an other architecure.\n");
-			}
-		}
-	}
-	else
+	if (save_ver == 0) // not found in mappings table
 	{
 		fclose(f);
 		gi.error("Savegame from an incompatible version.\n");
 	}
- 
+
+	if (save_ver == 1)
+	{
+		if (strcmp(str_game, GAMEVERSION) != 0)
+		{
+			fclose(f);
+			gi.error("Savegame from another game.so.\n");
+		}
+		else if (strcmp(str_os, OSTYPE_1) != 0)
+		{
+			fclose(f);
+			gi.error("Savegame from another os.\n");
+		}
+
+#ifdef _WIN32
+		/* Windows was forced to i386 */
+		if (strcmp(str_arch, "i386") != 0)
+		{
+			fclose(f);
+			gi.error("Savegame from another architecture.\n");
+		}
+#else
+		if (strcmp(str_arch, ARCH_1) != 0)
+		{
+			fclose(f);
+			gi.error("Savegame from another architecture.\n");
+		}
+#endif
+	}
+	else // all newer savegame versions
+	{
+		if (strcmp(str_game, GAMEVERSION) != 0)
+		{
+			fclose(f);
+			gi.error("Savegame from another game.so.\n");
+		}
+		else if (strcmp(str_os, YQ2OSTYPE) != 0)
+		{
+			fclose(f);
+			gi.error("Savegame from another os.\n");
+		}
+		else if (strcmp(str_arch, YQ2ARCH) != 0)
+		{
+#if defined(_WIN32) && (defined(__i386__) || defined(_M_IX86))
+			// before savegame version "YQ2-4" (and after version 1),
+			// the official Win32 binaries accidentally had the YQ2ARCH "AMD64"
+			// instead of "i386" set due to a bug in the Makefile.
+			// This quirk allows loading those savegames anyway
+			if (save_ver >= 4 || strcmp(str_arch, "AMD64") != 0)
+#endif
+			{
+				fclose(f);
+				gi.error("Savegame from another architecture.\n");
+			}
+		}
+	}
+
 	g_edicts = gi.TagMalloc(game.maxentities * sizeof(g_edicts[0]), TAG_GAME);
 	globals.edicts = g_edicts;
 
