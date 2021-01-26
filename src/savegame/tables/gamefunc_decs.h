@@ -404,7 +404,7 @@ extern void TossClientWeapon ( edict_t * self ) ;
 extern void ClientObituary ( edict_t * self , edict_t * inflictor , edict_t * attacker ) ;
 extern qboolean IsFemale ( edict_t * ent ) ;
 extern void player_pain ( edict_t * self , edict_t * other , float kick , int damage ) ;
-extern void SP_info_player_intermission ( void ) ;
+extern void SP_info_player_intermission ( edict_t *ent ) ;
 extern void SP_info_player_coop ( edict_t * self ) ;
 extern void SP_info_player_deathmatch ( edict_t * self ) ;
 extern void SP_info_player_start ( edict_t * self ) ;

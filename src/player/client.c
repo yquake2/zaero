@@ -140,7 +140,7 @@ void SP_info_player_coop(edict_t *self)
 The deathmatch intermission point will be at one of these
 Use 'angles' instead of 'angle', so you can set pitch or roll as well as yaw.  'pitch yaw roll'
 */
-void SP_info_player_intermission(void)
+void SP_info_player_intermission(edict_t *ent)
 {
 }
 
@@ -185,7 +185,7 @@ qboolean IsFemale (edict_t *ent)
 struct monsterObit {
 	char *classname;
 	char *message;
-} obits[] = 
+} obits[] =
 {
 	{"monster_soldier", "%s was slaughtered by a Shotgun Guard.\n"},
 	{"monster_soldier_light", "%s was exterminated by a Light Guard.\n"},
@@ -570,7 +570,7 @@ void player_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damag
 	{
 		stopCamera(self);
 	}
-	
+
 	VectorClear (self->avelocity);
 
 	self->takedamage = DAMAGE_YES;
@@ -679,7 +679,7 @@ void InitClientPersistant (gclient_t *client)
 
 	item = FindItem("Push");
 	client->pers.inventory[ITEM_INDEX(item)] = 1;
-	
+
 	item = FindItem("Blaster");
 	client->pers.selected_item = ITEM_INDEX(item);
 	client->pers.inventory[client->pers.selected_item] = 1;
@@ -693,7 +693,7 @@ void InitClientPersistant (gclient_t *client)
 		client->pers.inventory[ITEM_INDEX(item)] = 3;
 	}
 
-	
+
 	client->pers.health			      = 100;
 	client->pers.max_health		    = 100;
 
@@ -730,7 +730,7 @@ void InitClientResp (gclient_t *client)
 ==================
 SaveClientData
 
-Some information that should be persistant, like health, 
+Some information that should be persistant, like health,
 is still stored in the edict structure, so it needs to
 be mirrored out to the client structure before all the
 edicts are wiped.
@@ -1249,7 +1249,7 @@ void PutClientInServer (edict_t *ent)
 		char		userinfo[MAX_INFO_STRING];
 
 		int health = client->pers.health;
-		
+
 		memcpy (userinfo, client->pers.userinfo, sizeof(userinfo));
 		InitClientPersistant(client);
 		ClientUserinfoChanged (ent, userinfo);
@@ -1344,7 +1344,7 @@ void PutClientInServer (edict_t *ent)
 =====================
 ClientBeginDeathmatch
 
-A client has just connected to the server in 
+A client has just connected to the server in
 deathmatch mode, so clear everything out before starting them.
 =====================
 */
@@ -1672,7 +1672,7 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 	{
 		client->ps.pmove.pm_type = PM_FREEZE;
 		// can exit intermission after five seconds
-		if (level.time > level.intermissiontime + 5.0 
+		if (level.time > level.intermissiontime + 5.0
 			&& (ucmd->buttons & BUTTON_ANY) )
 			level.exitintermission = true;
 		return;
@@ -1688,7 +1688,7 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 
 	// set up for pmove
 	memset (&pm, 0, sizeof(pm));
-	
+
 	if (ent->movetype == MOVETYPE_NOCLIP)
 		client->ps.pmove.pm_type = PM_SPECTATOR;
 	else if (ent->s.modelindex != 255)
