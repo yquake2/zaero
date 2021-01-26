@@ -386,7 +386,7 @@ void use_target_changelevel (edict_t *self, edict_t *other, edict_t *activator)
 	}
 
 	// if going to a new unit, clear cross triggers
-	if (strstr(self->map, "*"))	
+	if (strstr(self->map, "*"))
 		game.serverflags &= ~(SFL_CROSS_TRIGGER_MASK);
 
 	BeginIntermission (self);
@@ -534,8 +534,6 @@ speed	default is 1000
 
 void use_target_blaster (edict_t *self, edict_t *other, edict_t *activator)
 {
-	int effect;
-
 	if (!self)
 	{
 		return;
@@ -546,13 +544,6 @@ void use_target_blaster (edict_t *self, edict_t *other, edict_t *activator)
 		gi.sound (self, CHAN_AUTO, gi.soundindex("items/empnuke/emp_missfire.wav"), 1, ATTN_NORM, 0);
 		return;
 	}
-
-	if (self->spawnflags & 2)
-		effect = 0;
-	else if (self->spawnflags & 1)
-		effect = EF_HYPERBLASTER;
-	else
-		effect = EF_BLASTER;
 
 	fire_blaster (self, self->s.origin, self->movedir, self->dmg, self->speed, EF_BLASTER, MOD_TARGET_BLASTER);
 	gi.sound (self, CHAN_VOICE, self->noise_index, 1, ATTN_NORM, 0);

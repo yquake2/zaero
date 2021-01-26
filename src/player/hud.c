@@ -164,7 +164,6 @@ void DeathmatchScoreboardMessage (edict_t *ent, edict_t *killer)
 	int		sorted[MAX_CLIENTS];
 	int		sortedscores[MAX_CLIENTS];
 	int		score, total;
-	int		picnum;
 	int		x, y;
 	gclient_t	*cl;
 	edict_t		*cl_ent;
@@ -212,7 +211,6 @@ void DeathmatchScoreboardMessage (edict_t *ent, edict_t *killer)
 		cl = &game.clients[sorted[i]];
 		cl_ent = g_edicts + 1 + sorted[i];
 
-		picnum = gi.imageindex ("i_fixme");
 		x = (i>=6) ? 160 : 0;
 		y = 32 + 32 * (i%6);
 
@@ -335,12 +333,12 @@ void HelpComputer (edict_t *ent)
 		"xv 0 yv 54 cstring2 \"%s\" "		// help 1
 		"xv 0 yv 110 cstring2 \"%s\" "		// help 2
 		"xv 50 yv 164 string2 \" kills     goals    secrets\" "
-		"xv 50 yv 172 string2 \"%3i/%3i     %i/%i       %i/%i\" ", 
+		"xv 50 yv 172 string2 \"%3i/%3i     %i/%i       %i/%i\" ",
 		sk,
 		level.level_name,
 		game.helpmessage1,
 		game.helpmessage2,
-		level.killed_monsters, level.total_monsters, 
+		level.killed_monsters, level.total_monsters,
 		level.found_goals, level.total_goals,
 		level.found_secrets, level.total_secrets);
 
@@ -426,9 +424,9 @@ void G_SetStats (edict_t *ent)
 		ent->client->ps.stats[STAT_AMMO_ICON] = gi.imageindex (item->icon);
 		ent->client->ps.stats[STAT_AMMO] = ent->client->pers.inventory[ent->client->ammo_index];
 	}
-	
+
 	cells = 0;
-	
+
 	//
 	// armor
 	//

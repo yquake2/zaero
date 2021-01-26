@@ -627,7 +627,7 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 		count = ent->item->quantity;
 
 	oldcount = other->client->pers.inventory[ITEM_INDEX(ent->item)];
-  
+
 	if(ent->spawnflags & 0x08)
 	{
 		if(oldcount >= count)
@@ -1066,7 +1066,7 @@ void Touch_Item (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *surf
 	if (taken)
 	{
 		// flash the screen
-		other->client->bonus_alpha = 0.25;	
+		other->client->bonus_alpha = 0.25;
 
 		// show icon and name on status bar
 		other->client->ps.stats[STAT_PICKUP_ICON] = gi.imageindex(ent->item->icon);
@@ -1150,7 +1150,7 @@ edict_t *Drop_Item (edict_t *ent, gitem_t *item)
 	VectorSet (dropped->maxs, 15, 15, 15);
 	gi.setmodel (dropped, dropped->item->world_model);
 	dropped->solid = SOLID_TRIGGER;
-	dropped->movetype = MOVETYPE_TOSS;  
+	dropped->movetype = MOVETYPE_TOSS;
 	dropped->touch = drop_temp_touch;
 	dropped->owner = ent;
 
@@ -1234,7 +1234,7 @@ void droptofloor (edict_t *ent)
 	else
 		gi.setmodel (ent, ent->item->world_model);
 	ent->solid = SOLID_TRIGGER;
-	ent->movetype = MOVETYPE_TOSS;  
+	ent->movetype = MOVETYPE_TOSS;
 	ent->touch = Touch_Item;
 
 	v = tv(0,0,-128);
@@ -1439,7 +1439,7 @@ void SpawnItem (edict_t *ent, gitem_t *item)
 
 //======================================================================
 
-gitem_t	itemlist[] = 
+gitem_t	itemlist[] =
 {
 	{
 		NULL
@@ -1452,7 +1452,7 @@ gitem_t	itemlist[] =
 /*QUAKED item_armor_body (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
 	{
-		"item_armor_body", 
+		"item_armor_body",
 		Pickup_Armor,
 		NULL,
 		NULL,
@@ -1474,7 +1474,7 @@ gitem_t	itemlist[] =
 /*QUAKED item_armor_combat (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
 	{
-		"item_armor_combat", 
+		"item_armor_combat",
 		Pickup_Armor,
 		NULL,
 		NULL,
@@ -1496,7 +1496,7 @@ gitem_t	itemlist[] =
 /*QUAKED item_armor_jacket (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
 	{
-		"item_armor_jacket", 
+		"item_armor_jacket",
 		Pickup_Armor,
 		NULL,
 		NULL,
@@ -1518,7 +1518,7 @@ gitem_t	itemlist[] =
 /*QUAKED item_armor_shard (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
 	{
-		"item_armor_shard", 
+		"item_armor_shard",
 		Pickup_Armor,
 		NULL,
 		NULL,
@@ -1541,7 +1541,7 @@ gitem_t	itemlist[] =
 /*QUAKED item_power_screen (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
 	{
-		"item_power_screen", 
+		"item_power_screen",
 		Pickup_PowerArmor,
 		Use_PowerArmor,
 		Drop_PowerArmor,
@@ -1583,7 +1583,7 @@ gitem_t	itemlist[] =
 	},
 
 	//
-	// WEAPONS 
+	// WEAPONS
 	//
 
 /*QUAKED weapon_hand (.3 .3 1) (-16 -16 -16) (16 16 16)
@@ -1635,7 +1635,7 @@ gitem_t	itemlist[] =
 always owned, never in the world
 */
 	{
-		"weapon_blaster", 
+		"weapon_blaster",
 		NULL,
 		Use_Weapon,
 		NULL,
@@ -1657,7 +1657,7 @@ always owned, never in the world
 /*QUAKED weapon_shotgun (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
 	{
-		"weapon_shotgun", 
+		"weapon_shotgun",
 		Pickup_Weapon,
 		Use_Weapon,
 		Drop_Weapon,
@@ -1679,7 +1679,7 @@ always owned, never in the world
 /*QUAKED weapon_supershotgun (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
 	{
-		"weapon_supershotgun", 
+		"weapon_supershotgun",
 		Pickup_Weapon,
 		Use_Weapon,
 		Drop_Weapon,
@@ -1701,7 +1701,7 @@ always owned, never in the world
 /*QUAKED weapon_machinegun (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
 	{
-		"weapon_machinegun", 
+		"weapon_machinegun",
 		Pickup_Weapon,
 		Use_Weapon,
 		Drop_Weapon,
@@ -1723,7 +1723,7 @@ always owned, never in the world
 /*QUAKED weapon_chaingun (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
 	{
-		"weapon_chaingun", 
+		"weapon_chaingun",
 		Pickup_Weapon,
 		Use_Weapon,
 		Drop_Weapon,
@@ -1841,7 +1841,7 @@ always owned, never in the world
 /*QUAKED weapon_hyperblaster (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
 	{
-		"weapon_hyperblaster", 
+		"weapon_hyperblaster",
 		Pickup_Weapon,
 		Use_Weapon,
 		Drop_Weapon,
@@ -1863,7 +1863,7 @@ always owned, never in the world
 /*QUAKED weapon_railgun (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
 	{
-		"weapon_railgun", 
+		"weapon_railgun",
 		Pickup_Weapon,
 		Use_Weapon,
 		Drop_Weapon,
@@ -1885,7 +1885,7 @@ always owned, never in the world
 /*QUAKED weapon_sniperrifle (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
 	{
-		"weapon_sniperrifle", 
+		"weapon_sniperrifle",
 		Pickup_Weapon,
 		Use_Weapon,
 		Drop_Weapon,
@@ -1951,7 +1951,7 @@ always owned, never in the world
 		IT_WEAPON|IT_STAY_COOP,
 		NULL,
 		0,
-/* precache */ "weapons/sonic/sc_warm.wav weapons/sonic/sc_cool.wav weapons/sonic/sc_fire.wav" // weapons/sonic/sc_act.wav weapons/sonic/sc_dact.wav  
+/* precache */ "weapons/sonic/sc_warm.wav weapons/sonic/sc_cool.wav weapons/sonic/sc_fire.wav" // weapons/sonic/sc_act.wav weapons/sonic/sc_dact.wav
 	},
 
 /*QUAKED ammo_a2k (.3 .3 1) (-16 -16 -16) (16 16 16)
@@ -1977,7 +1977,7 @@ always owned, never in the world
 		HIDE_FROM_SELECTION
 	},
 
-  
+
   //
 	// AMMO ITEMS
 	//
@@ -2137,7 +2137,7 @@ always owned, never in the world
 		IT_AMMO,
 		NULL,
 		AMMO_EMPNUKE,
-/* precache */ "items/empnuke/emp_trg.wav"  //items/empnuke/emp_act.wav items/empnuke/emp_spin.wav items/empnuke/emp_idle.wav 
+/* precache */ "items/empnuke/emp_trg.wav"  //items/empnuke/emp_act.wav items/empnuke/emp_spin.wav items/empnuke/emp_idle.wav
 	},
 
 	//
@@ -2146,7 +2146,7 @@ always owned, never in the world
 /*QUAKED item_quad (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
 	{
-		"item_quad", 
+		"item_quad",
 		Pickup_Powerup,
 		Use_Quad,
 		Drop_General,
@@ -2275,7 +2275,7 @@ always owned, never in the world
 /* precache */ "items/visor/act.wav items/visor/deact.wav"// items/visor/next.wav"
 	},
 
-  
+
 /*QUAKED ammo_plasmashield (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
 	{
@@ -2866,8 +2866,8 @@ void SetItemNames (void)
 {
 	int		i;
 	gitem_t	*it;
-	int index;
-	for (i=0, index = 0; i<game.num_items ; i++)
+
+	for (i=0; i<game.num_items ; i++)
 	{
 		it = &itemlist[i];
 		gi.configstring (CS_ITEMS+i, it->pickup_name);
