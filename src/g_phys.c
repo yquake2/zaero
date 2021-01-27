@@ -7,7 +7,7 @@
 
 pushmove objects do not obey gravity, and do not interact with each other or trigger fields, but block normal movement and push normal objects when they move.
 
-onground is set for toss objects when they come to a complete rest.  it is set for steping or walking objects 
+onground is set for toss objects when they come to a complete rest.  it is set for steping or walking objects
 
 doors, plats, etc are SOLID_BSP, and MOVETYPE_PUSH
 bonus items are SOLID_TRIGGER touch, and MOVETYPE_TOSS
@@ -334,10 +334,10 @@ void SV_AddGravity (edict_t *ent)
 }
 
 /*
- * Returns the actual bounding box of a bmodel. 
+ * Returns the actual bounding box of a bmodel.
  * This is a big improvement over what q2 normally
- * does with rotating bmodels - q2 sets absmin, 
- * absmax to a cube that will completely contain 
+ * does with rotating bmodels - q2 sets absmin,
+ * absmax to a cube that will completely contain
  * the bmodel at *any* rotation on *any* axis, whether
  * the bmodel can actually rotate to that angle or not.
  * This leads to a lot of false block tests in SV_Push
@@ -426,12 +426,12 @@ RealBoundingBox(edict_t *ent, vec3_t mins, vec3_t maxs)
 		if (mins[1] > p[i][1])
 		{
 			mins[1] = p[i][1];
-		}    
+		}
 
 		if (mins[2] > p[i][2])
 		{
 			mins[2] = p[i][2];
-		} 
+		}
 
 		if (maxs[0] < p[i][0])
 		{
@@ -532,7 +532,6 @@ qboolean SV_Push (edict_t *pusher, vec3_t move, vec3_t amove)
 {
 	int			i, e;
 	edict_t		*check, *block;
-	vec3_t		mins, maxs;
 	pushed_t	*p;
 	vec3_t		org, org2, move2, forward, right, up;
 	vec3_t		realmins, realmaxs;
@@ -555,13 +554,6 @@ qboolean SV_Push (edict_t *pusher, vec3_t move, vec3_t amove)
 		move[i] = 0.125 * (int)temp;
 	}
 
-	// find the bounding box
-	for (i=0 ; i<3 ; i++)
-	{
-		mins[i] = pusher->absmin[i] + move[i];
-		maxs[i] = pusher->absmax[i] + move[i];
-	}
-
 	// we need this for pushing things later
 	VectorSubtract (vec3_origin, amove, org);
 	AngleVectors (org, forward, right, up);
@@ -579,7 +571,7 @@ qboolean SV_Push (edict_t *pusher, vec3_t move, vec3_t amove)
 	VectorAdd (pusher->s.angles, amove, pusher->s.angles);
 	gi.linkentity (pusher);
 
-	/* Create a real bounding box for 
+	/* Create a real bounding box for
 	rotating brush models. */
 	RealBoundingBox(pusher,realmins,realmaxs);
 
@@ -624,7 +616,7 @@ qboolean SV_Push (edict_t *pusher, vec3_t move, vec3_t amove)
 			VectorCopy (check->s.angles, pushed_p->angles);
 			pushed_p++;
 
-			// try moving the contacted entity 
+			// try moving the contacted entity
 			VectorAdd (check->s.origin, move, check->s.origin);
 			if (check->client)
 			{	// FIXME: doesn't rotate monsters?
@@ -858,7 +850,7 @@ void SV_Physics_Toss (edict_t *ent)
 
 	// add gravity
 	if (ent->movetype != MOVETYPE_FLY
-		&& ent->movetype != MOVETYPE_FLYMISSILE 
+		&& ent->movetype != MOVETYPE_FLYMISSILE
 		&& ent->movetype != MOVETYPE_BOUNCEFLY)
 		SV_AddGravity (ent);
 
