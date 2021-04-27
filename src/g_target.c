@@ -76,41 +76,56 @@ void Use_Target_Speaker (edict_t *ent, edict_t *other, edict_t *activator)
 
 void SP_target_speaker (edict_t *ent)
 {
-	char	buffer[MAX_QPATH];
+	char buffer[MAX_QPATH];
 
-	if (!ent)
+  	if (!ent)
 	{
 		return;
 	}
 
-	if(!st.noise)
+	if (!st.noise)
 	{
-		gi.dprintf("target_speaker with no noise set at %s\n", vtos(ent->s.origin));
+		gi.dprintf("target_speaker with no noise set at %s\n",
+				vtos(ent->s.origin));
 		return;
 	}
-	if (!strstr (st.noise, ".wav"))
-		Com_sprintf (buffer, sizeof(buffer), "%s.wav", st.noise);
+
+	if (!strstr(st.noise, ".wav"))
+	{
+		Com_sprintf(buffer, sizeof(buffer), "%s.wav", st.noise);
+	}
 	else
-		strncpy (buffer, st.noise, sizeof(buffer));
-	ent->noise_index = gi.soundindex (buffer);
+	{
+		Q_strlcpy(buffer, st.noise, sizeof(buffer));
+	}
+
+	ent->noise_index = gi.soundindex(buffer);
 
 	if (!ent->volume)
+	{
 		ent->volume = 1.0;
+	}
 
 	if (!ent->attenuation)
+	{
 		ent->attenuation = 1.0;
-	else if (ent->attenuation == -1)	// use -1 so 0 defaults to 1
+	}
+	else if (ent->attenuation == -1) /* use -1 so 0 defaults to 1 */
+	{
 		ent->attenuation = 0;
+	}
 
-	// check for prestarted looping sound
+	/* check for prestarted looping sound */
 	if (ent->spawnflags & 1)
+	{
 		ent->s.sound = ent->noise_index;
+	}
 
 	ent->use = Use_Target_Speaker;
 
-	// must link the entity so we get areas and clusters so
-	// the server can determine who to send updates to
-	gi.linkentity (ent);
+	/* must link the entity so we get areas and clusters so
+	   the server can determine who to send updates to */
+	gi.linkentity(ent);
 }
 
 
