@@ -1,6 +1,5 @@
 #include "../header/local.h"
 #include "../monster/misc/player.h"
-#include <stdio.h>
 
 extern qboolean is_quad;
 extern byte is_silenced;
