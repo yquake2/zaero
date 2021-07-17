@@ -1,5 +1,6 @@
 #include "../header/local.h"
 #include "../monster/misc/player.h"
+#include <stdio.h>
 
 extern qboolean is_quad;
 extern byte is_silenced;
@@ -116,7 +117,7 @@ void TripBomb_Explode (edict_t *ent)
 		return;
 	}
 
-	T_RadiusDamage(ent, ent->owner ? ent->owner : ent, ent->dmg, ent->enemy, ent->dmg_radius, MOD_TRIPBOMB);
+	T_RadiusDamage(ent, ent->owner ? ent->owner : ent, ent->dmg, ent, ent->dmg_radius, MOD_TRIPBOMB);
 
 	VectorMA (ent->s.origin, -0.02, ent->velocity, origin);
 
