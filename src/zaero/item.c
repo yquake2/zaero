@@ -214,11 +214,6 @@ edict_t *findNextCamera(edict_t *old)
 {
 	edict_t *e = NULL;
 
-	if (!old)
-	{
-		return NULL;
-	}
-
 	// first of all, are there *any* cameras?
 	e = G_Find(NULL, FOFS(classname), "misc_securitycamera");
 	if (e == NULL)
