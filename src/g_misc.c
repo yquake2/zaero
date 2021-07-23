@@ -1682,7 +1682,7 @@ void misc_viper_bomb_touch (edict_t *self, edict_t *other, cplane_t *plane, csur
 	G_UseTargets (self, self->activator);
 
 	self->s.origin[2] = self->absmin[2] + 1;
-	T_RadiusDamage (self, self, self->dmg, NULL, self->dmg+40, MOD_BOMB);
+	T_RadiusDamage (self, self, self->dmg, self, self->dmg+40, MOD_BOMB);
 	BecomeExplosion2 (self);
 }
 
