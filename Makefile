@@ -44,8 +44,12 @@ YQ2_ARCH ?= $(PROCESSOR_ARCHITECTURE)
 endif
 endif # windows but MINGW_CHOST not defined
 else
+ifneq ($(YQ2_OSTYPE), Darwin)
 # Normalize some abiguous YQ2_ARCH strings
 YQ2_ARCH ?= $(shell uname -m | sed -e 's/i.86/i386/' -e 's/amd64/x86_64/' -e 's/^arm.*/arm/')
+else
+YQ2_ARCH ?= $(shell uname -m)
+endif
 endif
 
 # Detect the compiler
@@ -81,7 +85,7 @@ endif
 # -MMD to generate header dependencies.
 ifeq ($(YQ2_OSTYPE), Darwin)
 CFLAGS := -O2 -fno-strict-aliasing -fomit-frame-pointer \
-		  -Wall -pipe -g -fwrapv -arch i386 -arch x86_64
+		  -Wall -pipe -g -fwrapv -arch $(YQ2_ARCH)
 else
 CFLAGS := -O0 -fno-strict-aliasing -fomit-frame-pointer \
 		  -Wall -pipe -ggdb -MMD -fwrapv
@@ -122,7 +126,7 @@ CFLAGS += -DYQ2OSTYPE=\"$(YQ2_OSTYPE)\" -DYQ2ARCH=\"$(YQ2_ARCH)\"
 
 # Base LDFLAGS.
 ifeq ($(YQ2_OSTYPE), Darwin)
-LDFLAGS := -shared -arch i386 -arch x86_64
+LDFLAGS := -shared -arch $(YQ2_ARCH)
 else
 LDFLAGS := -shared
 endif
@@ -163,6 +167,16 @@ zaero:
 	@echo "===> Building game.dll"
 	${Q}mkdir -p release
 	${MAKE} release/game.dll
+
+build/%.o: %.c
+	@echo "===> CC $<"
+	${Q}mkdir -p $(@D)
+	${Q}$(CC) -c $(CFLAGS) -o $@ $<
+else ifeq ($(YQ2_OSTYPE), Darwin)
+zaero:
+	@echo "===> Building game.dylib"
+	${Q}mkdir -p release
+	$(MAKE) release/game.dylib
 
 build/%.o: %.c
 	@echo "===> CC $<"
@@ -266,6 +280,10 @@ ZAERO_DEPS= $(ZAERO_OBJS:.o=.d)
 
 ifeq ($(YQ2_OSTYPE), Windows)
 release/game.dll : $(ZAERO_OBJS)
+	@echo "===> LD $@"
+	${Q}$(CC) $(LDFLAGS) -o $@ $(ZAERO_OBJS)
+else ifeq ($(YQ2_OSTYPE), Darwin)
+release/game.dylib : $(ZAERO_OBJS)
 	@echo "===> LD $@"
 	${Q}$(CC) $(LDFLAGS) -o $@ $(ZAERO_OBJS)
 else
