@@ -237,10 +237,15 @@ void gladiator_attack(edict_t *self)
 	}
 
 	// a small safe zone
-	VectorSubtract (self->s.origin, self->enemy->s.origin, v);
-	range = VectorLength(v);
-	if (range <= (MELEE_DISTANCE + 32))
-		return;
+	// but not for stand-ground ones since players can
+	// abuse it by standing still inside this range
+	if (!(self->monsterinfo.aiflags & AI_STAND_GROUND))
+	{
+		VectorSubtract (self->s.origin, self->enemy->s.origin, v);
+		range = VectorLength(v);
+		if (range <= (MELEE_DISTANCE + 32))
+			return;
+	}
 
 	// charge up the railgun
 	gi.sound (self, CHAN_WEAPON, sound_gun, 1, ATTN_NORM, 0);
