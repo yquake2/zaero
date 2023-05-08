@@ -120,15 +120,15 @@ endif
 # ----------
 
 # Defines the operating system and architecture
-CFLAGS += -DYQ2OSTYPE=\"$(YQ2_OSTYPE)\" -DYQ2ARCH=\"$(YQ2_ARCH)\"
+override CFLAGS += -DYQ2OSTYPE=\"$(YQ2_OSTYPE)\" -DYQ2ARCH=\"$(YQ2_ARCH)\"
 
 # ----------
 
 # Base LDFLAGS.
 ifeq ($(YQ2_OSTYPE), Darwin)
-LDFLAGS := -shared -arch $(YQ2_ARCH)
+override LDFLAGS := -shared -arch $(YQ2_ARCH)
 else
-LDFLAGS := -shared
+override LDFLAGS := -shared
 endif
 
 # ----------
