@@ -244,6 +244,19 @@ void ChangeWeapon (edict_t *ent)
 	ent->client->weaponstate = WEAPON_ACTIVATING;
 	ent->client->ps.gunframe = 0;
 	ent->client->ps.gunindex = gi.modelindex(ent->client->pers.weapon->view_model);
+
+	ent->client->anim_priority = ANIM_PAIN;
+
+	if (ent->client->ps.pmove.pm_flags & PMF_DUCKED)
+	{
+		ent->s.frame = FRAME_crpain1;
+		ent->client->anim_end = FRAME_crpain4;
+	}
+	else
+	{
+		ent->s.frame = FRAME_pain301;
+		ent->client->anim_end = FRAME_pain304;
+	}
 }
 
 /*
@@ -425,6 +438,52 @@ void Drop_Weapon (edict_t *ent, gitem_t *item)
 	ent->client->pers.inventory[index]--;
 }
 
+/*
+ * Returns ammo used on a single shot for the given weapon
+ */
+int
+get_ammo_usage(gitem_t *weap)
+{
+	if (!weap)
+	{
+		return 0;
+	}
+
+	/* handles grenades and tesla which only use 1 ammo per shot */
+	/* have to check this because they don't store their ammo usage in weap->quantity */
+	if (weap->flags & IT_AMMO)
+	{
+		return 1;
+	}
+
+	/* weapons store their ammo usage in the quantity field */
+	return weap->quantity;
+}
+
+/*
+ * Client (player) animation for changing weapon
+ */
+static void
+Change_Weap_Animation(edict_t *ent)
+{
+	if (!ent)
+	{
+		return;
+	}
+
+	ent->client->anim_priority = ANIM_REVERSE;
+
+	if (ent->client->ps.pmove.pm_flags & PMF_DUCKED)
+	{
+		ent->s.frame = FRAME_crpain4 + 1;
+		ent->client->anim_end = FRAME_crpain1;
+	}
+	else
+	{
+		ent->s.frame = FRAME_pain304 + 1;
+		ent->client->anim_end = FRAME_pain301;
+	}
+}
 
 /*
 ================
@@ -453,6 +512,15 @@ void Weapon_Generic (edict_t *ent, int FRAME_ACTIVATE_LAST, int FRAME_FIRE_LAST,
 			ChangeWeapon (ent);
 			return;
 		}
+		else if ( (FRAME_DEACTIVATE_LAST - FRAME_DEACTIVATE_FIRST) >= 4 )
+		{
+			unsigned short int remainder = FRAME_DEACTIVATE_LAST - ent->client->ps.gunframe;
+			// "if (remainder == 4)" at change_speed == 1
+			if (remainder == 4)
+			{
+				Change_Weap_Animation(ent);
+			}
+		}
 
 		ent->client->ps.gunframe++;
 		return;
@@ -475,6 +543,10 @@ void Weapon_Generic (edict_t *ent, int FRAME_ACTIVATE_LAST, int FRAME_FIRE_LAST,
 	{
 		ent->client->weaponstate = WEAPON_DROPPING;
 		ent->client->ps.gunframe = FRAME_DEACTIVATE_FIRST;
+		if ( (FRAME_DEACTIVATE_LAST - FRAME_DEACTIVATE_FIRST) < 4 )
+		{
+			Change_Weap_Animation(ent);
+		}
 		return;
 	}
 
@@ -484,7 +556,7 @@ void Weapon_Generic (edict_t *ent, int FRAME_ACTIVATE_LAST, int FRAME_FIRE_LAST,
 		{
 			ent->client->latched_buttons &= ~BUTTON_ATTACK;
 			if ((!ent->client->ammo_index) || 
-				( ent->client->pers.inventory[ent->client->ammo_index] >= ent->client->pers.weapon->quantity))
+				( ent->client->pers.inventory[ent->client->ammo_index] >= get_ammo_usage(ent->client->pers.weapon) ))
 			{
 				ent->client->ps.gunframe = FRAME_FIRE_FIRST;
 				ent->client->weaponstate = WEAPON_FIRING;
@@ -603,6 +675,24 @@ void weapon_grenade_fire (edict_t *ent, qboolean held)
 
 	// play quad damage sound
 	playQuadSound(ent);
+
+	if (ent->deadflag || ent->health <= 0 || ent->s.modelindex != 255)
+	{
+		return;	// VWep animations screw up corpses
+	}
+
+	if (ent->client->ps.pmove.pm_flags & PMF_DUCKED)
+	{
+		ent->client->anim_priority = ANIM_ATTACK;
+		ent->s.frame = FRAME_crattak1 - 1;
+		ent->client->anim_end = FRAME_crattak3;
+	}
+	else
+	{
+		ent->client->anim_priority = ANIM_REVERSE;
+		ent->s.frame = FRAME_wave08;
+		ent->client->anim_end = FRAME_wave01;
+	}
 }
 
 void Weapon_Grenade (edict_t *ent)
