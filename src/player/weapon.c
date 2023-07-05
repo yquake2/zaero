@@ -499,6 +499,7 @@ A generic function to handle the basics of weapon thinking
 void Weapon_Generic (edict_t *ent, int FRAME_ACTIVATE_LAST, int FRAME_FIRE_LAST, int FRAME_IDLE_LAST, int FRAME_DEACTIVATE_LAST, int *pause_frames, int *fire_frames, void (*fire)(edict_t *ent))
 {
 	int		n;
+	const unsigned short int change_speed = (g_swap_speed->value > 0)?(unsigned short int)g_swap_speed->value:1;
 
 	if (!ent)
 	{
@@ -507,35 +508,36 @@ void Weapon_Generic (edict_t *ent, int FRAME_ACTIVATE_LAST, int FRAME_FIRE_LAST,
 
 	if (ent->client->weaponstate == WEAPON_DROPPING)
 	{
-		if (ent->client->ps.gunframe == FRAME_DEACTIVATE_LAST)
+		if (ent->client->ps.gunframe >= FRAME_DEACTIVATE_LAST - change_speed + 1)
 		{
 			ChangeWeapon (ent);
 			return;
 		}
-		else if ( (FRAME_DEACTIVATE_LAST - FRAME_DEACTIVATE_FIRST) >= 4 )
+		else if ( (FRAME_DEACTIVATE_LAST - FRAME_DEACTIVATE_FIRST) >= (4 * change_speed) )
 		{
 			unsigned short int remainder = FRAME_DEACTIVATE_LAST - ent->client->ps.gunframe;
 			// "if (remainder == 4)" at change_speed == 1
-			if (remainder == 4)
+			if ( ( remainder <= (4 * change_speed) )
+				&& ( remainder > (3 * change_speed) ) )
 			{
 				Change_Weap_Animation(ent);
 			}
 		}
 
-		ent->client->ps.gunframe++;
+		ent->client->ps.gunframe += change_speed;
 		return;
 	}
 
 	if (ent->client->weaponstate == WEAPON_ACTIVATING)
 	{
-		if (ent->client->ps.gunframe == FRAME_ACTIVATE_LAST)
+		if (ent->client->ps.gunframe >= FRAME_ACTIVATE_LAST - change_speed + 1)
 		{
 			ent->client->weaponstate = WEAPON_READY;
 			ent->client->ps.gunframe = FRAME_IDLE_FIRST;
 			return;
 		}
 
-		ent->client->ps.gunframe++;
+		ent->client->ps.gunframe += change_speed;
 		return;
 	}
 
@@ -543,7 +545,7 @@ void Weapon_Generic (edict_t *ent, int FRAME_ACTIVATE_LAST, int FRAME_FIRE_LAST,
 	{
 		ent->client->weaponstate = WEAPON_DROPPING;
 		ent->client->ps.gunframe = FRAME_DEACTIVATE_FIRST;
-		if ( (FRAME_DEACTIVATE_LAST - FRAME_DEACTIVATE_FIRST) < 4 )
+		if ( (FRAME_DEACTIVATE_LAST - FRAME_DEACTIVATE_FIRST) < (4 * change_speed) )
 		{
 			Change_Weap_Animation(ent);
 		}
@@ -1184,11 +1186,13 @@ void Machinegun_Fire (edict_t *ent)
 	ent->client->kick_angles[0] = ent->client->machinegun_shots * -1.5;
 
 	// raise the gun as it is firing
-	if (!deathmatch->value)
+	if (!(deathmatch->value || g_machinegun_norecoil->value))
 	{
 		ent->client->machinegun_shots++;
 		if (ent->client->machinegun_shots > 9)
+		{
 			ent->client->machinegun_shots = 9;
+		}
 	}
 
 	// get start / end positions
