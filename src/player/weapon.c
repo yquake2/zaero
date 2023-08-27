@@ -499,7 +499,9 @@ A generic function to handle the basics of weapon thinking
 void Weapon_Generic (edict_t *ent, int FRAME_ACTIVATE_LAST, int FRAME_FIRE_LAST, int FRAME_IDLE_LAST, int FRAME_DEACTIVATE_LAST, int *pause_frames, int *fire_frames, void (*fire)(edict_t *ent))
 {
 	int		n;
-	const unsigned short int change_speed = (g_swap_speed->value > 0)?(unsigned short int)g_swap_speed->value:1;
+	const unsigned short int change_speed = (g_swap_speed->value > 1)?
+		(g_swap_speed->value < USHRT_MAX)? (unsigned short int)g_swap_speed->value : 1
+		: 1;
 
 	if (!ent)
 	{
