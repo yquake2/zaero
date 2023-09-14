@@ -610,6 +610,8 @@ extern	cvar_t	*grenadeammo;
 extern	cvar_t	*bettyammo;
 
 extern cvar_t *aimfix;
+extern cvar_t *g_machinegun_norecoil;
+extern cvar_t *g_swap_speed;
 
 #define world	(&g_edicts[0])
 
@@ -850,6 +852,7 @@ void DeathmatchScoreboardMessage (edict_t *client, edict_t *killer);
 // g_pweapon.c
 //
 void PlayerNoise(edict_t *who, vec3_t where, int type);
+int get_ammo_usage(gitem_t *weap);
 
 //
 // m_move.c
@@ -905,7 +908,7 @@ void ai_schoolSideStepLeft (edict_t *self, float dist);
 #define	ANIM_PAIN		3
 #define	ANIM_ATTACK		4
 #define	ANIM_DEATH		5
-
+#define	ANIM_REVERSE	6
 
 // client data that stays across multiple level loads
 typedef struct
