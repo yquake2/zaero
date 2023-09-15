@@ -2,7 +2,7 @@
 
 #include "../header/local.h"
 #include "../monster/misc/player.h"
-
+#include <limits.h>
 
 qboolean	is_quad;
 byte		is_silenced;
