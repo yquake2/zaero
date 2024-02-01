@@ -61,12 +61,12 @@
  * created on other systems or architectures. This will
  * crash q2 in spectacular ways
  */
-#ifndef YQ2OSTYPE
-#error YQ2OSTYPE should be defined by the build system
+#ifndef YQ2_OSTYPE
+#error YQ2_OSTYPE should be defined by the build system
 #endif
 
-#ifndef YQ2ARCH
-#error YQ2ARCH should be defined by the build system
+#ifndef YQ2_ARCH
+#error YQ2_ARCH should be defined by the build system
 #endif
 
 /*
@@ -771,8 +771,8 @@ WriteGame(const char *filename, qboolean autosave)
 
 	Q_strlcpy(sv.ver, SAVEGAMEVER, sizeof(sv.ver));
 	Q_strlcpy(sv.game, GAMEVERSION, sizeof(sv.game));
-	Q_strlcpy(sv.os, YQ2OSTYPE, sizeof(sv.os) - 1);
-	Q_strlcpy(sv.arch, YQ2ARCH, sizeof(sv.arch));
+	Q_strlcpy(sv.os, YQ2_OSTYPE, sizeof(sv.os) - 1);
+	Q_strlcpy(sv.arch, YQ2_ARCH, sizeof(sv.arch));
 
 	fwrite(&sv, sizeof(sv), 1, f);
 
@@ -874,16 +874,16 @@ ReadGame(const char *filename)
 			fclose(f);
 			gi.error("Savegame from another game.so.\n");
 		}
-		else if (strcmp(sv.os, YQ2OSTYPE) != 0)
+		else if (strcmp(sv.os, YQ2_OSTYPE) != 0)
 		{
 			fclose(f);
 			gi.error("Savegame from another os.\n");
 		}
-		else if (strcmp(sv.arch, YQ2ARCH) != 0)
+		else if (strcmp(sv.arch, YQ2_ARCH) != 0)
 		{
 #if defined(_WIN32) && (defined(__i386__) || defined(_M_IX86))
 			// before savegame version "YQ2-4" (and after version 1),
-			// the official Win32 binaries accidentally had the YQ2ARCH "AMD64"
+			// the official Win32 binaries accidentally had the YQ2_ARCH "AMD64"
 			// instead of "i386" set due to a bug in the Makefile.
 			// This quirk allows loading those savegames anyway
 			if (save_ver >= 4 || strcmp(sv.arch, "AMD64") != 0)
