@@ -120,7 +120,7 @@ endif
 # ----------
 
 # Defines the operating system and architecture
-override CFLAGS += -DYQ2OSTYPE=\"$(YQ2_OSTYPE)\" -DYQ2ARCH=\"$(YQ2_ARCH)\"
+override CFLAGS += -DYQ2_OSTYPE=\"$(YQ2_OSTYPE)\" -DYQ2_ARCH=\"$(YQ2_ARCH)\"
 
 # ----------
 
