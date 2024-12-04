@@ -738,27 +738,48 @@ void Cmd_WeapPrev_f (edict_t *ent)
 
 	cl = ent->client;
 
-	if (!cl->pers.weapon)
+	if (g_quick_weap->value && cl->newweapon)
+	{
+		it = cl->newweapon;
+	}
+	else if (cl->pers.weapon)
+	{
+		it = cl->pers.weapon;
+	}
+	else
+	{
 		return;
+	}
 
-	selected_weapon = ITEM_INDEX(cl->pers.weapon);
+	selected_weapon = ITEM_INDEX(it);
 
-	// scan  for the next valid one
+	// scan for the next valid one
 	for (i=1 ; i<=MAX_ITEMS ; i++)
 	{
-		index = (selected_weapon + MAX_ITEMS - i)%MAX_ITEMS;
+		index = (selected_weapon + MAX_ITEMS - i) % MAX_ITEMS;
 		if (!cl->pers.inventory[index])
+		{
 			continue;
+		}
+
 		it = &itemlist[index];
-		if (it->hideFlags & HIDE_FROM_SELECTION)
+		if ( (it->hideFlags & HIDE_FROM_SELECTION)
+			|| !it->use || !(it->flags & IT_WEAPON) )
+		{
 			continue;
-		if (!it->use)
-			continue;
-		if (! (it->flags & IT_WEAPON) )
-			continue;
+		}
+
 		it->use (ent, it);
 		if (cl->newweapon == it)
+		{
+			if (g_quick_weap->value)
+			{
+				cl->ps.stats[STAT_PICKUP_ICON] = gi.imageindex(it->icon);
+				cl->ps.stats[STAT_PICKUP_STRING] = CS_ITEMS + ITEM_INDEX(it);
+				cl->pickup_msg_time = level.time + 0.9f;
+			}
 			return;	// successful
+		}
 	}
 }
 
@@ -781,27 +802,48 @@ void Cmd_WeapNext_f (edict_t *ent)
 
 	cl = ent->client;
 
-	if (!cl->pers.weapon)
+	if (g_quick_weap->value && cl->newweapon)
+	{
+		it = cl->newweapon;
+	}
+	else if (cl->pers.weapon)
+	{
+		it = cl->pers.weapon;
+	}
+	else
+	{
 		return;
+	}
 
-	selected_weapon = ITEM_INDEX(cl->pers.weapon);
+	selected_weapon = ITEM_INDEX(it);
 
-	// scan  for the next valid one
+	// scan for the next valid one
 	for (i=1 ; i<=MAX_ITEMS ; i++)
 	{
-		index = (selected_weapon + i)%MAX_ITEMS;
+		index = (selected_weapon + i) % MAX_ITEMS;
 		if (!cl->pers.inventory[index])
+		{
 			continue;
+		}
+
 		it = &itemlist[index];
-		if (it->hideFlags & HIDE_FROM_SELECTION)
+		if ( (it->hideFlags & HIDE_FROM_SELECTION)
+			|| !it->use || !(it->flags & IT_WEAPON) )
+		{
 			continue;
-		if (!it->use)
-			continue;
-		if (! (it->flags & IT_WEAPON) )
-			continue;
+		}
+
 		it->use (ent, it);
 		if (cl->newweapon == it)
+		{
+			if (g_quick_weap->value)
+			{
+				cl->ps.stats[STAT_PICKUP_ICON] = gi.imageindex(it->icon);
+				cl->ps.stats[STAT_PICKUP_STRING] = CS_ITEMS + ITEM_INDEX(it);
+				cl->pickup_msg_time = level.time + 0.9f;
+			}
 			return;	// successful
+		}
 	}
 }
 
