@@ -21,6 +21,10 @@
 #   Available values:
 #   x86_64-w64-mingw32 -> indicates x86_64
 #   i686-w64-mingw32   -> indicates i386
+# SOURCE_DATE_EPOCH
+#   For reproduceable builds, look here for details:
+#   https://reproducible-builds.org/specs/source-date-epoch/
+#   If set, adds a BUILD_DATE define to CFLAGS.
 # VERBOSE
 #   Prints full compile, linker and misc commands.
 # ----------
@@ -116,6 +120,12 @@ else ifeq ($(COMPILER), gcc)
 		# because GCC spams about 50 false positives.
 		CFLAGS += -Wno-format-truncation -Wno-format-overflow
 	endif
+endif
+
+# ----------
+
+ifdef SOURCE_DATE_EPOCH
+CFLAGS += -DBUILD_DATE=\"$(shell date --utc --date="@${SOURCE_DATE_EPOCH}" +"%b %_d %Y" | sed -e 's/ /\\ /g')\"
 endif
 
 # ----------
