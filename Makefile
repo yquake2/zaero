@@ -14,6 +14,17 @@
 # - FreeBSD                                             #
 # ----------------------------------------------------- #
 
+# Variables
+# ---------
+# MINGW_CHOST
+#   If you use mingw this can specify architecture.
+#   Available values:
+#   x86_64-w64-mingw32 -> indicates x86_64
+#   i686-w64-mingw32   -> indicates i386
+# VERBOSE
+#   Prints full compile, linker and misc commands.
+# ----------
+
 # Detect the OS
 ifdef SystemRoot
 YQ2_OSTYPE := Windows
