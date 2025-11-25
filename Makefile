@@ -114,6 +114,17 @@ endif
 
 # ----------
 
+# Set up build and bin output directories
+
+# Root dir names
+override BINROOT :=
+override BUILDROOT := build
+
+override BINDIR := $(BINROOT)release
+override BUILDDIR := $(BUILDROOT)
+
+# ----------
+
 # Base CFLAGS. These may be overridden by the environment.
 # Highest supported optimizations are -O2, higher levels
 # will likely break this crappy code.
@@ -241,25 +252,23 @@ clean:
 ifeq ($(YQ2_OSTYPE), Windows)
 zaero:
 	@echo "===> Building game.dll"
-	${Q}mkdir -p release
-	$(MAKE) release/game.dll
-
+	${Q}mkdir -p $(BINDIR)
+	$(MAKE) $(BINDIR)/game.dll
 else ifeq ($(YQ2_OSTYPE), Darwin)
 zaero:
 	@echo "===> Building game.dylib"
-	${Q}mkdir -p release
-	$(MAKE) release/game.dylib
-
+	${Q}mkdir -p $(BINDIR)
+	$(MAKE) $(BINDIR)/game.dylib
 else
 zaero:
 	@echo "===> Building game.so"
-	${Q}mkdir -p release
-	$(MAKE) release/game.so
+	${Q}mkdir -p $(BINDIR)
+	$(MAKE) $(BINDIR)/game.so
 
-release/game.so : CFLAGS += -fPIC
-endif 
+$(BINDIR)/game.so : CFLAGS += -fPIC
+endif
 
-build/%.o: %.c
+$(BUILDDIR)/%.o: %.c
 	@if [ -z $(QUIET) ]; then\
 		echo "===> CC $<";\
 	fi
@@ -334,7 +343,7 @@ ZAERO_OBJS_ = \
 # ----------
 
 # Rewrite pathes to our object directory
-ZAERO_OBJS = $(patsubst %,build/%,$(ZAERO_OBJS_))
+ZAERO_OBJS = $(patsubst %,$(BUILDDIR)/%,$(ZAERO_OBJS_))
 
 # ----------
 
@@ -349,15 +358,15 @@ ZAERO_DEPS= $(ZAERO_OBJS:.o=.d)
 # ----------
 
 ifeq ($(YQ2_OSTYPE), Windows)
-release/game.dll : $(ZAERO_OBJS)
+$(BINDIR)/game.dll : $(ZAERO_OBJS)
 	@echo "===> LD $@"
 	${Q}$(CC) $(LDFLAGS) -o $@ $(ZAERO_OBJS)
 else ifeq ($(YQ2_OSTYPE), Darwin)
-release/game.dylib : $(ZAERO_OBJS)
+$(BINDIR)/game.dylib : $(ZAERO_OBJS)
 	@echo "===> LD $@"
 	${Q}$(CC) $(LDFLAGS) -o $@ $(ZAERO_OBJS)
 else
-release/game.so : $(ZAERO_OBJS)
+$(BINDIR)/game.so : $(ZAERO_OBJS)
 	@echo "===> LD $@"
 	${Q}$(CC) $(LDFLAGS) -o $@ $(ZAERO_OBJS)
 endif
