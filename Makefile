@@ -405,15 +405,15 @@ ZAERO_DEPS= $(ZAERO_OBJS:.o=.d)
 ifeq ($(YQ2_OSTYPE), Windows)
 $(BINDIR)/game.dll : $(ZAERO_OBJS)
 	@echo "===> LD $@"
-	${Q}$(CC) $(LDFLAGS) -o $@ $(ZAERO_OBJS)
+	${Q}$(CC) -o $@ $(ZAERO_OBJS) $(LDFLAGS)
 else ifeq ($(YQ2_OSTYPE), Darwin)
 $(BINDIR)/game.dylib : $(ZAERO_OBJS)
 	@echo "===> LD $@"
-	${Q}$(CC) $(LDFLAGS) -o $@ $(ZAERO_OBJS)
+	${Q}$(CC) -o $@ $(ZAERO_OBJS) $(LDFLAGS)
 else
 $(BINDIR)/game.so : $(ZAERO_OBJS)
 	@echo "===> LD $@"
-	${Q}$(CC) $(LDFLAGS) -o $@ $(ZAERO_OBJS)
+	${Q}$(CC) -o $@ $(ZAERO_OBJS) $(LDFLAGS)
 endif
 
 # ----------
