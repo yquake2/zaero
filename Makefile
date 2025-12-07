@@ -14,11 +14,59 @@
 # - FreeBSD                                             #
 # ----------------------------------------------------- #
 
+# Variables
+# ---------
+# ASAN
+#   Builds with address sanitizer, includes DEBUG.
+# DEBUG
+#   Builds a debug build, forces -O0 and adds debug symbols.
+# MINGW_CHOST
+#   If you use mingw this can specify architecture.
+#   Available values:
+#   x86_64-w64-mingw32 -> indicates x86_64
+#   i686-w64-mingw32   -> indicates i386
+# QUIET
+#   If defined, "===> CC ..." lines are silenced.
+# SOURCE_DATE_EPOCH
+#   For reproduceable builds, look here for details:
+#   https://reproducible-builds.org/specs/source-date-epoch/
+#   If set, adds a BUILD_DATE define to CFLAGS.
+# UBSAN
+#   Builds with undefined behavior sanitizer.includes DEBUG.
+# VERBOSE
+#   Prints full compile, linker and misc commands.
+# WERR
+#   Treat compiler warnings as errors.
+#   If defined, -Werror is added to compiler flags.
+# ----------
+
+# User configurable options
+# -------------------------
+
+# CONFIG_FILE
+# This is an optional configuration file, it'll be used in
+# case of presence.
+CONFIG_FILE:=config.mk
+
+# ----------
+
+# In case of a configuration file being present, we'll just use it
+ifeq ($(wildcard $(CONFIG_FILE)), $(CONFIG_FILE))
+include $(CONFIG_FILE)
+endif
+
+# Normalize QUIET value to either "x" or ""
+ifdef QUIET
+	override QUIET := "x"
+else
+	override QUIET := ""
+endif
+
 # Detect the OS
 ifdef SystemRoot
-YQ2_OSTYPE := Windows
+YQ2_OSTYPE ?= Windows
 else
-YQ2_OSTYPE := $(shell uname -s)
+YQ2_OSTYPE ?= $(shell uname -s)
 endif
 
 # Special case for MinGW
@@ -52,6 +100,11 @@ YQ2_ARCH ?= $(shell uname -m)
 endif
 endif
 
+# On Windows / MinGW $(CC) is undefined by default.
+ifeq ($(YQ2_OSTYPE),Windows)
+CC ?= gcc
+endif
+
 # Detect the compiler
 ifeq ($(shell $(CC) -v 2>&1 | grep -c "clang version"), 1)
 COMPILER := clang
@@ -63,32 +116,68 @@ else
 COMPILER := unknown
 endif
 
+# ASAN includes DEBUG
+ifdef ASAN
+DEBUG=1
+endif
+
+# UBSAN includes DEBUG
+ifdef UBSAN
+DEBUG=1
+endif
+
 # ----------
 
-# Base CFLAGS.
-#
-# -O2 are enough optimizations.
-#
-# -fno-strict-aliasing since the source doesn't comply
-#  with strict aliasing rules and it's next to impossible
-#  to get it there...
-#
-# -fomit-frame-pointer since the framepointer is mostly
-#  useless for debugging Quake II and slows things down.
-#
-# -g to build allways with debug symbols. Please do not
-#  change this, since it's our only chance to debug this
-#  crap when random crashes happen!
-#
-# -fPIC for position independend code.
-#
-# -MMD to generate header dependencies.
-ifeq ($(YQ2_OSTYPE), Darwin)
-CFLAGS := -O2 -fno-strict-aliasing -fomit-frame-pointer \
-		  -Wall -pipe -g -fwrapv -arch $(YQ2_ARCH)
+# Set up build and bin output directories
+
+# Root dir names
+override BINROOT :=
+override BUILDROOT := build
+
+override BINDIR := $(BINROOT)release
+override BUILDDIR := $(BUILDROOT)
+
+# ----------
+
+# Base CFLAGS. These may be overridden by the environment.
+# Highest supported optimizations are -O2, higher levels
+# will likely break this crappy code.
+ifdef DEBUG
+CFLAGS ?= -O0 -g -Wall -pipe -DDEBUG
+ifdef ASAN
+override CFLAGS += -fsanitize=address -DUSE_SANITIZER
+endif
+ifdef UBSAN
+override CFLAGS += -fsanitize=undefined -DUSE_SANITIZER
+endif
 else
-CFLAGS := -O0 -fno-strict-aliasing -fomit-frame-pointer \
-		  -Wall -pipe -ggdb -MMD -fwrapv
+CFLAGS ?= -O2 -Wall -pipe -fomit-frame-pointer
+endif
+
+# Optionally treat warnings as errors
+ifdef WERR
+override CFLAGS += -Werror
+endif
+
+# Always needed are:
+#  -fno-strict-aliasing since the source doesn't comply
+#   with strict aliasing rules and it's next to impossible
+#   to get it there...
+#  -fwrapv for defined integer wrapping. MSVC6 did this
+#   and the game code requires it.
+#  -fvisibility=hidden to keep symbols hidden. This is
+#   mostly best practice and not really necessary.
+override CFLAGS += -fno-strict-aliasing -fwrapv -fvisibility=hidden
+
+# -MMD to generate header dependencies. Unsupported by
+#  the Clang shipped with OS X.
+ifneq ($(YQ2_OSTYPE), Darwin)
+override CFLAGS += -MMD
+endif
+
+# OS X architecture.
+ifeq ($(YQ2_OSTYPE), Darwin)
+override CFLAGS += -arch $(YQ2_ARCH)
 endif
 
 # ----------
@@ -109,6 +198,17 @@ endif
 
 # ----------
 
+# Defines the operating system and architecture
+override CFLAGS += -DYQ2OSTYPE=\"$(YQ2_OSTYPE)\" -DYQ2ARCH=\"$(YQ2_ARCH)\"
+
+# ----------
+
+ifdef SOURCE_DATE_EPOCH
+CFLAGS += -DBUILD_DATE=\"$(shell date --utc --date="@${SOURCE_DATE_EPOCH}" +"%b %_d %Y" | sed -e 's/ /\\ /g')\"
+endif
+
+# ----------
+
 # Using the default x87 float math on 32bit x86 causes rounding trouble
 # -ffloat-store could work around that, but the better solution is to
 # just enforce SSE - every x86 CPU since Pentium3 supports that
@@ -117,18 +217,50 @@ ifeq ($(YQ2_ARCH), i386)
 override CFLAGS += -msse -mfpmath=sse
 endif
 
-# ----------
-
-# Defines the operating system and architecture
-override CFLAGS += -DYQ2OSTYPE=\"$(YQ2_OSTYPE)\" -DYQ2ARCH=\"$(YQ2_ARCH)\"
+# Force SSE math on x86_64. All sane compilers should do this
+# anyway, just to protect us from broken Linux distros.
+ifeq ($(YQ2_ARCH), x86_64)
+override CFLAGS += -mfpmath=sse
+endif
 
 # ----------
 
 # Base LDFLAGS.
+LDFLAGS ?=
+
+# It's a shared library.
+override LDFLAGS += -shared
+
+# Link address sanitizer if requested.
+ifdef ASAN
+override LDFLAGS += -fsanitize=address
+endif
+
+# Link undefined behavior sanitizer if requested.
+ifdef UBSAN
+override LDFLAGS += -fsanitize=undefined
+endif
+
+# Required libraries
 ifeq ($(YQ2_OSTYPE), Darwin)
-override LDFLAGS := -shared -arch $(YQ2_ARCH)
+override LDFLAGS += -arch $(YQ2_ARCH)
+else ifeq ($(YQ2_OSTYPE), Windows)
+override LDFLAGS += -static-libgcc
 else
-override LDFLAGS := -shared
+override LDFLAGS += -lm
+endif
+
+# ASAN and UBSAN must not be linked
+# with --no-undefined. OSX and OpenBSD
+# don't support it at all.
+ifndef ASAN
+ifndef UBSAN
+ifneq ($(YQ2_OSTYPE), Darwin)
+ifneq ($(YQ2_OSTYPE), OpenBSD)
+override LDFLAGS += -Wl,--no-undefined
+endif
+endif
+endif
 endif
 
 # ----------
@@ -165,36 +297,28 @@ clean:
 ifeq ($(YQ2_OSTYPE), Windows)
 zaero:
 	@echo "===> Building game.dll"
-	${Q}mkdir -p release
-	${MAKE} release/game.dll
-
-build/%.o: %.c
-	@echo "===> CC $<"
-	${Q}mkdir -p $(@D)
-	${Q}$(CC) -c $(CFLAGS) -o $@ $<
+	${Q}mkdir -p $(BINDIR)
+	$(MAKE) $(BINDIR)/game.dll
 else ifeq ($(YQ2_OSTYPE), Darwin)
 zaero:
 	@echo "===> Building game.dylib"
-	${Q}mkdir -p release
-	$(MAKE) release/game.dylib
-
-build/%.o: %.c
-	@echo "===> CC $<"
-	${Q}mkdir -p $(@D)
-	${Q}$(CC) -c $(CFLAGS) -o $@ $<
+	${Q}mkdir -p $(BINDIR)
+	$(MAKE) $(BINDIR)/game.dylib
 else
 zaero:
 	@echo "===> Building game.so"
-	${Q}mkdir -p release
-	$(MAKE) release/game.so
+	${Q}mkdir -p $(BINDIR)
+	$(MAKE) $(BINDIR)/game.so
 
-build/%.o: %.c
-	@echo "===> CC $<"
+$(BINDIR)/game.so : CFLAGS += -fPIC
+endif
+
+$(BUILDDIR)/%.o: %.c
+	@if [ -z $(QUIET) ]; then\
+		echo "===> CC $<";\
+	fi
 	${Q}mkdir -p $(@D)
 	${Q}$(CC) -c $(CFLAGS) -o $@ $<
-
-release/game.so : CFLAGS += -fPIC
-endif 
 
 # ----------
 
@@ -264,7 +388,7 @@ ZAERO_OBJS_ = \
 # ----------
 
 # Rewrite pathes to our object directory
-ZAERO_OBJS = $(patsubst %,build/%,$(ZAERO_OBJS_))
+ZAERO_OBJS = $(patsubst %,$(BUILDDIR)/%,$(ZAERO_OBJS_))
 
 # ----------
 
@@ -279,15 +403,15 @@ ZAERO_DEPS= $(ZAERO_OBJS:.o=.d)
 # ----------
 
 ifeq ($(YQ2_OSTYPE), Windows)
-release/game.dll : $(ZAERO_OBJS)
+$(BINDIR)/game.dll : $(ZAERO_OBJS)
 	@echo "===> LD $@"
 	${Q}$(CC) $(LDFLAGS) -o $@ $(ZAERO_OBJS)
 else ifeq ($(YQ2_OSTYPE), Darwin)
-release/game.dylib : $(ZAERO_OBJS)
+$(BINDIR)/game.dylib : $(ZAERO_OBJS)
 	@echo "===> LD $@"
 	${Q}$(CC) $(LDFLAGS) -o $@ $(ZAERO_OBJS)
 else
-release/game.so : $(ZAERO_OBJS)
+$(BINDIR)/game.so : $(ZAERO_OBJS)
 	@echo "===> LD $@"
 	${Q}$(CC) $(LDFLAGS) -o $@ $(ZAERO_OBJS)
 endif
