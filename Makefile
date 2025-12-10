@@ -165,9 +165,7 @@ endif
 #   to get it there...
 #  -fwrapv for defined integer wrapping. MSVC6 did this
 #   and the game code requires it.
-#  -fvisibility=hidden to keep symbols hidden. This is
-#   mostly best practice and not really necessary.
-override CFLAGS += -fno-strict-aliasing -fwrapv -fvisibility=hidden
+override CFLAGS += -fno-strict-aliasing -fwrapv
 
 # -MMD to generate header dependencies. Unsupported by
 #  the Clang shipped with OS X.
