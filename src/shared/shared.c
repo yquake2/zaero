@@ -272,10 +272,14 @@ R_ConcatTransforms(float in1[3][4], float in2[3][4], float out[3][4])
 float
 Q_fabs(float f)
 {
-	int tmp = *(int *)&f;
+	int i_tmp;
+	memcpy(&i_tmp, &f, sizeof(f));
 
-	tmp &= 0x7FFFFFFF;
-	return *(float *)&tmp;
+	i_tmp &= 0x7FFFFFFF;
+
+	float f_tmp;
+	memcpy(&f_tmp, &i_tmp, sizeof(i_tmp));
+	return f_tmp;
 }
 
 float
