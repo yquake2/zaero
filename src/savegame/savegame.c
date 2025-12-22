@@ -253,6 +253,7 @@ InitGame(void)
 
 	/* change anytime vars */
 	dmflags = gi.cvar ("dmflags", "0", CVAR_SERVERINFO);
+	zdmflags = gi.cvar ("zdmflags", "0", CVAR_SERVERINFO);
 	fraglimit = gi.cvar ("fraglimit", "0", CVAR_SERVERINFO);
 	timelimit = gi.cvar ("timelimit", "0", CVAR_SERVERINFO);
 	password = gi.cvar ("password", "", CVAR_USERINFO);
