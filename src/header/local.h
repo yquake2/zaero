@@ -386,6 +386,9 @@ typedef struct
 	float		maxyaw;
 	float		minpitch;
 	float		maxpitch;
+
+	vec3_t		mins;
+	vec3_t		maxs;
 } spawn_temp_t;
 
 

@@ -674,6 +674,9 @@ void SP_func_barrier(edict_t *self)
 		return;
 	}
 
+	VectorCopy(st.mins, self->mins);
+	VectorCopy(st.maxs, self->maxs);
+
 	self->solid = SOLID_BBOX;
 	self->movetype = MOVETYPE_NONE;
 	self->s.modelindex = gi.modelindex("models/objects/wall/tris.md2");

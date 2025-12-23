@@ -1,9 +1,13 @@
 // FIXED ENTITY STRING (by BjossiAlfreds)
 //
-// 1. Fixed 2x monster_hound (5060, 5067) never activating
+// 1. Fixed 2x monster_hound never activating (b#1)
 //
 // Their targetname "powerboom" is never targeted,
 // changed to "exitlaser" which is hopefully close enough.
+//
+// 2. Fixed typo in target_speaker noise name (b#2)
+//
+// 3. Moved monster_floater down a bit to silence warning (b#3)
 {
 "sounds" "3"
 "sky" "env3v"
@@ -2819,7 +2823,7 @@
 "classname" "func_wall"
 }
 {
-"origin" "1248 240 -256"
+"origin" "1248 240 -260" // b#3: -256 -> -260
 "mteam" "corespeace"
 "spawnflags2" "0"
 "targetname" "coresambush"
@@ -3228,7 +3232,7 @@
 "origin" "304 2360 -460"
 "volume" "1"
 "attenuation" "1"
-"noise" "world/lasoff.wav"
+"noise" "world/lasoff1.wav" // b#2: lasoff -> lasoff1
 "targetname" "exitlaser"
 "spawnflags2" "0"
 "spawnflags" "2052"
@@ -3600,7 +3604,7 @@
 "origin" "-704 352 -352"
 "volume" "1"
 "attenuation" "1"
-"noise" "world/lasoff.wav"
+"noise" "world/lasoff1.wav" // b#2: lasoff -> lasoff1
 "targetname" "monsterbeam"
 "spawnflags2" "0"
 "spawnflags" "2052"
@@ -3630,7 +3634,7 @@
 "origin" "-704 160 -352"
 "volume" "1"
 "attenuation" "1"
-"noise" "world/lasoff.wav"
+"noise" "world/lasoff1.wav" // b#2: lasoff -> lasoff1
 "targetname" "monsterbeam"
 "spawnflags2" "0"
 "spawnflags" "2052"
@@ -5060,14 +5064,14 @@
 {
 "origin" "-2352 328 -248"
 "spawnflags2" "0"
-"targetname" "exitlaser"
+"targetname" "exitlaser" // b#1: powerboom -> exitlaser
 "spawnflags" "779"
 "classname" "monster_hound"
 }
 {
 "origin" "-2256 152 -248"
 "spawnflags2" "0"
-"targetname" "exitlaser"
+"targetname" "exitlaser" // b#1: powerboom -> exitlaser
 "spawnflags" "771"
 "classname" "monster_hound"
 }

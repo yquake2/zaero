@@ -141,5 +141,7 @@
 {"maxyaw", STOFS(maxyaw), F_FLOAT, FFL_SPAWNTEMP},
 {"minpitch", STOFS(minpitch), F_FLOAT, FFL_SPAWNTEMP},
 {"maxpitch", STOFS(maxpitch), F_FLOAT, FFL_SPAWNTEMP},
+{"mins", STOFS(mins), F_VECTOR, FFL_SPAWNTEMP},
+{"maxs", STOFS(maxs), F_VECTOR, FFL_SPAWNTEMP},
 
 {0, 0, 0, 0}

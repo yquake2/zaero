@@ -1639,6 +1639,11 @@ void SP_misc_viper (edict_t *ent)
 		VectorSet (ent->mins, -16, -16, 0);
 		VectorSet (ent->maxs, 16, 16, 32);
 	}
+	else
+	{
+		VectorCopy(st.mins, ent->mins);
+		VectorCopy(st.maxs, ent->mins);
+	}
 
 	ent->think = func_train_find;
 	ent->nextthink = level.time + FRAMETIME;
