@@ -36,7 +36,42 @@ typedef unsigned char byte;
 #define MAX_TOKEN_CHARS 128         /* max length of an individual token */
 
 #define MAX_QPATH 64                /* max length of a quake game pathname */
-#define MAX_OSPATH 128              /* max length of a filesystem pathname */
+
+/*
+ * DG: For some stupid reason, SV_WriteServerFile() and SV_ReadeServerFile() used
+ * MAX_OSPATH as buffer length for CVAR_LATCH CVARS and saved the whole buffer
+ * into $game/save/current/server.ssv, so changing MAX_OSPATH breaks savegames...
+ * Unfortunately, for some other fucking reason MAX_OSPATH was 128 for non-Windows
+ * which is just horrible.. so I introduced LATCH_CVAR_SAVELENGTH with the stupid
+ * values so I could bump MAX_OSPATH.
+ * TODO: whenever you break savegame compatibility next, make
+ *       LATCH_CVAR_SAVELENGTH system-independent (or remove it and hardcode a
+ *       sensible value in the two functions)
+ */
+
+#ifdef _WIN32
+ #define MAX_OSPATH 256             /* max length of a filesystem pathname (same as MAX_PATH) */
+ #define LATCH_CVAR_SAVELENGTH 256
+
+ // by default dlls don't export any functions, use this to
+ // make a function visible (for GetGameAPI(), GetRefAPI() and similar)
+ #define Q2_DLL_EXPORTED  __declspec(dllexport)
+
+#else // not Win32 (Linux, BSD, Mac, ..)
+
+ #define MAX_OSPATH 4096            /* max length of a filesystem pathname */
+ #define LATCH_CVAR_SAVELENGTH 128
+
+ // by default our .so/.dylibs don't export any functions, use this to
+ // make a function visible (for GetGameAPI(), GetRefAPI() and similar)
+ #define Q2_DLL_EXPORTED  __attribute__((__visibility__("default")))
+#endif
+
+#ifdef _MSC_VER
+ #define PRINTF_ATTR(FMT, VARGS)
+#else // at least GCC/mingw and clang support this
+ #define PRINTF_ATTR(FMT, VARGS) __attribute__((format(printf, FMT , VARGS )))
+#endif
 
 /* */
 /* per-level limits */
