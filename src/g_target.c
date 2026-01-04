@@ -131,19 +131,73 @@ void SP_target_speaker (edict_t *ent)
 
 //==========================================================
 
-void Use_Target_Help (edict_t *ent, edict_t *other, edict_t *activator)
+#define TARGET_HELP_PRIMARY 1
+#define TARGET_HELP_THINK_DELAY 0.3f
+
+static void
+Target_Help_Apply(const char *msg, int is_primary)
+{
+	char *curr;
+	size_t sz;
+
+	if (!msg)
+	{
+		return;
+	}
+
+	if (is_primary)
+	{
+		curr = game.helpmessage1;
+		sz = sizeof (game.helpmessage1);
+	}
+	else
+	{
+		curr = game.helpmessage2;
+		sz = sizeof (game.helpmessage2);
+	}
+
+	if (strcmp(curr, msg) == 0)
+	{
+		return;
+	}
+
+	Q_strlcpy(curr, msg, sz - 1);
+
+	game.helpchanged++;
+}
+
+void
+Target_Help_Think (edict_t *ent)
 {
 	if (!ent)
 	{
 		return;
 	}
 
-	if (ent->spawnflags & 1)
-		strncpy (game.helpmessage1, ent->message, sizeof(game.helpmessage2)-1);
-	else
-		strncpy (game.helpmessage2, ent->message, sizeof(game.helpmessage1)-1);
+	Target_Help_Apply(ent->message, ent->spawnflags & TARGET_HELP_PRIMARY);
+	ent->think = NULL;
+}
 
-	game.helpchanged++;
+void
+Use_Target_Help(edict_t *ent, edict_t *other /* unused */, edict_t *activator /* unused */)
+{
+	if (!ent)
+	{
+		return;
+	}
+
+	if (level.time > TARGET_HELP_THINK_DELAY)
+	{
+		Target_Help_Apply(ent->message, ent->spawnflags & TARGET_HELP_PRIMARY);
+	}
+	else
+	{
+		/* The game is still pre-loading so delay the help message a bit,
+		   otherwise its changes to game structure will leak past save loads
+		*/
+		ent->think = Target_Help_Think;
+		ent->nextthink = TARGET_HELP_THINK_DELAY;
+	}
 }
 
 /*QUAKED target_help (1 0 1) (-16 -16 -24) (16 16 24) help1

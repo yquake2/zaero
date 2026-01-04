@@ -372,7 +372,7 @@ void Cmd_Help_f (edict_t *ent)
 	ent->client->showinventory = false;
 	ent->client->showscores = false;
 
-	if (ent->client->showhelp && (ent->client->resp.game_helpchanged == game.helpchanged))
+	if (ent->client->showhelp && !ent->client->resp.helpchanged)
 	{
 		ent->client->showhelp = false;
 		return;
