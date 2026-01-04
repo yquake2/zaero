@@ -91,6 +91,8 @@ void berserk_fidget (edict_t *self)
 		return;
 	}
 
+	if (self->enemy)
+		return;
 	if (self->monsterinfo.aiflags & AI_STAND_GROUND)
 		return;
 	if (random() > 0.15)
