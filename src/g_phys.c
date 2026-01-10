@@ -37,10 +37,14 @@ edict_t	*SV_TestEntityPosition (edict_t *ent)
 		return NULL;
 	}
 
-	if (ent->clipmask)
+	/* dead bodies are supposed to not be solid so lets
+	   ensure they only collide with BSP during pushmoves
+	*/
+	if (ent->clipmask && !(ent->svflags & SVF_DEADMONSTER))
 		mask = ent->clipmask;
 	else
 		mask = MASK_SOLID;
+
 	trace = gi.trace (ent->s.origin, ent->mins, ent->maxs, ent->s.origin, ent, mask);
 
 	if (trace.startsolid)
@@ -482,6 +486,15 @@ retry:
 		mask = MASK_SOLID;
 
 	trace = gi.trace (start, ent->mins, ent->maxs, end, ent, mask);
+
+	/* startsolid treats different-content volumes
+	   as continuous, like the bbox of a monster/player
+	   and the floor of an elevator. So do another trace
+	   that only collides with BSP so that we make a best
+	   effort to keep these entities inside non-solid space
+	*/
+	if (trace.startsolid && (mask & ~MASK_SOLID))
+		trace = gi.trace (start, ent->mins, ent->maxs, end, ent, MASK_SOLID);
 
 	VectorCopy (trace.endpos, ent->s.origin);
 	gi.linkentity (ent);
