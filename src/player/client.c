@@ -1226,7 +1226,7 @@ void PutClientInServer (edict_t *ent)
 		resp = client->resp;
 		memcpy (userinfo, client->pers.userinfo, sizeof(userinfo));
 		// this is kind of ugly, but it's how we want to handle keys in coop
-		for (n = 0; n < MAX_ITEMS; n++)
+		for (n = 0; n < game.num_items; n++)
 		{
 			if (itemlist[n].flags & IT_KEY)
 				resp.coop_respawn.inventory[n] = client->pers.inventory[n];
