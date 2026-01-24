@@ -97,11 +97,13 @@ void BeginIntermission (edict_t *targ)
 				if (!client->inuse)
 					continue;
 				// strip players of all keys between units
-				for (n = 0; n < MAX_ITEMS; n++)
+				for (n = 0; n < game.num_items; n++)
 				{
 					if (itemlist[n].flags & IT_KEY)
 					client->client->pers.inventory[n] = 0;
 				}
+
+				client->client->pers.power_cubes = 0;
 			}
 		}
 	}
@@ -372,7 +374,7 @@ void Cmd_Help_f (edict_t *ent)
 	ent->client->showinventory = false;
 	ent->client->showscores = false;
 
-	if (ent->client->showhelp && (ent->client->resp.game_helpchanged == game.helpchanged))
+	if (ent->client->showhelp && !ent->client->resp.helpchanged)
 	{
 		ent->client->showhelp = false;
 		return;

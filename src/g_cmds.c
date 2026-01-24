@@ -67,9 +67,9 @@ void SelectNextItem (edict_t *ent, int itflags)
 	cl = ent->client;
 
 	// scan  for the next valid one
-	for (i=1 ; i<=MAX_ITEMS ; i++)
+	for (i = 1; i <= game.num_items; i++)
 	{
-		index = (cl->pers.selected_item + i)%MAX_ITEMS;
+		index = (cl->pers.selected_item + i) % game.num_items;
 		if (!cl->pers.inventory[index])
 			continue;
 		it = &itemlist[index];
@@ -101,9 +101,9 @@ void SelectPrevItem (edict_t *ent, int itflags)
 	cl = ent->client;
 
 	// scan  for the next valid one
-	for (i=1 ; i<=MAX_ITEMS ; i++)
+	for (i = 1; i <= game.num_items; i++)
 	{
-		index = (cl->pers.selected_item + MAX_ITEMS - i)%MAX_ITEMS;
+		index = (cl->pers.selected_item + game.num_items - i) % game.num_items;
 		if (!cl->pers.inventory[index])
 			continue;
 		it = &itemlist[index];
@@ -190,7 +190,7 @@ void Cmd_Give_f (edict_t *ent)
 
 	if (give_all || Q_stricmp(name, "weapons") == 0)
 	{
-		for (i=0 ; i<game.num_items ; i++)
+		for (i = 0; i < game.num_items; i++)
 		{
 			it = itemlist + i;
 			if (!it->pickup)
@@ -205,7 +205,7 @@ void Cmd_Give_f (edict_t *ent)
 
 	if (give_all || Q_stricmp(name, "ammo") == 0)
 	{
-		for (i=0 ; i<game.num_items ; i++)
+		for (i = 0; i < game.num_items; i++)
 		{
 			it = itemlist + i;
 			if (!it->pickup)
@@ -266,7 +266,7 @@ void Cmd_Give_f (edict_t *ent)
 
 	if (give_all)
 	{
-		for (i=0 ; i<game.num_items ; i++)
+		for (i = 0; i < game.num_items; i++)
 		{
 			it = itemlist + i;
 			if (!it->pickup)
@@ -674,17 +674,20 @@ void Cmd_Inven_f (edict_t *ent)
 	cl->showinventory = true;
 
 	gi.WriteByte (svc_inventory);
-	for (i=0; i < MAX_ITEMS ; i++)
+	for (i = 0; i < game.num_items; i++)
 	{
-		gitem_t *it = &itemlist[i];
-		if (it->hideFlags & HIDE_FROM_INVENTORY)
-			gi.WriteShort(0);	// this is a hack and will work as long as
-								// the client continues to hide items that
-								// the user has none of
-		else
-			gi.WriteShort (cl->pers.inventory[i]);
+		const gitem_t *it = &itemlist[i];
+
+		// this is a hack and will work as long as
+		// the client continues to hide items that
+		// the user has none of
+		gi.WriteShort ((it->hideFlags & HIDE_FROM_INVENTORY) ?
+			0 : cl->pers.inventory[i]);
 	}
-	
+
+	for (i = game.num_items; i < MAX_ITEMS; i++)
+		gi.WriteShort(0);
+
 	gi.unicast(ent, true);
 }
 
@@ -754,9 +757,9 @@ void Cmd_WeapPrev_f (edict_t *ent)
 	selected_weapon = ITEM_INDEX(it);
 
 	// scan for the next valid one
-	for (i=1 ; i<=MAX_ITEMS ; i++)
+	for (i = 1; i <= game.num_items; i++)
 	{
-		index = (selected_weapon + MAX_ITEMS - i) % MAX_ITEMS;
+		index = (selected_weapon + game.num_items - i) % game.num_items;
 		if (!cl->pers.inventory[index])
 		{
 			continue;
@@ -818,9 +821,9 @@ void Cmd_WeapNext_f (edict_t *ent)
 	selected_weapon = ITEM_INDEX(it);
 
 	// scan for the next valid one
-	for (i=1 ; i<=MAX_ITEMS ; i++)
+	for (i = 1; i <= game.num_items; i++)
 	{
-		index = (selected_weapon + i) % MAX_ITEMS;
+		index = (selected_weapon + i) % game.num_items;
 		if (!cl->pers.inventory[index])
 		{
 			continue;
@@ -1195,6 +1198,130 @@ Cmd_Teleport_f(edict_t *ent)
 
 	/* And link it back in. */
 	gi.linkentity(ent);
+}
+
+static void
+Cmd_ListEntities_f(edict_t *ent)
+{
+	if ((deathmatch->value || coop->value) && !sv_cheats->value)
+	{
+		gi.cprintf(ent, PRINT_HIGH, "You must run the server with '+set cheats 1' to enable this command.\n");
+		return;
+	}
+
+	if (gi.argc() < 2)
+	{
+		gi.cprintf(ent, PRINT_HIGH, "Usage: listentities <all|ammo|items|keys|monsters|weapons>\n");
+		return;
+	}
+
+	/* What to print? */
+	qboolean all = false;
+	qboolean ammo = false;
+	qboolean items = false;
+	qboolean keys = false;
+	qboolean monsters = false;
+	qboolean weapons = false;
+
+	for (int i = 1; i < gi.argc(); i++)
+	{
+		const char *arg = gi.argv(i);
+
+		if (Q_stricmp(arg, "all") == 0)
+		{
+			all = true;
+		}
+		else if (Q_stricmp(arg, "ammo") == 0)
+		{
+			ammo = true;
+		}
+		else if (Q_stricmp(arg, "items") == 0)
+		{
+			items = true;
+		}
+		else if (Q_stricmp(arg, "keys") == 0)
+		{
+			keys = true;
+		}
+		else if (Q_stricmp(arg, "monsters") == 0)
+		{
+			monsters = true;
+		}
+		else if (Q_stricmp(arg, "weapons") == 0)
+		{
+			weapons = true;
+		}
+		else
+		{
+			gi.cprintf(ent, PRINT_HIGH, "Usage: listentities <all|ammo|items|keys|monsters|weapons>\n");
+		}
+	}
+
+	/* Print what's requested. */
+	for (int i = 0; i < globals.num_edicts; i++)
+	{
+		edict_t *cur = &g_edicts[i];
+		qboolean print = false;
+
+		/* Ensure that the entity is valid. */
+		if (!cur->classname)
+		{
+			continue;
+		}
+
+		if (all)
+		{
+			print = true;
+		}
+		else
+		{
+			if (ammo)
+			{
+				if (strncmp(cur->classname, "ammo_", 5) == 0)
+				{
+					print = true;
+				}
+			}
+
+			if (items)
+			{
+				if (strncmp(cur->classname, "item_", 5) == 0)
+				{
+					print = true;
+				}
+			}
+
+			if (keys)
+			{
+				if (strncmp(cur->classname, "key_", 4) == 0)
+				{
+					print = true;
+				}
+			}
+
+			if (monsters)
+			{
+				if (strncmp(cur->classname, "monster_", 8) == 0)
+				{
+					print = true;
+				}
+			}
+
+			if (weapons)
+			{
+				if (strncmp(cur->classname, "weapon_", 7) == 0)
+				{
+					print = true;
+				}
+			}
+		}
+
+		if (print)
+		{
+			/* We use dprintf() because cprintf() may flood the server... */
+			gi.dprintf("%s: %f %f %f\n", cur->classname, cur->s.origin[0], cur->s.origin[1], cur->s.origin[2]);
+		}
+	}
 }
 
 /* Yamagi's cycleweap / prefweap */
@@ -1608,6 +1735,10 @@ void ClientCommand (edict_t *ent)
    else if(Q_stricmp (cmd, "anim") == 0)
       anim_player_cmd(ent);
 #endif
+	else if (Q_stricmp(cmd, "listentities") == 0)
+	{
+		Cmd_ListEntities_f(ent);
+	}
 	else if (Q_stricmp(cmd, "cycleweap") == 0)
 	{
 		Cmd_CycleWeap_f(ent);

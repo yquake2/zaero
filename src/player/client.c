@@ -1226,7 +1226,7 @@ void PutClientInServer (edict_t *ent)
 		resp = client->resp;
 		memcpy (userinfo, client->pers.userinfo, sizeof(userinfo));
 		// this is kind of ugly, but it's how we want to handle keys in coop
-		for (n = 0; n < MAX_ITEMS; n++)
+		for (n = 0; n < game.num_items; n++)
 		{
 			if (itemlist[n].flags & IT_KEY)
 				resp.coop_respawn.inventory[n] = client->pers.inventory[n];
@@ -1239,6 +1239,10 @@ void PutClientInServer (edict_t *ent)
 	else
 	{
 		memset (&resp, 0, sizeof(resp));
+
+		// avoid redundant help icon flashing on level transitions
+		resp.helpchanged = client->resp.helpchanged;
+		resp.game_helpchanged = client->resp.game_helpchanged;
 	}
 
 	// clear everything but the persistant data
@@ -1388,7 +1392,7 @@ to be placed into the game.  This will happen every level load.
 */
 void ClientBegin (edict_t *ent)
 {
-	int		i;
+	int		i, hc, ghc;
 
 	if (!ent)
 	{
@@ -1421,7 +1425,14 @@ void ClientBegin (edict_t *ent)
 		// ClientConnect() time
 		G_InitEdict (ent);
 		ent->classname = "player";
+
+		// avoid redundant help icon flashing on level transitions
+		hc = ent->client->resp.helpchanged;
+		ghc = ent->client->resp.game_helpchanged;
 		InitClientResp (ent->client);
+		ent->client->resp.helpchanged = hc;
+		ent->client->resp.game_helpchanged = ghc;
+
 		PutClientInServer (ent);
 	}
 
@@ -1535,6 +1546,7 @@ loadgames will.
 qboolean ClientConnect (edict_t *ent, char *userinfo)
 {
 	char	*value;
+	int		hc, ghc;
 
 	if (!ent)
 	{
@@ -1557,7 +1569,13 @@ qboolean ClientConnect (edict_t *ent, char *userinfo)
 	if (ent->inuse == false)
 	{
 		// clear the respawning variables
+		// avoid redundant help icon flashing on level transitions
+		hc = ent->client->resp.helpchanged;
+		ghc = ent->client->resp.game_helpchanged;
 		InitClientResp (ent->client);
+		ent->client->resp.helpchanged = hc;
+		ent->client->resp.game_helpchanged = ghc;
+
 		if (!game.autosaved || !ent->client->pers.weapon)
 			InitClientPersistant (ent->client);
 	}

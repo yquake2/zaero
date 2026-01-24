@@ -923,7 +923,10 @@ void sentien_fend (edict_t *self, edict_t *attacker, float eta)
 	}
 
 	if (!self->enemy)
+	{
 		self->enemy = attacker;
+		FoundTarget(self);
+	}
 
 	self->monsterinfo.currentmove = &sentien_move_fend;
 }
