@@ -407,7 +407,15 @@ void HuntTarget (edict_t *self)
 		self->monsterinfo.stand (self);
 	else
 		self->monsterinfo.run (self);
-	VectorSubtract (self->enemy->s.origin, self->s.origin, vec);
+	if (self->enemy)
+	{
+		VectorSubtract(self->enemy->s.origin, self->s.origin, vec);
+	}
+	else
+	{
+		VectorClear(vec);
+	}
+
 	self->ideal_yaw = vectoyaw(vec);
 	// wait a while before first attack
 	if (!(self->monsterinfo.aiflags & AI_STAND_GROUND))
