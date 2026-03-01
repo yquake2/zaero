@@ -1177,9 +1177,9 @@ Cmd_Teleport_f(edict_t *ent)
 	gi.unlinkentity(ent);
 
 	/* Set new position */
-	ent->s.origin[0] = atof(gi.argv(1));
-	ent->s.origin[1] = atof(gi.argv(2));
-	ent->s.origin[2] = atof(gi.argv(3)) + 10.0;
+	ent->s.origin[0] = (float)strtod(gi.argv(1), (char **)NULL);
+	ent->s.origin[1] = (float)strtod(gi.argv(2), (char **)NULL);
+	ent->s.origin[2] = (float)strtod(gi.argv(3), (char **)NULL) + 10.0f;
 
 	/* Remove velocity and keep the entity briefly in place
 	   to give the server and clients time to catch up. */
