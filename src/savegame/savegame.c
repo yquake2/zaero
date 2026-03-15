@@ -636,8 +636,20 @@ ReadField(FILE *f, field_t *field, byte *base)
 			}
 			else
 			{
-				*(char **)p = gi.TagMalloc(32 + len, TAG_LEVEL);
-				sg_fread(*(char **)p, len, f);
+				char *s;
+
+				s = gi.TagMalloc(len + 1, TAG_LEVEL);
+				if (!s)
+				{
+					fclose(f);
+					gi.error("%s: can't allocate string field", __func__);
+					return;
+				}
+
+				sg_fread(s, len, f);
+
+				s[len] = 0;
+				*(char **)p = s;
 			}
 
 			break;
