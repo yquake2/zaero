@@ -489,7 +489,9 @@ WriteField1(FILE *f, field_t *field, byte *base)
 
 				if (!func)
 				{
+					fclose(f);
 					gi.error ("WriteField1: function not in list, can't save game");
+					return;
 				}
 				
 				len = strlen(func->funcStr)+1;
@@ -509,7 +511,9 @@ WriteField1(FILE *f, field_t *field, byte *base)
 				
 				if (!mmove)
 				{
+					fclose(f);
 					gi.error ("WriteField1: mmove not in list, can't save game");
+					return;
 				}
 
 				len = strlen(mmove->mmoveStr)+1;
@@ -518,6 +522,7 @@ WriteField1(FILE *f, field_t *field, byte *base)
 			*(int *)p = len;
 			break;
 		default:
+			fclose(f);
 			gi.error("WriteEdict: unknown field type");
 	}
 }
@@ -556,7 +561,9 @@ WriteField2(FILE *f, field_t *field, byte *base)
 				
 				if (!func)
 				{
+					fclose(f);
 					gi.error ("WriteField2: function not in list, can't save game");
+					return;
 				}
 				
 				len = strlen(func->funcStr)+1;
@@ -572,7 +579,9 @@ WriteField2(FILE *f, field_t *field, byte *base)
 
 				if (!mmove)
 				{
+					fclose(f);
 					gi.error ("WriteField2: mmove not in list, can't save game");
+					return;
 				}
 
 				len = strlen(mmove->mmoveStr)+1;
@@ -682,14 +691,17 @@ ReadField(FILE *f, field_t *field, byte *base)
 			{
 				if (len > sizeof(funcStr))
 				{
+					fclose(f);
 					gi.error ("ReadField: function name is longer than buffer (%i chars)",
 							sizeof(funcStr));
+					return;
 				}
 
 				sg_fread (funcStr, len, f);
 
 				if ( !(*(byte **)p = FindFunctionByName (funcStr)) )
 				{
+					fclose(f);
 					gi.error ("ReadField: function %s not found in table, can't load game", funcStr);
 				}
 
@@ -706,20 +718,24 @@ ReadField(FILE *f, field_t *field, byte *base)
 			{
 				if (len > sizeof(funcStr))
 				{
+					fclose(f);
 					gi.error ("ReadField: mmove name is longer than buffer (%i chars)",
 						   	sizeof(funcStr));
+					return;
 				}
 
 				sg_fread (funcStr, len, f);
 				
 				if ( !(*(mmove_t **)p = FindMmoveByName (funcStr)) )
 				{
+					fclose(f);
 					gi.error ("ReadField: mmove %s not found in table, can't load game", funcStr);
 				}
 			}
 			break;
 
 		default:
+			fclose(f);
 			gi.error("ReadEdict: unknown field type");
 	}
 }
