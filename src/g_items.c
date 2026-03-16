@@ -55,7 +55,7 @@ GetItemByIndex
 */
 gitem_t	*GetItemByIndex (int index)
 {
-	if (index == 0 || index >= game.num_items)
+	if (index <= 0 || index >= game.num_items)
 		return NULL;
 
 	return &itemlist[index];
