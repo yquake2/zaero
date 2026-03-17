@@ -67,9 +67,9 @@ void SelectNextItem (edict_t *ent, int itflags)
 	cl = ent->client;
 
 	// scan  for the next valid one
-	for (i = 1; i <= game.num_items; i++)
+	for (i = 1; i <= itemlist_len; i++)
 	{
-		index = (cl->pers.selected_item + i) % game.num_items;
+		index = (cl->pers.selected_item + i) % itemlist_len;
 		if (!cl->pers.inventory[index])
 			continue;
 		it = &itemlist[index];
@@ -101,9 +101,9 @@ void SelectPrevItem (edict_t *ent, int itflags)
 	cl = ent->client;
 
 	// scan  for the next valid one
-	for (i = 1; i <= game.num_items; i++)
+	for (i = 1; i <= itemlist_len; i++)
 	{
-		index = (cl->pers.selected_item + game.num_items - i) % game.num_items;
+		index = (cl->pers.selected_item + itemlist_len - i) % itemlist_len;
 		if (!cl->pers.inventory[index])
 			continue;
 		it = &itemlist[index];
@@ -190,7 +190,7 @@ void Cmd_Give_f (edict_t *ent)
 
 	if (give_all || Q_stricmp(name, "weapons") == 0)
 	{
-		for (i = 0; i < game.num_items; i++)
+		for (i = 0; i < itemlist_len; i++)
 		{
 			it = itemlist + i;
 			if (!it->pickup)
@@ -205,7 +205,7 @@ void Cmd_Give_f (edict_t *ent)
 
 	if (give_all || Q_stricmp(name, "ammo") == 0)
 	{
-		for (i = 0; i < game.num_items; i++)
+		for (i = 0; i < itemlist_len; i++)
 		{
 			it = itemlist + i;
 			if (!it->pickup)
@@ -266,7 +266,7 @@ void Cmd_Give_f (edict_t *ent)
 
 	if (give_all)
 	{
-		for (i = 0; i < game.num_items; i++)
+		for (i = 0; i < itemlist_len; i++)
 		{
 			it = itemlist + i;
 			if (!it->pickup)
@@ -674,7 +674,7 @@ void Cmd_Inven_f (edict_t *ent)
 	cl->showinventory = true;
 
 	gi.WriteByte (svc_inventory);
-	for (i = 0; i < game.num_items; i++)
+	for (i = 0; i < itemlist_len; i++)
 	{
 		const gitem_t *it = &itemlist[i];
 
@@ -685,7 +685,7 @@ void Cmd_Inven_f (edict_t *ent)
 			0 : cl->pers.inventory[i]);
 	}
 
-	for (i = game.num_items; i < MAX_ITEMS; i++)
+	for (i = itemlist_len; i < MAX_ITEMS; i++)
 		gi.WriteShort(0);
 
 	gi.unicast(ent, true);
@@ -757,9 +757,9 @@ void Cmd_WeapPrev_f (edict_t *ent)
 	selected_weapon = ITEM_INDEX(it);
 
 	// scan for the next valid one
-	for (i = 1; i <= game.num_items; i++)
+	for (i = 1; i <= itemlist_len; i++)
 	{
-		index = (selected_weapon + game.num_items - i) % game.num_items;
+		index = (selected_weapon + itemlist_len - i) % itemlist_len;
 		if (!cl->pers.inventory[index])
 		{
 			continue;
@@ -821,9 +821,9 @@ void Cmd_WeapNext_f (edict_t *ent)
 	selected_weapon = ITEM_INDEX(it);
 
 	// scan for the next valid one
-	for (i = 1; i <= game.num_items; i++)
+	for (i = 1; i <= itemlist_len; i++)
 	{
-		index = (selected_weapon + i) % game.num_items;
+		index = (selected_weapon + i) % itemlist_len;
 		if (!cl->pers.inventory[index])
 		{
 			continue;

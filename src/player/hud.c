@@ -97,7 +97,7 @@ void BeginIntermission (edict_t *targ)
 				if (!client->inuse)
 					continue;
 				// strip players of all keys between units
-				for (n = 0; n < game.num_items; n++)
+				for (n = 0; n < itemlist_len; n++)
 				{
 					if (itemlist[n].flags & IT_KEY)
 					client->client->pers.inventory[n] = 0;

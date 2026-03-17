@@ -55,7 +55,7 @@ GetItemByIndex
 */
 gitem_t	*GetItemByIndex (int index)
 {
-	if (index <= 0 || index >= game.num_items)
+	if (index <= 0 || index >= itemlist_len)
 		return NULL;
 
 	return &itemlist[index];
@@ -74,7 +74,7 @@ gitem_t	*FindItemByClassname (char *classname)
 	gitem_t	*it;
 
 	it = itemlist;
-	for (i=0 ; i<game.num_items ; i++, it++)
+	for (i=0 ; i<itemlist_len ; i++, it++)
 	{
 		if (!it->classname)
 			continue;
@@ -97,7 +97,7 @@ gitem_t	*FindItem (char *pickup_name)
 	gitem_t	*it;
 
 	it = itemlist;
-	for (i=0 ; i<game.num_items ; i++, it++)
+	for (i=0 ; i<itemlist_len ; i++, it++)
 	{
 		if (!it->pickup_name)
 			continue;
@@ -114,7 +114,7 @@ void precacheAllItems()
 	gitem_t	*it;
 
 	it = itemlist;
-	for (i=0 ; i<game.num_items ; i++, it++)
+	for (i=0 ; i<itemlist_len ; i++, it++)
 	{
 		if (!it->pickup_name)
 			continue;
@@ -2761,6 +2761,7 @@ security pass for the security level
 	{NULL}
 };
 
+const int itemlist_len = ARRLEN(itemlist) - 1;
 
 /*QUAKED item_health (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
@@ -2851,7 +2852,6 @@ void SP_item_health_mega (edict_t *self)
 
 void InitItems (void)
 {
-	game.num_items = sizeof(itemlist)/sizeof(itemlist[0]) - 1;
 }
 
 
@@ -2868,7 +2868,7 @@ void SetItemNames (void)
 	int		i;
 	gitem_t	*it;
 
-	for (i=0; i<game.num_items ; i++)
+	for (i=0; i<itemlist_len ; i++)
 	{
 		it = &itemlist[i];
 		gi.configstring (CS_ITEMS+i, it->pickup_name);
