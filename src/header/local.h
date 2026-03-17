@@ -854,7 +854,7 @@ void ClientEndServerFrame (edict_t *ent);
 //
 void MoveClientToIntermission (edict_t *client);
 void G_SetStats (edict_t *ent);
-void ValidateSelectedItem (edict_t *ent);
+void ValidateSelectedItem (gclient_t *cl);
 void DeathmatchScoreboardMessage (edict_t *client, edict_t *killer);
 
 //

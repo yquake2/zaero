@@ -227,7 +227,7 @@ void Drop_General (edict_t *ent, gitem_t *item)
 {
 	Drop_Item (ent, item);
 	ent->client->pers.inventory[ITEM_INDEX(item)]--;
-	ValidateSelectedItem (ent);
+	ValidateSelectedItem (ent->client);
 }
 
 
@@ -449,7 +449,7 @@ void Use_Quad (edict_t *ent, gitem_t *item)
 	}
 
 	ent->client->pers.inventory[ITEM_INDEX(item)]--;
-	ValidateSelectedItem (ent);
+	ValidateSelectedItem (ent->client);
 
 	if (quad_drop_timeout_hack)
 	{
@@ -479,7 +479,7 @@ void Use_Breather (edict_t *ent, gitem_t *item)
 	}
 
 	ent->client->pers.inventory[ITEM_INDEX(item)]--;
-	ValidateSelectedItem (ent);
+	ValidateSelectedItem (ent->client);
 
 	if (ent->client->breather_framenum > level.framenum)
 		ent->client->breather_framenum += 300;
@@ -497,7 +497,7 @@ void Use_Envirosuit (edict_t *ent, gitem_t *item)
 	}
 
 	ent->client->pers.inventory[ITEM_INDEX(item)]--;
-	ValidateSelectedItem (ent);
+	ValidateSelectedItem (ent->client);
 
 	if (ent->client->enviro_framenum > level.framenum)
 		ent->client->enviro_framenum += 300;
@@ -515,7 +515,7 @@ void	Use_Invulnerability (edict_t *ent, gitem_t *item)
 	}
 
 	ent->client->pers.inventory[ITEM_INDEX(item)]--;
-	ValidateSelectedItem (ent);
+	ValidateSelectedItem (ent->client);
 
 	if (ent->client->invincible_framenum > level.framenum)
 		ent->client->invincible_framenum += 300;
@@ -535,7 +535,7 @@ void	Use_Silencer (edict_t *ent, gitem_t *item)
 	}
 
 	ent->client->pers.inventory[ITEM_INDEX(item)]--;
-	ValidateSelectedItem (ent);
+	ValidateSelectedItem (ent->client);
 	ent->client->silencer_shots += 30;
 }
 
@@ -691,7 +691,7 @@ void Drop_Ammo (edict_t *ent, gitem_t *item)
 	else
 		dropped->count = ent->client->pers.inventory[index];
 	ent->client->pers.inventory[index] -= dropped->count;
-	ValidateSelectedItem (ent);
+	ValidateSelectedItem (ent->client);
 }
 
 qboolean Pickup_A2k (edict_t *ent, edict_t *other)
@@ -1048,7 +1048,7 @@ void Drop_Visor(edict_t *ent, gitem_t *item)
 
 	edict_t *visor = Drop_Item (ent, item);
 	ent->client->pers.inventory[ITEM_INDEX(item)] = 0;
-	ValidateSelectedItem (ent);
+	ValidateSelectedItem (ent->client);
 	visor->visorFrames = ent->client->pers.visorFrames;
 	ent->client->pers.visorFrames = 0;
 }

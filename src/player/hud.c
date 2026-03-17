@@ -393,6 +393,25 @@ void Cmd_Help_f (edict_t *ent)
 G_SetStats
 ===============
 */
+static void
+G_SetStats_SelectedItem(gclient_t *cl)
+{
+	const gitem_t *it;
+	int si;
+
+	si = cl->pers.selected_item;
+	it = GetItemByIndex(si);
+
+	if ((si <= 0) || (si >= itemlist_len))
+	{
+		si = -1;
+	}
+
+	cl->ps.stats[STAT_SELECTED_ITEM] = si;
+	cl->ps.stats[STAT_SELECTED_ICON] = (it && it->icon) ?
+		gi.imageindex(it->icon) : 0;
+}
+
 void G_SetStats (edict_t *ent)
 {
 	gitem_t		*item;
@@ -513,12 +532,7 @@ void G_SetStats (edict_t *ent)
 	//
 	// selected item
 	//
-	if (ent->client->pers.selected_item == -1)
-		ent->client->ps.stats[STAT_SELECTED_ICON] = 0;
-	else
-		ent->client->ps.stats[STAT_SELECTED_ICON] = gi.imageindex (itemlist[ent->client->pers.selected_item].icon);
-
-	ent->client->ps.stats[STAT_SELECTED_ITEM] = ent->client->pers.selected_item;
+	G_SetStats_SelectedItem(ent->client);
 
 	//
 	// layouts

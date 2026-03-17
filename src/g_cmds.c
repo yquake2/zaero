@@ -52,92 +52,128 @@ qboolean OnSameTeam (edict_t *ent1, edict_t *ent2)
 	return false;
 }
 
-
-void SelectNextItem (edict_t *ent, int itflags)
+static int
+SelectNextItem(const gclient_t *cl, int itflags)
 {
-	gclient_t	*cl;
-	int			i, index;
-	gitem_t		*it;
+	int i, si;
 
-	if (!ent)
-	{
-		return;
-	}
+	si = cl->pers.selected_item;
 
-	cl = ent->client;
-
-	// scan  for the next valid one
 	for (i = 1; i <= itemlist_len; i++)
 	{
-		index = (cl->pers.selected_item + i) % itemlist_len;
+		const gitem_t *it;
+		int index;
+
+		index = (si + i) % itemlist_len;
+
 		if (!cl->pers.inventory[index])
+		{
 			continue;
+		}
+
 		it = &itemlist[index];
+
 		if (it->hideFlags & HIDE_FROM_INVENTORY) // don't show this
+		{
 			continue;
-		if (!it->use)
-			continue;
-		if (!(it->flags & itflags))
-			continue;
+		}
 
-		cl->pers.selected_item = index;
-		return;
+		if (!it->use)
+		{
+			continue;
+		}
+
+		if (!(it->flags & itflags))
+		{
+			continue;
+		}
+
+		return index;
 	}
 
-	cl->pers.selected_item = -1;
+	return -1;
 }
 
-void SelectPrevItem (edict_t *ent, int itflags)
+static void
+SelectNext(edict_t *ent, int itflags)
 {
-	gclient_t	*cl;
-	int			i, index;
-	gitem_t		*it;
-
-	if (!ent)
+	if (ent && ent->client)
 	{
-		return;
+		ent->client->pers.selected_item = SelectNextItem(ent->client, itflags);
 	}
+}
 
-	cl = ent->client;
+static int
+SelectPrevItem(const gclient_t *cl, int itflags)
+{
+	int i, si;
 
-	// scan  for the next valid one
+	si = cl->pers.selected_item;
+
 	for (i = 1; i <= itemlist_len; i++)
 	{
-		index = (cl->pers.selected_item + itemlist_len - i) % itemlist_len;
-		if (!cl->pers.inventory[index])
-			continue;
-		it = &itemlist[index];
-		if (it->hideFlags & HIDE_FROM_INVENTORY)
-			continue;
-		if (!it->use)
-			continue;
-		if (!(it->flags & itflags))
-			continue;
+		const gitem_t *it;
+		int index;
 
-		cl->pers.selected_item = index;
-		return;
+		index = (si + itemlist_len - i) % itemlist_len;
+
+		if (!cl->pers.inventory[index])
+		{
+			continue;
+		}
+
+		it = &itemlist[index];
+
+		if (it->hideFlags & HIDE_FROM_INVENTORY)
+		{
+			continue;
+		}
+
+		if (!it->use)
+		{
+			continue;
+		}
+
+		if (!(it->flags & itflags))
+		{
+			continue;
+		}
+
+		return index;
 	}
 
-	cl->pers.selected_item = -1;
+	return -1;
 }
 
-void ValidateSelectedItem (edict_t *ent)
+static void
+SelectPrev(edict_t *ent, int itflags)
 {
-	gclient_t	*cl;
+	if (ent && ent->client)
+	{
+		ent->client->pers.selected_item = SelectPrevItem(ent->client, -1);
+	}
+}
 
-	if (!ent)
+void
+ValidateSelectedItem(gclient_t *cl)
+{
+	const gitem_t *it;
+	int si;
+
+	if (!cl)
 	{
 		return;
 	}
 
-	cl = ent->client;
+	si = cl->pers.selected_item;
+	it = GetItemByIndex(si);
 
-	if (cl->pers.inventory[cl->pers.selected_item])
-		return;		// valid
-
-	SelectNextItem (ent, -1);
+	if (!it || !it->use ||
+		!cl->pers.inventory[si])
+	{
+		cl->pers.selected_item = SelectNextItem(cl, -1);
+	}
 }
-
 
 //=================================================================================
 
@@ -705,7 +741,7 @@ void Cmd_InvUse_f (edict_t *ent)
 		return;
 	}
 
-	ValidateSelectedItem (ent);
+	ValidateSelectedItem (ent->client);
 
 	if (ent->client->pers.selected_item == -1)
 	{
@@ -896,7 +932,7 @@ void Cmd_InvDrop_f (edict_t *ent)
 		return;
 	}
 
-	ValidateSelectedItem (ent);
+	ValidateSelectedItem (ent->client);
 
 	if (ent->client->pers.selected_item == -1)
 	{
@@ -1626,9 +1662,9 @@ void ClientCommand (edict_t *ent)
 				Cmd_InvUse_f (ent);
 		}
 		else if (Q_stricmp (cmd, "invnext") == 0)
-			SelectNextItem (ent, -1);
+			SelectNext (ent, -1);
 		else if (Q_stricmp (cmd, "invprev") == 0)
-			SelectPrevItem (ent, -1);
+			SelectPrev (ent, -1);
 	
 		return;
 	}
@@ -1677,17 +1713,17 @@ void ClientCommand (edict_t *ent)
 	else if (Q_stricmp (cmd, "inven") == 0)
 		Cmd_Inven_f (ent);
 	else if (Q_stricmp (cmd, "invnext") == 0)
-		SelectNextItem (ent, -1);
+		SelectNext (ent, -1);
 	else if (Q_stricmp (cmd, "invprev") == 0)
-		SelectPrevItem (ent, -1);
+		SelectPrev (ent, -1);
 	else if (Q_stricmp (cmd, "invnextw") == 0)
-		SelectNextItem (ent, IT_WEAPON);
+		SelectNext (ent, IT_WEAPON);
 	else if (Q_stricmp (cmd, "invprevw") == 0)
-		SelectPrevItem (ent, IT_WEAPON);
+		SelectPrev (ent, IT_WEAPON);
 	else if (Q_stricmp (cmd, "invnextp") == 0)
-		SelectNextItem (ent, IT_POWERUP);
+		SelectNext (ent, IT_POWERUP);
 	else if (Q_stricmp (cmd, "invprevp") == 0)
-		SelectPrevItem (ent, IT_POWERUP);
+		SelectPrev (ent, IT_POWERUP);
 	else if (Q_stricmp (cmd, "invuse") == 0)
 		Cmd_InvUse_f (ent);
 	else if (Q_stricmp (cmd, "invdrop") == 0)

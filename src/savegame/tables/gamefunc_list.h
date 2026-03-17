@@ -1257,8 +1257,6 @@
 {"Cmd_God_f", (byte *)Cmd_God_f},
 {"Cmd_Give_f", (byte *)Cmd_Give_f},
 {"ValidateSelectedItem", (byte *)ValidateSelectedItem},
-{"SelectPrevItem", (byte *)SelectPrevItem},
-{"SelectNextItem", (byte *)SelectNextItem},
 {"OnSameTeam", (byte *)OnSameTeam},
 {"ai_run", (byte *)ai_run},
 {"ai_checkattack", (byte *)ai_checkattack},
