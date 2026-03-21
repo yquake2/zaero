@@ -391,57 +391,58 @@ in an edict
 */
 void ED_ParseField (const char *key, const char *value, edict_t *ent)
 {
-	field_t	*f;
-	byte	*b;
-	float	v;
-	vec3_t	vec;
+	const field_t	*f;
+	void	*b;
+	vec_t	*vec;
 
 	if (!ent || !value || !key)
 	{
 		return;
 	}
 
-	for (f=fields ; f->name ; f++)
+	f = FindSpawnfield(key);
+	if (!f)
 	{
-		if (!(f->flags & FFL_NOSPAWN) && !Q_stricmp(f->name, key))
-		{	// found it
-			if (f->flags & FFL_SPAWNTEMP)
-				b = (byte *)&st;
-			else
-				b = (byte *)ent;
-
-			switch (f->type)
-			{
-			case F_LSTRING:
-				*(char **)(b+f->ofs) = ED_NewString (value);
-				break;
-			case F_VECTOR:
-				sscanf (value, "%f %f %f", &vec[0], &vec[1], &vec[2]);
-				((float *)(b+f->ofs))[0] = vec[0];
-				((float *)(b+f->ofs))[1] = vec[1];
-				((float *)(b+f->ofs))[2] = vec[2];
-				break;
-			case F_INT:
-				*(int *)(b+f->ofs) = atoi(value);
-				break;
-			case F_FLOAT:
-				*(float *)(b+f->ofs) = atof(value);
-				break;
-			case F_ANGLEHACK:
-				v = atof(value);
-				((float *)(b+f->ofs))[0] = 0;
-				((float *)(b+f->ofs))[1] = v;
-				((float *)(b+f->ofs))[2] = 0;
-				break;
-			case F_IGNORE:
-				break;
-			default:
-				break;
-			}
-			return;
-		}
+		gi.dprintf ("'%s' is not a field\n", key);
+		return;
 	}
-	gi.dprintf ("%s is not a field\n", key);
+
+	if (f->flags & FFL_SPAWNTEMP)
+		b = (byte *)&st + f->ofs;
+	else
+		b = (byte *)ent + f->ofs;
+
+	switch (f->type)
+	{
+		case F_LSTRING:
+			*(char **)b = ED_NewString (value);
+			break;
+		case F_VECTOR:
+			vec = b;
+			if (sscanf(value, "%f %f %f", &vec[0], &vec[1], &vec[2]) != 3)
+			{
+				memset(vec, 0, sizeof(vec3_t));
+				gi.dprintf("%s: entity %d: incomplete '%s' field\n",
+					__func__, ent->s.number, f->name);
+			}
+			break;
+		case F_INT:
+			*(int *)b = atoi(value);
+			break;
+		case F_FLOAT:
+			*(float *)b = atof(value);
+			break;
+		case F_ANGLEHACK:
+			vec = b;
+			vec[0] = 0;
+			vec[1] = atof(value);
+			vec[2] = 0;
+			break;
+		case F_IGNORE:
+			break;
+		default:
+			break;
+	}
 }
 
 /*
