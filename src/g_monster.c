@@ -448,18 +448,21 @@ void M_SetEffects (edict_t *ent)
 qboolean FindTarget (edict_t *self);
 void M_MoveFrame (edict_t *self)
 {
+	mmove_t	*move;
+	int		index;
+
 	if (!self)
 	{
 		return;
 	}
 
-	mmove_t	*move;
-	int		index;
-
 	self->nextthink = level.time + FRAMETIME;
-
-	// otherwise, move normally
 	move = self->monsterinfo.currentmove;
+
+	if (!move)
+	{
+		return;
+	}
 	
 	if ((self->monsterinfo.nextframe) && (self->monsterinfo.nextframe >= move->firstframe) && (self->monsterinfo.nextframe <= move->lastframe))
 	{
