@@ -477,7 +477,7 @@ char *ED_ParseEdict (char *data, edict_t *ent)
 		if (!data)
 			gi.error ("ED_ParseEntity: EOF without closing brace");
 
-		strncpy (keyname, com_token, sizeof(keyname)-1);
+		Q_strlcpy (keyname, com_token, sizeof(keyname));
 
 		// parse value
 		com_token = COM_Parse (&data);
@@ -591,8 +591,8 @@ void SpawnEntities (const char *mapname, char *entities, const char *spawnpoint)
 	memset (&level, 0, sizeof(level));
 	memset (g_edicts, 0, game.maxentities * sizeof (g_edicts[0]));
 
-	strncpy (level.mapname, mapname, sizeof(level.mapname)-1);
-	strncpy (game.spawnpoint, spawnpoint, sizeof(game.spawnpoint)-1);
+	Q_strlcpy (level.mapname, mapname, sizeof(level.mapname));
+	Q_strlcpy (game.spawnpoint, spawnpoint, sizeof(game.spawnpoint));
 
 	// set client fields on player ents
 	for (i=0 ; i<game.maxclients ; i++)
