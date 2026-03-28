@@ -55,12 +55,27 @@ GetItemByIndex
 */
 gitem_t	*GetItemByIndex (int index)
 {
-	if (index == 0 || index >= game.num_items)
+	if (index <= 0 || index >= itemlist_len)
 		return NULL;
 
 	return &itemlist[index];
 }
 
+int
+GetWeaponAmmoIndex(const gitem_t *weap)
+{
+	if (weap && weap->ammo)
+	{
+		const gitem_t *ammo = FindItem(weap->ammo);
+
+		if (ammo)
+		{
+			return ITEM_INDEX(ammo);
+		}
+	}
+
+	return 0;
+}
 
 /*
 ===============
@@ -68,13 +83,13 @@ FindItemByClassname
 
 ===============
 */
-gitem_t	*FindItemByClassname (char *classname)
+gitem_t	*FindItemByClassname (const char *classname)
 {
 	int		i;
 	gitem_t	*it;
 
 	it = itemlist;
-	for (i=0 ; i<game.num_items ; i++, it++)
+	for (i=0 ; i<itemlist_len ; i++, it++)
 	{
 		if (!it->classname)
 			continue;
@@ -91,13 +106,13 @@ FindItem
 
 ===============
 */
-gitem_t	*FindItem (char *pickup_name)
+gitem_t	*FindItem (const char *pickup_name)
 {
 	int		i;
 	gitem_t	*it;
 
 	it = itemlist;
-	for (i=0 ; i<game.num_items ; i++, it++)
+	for (i=0 ; i<itemlist_len ; i++, it++)
 	{
 		if (!it->pickup_name)
 			continue;
@@ -114,7 +129,7 @@ void precacheAllItems()
 	gitem_t	*it;
 
 	it = itemlist;
-	for (i=0 ; i<game.num_items ; i++, it++)
+	for (i=0 ; i<itemlist_len ; i++, it++)
 	{
 		if (!it->pickup_name)
 			continue;
@@ -212,7 +227,7 @@ void Drop_General (edict_t *ent, gitem_t *item)
 {
 	Drop_Item (ent, item);
 	ent->client->pers.inventory[ITEM_INDEX(item)]--;
-	ValidateSelectedItem (ent);
+	ValidateSelectedItem (ent->client);
 }
 
 
@@ -434,7 +449,7 @@ void Use_Quad (edict_t *ent, gitem_t *item)
 	}
 
 	ent->client->pers.inventory[ITEM_INDEX(item)]--;
-	ValidateSelectedItem (ent);
+	ValidateSelectedItem (ent->client);
 
 	if (quad_drop_timeout_hack)
 	{
@@ -464,7 +479,7 @@ void Use_Breather (edict_t *ent, gitem_t *item)
 	}
 
 	ent->client->pers.inventory[ITEM_INDEX(item)]--;
-	ValidateSelectedItem (ent);
+	ValidateSelectedItem (ent->client);
 
 	if (ent->client->breather_framenum > level.framenum)
 		ent->client->breather_framenum += 300;
@@ -482,7 +497,7 @@ void Use_Envirosuit (edict_t *ent, gitem_t *item)
 	}
 
 	ent->client->pers.inventory[ITEM_INDEX(item)]--;
-	ValidateSelectedItem (ent);
+	ValidateSelectedItem (ent->client);
 
 	if (ent->client->enviro_framenum > level.framenum)
 		ent->client->enviro_framenum += 300;
@@ -500,7 +515,7 @@ void	Use_Invulnerability (edict_t *ent, gitem_t *item)
 	}
 
 	ent->client->pers.inventory[ITEM_INDEX(item)]--;
-	ValidateSelectedItem (ent);
+	ValidateSelectedItem (ent->client);
 
 	if (ent->client->invincible_framenum > level.framenum)
 		ent->client->invincible_framenum += 300;
@@ -520,7 +535,7 @@ void	Use_Silencer (edict_t *ent, gitem_t *item)
 	}
 
 	ent->client->pers.inventory[ITEM_INDEX(item)]--;
-	ValidateSelectedItem (ent);
+	ValidateSelectedItem (ent->client);
 	ent->client->silencer_shots += 30;
 }
 
@@ -676,7 +691,7 @@ void Drop_Ammo (edict_t *ent, gitem_t *item)
 	else
 		dropped->count = ent->client->pers.inventory[index];
 	ent->client->pers.inventory[index] -= dropped->count;
-	ValidateSelectedItem (ent);
+	ValidateSelectedItem (ent->client);
 }
 
 qboolean Pickup_A2k (edict_t *ent, edict_t *other)
@@ -1033,7 +1048,7 @@ void Drop_Visor(edict_t *ent, gitem_t *item)
 
 	edict_t *visor = Drop_Item (ent, item);
 	ent->client->pers.inventory[ITEM_INDEX(item)] = 0;
-	ValidateSelectedItem (ent);
+	ValidateSelectedItem (ent->client);
 	visor->visorFrames = ent->client->pers.visorFrames;
 	ent->client->pers.visorFrames = 0;
 }
@@ -2761,6 +2776,7 @@ security pass for the security level
 	{NULL}
 };
 
+const int itemlist_len = ARRLEN(itemlist) - 1;
 
 /*QUAKED item_health (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
@@ -2851,7 +2867,6 @@ void SP_item_health_mega (edict_t *self)
 
 void InitItems (void)
 {
-	game.num_items = sizeof(itemlist)/sizeof(itemlist[0]) - 1;
 }
 
 
@@ -2868,7 +2883,7 @@ void SetItemNames (void)
 	int		i;
 	gitem_t	*it;
 
-	for (i=0; i<game.num_items ; i++)
+	for (i=0; i<itemlist_len ; i++)
 	{
 		it = &itemlist[i];
 		gi.configstring (CS_ITEMS+i, it->pickup_name);

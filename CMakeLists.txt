@@ -107,7 +107,7 @@ set(Zaero-Header
     src/savegame/tables/gamemmove_list.h
     src/savegame/tables/gamefunc_decs.h
     src/savegame/tables/gamefunc_list.h
-    src/savegame/tables/fields.h
+    src/savegame/tables/entfields.h
     src/savegame/tables/clientfields.h
     src/savegame/tables/levelfields.h
     src/savegame/tables/gamemmove_decs.h

@@ -1226,7 +1226,7 @@ void PutClientInServer (edict_t *ent)
 		resp = client->resp;
 		memcpy (userinfo, client->pers.userinfo, sizeof(userinfo));
 		// this is kind of ugly, but it's how we want to handle keys in coop
-		for (n = 0; n < game.num_items; n++)
+		for (n = 0; n < itemlist_len; n++)
 		{
 			if (itemlist[n].flags & IT_KEY)
 				resp.coop_respawn.inventory[n] = client->pers.inventory[n];
@@ -1486,7 +1486,7 @@ void ClientUserinfoChanged (edict_t *ent, char *userinfo)
 
 	// set name
 	s = Info_ValueForKey (userinfo, "name");
-	strncpy (ent->client->pers.netname, s, sizeof(ent->client->pers.netname)-1);
+	Q_strlcpy (ent->client->pers.netname, s, sizeof(ent->client->pers.netname));
 
 	// set skin
 	s = Info_ValueForKey (userinfo, "skin");
@@ -1527,7 +1527,7 @@ void ClientUserinfoChanged (edict_t *ent, char *userinfo)
 	}
 
 	// save off the userinfo in case we want to check something later
-	strncpy (ent->client->pers.userinfo, userinfo, sizeof(ent->client->pers.userinfo)-1);
+	Q_strlcpy (ent->client->pers.userinfo, userinfo, sizeof(ent->client->pers.userinfo));
 }
 
 

@@ -72,7 +72,11 @@ void Move_Done (edict_t *ent)
 
 	VectorClear (ent->velocity);
 	VectorClear(ent->avelocity);
-	ent->moveinfo.endfunc (ent);
+
+	if (ent->moveinfo.endfunc)
+	{
+		ent->moveinfo.endfunc (ent);
+	}
 }
 
 void Move_Final (edict_t *ent)
@@ -204,7 +208,11 @@ void AngleMove_Done (edict_t *ent)
 	}
 
 	VectorClear (ent->avelocity);
-	ent->moveinfo.endfunc (ent);
+
+	if (ent->moveinfo.endfunc)
+	{
+		ent->moveinfo.endfunc (ent);
+	}
 }
 
 void AngleMove_Final (edict_t *ent)

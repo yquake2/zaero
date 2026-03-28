@@ -308,8 +308,10 @@ typedef struct
 	// cross level triggers
 	int			serverflags;
 
-	// items
-	int			num_items;
+	/* unused for savegame security and stability reasons
+	   use itemlist_len instead
+	*/
+	int num_items;
 
 	qboolean	autosaved;
 } game_locals_t;
@@ -659,8 +661,10 @@ typedef struct
 	short   save_ver;
 } field_t;
 
-extern	field_t fields[];
+const field_t *FindSpawnfield(const char *key);
+
 extern	gitem_t	itemlist[];
+extern const int itemlist_len;
 
 //
 // g_cmds.c
@@ -674,8 +678,9 @@ void Cmd_Score_f (edict_t *ent);
 void PrecacheItem (gitem_t *it);
 void InitItems (void);
 void SetItemNames (void);
-gitem_t	*FindItem (char *pickup_name);
-gitem_t	*FindItemByClassname (char *classname);
+gitem_t	*FindItem (const char *pickup_name);
+int GetWeaponAmmoIndex(const gitem_t *weap);
+gitem_t	*FindItemByClassname (const char *classname);
 #define	ITEM_INDEX(x) ((x)-itemlist)
 edict_t *Drop_Item (edict_t *ent, gitem_t *item);
 void SetRespawn (edict_t *ent, float delay);
@@ -849,7 +854,7 @@ void ClientEndServerFrame (edict_t *ent);
 //
 void MoveClientToIntermission (edict_t *client);
 void G_SetStats (edict_t *ent);
-void ValidateSelectedItem (edict_t *ent);
+void ValidateSelectedItem (gclient_t *cl);
 void DeathmatchScoreboardMessage (edict_t *client, edict_t *killer);
 
 //

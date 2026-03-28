@@ -227,13 +227,7 @@ void ChangeWeapon (edict_t *ent)
 	ent->client->newweapon = NULL;
 	ent->client->machinegun_shots = 0;
 
-	if (ent->client->pers.weapon && ent->client->pers.weapon->ammo)
-	{
-		gitem_t *item = FindItem(ent->client->pers.weapon->ammo);
-		ent->client->ammo_index = ITEM_INDEX(item);
-	}
-	else
-		ent->client->ammo_index = 0;
+	ent->client->ammo_index = GetWeaponAmmoIndex(ent->client->pers.weapon);
 
 	if (!ent->client->pers.weapon)
 	{	// dead

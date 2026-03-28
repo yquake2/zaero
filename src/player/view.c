@@ -1224,7 +1224,7 @@ void ClientEndServerFrame (edict_t *ent)
 		{
 			stopCamera(ent);
 			ent->client->pers.inventory[ITEM_INDEX(FindItem("Visor"))]--;
-			ValidateSelectedItem (ent);
+			ValidateSelectedItem (ent->client);
 		}
 	}
 }
