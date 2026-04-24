@@ -355,4 +355,3 @@
 {"actor_move_run", &actor_move_run},
 {"actor_move_walk", &actor_move_walk},
 {"actor_move_stand", &actor_move_stand},
-{0, 0}
