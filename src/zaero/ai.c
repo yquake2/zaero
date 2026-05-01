@@ -2,10 +2,8 @@
 
 #define Z_RADUISLISTSIZE	2000
 
-void ai_run_melee(edict_t *self);
 qboolean FindTarget (edict_t *self);
 qboolean SV_StepDirection (edict_t *ent, float yaw, float dist);
-void SV_NewChaseDir (edict_t *actor, vec3_t eOrigin, float dist);
 
 /*
 =============
@@ -55,7 +53,7 @@ void zCreateRaduisList(edict_t *self)
 =============
 zSchoolAllVisiable
 
-Create list of monsters of the same schooling type that are ahead of you. 
+Create list of monsters of the same schooling type that are ahead of you.
 ==============
 */
 int zSchoolAllVisiable(edict_t *self)
@@ -76,7 +74,7 @@ int zSchoolAllVisiable(edict_t *self)
 
 	while (head)
 	{
-		if(strcmp(head->classname, self->classname) == 0 && (self->monsterinfo.aiflags & AI_SCHOOLING) && (head->health > 0) && 
+		if(strcmp(head->classname, self->classname) == 0 && (self->monsterinfo.aiflags & AI_SCHOOLING) && (head->health > 0) &&
 			(head->zDistance <= self->monsterinfo.zSchoolSightRadius) && (visible(self, head)) && (infront(self, head)))
 		{
 			list->zSchoolChain = head;
@@ -163,7 +161,7 @@ int zFindRoamYaw(edict_t *self, float distcheck)
 =============
 zSchoolMonsters
 
-Roaming schooling ai. 
+Roaming schooling ai.
 ==============
 */
 int zSchoolMonsters(edict_t *self, float dist, int runStyle, float *currentSpeed)
@@ -235,7 +233,7 @@ int zSchoolMonsters(edict_t *self, float dist, int runStyle, float *currentSpeed
 
 	}
 	else
-	{	
+	{
 		//You are in front, so slow down a bit
 		edict_t *head;
 
@@ -250,7 +248,7 @@ int zSchoolMonsters(edict_t *self, float dist, int runStyle, float *currentSpeed
 
 		while (head)
 		{
-			if(strcmp(head->classname, self->classname) == 0 && (head->health > 0) && 
+			if(strcmp(head->classname, self->classname) == 0 && (head->health > 0) &&
 			(head->zDistance <= self->monsterinfo.zSchoolSightRadius) && (visible(self, head)))
 
 			{
@@ -296,7 +294,7 @@ int zSchoolMonsters(edict_t *self, float dist, int runStyle, float *currentSpeed
 			*currentSpeed = (self->speed - self->monsterinfo.zSpeedStandMax) + 1;
 		}
 	}
-	else 
+	else
 	{
 		newRunStyle = 2;
 

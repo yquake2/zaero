@@ -1084,7 +1084,7 @@ extern void EndDMLevel ( void ) ;
 extern void ClientEndServerFrames ( void ) ;
 extern void Com_Printf ( char * msg , ... ) ;
 extern void Sys_Error ( char * error , ... ) ;
-extern game_export_t * GetGameAPI ( game_import_t * import ) ;
+extern game_export_t * GetGameAPI ( const game_import_t * import ) ;
 extern void ShutdownGame ( void ) ;
 extern void SetItemNames ( void ) ;
 extern void InitItems ( void ) ;
