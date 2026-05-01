@@ -532,7 +532,7 @@ void zboss_swing (edict_t *self)
 	}
 
 	static	vec3_t	aim = {MELEE_DISTANCE, 0, -24};
-	fire_hit (self, aim, (15 + (rand() % 6)), 800);
+	fire_hit (self, aim, (15 + (randk() % 6)), 800);
 }
 
 mframe_t zboss_frames_attack2c [] =

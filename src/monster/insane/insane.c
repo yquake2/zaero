@@ -52,7 +52,7 @@ void insane_scream (edict_t *self)
 		return;
 	}
 
-	gi.sound (self, CHAN_VOICE, sound_scream[rand()%8], 1, ATTN_IDLE, 0);
+	gi.sound (self, CHAN_VOICE, sound_scream[randk()%8], 1, ATTN_IDLE, 0);
 }
 
 
@@ -504,7 +504,7 @@ void insane_pain (edict_t *self, edict_t *other, float kick, int damage)
 
 	self->pain_debounce_time = level.time + 3;
 
-	r = 1 + (rand()&1);
+	r = 1 + (randk()&1);
 	if (self->health < 25)
 		l = 25;
 	else if (self->health < 50)
@@ -521,10 +521,10 @@ void insane_pain (edict_t *self, edict_t *other, float kick, int damage)
 	// Don't go into pain frames if crucified.
 	if (self->spawnflags & 8)
 	{
-		self->monsterinfo.currentmove = &insane_move_struggle_cross;			
+		self->monsterinfo.currentmove = &insane_move_struggle_cross;
 		return;
 	}
-	
+
 	if  ( ((self->s.frame >= FRAME_crawl1) && (self->s.frame <= FRAME_crawl9)) || ((self->s.frame >= FRAME_stand99) && (self->s.frame <= FRAME_stand160)) )
 	{
 		self->monsterinfo.currentmove = &insane_move_crawl_pain;
@@ -558,7 +558,7 @@ void insane_checkdown (edict_t *self)
 		if (random() < 0.5)
 			self->monsterinfo.currentmove = &insane_move_uptodown;
 		else
-			self->monsterinfo.currentmove = &insane_move_jumpdown; 
+			self->monsterinfo.currentmove = &insane_move_jumpdown;
 	}
 }
 
@@ -573,7 +573,7 @@ void insane_checkup (edict_t *self)
 	if ( (self->spawnflags & 4) && (self->spawnflags & 16) )
 		return;
 	if (random() < 0.5)
-		self->monsterinfo.currentmove = &insane_move_downtoup;				
+		self->monsterinfo.currentmove = &insane_move_downtoup;
 
 }
 
@@ -646,7 +646,7 @@ void insane_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damag
 	if (self->deadflag == DEAD_DEAD)
 		return;
 
-	gi.sound (self, CHAN_VOICE, gi.soundindex(va("player/male/death%i.wav", (rand()%4)+1)), 1, ATTN_IDLE, 0);
+	gi.sound (self, CHAN_VOICE, gi.soundindex(va("player/male/death%i.wav", (randk()%4)+1)), 1, ATTN_IDLE, 0);
 
 	self->deadflag = DEAD_DEAD;
 	self->takedamage = DAMAGE_YES;
@@ -657,7 +657,7 @@ void insane_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damag
 	}
 	else
 	{
-		if ( ((self->s.frame >= FRAME_crawl1) && (self->s.frame <= FRAME_crawl9)) || ((self->s.frame >= FRAME_stand99) && (self->s.frame <= FRAME_stand160)) )		
+		if ( ((self->s.frame >= FRAME_crawl1) && (self->s.frame <= FRAME_crawl9)) || ((self->s.frame >= FRAME_stand99) && (self->s.frame <= FRAME_stand160)) )
 			self->monsterinfo.currentmove = &insane_move_crawl_death;
 		else
 			self->monsterinfo.currentmove = &insane_move_stand_death;
@@ -721,7 +721,7 @@ void SP_misc_insane (edict_t *self)
 		self->monsterinfo.aiflags |= AI_STAND_GROUND;
 
 	self->monsterinfo.currentmove = &insane_move_stand_normal;
-	
+
 	self->monsterinfo.scale = MODEL_SCALE;
 
 	if (self->spawnflags & 8)					// Crucified ?
@@ -734,7 +734,7 @@ void SP_misc_insane (edict_t *self)
 	else
 	{
 		walkmonster_start (self);
-		self->s.skinnum = rand()%3;
+		self->s.skinnum = randk()%3;
 	}
 }
 

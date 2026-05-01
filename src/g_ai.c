@@ -122,7 +122,7 @@ void ai_stand (edict_t *self, float dist)
 
 	if (FindTarget (self))
 		return;
-	
+
 	if (level.time > self->monsterinfo.pausetime)
 	{
 		self->monsterinfo.walk (self);
@@ -237,7 +237,7 @@ void ai_turn (edict_t *self, float dist)
 
 	if (FindTarget (self))
 		return;
-	
+
 	M_ChangeYaw (self);
 }
 
@@ -326,7 +326,7 @@ qboolean visible (edict_t *self, edict_t *other)
 	VectorCopy (other->s.origin, spot2);
 	spot2[2] += other->viewheight;
 	trace = gi.trace (spot1, vec3_origin, vec3_origin, spot2, self, MASK_OPAQUE);
-	
+
 	if (trace.fraction == 1.0)
 		return true;
 	return false;
@@ -724,12 +724,12 @@ qboolean M_CheckAttack (edict_t *self)
 		if (tr.ent != self->enemy)
 			return false;
 	}
-	
+
 	// melee attack
 	if (enemy_range == RANGE_MELEE)
 	{
 		// don't always melee in easy mode
-		if (skill->value == SKILL_EASY && (rand()&3) )
+		if (skill->value == SKILL_EASY && (randk() & 3) )
 			return false;
 		if (self->monsterinfo.melee)
 			self->monsterinfo.attack_state = AS_MELEE;
@@ -737,14 +737,14 @@ qboolean M_CheckAttack (edict_t *self)
 			self->monsterinfo.attack_state = AS_MISSILE;
 		return true;
 	}
-	
+
 	// missile attack
 	if (!self->monsterinfo.attack)
 		return false;
-		
+
 	if (level.time < self->monsterinfo.attack_finished)
 		return false;
-		
+
 	if (enemy_range == RANGE_FAR)
 		return false;
 
@@ -866,10 +866,10 @@ void ai_run_slide(edict_t *self, float distance)
 		ofs = 90;
 	else
 		ofs = -90;
-	
+
 	if (M_walkmove (self, self->ideal_yaw + ofs, distance))
 		return;
-		
+
 	self->monsterinfo.lefty = 1 - self->monsterinfo.lefty;
 	M_walkmove (self, self->ideal_yaw - ofs, distance);
 }
@@ -1085,7 +1085,7 @@ void ai_run (edict_t *self, float dist)
 		M_MoveToGoal (self, dist);
 		return;
 	}
-	
+
 	if (self->monsterinfo.aiflags & AI_SOUND_TARGET)
 	{
 		VectorSubtract (self->s.origin, self->enemy->s.origin, v);

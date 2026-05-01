@@ -257,6 +257,13 @@ char *Info_ValueForKey(char *s, char *key);
 void Info_RemoveKey(char *s, char *key);
 void Info_SetValueForKey(char *s, char *key, char *value);
 qboolean Info_Validate(char *s);
+/* ============================================= */
+
+/* Random number generator */
+int randk(void);
+float frandk(void);
+float crandk(void);
+void randk_seed(void);
 
 /*
  * ==============================================================

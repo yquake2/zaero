@@ -2365,7 +2365,7 @@ void func_timer_think (edict_t *self)
 	if (self->numTargets <= 0)
 		return;
 
-	self->target = self->targets[rand() % self->numTargets];
+	self->target = self->targets[randk() % self->numTargets];
 
 	G_UseTargets (self, self->activator);
 	self->nextthink = level.time + self->wait + crandom() * self->random;

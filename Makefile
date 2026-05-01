@@ -371,17 +371,18 @@ ZAERO_OBJS_ = \
 	src/player/weapon.o \
 	src/savegame/savegame.o \
 	src/shared/flash.o \
+	src/shared/rand.o \
 	src/shared/shared.o \
-    src/zaero/acannon.o \
-    src/zaero/ai.o \
-    src/zaero/anim.o \
-    src/zaero/camera.o \
-    src/zaero/frames.o \
-    src/zaero/item.o \
-    src/zaero/mtest.o \
-    src/zaero/spawn.o \
-    src/zaero/trigger.o \
-    src/zaero/weapon.o
+	src/zaero/acannon.o \
+ 	src/zaero/ai.o \
+	src/zaero/anim.o \
+	src/zaero/camera.o \
+	src/zaero/frames.o \
+	src/zaero/item.o \
+	src/zaero/mtest.o \
+	src/zaero/spawn.o \
+	src/zaero/trigger.o \
+	src/zaero/weapon.o
 
 # ----------
 

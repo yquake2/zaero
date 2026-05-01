@@ -470,7 +470,7 @@ void soldier_fire (edict_t *self, int flash_number)
 	else
 	{
 		if (!(self->monsterinfo.aiflags & AI_HOLD_FRAME))
-			self->monsterinfo.pausetime = level.time + (3 + rand() % 8) * FRAMETIME;
+			self->monsterinfo.pausetime = level.time + (3 + randk() % 8) * FRAMETIME;
 
 		monster_fire_bullet (self, start, aim, 2, 4, DEFAULT_BULLET_HSPREAD, DEFAULT_BULLET_VSPREAD, flash_index);
 
@@ -1208,7 +1208,7 @@ void soldier_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int dama
 		return;
 	}
 
-	n = rand() % 5;
+	n = randk() % 5;
 	if (n == 0)
 		self->monsterinfo.currentmove = &soldier_move_death1;
 	else if (n == 1)

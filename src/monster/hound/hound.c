@@ -258,7 +258,7 @@ void hound_bite (edict_t *self)
 	}
 
 	VectorSet (aim, MELEE_DISTANCE, self->mins[0], 8);
-	if (fire_hit (self, aim, (30 + (rand() %5)), 100))
+	if (fire_hit (self, aim, (30 + (randk() %5)), 100))
 		gi.sound (self, CHAN_WEAPON, sound_bite, 1, ATTN_NORM, 0);
 	else
 		gi.sound (self, CHAN_WEAPON, sound_bitemiss, 1, ATTN_NORM, 0);
@@ -274,7 +274,7 @@ void hound_bite2 (edict_t *self)
 	}
 
 	VectorSet (aim, MELEE_DISTANCE, self->mins[0], 8);
-	fire_hit (self, aim, (30 + (rand() %5)), 100);
+	fire_hit (self, aim, (30 + (randk() %5)), 100);
 }
 
 

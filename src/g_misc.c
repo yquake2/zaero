@@ -56,7 +56,7 @@ void VelocityForDamage (int damage, vec3_t v)
 
 	if (damage < 50)
 		VectorScale (v, 0.7, v);
-	else 
+	else
 		VectorScale (v, 1.2, v);
 }
 
@@ -165,7 +165,7 @@ void ThrowGib (edict_t *self, char *gibname, int damage, int type)
 	}
 
 	gibsthisframe++;
-	
+
 	if (gibsthisframe > 20)
 	{
 		return;
@@ -272,7 +272,7 @@ void ThrowClientHead (edict_t *self, int damage)
 		return;
 	}
 
-	if (rand()&1)
+	if (randk() & 1)
 	{
 		gibname = "models/objects/gibs/head2/tris.md2";
 		self->s.skinnum = 1;		// second skin is player
@@ -333,7 +333,7 @@ void ThrowDebris (edict_t *self, char *modelname, float speed, vec3_t origin)
 	{
 		return;
 	}
-     
+
 	if (level.framenum > lastgibframe)
 	{
 		gibsthisframe = 0;
@@ -341,7 +341,7 @@ void ThrowDebris (edict_t *self, char *modelname, float speed, vec3_t origin)
 	}
 
 	gibsthisframe++;
-	
+
 	if (gibsthisframe > 20)
 	{
 		return;
@@ -420,7 +420,7 @@ void path_corner_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface
 
 	if (other->movetarget != self)
 		return;
-	
+
 	if (other->enemy)
 		return;
 
@@ -1065,7 +1065,7 @@ void barrel_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *s
 	dist = 20 * ratio * FRAMETIME;
 
 	yaw = yaw*M_PI*2 / 360;
-	
+
 	move[0] = cos(yaw)*dist;
 	move[1] = sin(yaw)*dist;
 	move[2] = 0;
@@ -1248,7 +1248,7 @@ void misc_blackhole_think (edict_t *self)
 	if (++self->s.frame < 19)
 		self->nextthink = level.time + FRAMETIME;
 	else
-	{		
+	{
 		self->s.frame = 0;
 		self->nextthink = level.time + FRAMETIME;
 	}
@@ -1286,7 +1286,7 @@ void misc_eastertank_think (edict_t *self)
 	if (++self->s.frame < 293)
 		self->nextthink = level.time + FRAMETIME;
 	else
-	{		
+	{
 		self->s.frame = 254;
 		self->nextthink = level.time + FRAMETIME;
 	}
@@ -1324,7 +1324,7 @@ void misc_easterchick_think (edict_t *self)
 	if (++self->s.frame < 247)
 		self->nextthink = level.time + FRAMETIME;
 	else
-	{		
+	{
 		self->s.frame = 208;
 		self->nextthink = level.time + FRAMETIME;
 	}
@@ -1362,7 +1362,7 @@ void misc_easterchick2_think (edict_t *self)
 	if (++self->s.frame < 287)
 		self->nextthink = level.time + FRAMETIME;
 	else
-	{		
+	{
 		self->s.frame = 248;
 		self->nextthink = level.time + FRAMETIME;
 	}
@@ -1483,7 +1483,7 @@ void SP_misc_banner (edict_t *ent)
 	ent->movetype = MOVETYPE_NONE;
 	ent->solid = SOLID_NOT;
 	ent->s.modelindex = gi.modelindex ("models/objects/banner/tris.md2");
-	ent->s.frame = rand() % 16;
+	ent->s.frame = randk() % 16;
 	gi.linkentity (ent);
 
 	ent->think = misc_banner_think;
@@ -1655,7 +1655,7 @@ void SP_misc_viper (edict_t *ent)
 }
 
 
-/*QUAKED misc_bigviper (1 .5 0) (-176 -120 -24) (176 120 72) 
+/*QUAKED misc_bigviper (1 .5 0) (-176 -120 -24) (176 120 72)
 This is a large stationary viper as seen in Paul's intro
 */
 void SP_misc_bigviper (edict_t *ent)
@@ -2408,7 +2408,7 @@ void SP_misc_teleporter (edict_t *ent)
 	VectorSet (trig->mins, -8, -8, 8);
 	VectorSet (trig->maxs, 8, 8, 24);
 	gi.linkentity (trig);
-	
+
 }
 
 /*QUAKED misc_teleporter_dest (1 0 0) (-32 -32 -24) (32 32 -16)

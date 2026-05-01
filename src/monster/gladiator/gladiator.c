@@ -152,7 +152,7 @@ void GaldiatorMelee (edict_t *self)
 	}
 
 	VectorSet (aim, MELEE_DISTANCE, self->mins[0], -4);
-	if (fire_hit (self, aim, (20 + (rand() %5)), 300))
+	if (fire_hit (self, aim, (20 + (randk() %5)), 300))
 		gi.sound (self, CHAN_AUTO, sound_cleaver_hit, 1, ATTN_NORM, 0);
 	else
 		gi.sound (self, CHAN_AUTO, sound_cleaver_miss, 1, ATTN_NORM, 0);

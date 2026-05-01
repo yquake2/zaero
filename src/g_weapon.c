@@ -663,7 +663,7 @@ void rocket_touch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *su
 		{
 			if ((surf) && !(surf->flags & (SURF_WARP|SURF_TRANS33|SURF_TRANS66|SURF_FLOWING)))
 			{
-				n = rand() % 5;
+				n = randk() % 5;
 				while(n--)
 					ThrowDebris (ent, "models/objects/debris2/tris.md2", 2, ent->s.origin);
 			}
