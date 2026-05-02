@@ -648,7 +648,7 @@ void ClientBegin(edict_t *ent);
 void ClientDisconnect(edict_t *ent);
 void ClientUserinfoChanged(edict_t *ent, char *userinfo);
 qboolean ClientConnect(edict_t *ent, char *userinfo);
-void ClientThink(edict_t *ent, usercmd_t *cmd);
+void ClientThink(edict_t *ent, usercmd_t *ucmd);
 
 /* g_cmds.c */
 void Cmd_Help_f(edict_t *ent);
@@ -693,7 +693,7 @@ void G_SetMovedir(vec3_t angles, vec3_t movedir);
 
 void G_InitEdict(edict_t *e);
 edict_t *G_Spawn(void);
-void G_FreeEdict(edict_t *e);
+void G_FreeEdict(edict_t *ed);
 
 void G_TouchTriggers(edict_t *ent);
 void G_TouchSolids(edict_t *ent);
@@ -778,7 +778,7 @@ void ai_walk(edict_t *self, float dist);
 void ai_turn(edict_t *self, float dist);
 void ai_run(edict_t *self, float dist);
 void ai_charge(edict_t *self, float dist);
-int range(edict_t *self, edict_t *other);
+int ai_range(edict_t *self, edict_t *other);
 
 void FoundTarget(edict_t *self);
 qboolean infront(edict_t *self, edict_t *other);
@@ -814,7 +814,7 @@ edict_t *PlayerTrail_PickNext(edict_t *self);
 edict_t *PlayerTrail_LastSpot(void);
 
 /* g_client.c */
-void respawn(edict_t *ent);
+void respawn(edict_t *self);
 void BeginIntermission(const edict_t *targ);
 void PutClientInServer(edict_t *ent);
 void InitClientPersistant(gclient_t *client);
@@ -835,10 +835,10 @@ qboolean SV_FilterPacket(char *from);
 void ClientEndServerFrame(edict_t *ent);
 
 /* p_hud.c */
-void MoveClientToIntermission(edict_t *client);
+void MoveClientToIntermission(edict_t *ent);
 void G_SetStats(edict_t *ent);
 void ValidateSelectedItem(gclient_t *cl);
-void DeathmatchScoreboardMessage(edict_t *client, edict_t *killer);
+void DeathmatchScoreboardMessage(edict_t *ent, edict_t *killer);
 
 /* g_pweapon.c */
 void PlayerNoise(edict_t *who, vec3_t where, int type);
@@ -884,7 +884,7 @@ void FetchClientEntData(edict_t *ent);
 //
 // z_item.c
 //
-qboolean EMPNukeCheck(edict_t *ent, const vec3_t pos);
+qboolean EMPNukeCheck(const edict_t *ent, const vec3_t pos);
 
 /* savegame */
 void InitGame(void);

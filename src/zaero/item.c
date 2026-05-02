@@ -391,7 +391,7 @@ void fire_empnuke(edict_t *ent, vec3_t center, int radius)
 }
 
 qboolean
-EMPNukeCheck(edict_t *ent, const vec3_t pos)
+EMPNukeCheck(const edict_t *ent, const vec3_t pos)
 {
 	edict_t	*check = NULL;
 

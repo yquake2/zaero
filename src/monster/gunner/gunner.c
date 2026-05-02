@@ -614,7 +614,7 @@ void gunner_attack(edict_t *self)
 		return;
 	}
 
-	if (range (self, self->enemy) == RANGE_MELEE)
+	if (ai_range (self, self->enemy) == RANGE_MELEE)
 	{
 		self->monsterinfo.currentmove = &gunner_move_attack_chain;
 	}

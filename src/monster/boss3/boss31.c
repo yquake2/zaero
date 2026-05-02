@@ -663,7 +663,7 @@ qboolean Jorg_CheckAttack (edict_t *self)
 			return false;
 	}
 
-	enemy_range = range(self, self->enemy);
+	enemy_range = ai_range(self, self->enemy);
 	VectorSubtract (self->enemy->s.origin, self->s.origin, temp);
 	enemy_yaw = vectoyaw(temp);
 

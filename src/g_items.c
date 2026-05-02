@@ -711,7 +711,8 @@ void MegaHealth_think (edict_t *self)
 		G_FreeEdict (self);
 }
 
-qboolean Pickup_Health (edict_t *ent, edict_t *other)
+qboolean
+Pickup_Health(edict_t *ent, edict_t *other)
 {
 	if (!ent || !other)
 	{
@@ -719,24 +720,21 @@ qboolean Pickup_Health (edict_t *ent, edict_t *other)
 	}
 
 	if (!(ent->style & HEALTH_IGNORE_MAX))
+	{
 		if (other->health >= other->max_health)
+		{
 			return false;
+		}
+	}
 
 	other->health += ent->count;
-
-	if (ent->count == 2)
-		ent->item->pickup_sound = "items/s_health.wav";
-	else if (ent->count == 10)
-		ent->item->pickup_sound = "items/n_health.wav";
-	else if (ent->count == 25)
-		ent->item->pickup_sound = "items/l_health.wav";
-	else // (ent->count == 100)
-		ent->item->pickup_sound = "items/m_health.wav";
 
 	if (!(ent->style & HEALTH_IGNORE_MAX))
 	{
 		if (other->health > other->max_health)
+		{
 			other->health = other->max_health;
+		}
 	}
 
 	if (ent->style & HEALTH_TIMED)
@@ -751,7 +749,9 @@ qboolean Pickup_Health (edict_t *ent, edict_t *other)
 	else
 	{
 		if (!(ent->spawnflags & DROPPED_ITEM) && (deathmatch->value))
-			SetRespawn (ent, 30);
+		{
+			SetRespawn(ent, 30);
+		}
 	}
 
 	return true;
@@ -1065,7 +1065,34 @@ void Touch_Item (edict_t *ent, edict_t *other, const cplane_t *plane, const csur
 		if (ent->item->use)
 			other->client->pers.selected_item = other->client->ps.stats[STAT_SELECTED_ITEM] = ITEM_INDEX(ent->item);
 
-		gi.sound(other, CHAN_ITEM, gi.soundindex(ent->item->pickup_sound), 1, ATTN_NORM, 0);
+		if (ent->item->pickup == Pickup_Health)
+		{
+			if (ent->count == 2)
+			{
+				gi.sound(other, CHAN_ITEM, gi.soundindex(
+								"items/s_health.wav"), 1, ATTN_NORM, 0);
+			}
+			else if (ent->count == 10)
+			{
+				gi.sound(other, CHAN_ITEM, gi.soundindex(
+								"items/n_health.wav"), 1, ATTN_NORM, 0);
+			}
+			else if (ent->count == 25)
+			{
+				gi.sound(other, CHAN_ITEM, gi.soundindex(
+								"items/l_health.wav"), 1, ATTN_NORM, 0);
+			}
+			else
+			{
+				gi.sound(other, CHAN_ITEM, gi.soundindex(
+								"items/m_health.wav"), 1, ATTN_NORM, 0);
+			}
+		}
+		else if (ent->item->pickup_sound)
+		{
+			gi.sound(other, CHAN_ITEM, gi.soundindex(
+							ent->item->pickup_sound), 1, ATTN_NORM, 0);
+		}
 	}
 
 	if (!(ent->spawnflags & ITEM_TARGETS_USED))
