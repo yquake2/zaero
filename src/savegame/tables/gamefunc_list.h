@@ -375,8 +375,6 @@
 {"CopyToBodyQue", (byte *)CopyToBodyQue},
 {"body_die", (byte *)body_die},
 {"InitBodyQue", (byte *)InitBodyQue},
-{"SelectSpawnPoint", (byte *)SelectSpawnPoint},
-{"SelectCoopSpawnPoint", (byte *)SelectCoopSpawnPoint},
 {"SelectDeathmatchSpawnPoint", (byte *)SelectDeathmatchSpawnPoint},
 {"SelectFarthestDeathmatchSpawnPoint", (byte *)SelectFarthestDeathmatchSpawnPoint},
 {"SelectRandomDeathmatchSpawnPoint", (byte *)SelectRandomDeathmatchSpawnPoint},

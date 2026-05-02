@@ -1307,75 +1307,112 @@ void droptofloor (edict_t *ent)
 		ent->use = Use_Item;
 	}
 
-	gi.linkentity (ent);
+	gi.linkentity(ent);
 }
 
-
 /*
-===============
-PrecacheItem
-
-Precaches all data needed for a given item.
-This will be called for each item spawned in a level,
-and for each item in each client's inventory.
-===============
-*/
+ * Precaches all data needed for a given item.
+ * This will be called for each item spawned in a level,
+ * and for each item in each client's inventory.
+ */
 void
 PrecacheItem(const gitem_t *it)
 {
-	const char	*s, *start;
-	char	data[MAX_QPATH];
-	int		len;
-	gitem_t	*ammo;
+	const char *s;
+	char data[MAX_QPATH];
 
 	if (!it)
-		return;
-
-	if (it->pickup_sound)
-		gi.soundindex (it->pickup_sound);
-	if (it->world_model)
-		gi.modelindex (it->world_model);
-	if (it->view_model)
-		gi.modelindex (it->view_model);
-	if (it->icon)
-		gi.imageindex (it->icon);
-
-	// parse everything for its ammo
-	if (it->ammo && it->ammo[0])
 	{
-		ammo = FindItem (it->ammo);
-		if (ammo != it)
-			PrecacheItem (ammo);
+		return;
 	}
 
-	// parse the space seperated precache string for other items
+	if (it->pickup_sound)
+	{
+		gi.soundindex(it->pickup_sound);
+	}
+
+	if (it->world_model)
+	{
+		gi.modelindex(it->world_model);
+	}
+
+	if (it->view_model)
+	{
+		gi.modelindex(it->view_model);
+	}
+
+	if (it->icon)
+	{
+		gi.imageindex(it->icon);
+	}
+
+	/* parse everything for its ammo */
+	if (it->ammo && it->ammo[0])
+	{
+		const gitem_t *ammo;
+
+		ammo = FindItem(it->ammo);
+
+		if (ammo != it)
+		{
+			PrecacheItem(ammo);
+		}
+	}
+
+	/* parse the space seperated precache string for other items */
 	s = it->precaches;
+
 	if (!s || !s[0])
+	{
 		return;
+	}
 
 	while (*s)
 	{
+		const char *start;
+		int len;
+
 		start = s;
+
 		while (*s && *s != ' ')
+		{
 			s++;
+		}
 
-		len = s-start;
-		if (len >= MAX_QPATH || len < 5)
-			gi.error ("PrecacheItem: %s has bad precache string", it->classname);
-		memcpy (data, start, len);
+		len = s - start;
+
+		if ((len >= MAX_QPATH) || (len < 5))
+		{
+			gi.error("PrecacheItem: %s has bad precache string", it->classname);
+			return;
+		}
+
+		memcpy(data, start, len);
 		data[len] = 0;
-		if (*s)
-			s++;
 
-		// determine type based on extension
-		if (!strcmp(data+len-3, "md2"))
-			gi.modelindex (data);
-		else if (!strcmp(data+len-3, "sp2"))
-			gi.modelindex (data);
-		else if (!strcmp(data+len-3, "wav"))
-			gi.soundindex (data);
-		if (!strcmp(data+len-3, "pcx"))
-			gi.imageindex (data);
+		if (*s)
+		{
+			s++;
+		}
+
+		/* determine type based on extension */
+		if (!strcmp(data + len - 3, "md2"))
+		{
+			gi.modelindex(data);
+		}
+		else if (!strcmp(data + len - 3, "sp2"))
+		{
+			gi.modelindex(data);
+		}
+		else if (!strcmp(data + len - 3, "wav"))
+		{
+			gi.soundindex(data);
+		}
+
+		if (!strcmp(data + len - 3, "pcx"))
+		{
+			gi.imageindex(data);
+		}
 	}
 }
 
@@ -1464,7 +1501,7 @@ SpawnItem(edict_t *ent, gitem_t *item)
 	ent->s.effects = item->world_model_flags;
 	ent->s.renderfx = RF_GLOW;
 	if (ent->model)
-		gi.modelindex (ent->model);
+		gi.modelindex(ent->model);
 }
 
 //======================================================================
@@ -2810,7 +2847,7 @@ void SP_item_health (edict_t *self)
 	self->model = "models/items/healing/medium/tris.md2";
 	self->count = 10;
 	SpawnItem (self, FindItem ("Health"));
-	gi.soundindex ("items/n_health.wav");
+	gi.soundindex("items/n_health.wav");
 }
 
 /*QUAKED item_health_small (.3 .3 1) (-16 -16 -16) (16 16 16)
@@ -2832,7 +2869,7 @@ void SP_item_health_small (edict_t *self)
 	self->count = 2;
 	SpawnItem (self, FindItem ("Health"));
 	self->style = HEALTH_IGNORE_MAX;
-	gi.soundindex ("items/s_health.wav");
+	gi.soundindex("items/s_health.wav");
 }
 
 /*QUAKED item_health_large (.3 .3 1) (-16 -16 -16) (16 16 16)
@@ -2853,7 +2890,7 @@ void SP_item_health_large (edict_t *self)
 	self->model = "models/items/healing/large/tris.md2";
 	self->count = 25;
 	SpawnItem (self, FindItem ("Health"));
-	gi.soundindex ("items/l_health.wav");
+	gi.soundindex("items/l_health.wav");
 }
 
 /*QUAKED item_health_mega (.3 .3 1) (-16 -16 -16) (16 16 16)
@@ -2874,7 +2911,7 @@ void SP_item_health_mega (edict_t *self)
 	self->model = "models/items/mega_h/tris.md2";
 	self->count = 100;
 	SpawnItem (self, FindItem ("Health"));
-	gi.soundindex ("items/m_health.wav");
+	gi.soundindex("items/m_health.wav");
 	self->style = HEALTH_IGNORE_MAX|HEALTH_TIMED;
 }
 

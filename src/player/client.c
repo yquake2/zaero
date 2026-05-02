@@ -931,12 +931,11 @@ edict_t *SelectDeathmatchSpawnPoint (void)
 		return SelectRandomDeathmatchSpawnPoint ();
 }
 
-
-edict_t *SelectCoopSpawnPoint (edict_t *ent)
+static edict_t *
+SelectCoopSpawnPoint(const edict_t *ent)
 {
-	int		index;
-	edict_t	*spot = NULL;
-	const char	*target;
+	int index;
+	edict_t *spot = NULL;
 
 	if (!ent)
 	{
@@ -945,45 +944,56 @@ edict_t *SelectCoopSpawnPoint (edict_t *ent)
 
 	index = ent->client - game.clients;
 
-	// player 0 starts in normal player spawn point
+	/* player 0 starts in normal player spawn point */
 	if (!index)
+	{
 		return NULL;
+	}
 
 	spot = NULL;
 
-	// assume there are four coop spots at each spawnpoint
+	/* assume there are four coop spots at each spawnpoint */
 	while (1)
 	{
-		spot = G_Find (spot, FOFS(classname), "info_player_coop");
+		const char *target;
+
+		spot = G_Find(spot, FOFS(classname), "info_player_coop");
+
 		if (!spot)
-			return NULL;	// we didn't have enough...
+		{
+			return NULL; /* we didn't have enough... */
+		}
 
 		target = spot->targetname;
+
 		if (!target)
+		{
 			target = "";
-		if ( Q_stricmp(game.spawnpoint, target) == 0 )
-		{	// this is a coop spawn point for one of the clients here
+		}
+
+		if (Q_stricmp(game.spawnpoint, target) == 0)
+		{
+			/* this is a coop spawn point
+			   for one of the clients here */
 			index--;
+
 			if (!index)
-				return spot;		// this is it
+			{
+				return spot; /* this is it */
+			}
 		}
 	}
-
 
 	return spot;
 }
 
-
 /*
-===========
-SelectSpawnPoint
-
-Chooses a player start, deathmatch start, coop start, etc
-============
-*/
-void	SelectSpawnPoint (edict_t *ent, vec3_t origin, vec3_t angles)
+ * Chooses a player start, deathmatch start, coop start, etc
+ */
+static void
+SelectSpawnPoint(const edict_t *ent, vec3_t origin, vec3_t angles)
 {
-	edict_t	*spot = NULL;
+	edict_t *spot = NULL;
 	edict_t *coopspot = NULL;
 	int index;
 	int counter = 0;
@@ -995,33 +1005,48 @@ void	SelectSpawnPoint (edict_t *ent, vec3_t origin, vec3_t angles)
 	}
 
 	if (deathmatch->value)
-		spot = SelectDeathmatchSpawnPoint ();
+	{
+		spot = SelectDeathmatchSpawnPoint();
+	}
 	else if (coop->value)
-		spot = SelectCoopSpawnPoint (ent);
+	{
+		spot = SelectCoopSpawnPoint(ent);
+	}
 
-	// find a single player start spot
+	/* find a single player start spot */
 	if (!spot)
 	{
-		while ((spot = G_Find (spot, FOFS(classname), "info_player_start")) != NULL)
+		while ((spot = G_Find(spot, FOFS(classname), "info_player_start")) != NULL)
 		{
 			if (!game.spawnpoint[0] && !spot->targetname)
+			{
 				break;
+			}
 
 			if (!game.spawnpoint[0] || !spot->targetname)
+			{
 				continue;
+			}
 
 			if (Q_stricmp(game.spawnpoint, spot->targetname) == 0)
+			{
 				break;
+			}
 		}
 
 		if (!spot)
 		{
 			if (!game.spawnpoint[0])
-			{	// there wasn't a spawnpoint without a target, so use any
-				spot = G_Find (spot, FOFS(classname), "info_player_start");
+			{
+				/* there wasn't a spawnpoint without a target, so use any */
+				spot = G_Find(spot, FOFS(classname), "info_player_start");
 			}
+
 			if (!spot)
-				gi.error ("Couldn't find spawn point %s\n", game.spawnpoint);
+			{
+				gi.error("Couldn't find spawn point %s\n", game.spawnpoint);
+				return;
+			}
 		}
 	}
 
@@ -1063,22 +1088,24 @@ void	SelectSpawnPoint (edict_t *ent, vec3_t origin, vec3_t angles)
 		}
 	}
 
-	VectorCopy (spot->s.origin, origin);
+	VectorCopy(spot->s.origin, origin);
 	origin[2] += 9;
-	VectorCopy (spot->s.angles, angles);
+	VectorCopy(spot->s.angles, angles);
 }
 
-//======================================================================
+/* ====================================================================== */
 
-
-void InitBodyQue (void)
+void
+InitBodyQue(void)
 {
-	int		i;
-	edict_t	*ent;
+	int i;
 
 	level.body_que = 0;
-	for (i=0; i<BODY_QUEUE_SIZE ; i++)
+
+	for (i = 0; i < BODY_QUEUE_SIZE; i++)
 	{
+		edict_t *ent;
+
 		ent = G_Spawn();
 		ent->classname = "bodyque";
 	}
