@@ -38,7 +38,7 @@ void mutant_step (edict_t *self)
 	int		n;
 	n = (randk() + 1) % 3;
 	if (n == 0)
-		gi.sound (self, CHAN_VOICE, sound_step1, 1, ATTN_NORM, 0);		
+		gi.sound (self, CHAN_VOICE, sound_step1, 1, ATTN_NORM, 0);
 	else if (n == 1)
 		gi.sound (self, CHAN_VOICE, sound_step2, 1, ATTN_NORM, 0);
 	else
@@ -356,7 +356,7 @@ void mutant_melee (edict_t *self)
 // ATTACK
 //
 
-void mutant_jump_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *surf)
+void mutant_jump_touch (edict_t *self, edict_t *other, const cplane_t *plane, const csurface_t *surf)
 {
 	if (!self || !other)
 	{
@@ -662,7 +662,7 @@ mframe_t mutant_frames_death2 [] =
 };
 mmove_t mutant_move_death2 = {FRAME_death201, FRAME_death210, mutant_frames_death2, mutant_dead};
 
-void mutant_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void mutant_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	int		n;
 
@@ -730,7 +730,7 @@ void SP_monster_mutant (edict_t *self)
 	sound_step2 = gi.soundindex ("mutant/step2.wav");
 	sound_step3 = gi.soundindex ("mutant/step3.wav");
 	sound_thud = gi.soundindex ("mutant/thud1.wav");
-	
+
 	self->movetype = MOVETYPE_STEP;
 	self->solid = SOLID_BBOX;
 	self->s.modelindex = gi.modelindex ("models/monsters/mutant/tris.md2");
@@ -756,7 +756,7 @@ void SP_monster_mutant (edict_t *self)
 	self->monsterinfo.checkattack = mutant_checkattack;
 
 	gi.linkentity (self);
-	
+
 	self->monsterinfo.currentmove = &mutant_move_stand;
 
 	self->monsterinfo.scale = MODEL_SCALE;

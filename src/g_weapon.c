@@ -30,7 +30,7 @@ void check_dodge (edict_t *self, vec3_t start, vec3_t dir, int speed)
 	}
 	VectorMA (start, 8192, dir, end);
 	tr = gi.trace (start, NULL, NULL, end, self, MASK_SHOT);
-	if ((tr.ent) && (tr.ent->svflags & SVF_MONSTER) && (tr.ent->health > 0) && (tr.ent->monsterinfo.dodge) && infront(tr.ent, self) 
+	if ((tr.ent) && (tr.ent->svflags & SVF_MONSTER) && (tr.ent->health > 0) && (tr.ent->monsterinfo.dodge) && infront(tr.ent, self)
 				&& (!(tr.ent->monsterinfo.aiflags & AI_DODGETIMEOUT) || level.time > tr.ent->monsterinfo.dodgetimeout))
 	{
 		int skilllevel;
@@ -340,7 +340,7 @@ fire_blaster
 Fires a single blaster bolt.  Used by the blaster and hyper blaster.
 =================
 */
-void blaster_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *surf)
+void blaster_touch (edict_t *self, edict_t *other, const cplane_t *plane, const csurface_t *surf)
 {
 	int		mod;
 
@@ -428,7 +428,7 @@ void fire_blaster (edict_t *self, vec3_t start, vec3_t dir, int damage, int spee
 		VectorMA (bolt->s.origin, -10, dir, bolt->s.origin);
 		bolt->touch (bolt, tr.ent, NULL, NULL);
 	}
-}	
+}
 
 
 /*
@@ -498,7 +498,7 @@ void Grenade_Explode (edict_t *ent)
 	G_FreeEdict (ent);
 }
 
-void Grenade_Touch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *surf)
+void Grenade_Touch (edict_t *ent, edict_t *other, const cplane_t *plane, const csurface_t *surf)
 {
 	if (!ent || !other)
 	{
@@ -627,7 +627,7 @@ void fire_grenade2 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int 
 fire_rocket
 =================
 */
-void rocket_touch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *surf)
+void rocket_touch (edict_t *ent, edict_t *other, const cplane_t *plane, const csurface_t *surf)
 {
 	vec3_t		origin;
 	int			n;
@@ -844,7 +844,7 @@ void bfg_explode (edict_t *self)
 		self->think = G_FreeEdict;
 }
 
-void bfg_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *surf)
+void bfg_touch (edict_t *self, edict_t *other, const cplane_t *plane, const csurface_t *surf)
 {
 	if (!self || !other)
 	{

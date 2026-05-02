@@ -9,8 +9,6 @@ SUPERTANK
 #include "../../header/local.h"
 #include "supertank.h"
 
-qboolean visible (edict_t *self, edict_t *other);
-
 static int	sound_pain1;
 static int	sound_pain2;
 static int	sound_pain3;
@@ -699,7 +697,7 @@ void BossExplode (edict_t *self)
 }
 
 
-void supertank_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void supertank_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	if (!self)
 	{

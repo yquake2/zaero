@@ -309,7 +309,7 @@ void gladiator_pain (edict_t *self, edict_t *other, float kick, int damage)
 		self->monsterinfo.currentmove = &gladiator_move_pain_air;
 	else
 		self->monsterinfo.currentmove = &gladiator_move_pain;
-	
+
 }
 
 
@@ -355,7 +355,7 @@ mframe_t gladiator_frames_death [] =
 };
 mmove_t gladiator_move_death = {FRAME_death1, FRAME_death22, gladiator_frames_death, gladiator_dead};
 
-void gladiator_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void gladiator_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	int		n;
 
@@ -405,9 +405,9 @@ void SP_monster_gladiator (edict_t *self)
 	}
 
 
-	sound_pain1 = gi.soundindex ("gladiator/pain.wav");	
-	sound_pain2 = gi.soundindex ("gladiator/gldpain2.wav");	
-	sound_die = gi.soundindex ("gladiator/glddeth2.wav");	
+	sound_pain1 = gi.soundindex ("gladiator/pain.wav");
+	sound_pain2 = gi.soundindex ("gladiator/gldpain2.wav");
+	sound_die = gi.soundindex ("gladiator/glddeth2.wav");
 	sound_gun = gi.soundindex ("gladiator/railgun.wav");
 	sound_cleaver_swing = gi.soundindex ("gladiator/melee1.wav");
 	sound_cleaver_hit = gi.soundindex ("gladiator/melee2.wav");

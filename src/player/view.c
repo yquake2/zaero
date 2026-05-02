@@ -918,9 +918,10 @@ void G_SetClientEvent (edict_t *ent)
 G_SetClientSound
 ===============
 */
-void G_SetClientSound (edict_t *ent)
+void
+G_SetClientSound(edict_t *ent)
 {
-	char	*weap;
+	const char *weap;
 
 	if (!ent)
 	{

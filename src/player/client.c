@@ -462,7 +462,7 @@ void ClientObituary (edict_t *self, edict_t *inflictor, edict_t *attacker)
 }
 
 
-void Touch_Item (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *surf);
+void Touch_Item (edict_t *ent, edict_t *other, const cplane_t *plane, const csurface_t *surf);
 
 void TossClientWeapon (edict_t *self)
 {
@@ -556,7 +556,7 @@ void stopCamera(edict_t *self);
 player_die
 ==================
 */
-void player_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void player_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	int		n;
 
@@ -935,7 +935,7 @@ edict_t *SelectCoopSpawnPoint (edict_t *ent)
 {
 	int		index;
 	edict_t	*spot = NULL;
-	char	*target;
+	const char	*target;
 
 	if (!ent)
 	{
@@ -1083,7 +1083,7 @@ void InitBodyQue (void)
 	}
 }
 
-void body_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void body_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	int	n;
 

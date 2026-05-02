@@ -2,13 +2,13 @@
 
 #include "../header/local.h"
 
-void Weapon_Generic (edict_t *ent, 
-					 int FRAME_ACTIVATE_LAST, 
-					 int FRAME_FIRE_LAST, 
-					 int FRAME_IDLE_LAST, 
-					 int FRAME_DEACTIVATE_LAST, 
-					 int *pause_frames, 
-					 int *fire_frames, 
+void Weapon_Generic (edict_t *ent,
+					 int FRAME_ACTIVATE_LAST,
+					 int FRAME_FIRE_LAST,
+					 int FRAME_IDLE_LAST,
+					 int FRAME_DEACTIVATE_LAST,
+					 int *pause_frames,
+					 int *fire_frames,
 					 void (*fire)(edict_t *ent));
 void P_ProjectSource (edict_t *ent, vec3_t distance, vec3_t forward, vec3_t right, vec3_t result);
 
@@ -487,7 +487,7 @@ void InitTestItem(void)
     fclose(wCfgFile);
     return;
   }
-  
+
   convertToVector(testItem_aminationFramesStr, &(testItem_Size[0]));
 
   if(!fgets(testItem_aminationFramesStr, 4096, wCfgFile))
@@ -495,7 +495,7 @@ void InitTestItem(void)
     fclose(wCfgFile);
     return;
   }
-  
+
   convertToVector(testItem_aminationFramesStr, &(testItem_Size[1]));
 
   testItem->classname = testItem_className;
@@ -517,9 +517,9 @@ qboolean Pickup_TestItem (edict_t *ent, edict_t *other)
 	return true;
 }
 
-void drop_temp_touch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *surf);
+void drop_temp_touch (edict_t *ent, edict_t *other, const cplane_t *plane, const csurface_t *surf);
 
-void Drop_TestItem (edict_t *ent, gitem_t *item)
+void Drop_TestItem (edict_t *ent, const gitem_t *item)
 {
 	vec3_t	forward, right;
 	vec3_t	offset;
@@ -543,7 +543,7 @@ void Drop_TestItem (edict_t *ent, gitem_t *item)
 	gi.setmodel (testItemDroped, testItemDroped->item->world_model);
 	testItemDroped->s.skinnum = 0;
 	testItemDroped->solid = SOLID_TRIGGER;
-	testItemDroped->movetype = MOVETYPE_TOSS;  
+	testItemDroped->movetype = MOVETYPE_TOSS;
 	testItemDroped->touch = drop_temp_touch;
 	testItemDroped->owner = ent;
 

@@ -5,13 +5,13 @@ extern qboolean is_quad;
 extern byte is_silenced;
 
 void playQuadSound(edict_t *ent);
-void Weapon_Generic (edict_t *ent, 
-					 int FRAME_ACTIVATE_LAST, 
-					 int FRAME_FIRE_LAST, 
-					 int FRAME_IDLE_LAST, 
-					 int FRAME_DEACTIVATE_LAST, 
-					 int *pause_frames, 
-					 int *fire_frames, 
+void Weapon_Generic (edict_t *ent,
+					 int FRAME_ACTIVATE_LAST,
+					 int FRAME_FIRE_LAST,
+					 int FRAME_IDLE_LAST,
+					 int FRAME_DEACTIVATE_LAST,
+					 int *pause_frames,
+					 int *fire_frames,
 					 void (*fire)(edict_t *ent));
 void NoAmmoWeaponChange (edict_t *ent);
 void check_dodge (edict_t *self, vec3_t start, vec3_t dir, int speed);
@@ -32,7 +32,7 @@ vec_t VectorLengthSquared(vec3_t v)
 {
 	int		i;
 	float	length;
-	
+
 	length = 0;
 	for (i=0 ; i< 3 ; i++)
 		length += v[i]*v[i];
@@ -87,7 +87,7 @@ void angleToward(edict_t *self, vec3_t point, float speed)
 #define TBOMB_SHRAPNEL_DMG	15
 #define TBOMB_MAX_EXIST	25
 
-void shrapnel_touch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *surf)
+void shrapnel_touch (edict_t *ent, edict_t *other, const cplane_t *plane, const csurface_t *surf)
 {
 	if (!ent || !other)
 	{
@@ -101,7 +101,7 @@ void shrapnel_touch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *
 	if (VectorCompare(ent->velocity, vec3_origin))
 		return;
 
-	T_Damage (other, ent, ent->owner, ent->velocity, ent->s.origin, 
+	T_Damage (other, ent, ent->owner, ent->velocity, ent->s.origin,
 		plane->normal, TBOMB_SHRAPNEL_DMG, 8, 0, MOD_TRIPBOMB);
 	G_FreeEdict(ent);
 }
@@ -486,7 +486,7 @@ void weapon_lasertripbomb_fire (edict_t *ent)
 		if (fire_lasertripbomb(ent, start, forward, TBOMB_DELAY, damage, radius, is_quad))
 		{
 			ent->client->pers.inventory[ent->client->ammo_index] -= 1;
-			
+
 			// switch models
 			ent->client->ps.gunindex = gi.modelindex("models/weapons/v_ired/hand.md2");
 
@@ -551,7 +551,7 @@ void SP_misc_lasertripbomb(edict_t *bomb)
 
 	// set up ourself
 	setupBomb(bomb, "misc_ired", TBOMB_DAMAGE, TBOMB_RADIUS_DAMAGE);
-	
+
 	if (bomb->targetname)
 	{
 		bomb->use = use_tripbomb;
@@ -592,7 +592,7 @@ void weapon_sc_fire (edict_t *ent)
 		if(EMPNukeCheck(ent, ent->s.origin))
 		{
 			gi.sound (ent, CHAN_AUTO, gi.soundindex("items/empnuke/emp_missfire.wav"), 1, ATTN_NORM, 0);
-			
+
 			ent->client->ps.gunframe = 18;
 			ent->client->weapon_sound = 0;
 			ent->weaponsound_time = 0;
@@ -731,7 +731,7 @@ void Weapon_SonicCannon (edict_t *ent)
   Weapon_Generic (ent, 6, 22, 52, 57, pause_frames, fire_frames, weapon_sc_fire);
 }
 
-void SpawnDamage (int type, vec3_t origin, vec3_t normal, int damage);
+void SpawnDamage (int type, const vec3_t origin, const vec3_t normal);
 
 void fire_sconnanEffects (edict_t *self)
 {
@@ -755,12 +755,12 @@ void fire_sconnanEffects (edict_t *self)
 
 	VectorMA (start, 8192, forward, end);
 
-  tr = gi.trace (start, NULL, NULL, end, self, MASK_SHOT|CONTENTS_SLIME|CONTENTS_LAVA);
+	tr = gi.trace (start, NULL, NULL, end, self, MASK_SHOT|CONTENTS_SLIME|CONTENTS_LAVA);
 
 	VectorMA (tr.endpos, -5, forward, end);
 
-  VectorSet(v, crandom() * 10 - 20, crandom() * 10 - 20, crandom() * 10 - 20);
-  SpawnDamage(TE_SHIELD_SPARKS, end, v, 0);
+	VectorSet(v, crandom() * 10 - 20, crandom() * 10 - 20, crandom() * 10 - 20);
+	SpawnDamage(TE_SHIELD_SPARKS, end, v);
 }
 
 void scexplode_think(edict_t *self)
@@ -875,7 +875,7 @@ void flare_flash(edict_t *ent)
 		target = findradius(target, ent->s.origin, FLASH_RANGE);
 		if (target == NULL)
 			break;
-		if (!target->client && !(target->svflags & SVF_MONSTER)) 
+		if (!target->client && !(target->svflags & SVF_MONSTER))
 			continue;
 		if (target->deadflag)
 			continue;
@@ -941,7 +941,7 @@ void flare_think(edict_t *self)
 	}
 
 	self->s.frame++;
-	
+
 	if (self->s.frame > 14)
 		self->s.frame = 5;
 
@@ -1182,7 +1182,7 @@ void Weapon_SniperRifle(edict_t *ent)
 		if (ent->client->ps.gunframe == deactivateStart)
 		{
 			// back to old fov
-			ent->client->ps.fov = 90;	
+			ent->client->ps.fov = 90;
 			if (deathmatch->value)
 				gi.sound(ent, CHAN_WEAPON2, gi.soundindex("weapons/sniper/snip_bye.wav"), 1, ATTN_NORM, 0);
 		}
@@ -1207,7 +1207,7 @@ void Weapon_SniperRifle(edict_t *ent)
 		else if (ent->client->ps.gunframe == activateEnd)
 		{
 			ent->client->weaponstate = WEAPON_READY;
-			ent->client->ps.gunindex = (deathmatch->value ? 
+			ent->client->ps.gunindex = (deathmatch->value ?
 				gi.modelindex("models/weapons/v_sniper/dmscope/tris.md2") :
 				gi.modelindex("models/weapons/v_sniper/scope/tris.md2") );
 			ent->client->ps.gunframe = 0;
@@ -1231,10 +1231,10 @@ void Weapon_SniperRifle(edict_t *ent)
 
 	if (ent->client->weaponstate == WEAPON_READY)
 	{
-		ent->client->ps.gunindex = (deathmatch->value ? 
+		ent->client->ps.gunindex = (deathmatch->value ?
 			gi.modelindex("models/weapons/v_sniper/dmscope/tris.md2") :
 			gi.modelindex("models/weapons/v_sniper/scope/tris.md2") );
-		
+
 		ent->client->ps.fov = (deathmatch->value ? dmFov : spFov);
 
 		// beep if the sniper frame num is a multiple of 10
@@ -1249,7 +1249,7 @@ void Weapon_SniperRifle(edict_t *ent)
 			if (level.framenum >= ent->client->sniperFramenum)
 			{
 				ent->client->latched_buttons &= ~BUTTON_ATTACK;
-				if ((!ent->client->ammo_index) || 
+				if ((!ent->client->ammo_index) ||
 					( ent->client->pers.inventory[ent->client->ammo_index] >= ent->client->pers.weapon->quantity))
 				{
 					ent->client->weaponstate = WEAPON_FIRING;
@@ -1282,15 +1282,15 @@ void Weapon_SniperRifle(edict_t *ent)
 
 	if (ent->client->weaponstate == WEAPON_FIRING)
 	{
-		ent->client->ps.gunindex = (deathmatch->value ? 
+		ent->client->ps.gunindex = (deathmatch->value ?
 				gi.modelindex("models/weapons/v_sniper/dmscope/tris.md2") :
 				gi.modelindex("models/weapons/v_sniper/scope/tris.md2") );
-			
+
 		ent->client->ps.fov = (deathmatch->value ? dmFov : spFov);
 
 		// fire
 		weapon_sniperrifle_fire(ent);
-		
+
 		// start recharge
 		ent->client->weaponstate = WEAPON_READY;
 		ent->client->sniperFramenum = level.framenum + SNIPER_CHARGE_TIME;
@@ -1370,7 +1370,7 @@ void weapon_a2k_fire (edict_t *ent)
 		ent->client->a2kFramenum = level.framenum + A2K_FRAMENUM;
 		ent->client->pers.inventory[ent->client->ammo_index]--;
 		ent->client->ps.gunframe++;
-		
+
 		gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/a2k/countdn.wav"), 1, ATTN_NORM, 0);
 
 		// play quad sound
@@ -1391,7 +1391,7 @@ void weapon_a2k_fire (edict_t *ent)
 		}
 		// do some damage
 		T_RadiusDamage(ent, ent, damage, NULL, dmg_radius, MOD_A2K);
-		
+
 		// ok, now, do who ever's visible within 1024 units
 		Z_RadiusDamageVisible(ent, ent, damage, NULL, dmg_radius * 2, MOD_A2K);
 
@@ -1516,7 +1516,7 @@ void Action_Push (edict_t *ent)
 		vec3_t forward;
 		vec3_t offset;
 		vec3_t start;
-		
+
 		// contact
 		AngleVectors(ent->client->v_angle, forward, NULL, NULL);
 		VectorSet(offset, 0, 0, ent->viewheight * 0.5);

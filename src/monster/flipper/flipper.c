@@ -26,7 +26,7 @@ mframe_t flipper_frames_stand [] =
 {
 	{ai_stand, 0, NULL}
 };
-	
+
 mmove_t	flipper_move_stand = {FRAME_flphor01, FRAME_flphor01, flipper_frames_stand, NULL};
 
 void flipper_stand (edict_t *self)
@@ -103,7 +103,7 @@ void flipper_run (edict_t *self)
 	self->monsterinfo.currentmove = &flipper_move_run_start;
 }
 
-/* Standard Swimming */ 
+/* Standard Swimming */
 mframe_t flipper_frames_walk [] =
 {
 	{ai_walk, 4, NULL},
@@ -257,7 +257,7 @@ void flipper_pain (edict_t *self, edict_t *other, float kick, int damage)
 		return;
 
 	self->pain_debounce_time = level.time + 3;
-	
+
 	if (skill->value == SKILL_HARDPLUS)
 		return;		// no pain anims in nightmare
 
@@ -376,7 +376,7 @@ void flipper_sight (edict_t *self, edict_t *other)
 	gi.sound (self, CHAN_VOICE, sound_sight, 1, ATTN_NORM, 0);
 }
 
-void flipper_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void flipper_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	int		n;
 
@@ -423,9 +423,9 @@ void SP_monster_flipper (edict_t *self)
 		return;
 	}
 
-	sound_pain1		= gi.soundindex ("flipper/flppain1.wav");	
-	sound_pain2		= gi.soundindex ("flipper/flppain2.wav");	
-	sound_death		= gi.soundindex ("flipper/flpdeth1.wav");	
+	sound_pain1		= gi.soundindex ("flipper/flppain1.wav");
+	sound_pain2		= gi.soundindex ("flipper/flppain2.wav");
+	sound_death		= gi.soundindex ("flipper/flpdeth1.wav");
 	sound_chomp		= gi.soundindex ("flipper/flpatck1.wav");
 	sound_attack	= gi.soundindex ("flipper/flpatck2.wav");
 	sound_idle		= gi.soundindex ("flipper/flpidle1.wav");
@@ -453,7 +453,7 @@ void SP_monster_flipper (edict_t *self)
 
 	gi.linkentity (self);
 
-	self->monsterinfo.currentmove = &flipper_move_stand;	
+	self->monsterinfo.currentmove = &flipper_move_stand;
 	self->monsterinfo.scale = MODEL_SCALE;
 
 	swimmonster_start (self);

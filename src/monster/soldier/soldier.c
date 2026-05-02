@@ -1165,7 +1165,7 @@ mframe_t soldier_frames_death6 [] =
 };
 mmove_t soldier_move_death6 = {FRAME_death601, FRAME_death610, soldier_frames_death6, soldier_dead};
 
-void soldier_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void soldier_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	int		n;
 
@@ -1198,7 +1198,7 @@ void soldier_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int dama
 		gi.sound (self, CHAN_VOICE, sound_death_light, 1, ATTN_NORM, 0);
 	else if (self->s.skinnum == 3)
 		gi.sound (self, CHAN_VOICE, sound_death, 1, ATTN_NORM, 0);
-	else 
+	else
 		gi.sound (self, CHAN_VOICE, sound_death_ss, 1, ATTN_NORM, 0);
 
 	if (fabs((self->s.origin[2] + self->viewheight) - point[2]) <= 4)

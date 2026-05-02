@@ -49,13 +49,10 @@ void gunner_search (edict_t *self)
 	gi.sound (self, CHAN_VOICE, sound_search, 1, ATTN_NORM, 0);
 }
 
-
-qboolean visible (edict_t *self, edict_t *other);
 void GunnerGrenade (edict_t *self);
 void GunnerFire (edict_t *self);
 void gunner_fire_chain(edict_t *self);
 void gunner_refire_chain(edict_t *self);
-
 
 void gunner_stand (edict_t *self);
 
@@ -365,7 +362,7 @@ mframe_t gunner_frames_death [] =
 };
 mmove_t gunner_move_death = {FRAME_death01, FRAME_death11, gunner_frames_death, gunner_dead};
 
-void gunner_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void gunner_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	int		n;
 

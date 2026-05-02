@@ -2,7 +2,7 @@
 #include "monster/misc/player.h"
 
 static char*
-ClientTeam (edict_t *ent, char* value)
+ClientTeam (const edict_t *ent, char* value)
 {
 	char		*p;
 
@@ -30,7 +30,8 @@ ClientTeam (edict_t *ent, char* value)
 	return ++p;
 }
 
-qboolean OnSameTeam (edict_t *ent1, edict_t *ent2)
+qboolean
+OnSameTeam(const edict_t *ent1, const edict_t *ent2)
 {
 	char	ent1Team [512];
 	char	ent2Team [512];
@@ -48,7 +49,7 @@ qboolean OnSameTeam (edict_t *ent1, edict_t *ent2)
 
 	if (ent1Team[0] != '\0' && strcmp(ent1Team, ent2Team) == 0)
 		return true;
-	
+
 	return false;
 }
 
@@ -476,7 +477,7 @@ struct altsel_s
 {
 	int num;
 	char *weapon[MAX_ALT];
-} alternates[] = 
+} alternates[] =
 {
 	{0}, // filler
 	{2,{"Blaster", "Flare Gun"}},
@@ -534,7 +535,7 @@ void findNext(edict_t *ent, struct altsel_s *ptr, int offset)
 	{
 		if (tryUse(ent, ptr->weapon[offset]))
 			break;
-		
+
 		offset++;
 		// wrap around
 		if (offset >= ptr->num)
@@ -583,7 +584,7 @@ void altSelect(edict_t *ent, int num)
 	{
 		offset = ((offset + 1) % (ptr->num));
 	}
-	
+
 	// now select this offset
 	findNext(ent, ptr, offset);
 }
@@ -1665,7 +1666,7 @@ void ClientCommand (edict_t *ent)
 			SelectNext (ent, -1);
 		else if (Q_stricmp (cmd, "invprev") == 0)
 			SelectPrev (ent, -1);
-	
+
 		return;
 	}
 

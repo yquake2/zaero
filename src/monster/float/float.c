@@ -41,7 +41,7 @@ void floater_idle (edict_t *self)
 
 
 void floater_dead (edict_t *self);
-void floater_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point);
+void floater_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point);
 void floater_run (edict_t *self);
 void floater_wham (edict_t *self);
 void floater_zap (edict_t *self);
@@ -204,35 +204,35 @@ void floater_stand (edict_t *self)
 
 mframe_t floater_frames_activate [] =
 {
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
 	{ai_move,	0,	NULL}
 };
 mmove_t floater_move_activate = {FRAME_actvat01, FRAME_actvat31, floater_frames_activate, NULL};
@@ -640,7 +640,7 @@ void floater_dead (edict_t *self)
 	gi.linkentity (self);
 }
 
-void floater_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void floater_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	if (!self)
 	{
@@ -701,11 +701,11 @@ void SP_monster_floater (edict_t *self)
 
 	gi.linkentity (self);
 
-	if (random() <= 0.5)		
-		self->monsterinfo.currentmove = &floater_move_stand1;	
+	if (random() <= 0.5)
+		self->monsterinfo.currentmove = &floater_move_stand1;
 	else
-		self->monsterinfo.currentmove = &floater_move_stand2;	
-	
+		self->monsterinfo.currentmove = &floater_move_stand2;
+
 	self->monsterinfo.scale = MODEL_SCALE;
 
 	flymonster_start (self);

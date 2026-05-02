@@ -229,7 +229,7 @@ void infantry_pain (edict_t *self, edict_t *other, float kick, int damage)
 		return;
 
 	self->pain_debounce_time = level.time + 3;
-	
+
 	if (skill->value == SKILL_HARDPLUS)
 		return;		// no pain anims in nightmare
 
@@ -410,7 +410,7 @@ mframe_t infantry_frames_death3 [] =
 mmove_t infantry_move_death3 = {FRAME_death301, FRAME_death309, infantry_frames_death3, infantry_dead};
 
 
-void infantry_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void infantry_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	int		n;
 
@@ -656,11 +656,11 @@ void SP_monster_infantry (edict_t *self)
 	sound_weapon_cock = gi.soundindex ("infantry/infatck3.wav");
 	sound_punch_swing = gi.soundindex ("infantry/infatck2.wav");
 	sound_punch_hit = gi.soundindex ("infantry/melee2.wav");
-	
+
 	sound_sight = gi.soundindex ("infantry/infsght1.wav");
 	sound_search = gi.soundindex ("infantry/infsrch1.wav");
 	sound_idle = gi.soundindex ("infantry/infidle1.wav");
-	
+
 
 	self->movetype = MOVETYPE_STEP;
 	self->solid = SOLID_BBOX;

@@ -622,7 +622,7 @@ void insane_dead (edict_t *self)
 }
 
 
-void insane_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void insane_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	int		n;
 

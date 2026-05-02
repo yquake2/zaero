@@ -4,7 +4,7 @@
  * Functionpointers to every function in the game.so.
  *
  * =======================================================================
- */ 
+ */
 
 {"ReadLevel", (byte *)ReadLevel},
 {"WriteLevel", (byte *)WriteLevel},
@@ -1218,7 +1218,6 @@
 {"CheckTeamDamage", (byte *)CheckTeamDamage},
 {"M_ReactToDamage", (byte *)M_ReactToDamage},
 {"CheckArmor", (byte *)CheckArmor},
-{"CheckPowerArmor", (byte *)CheckPowerArmor},
 {"SpawnDamage", (byte *)SpawnDamage},
 {"Killed", (byte *)Killed},
 {"CanDamage", (byte *)CanDamage},

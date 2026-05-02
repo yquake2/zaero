@@ -328,7 +328,7 @@ void hound_attack (edict_t *self)
 //
 // ATTACK
 //
-void hound_jump_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *surf)
+void hound_jump_touch (edict_t *self, edict_t *other, const cplane_t *plane, const csurface_t *surf)
 {
 	if (!self || !other)
 	{
@@ -474,7 +474,7 @@ void hound_jump (edict_t *self)
 }
 
 /*
-=== 
+===
 attack check routines
 ===
 */
@@ -586,7 +586,7 @@ mframe_t hound_frames_death [] =
 };
 mmove_t hound_move_death = {FRAME_die1Start, FRAME_die1End, hound_frames_death, hound_dead};
 
-void hound_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void hound_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	int		n;
 
@@ -627,9 +627,9 @@ End Death Stuff
 
 void SP_monster_hound_precache(void)
 {
-	sound_pain1 = gi.soundindex ("monsters/hound/hpain1.wav");	
-	sound_pain2 = gi.soundindex ("monsters/hound/hpain2.wav");	
-	sound_die = gi.soundindex ("monsters/hound/hdeth1.wav");	
+	sound_pain1 = gi.soundindex ("monsters/hound/hpain1.wav");
+	sound_pain2 = gi.soundindex ("monsters/hound/hpain2.wav");
+	sound_die = gi.soundindex ("monsters/hound/hdeth1.wav");
 	sound_launch = gi.soundindex("monsters/hound/hlaunch.wav");
 	sound_impact = gi.soundindex("monsters/hound/himpact.wav");
 	sound_sight = gi.soundindex("monsters/hound/hsight1.wav");
@@ -694,7 +694,7 @@ void SP_monster_hound (edict_t *self)
 
 	gi.linkentity (self);
 
-	self->monsterinfo.currentmove = &hound_stand1;	
+	self->monsterinfo.currentmove = &hound_stand1;
 	self->monsterinfo.scale = MODEL_SCALE;
 
 	walkmonster_start (self);
@@ -749,7 +749,7 @@ void hound_createHound(edict_t *self, float healthPercent)
 	hound->monsterinfo.idle = hound_stand;
 	hound->monsterinfo.checkattack = hound_checkattack;
 
-	hound->monsterinfo.currentmove = &hound_move_handlerjump;	
+	hound->monsterinfo.currentmove = &hound_move_handlerjump;
 	hound->monsterinfo.scale = MODEL_SCALE;
 
 	hound->think = monster_think;

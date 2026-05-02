@@ -1,22 +1,6 @@
 #include "header/local.h"
 
 
-qboolean	Pickup_Weapon (edict_t *ent, edict_t *other);
-void		Use_Weapon (edict_t *ent, gitem_t *inv);
-void		Drop_Weapon (edict_t *ent, gitem_t *inv);
-
-void Weapon_Blaster (edict_t *ent);
-void Weapon_Shotgun (edict_t *ent);
-void Weapon_SuperShotgun (edict_t *ent);
-void Weapon_Machinegun (edict_t *ent);
-void Weapon_Chaingun (edict_t *ent);
-void Weapon_HyperBlaster (edict_t *ent);
-void Weapon_RocketLauncher (edict_t *ent);
-void Weapon_Grenade (edict_t *ent);
-void Weapon_GrenadeLauncher (edict_t *ent);
-void Weapon_Railgun (edict_t *ent);
-void Weapon_BFG (edict_t *ent);
-
 gitem_armor_t jacketarmor_info	= { 25,  50, .30, .00, ARMOR_JACKET};
 gitem_armor_t combatarmor_info	= { 50, 100, .60, .30, ARMOR_COMBAT};
 gitem_armor_t bodyarmor_info	= {100, 200, .80, .60, ARMOR_BODY};
@@ -30,21 +14,7 @@ static int	power_shield_index;
 #define HEALTH_IGNORE_MAX	1
 #define HEALTH_TIMED		2
 
-void Use_Quad (edict_t *ent, gitem_t *item);
 static int	quad_drop_timeout_hack;
-
-// *** Zaero prototypes ***
-
-void Weapon_FlareGun (edict_t *ent);
-void Weapon_SniperRifle(edict_t *ent);
-void Weapon_LaserTripBomb(edict_t *ent);
-void Weapon_SonicCannon (edict_t *ent);
-void Weapon_EMPNuke (edict_t *ent);
-void Weapon_A2k (edict_t *ent);
-void Use_Visor (edict_t *ent, gitem_t *item);
-void Action_Push(edict_t *ent);
-void Use_PlasmaShield (edict_t *ent, gitem_t *item);
-
 
 //======================================================================
 
@@ -571,7 +541,7 @@ qboolean Pickup_Key (edict_t *ent, edict_t *other)
 
 //======================================================================
 
-qboolean Add_Ammo (edict_t *ent, gitem_t *item, int count)
+qboolean Add_Ammo (edict_t *ent, const gitem_t *item, int count)
 {
 	int			index;
 	int			max;
@@ -789,7 +759,7 @@ qboolean Pickup_Health (edict_t *ent, edict_t *other)
 
 //======================================================================
 
-int ArmorIndex (edict_t *ent)
+int ArmorIndex (const edict_t *ent)
 {
 	if (!ent)
 	{
@@ -897,15 +867,18 @@ qboolean Pickup_Armor (edict_t *ent, edict_t *other)
 
 //======================================================================
 
-int PowerArmorType (edict_t *ent)
+int
+PowerArmorType(const edict_t *ent)
 {
 	if (!ent)
 	{
-		return 0;
+		return POWER_ARMOR_NONE;
 	}
 
 	if (!ent->client)
+	{
 		return POWER_ARMOR_NONE;
+	}
 
 	if (!(ent->flags & FL_POWER_ARMOR))
 		return POWER_ARMOR_NONE;
@@ -1060,7 +1033,7 @@ void Drop_Visor(edict_t *ent, gitem_t *item)
 Touch_Item
 ===============
 */
-void Touch_Item (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *surf)
+void Touch_Item (edict_t *ent, edict_t *other, const cplane_t *plane, const csurface_t *surf)
 {
 	qboolean	taken;
 
@@ -1115,7 +1088,7 @@ void Touch_Item (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *surf
 
 //======================================================================
 
-void drop_temp_touch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *surf)
+void drop_temp_touch (edict_t *ent, edict_t *other, const cplane_t *plane, const csurface_t *surf)
 {
 	if (!ent || !other)
 	{
@@ -1308,9 +1281,10 @@ This will be called for each item spawned in a level,
 and for each item in each client's inventory.
 ===============
 */
-void PrecacheItem (gitem_t *it)
+void
+PrecacheItem(const gitem_t *it)
 {
-	char	*s, *start;
+	const char	*s, *start;
 	char	data[MAX_QPATH];
 	int		len;
 	gitem_t	*ammo;
@@ -1376,7 +1350,8 @@ Items can't be immediately dropped to floor, because they might
 be on an entity that hasn't spawned yet.
 ============
 */
-void SpawnItem (edict_t *ent, gitem_t *item)
+void
+SpawnItem(edict_t *ent, gitem_t *item)
 {
 	if (!ent || !item)
 	{
