@@ -359,7 +359,8 @@ Use_Weapon
 Make the weapon ready if there is ammo
 ================
 */
-void Use_Weapon (edict_t *ent, gitem_t *item)
+void
+Use_Weapon(edict_t *ent, const gitem_t *item)
 {
 	int			ammo_index;
 	gitem_t		*ammo_item;
@@ -408,7 +409,8 @@ void Use_Weapon (edict_t *ent, gitem_t *item)
 Drop_Weapon
 ================
 */
-void Drop_Weapon (edict_t *ent, gitem_t *item)
+void
+Drop_Weapon(edict_t *ent, const gitem_t *item)
 {
 	int		index;
 
@@ -436,7 +438,7 @@ void Drop_Weapon (edict_t *ent, gitem_t *item)
  * Returns ammo used on a single shot for the given weapon
  */
 int
-get_ammo_usage(gitem_t *weap)
+get_ammo_usage(const gitem_t *weap)
 {
 	if (!weap)
 	{

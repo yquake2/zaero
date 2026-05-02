@@ -248,8 +248,8 @@ typedef struct gitem_s
 {
 	const char *classname; /* spawning name */
 	qboolean (*pickup)(struct edict_s *ent, struct edict_s *other);
-	void (*use)(struct edict_s *ent, struct gitem_s *item);
-	void (*drop)(struct edict_s *ent, struct gitem_s *item);
+	void (*use)(struct edict_s *ent, const struct gitem_s *item);
+	void (*drop)(struct edict_s *ent, const struct gitem_s *item);
 	void (*weaponthink)(struct edict_s *ent);
 	const char *pickup_sound;
 	const char *world_model;
@@ -320,7 +320,7 @@ typedef struct
 	float intermissiontime; /* time the intermission was started */
 	const char *changemap;
 	int exitintermission;
-	int			fadeFrames;
+	int fadeFrames;
 	vec3_t intermission_origin;
 	vec3_t intermission_angle;
 
@@ -665,7 +665,7 @@ gitem_t *FindItemByClassname(const char *classname);
 
 #define ITEM_INDEX(x) ((x) - itemlist)
 
-edict_t *Drop_Item(edict_t *ent, gitem_t *item);
+edict_t *Drop_Item(edict_t *ent, const gitem_t *item);
 void SetRespawn(edict_t *ent, float delay);
 void ChangeWeapon(edict_t *ent);
 void SpawnItem(edict_t *ent, gitem_t *item);
@@ -843,8 +843,8 @@ void DeathmatchScoreboardMessage(edict_t *ent, edict_t *killer);
 /* g_pweapon.c */
 void PlayerNoise(edict_t *who, vec3_t where, int type);
 qboolean Pickup_Weapon(edict_t *ent, edict_t *other);
-void Use_Weapon(edict_t *ent, gitem_t *item);
-void Drop_Weapon(edict_t *ent, gitem_t *item);
+void Use_Weapon(edict_t *ent, const gitem_t *item);
+void Drop_Weapon(edict_t *ent, const gitem_t *item);
 void Weapon_Blaster(edict_t *ent);
 void Weapon_Shotgun(edict_t *ent);
 void Weapon_SuperShotgun(edict_t *ent);
@@ -862,11 +862,11 @@ void Weapon_LaserTripBomb(edict_t *ent);
 void Weapon_SonicCannon(edict_t *ent);
 void Weapon_EMPNuke(edict_t *ent);
 void Weapon_A2k(edict_t *ent);
-void Use_Quad(edict_t *ent, gitem_t *item);
-void Use_Visor(edict_t *ent, gitem_t *item);
+void Use_Quad(edict_t *ent, const gitem_t *item);
+void Use_Visor(edict_t *ent, const gitem_t *item);
 void Action_Push(edict_t *ent);
-void Use_PlasmaShield(edict_t *ent, gitem_t *item);
-int get_ammo_usage(gitem_t *weap);
+void Use_PlasmaShield(edict_t *ent, const gitem_t *item);
+int get_ammo_usage(const gitem_t *weap);
 
 /* m_move.c */
 qboolean M_CheckBottom(edict_t *ent);
@@ -956,9 +956,9 @@ typedef struct
 	int max_empnuke;
 	int max_plasmashield;
 
-	gitem_t *weapon;
-	gitem_t *lastweapon;
-	gitem_t *lastweapon2; // this if for inventory hiding items
+	const gitem_t *weapon;
+	const gitem_t *lastweapon;
+	const gitem_t *lastweapon2; // this if for inventory hiding items
 
 	int power_cubes; /* used for tracking the cubes in coop games */
 	int score; /* for calculating total unit score in coop games */
@@ -1004,7 +1004,7 @@ struct gclient_s
 
 	qboolean weapon_thunk;
 
-	gitem_t *newweapon;
+	const gitem_t *newweapon;
 
 	/* sum up damage over an entire frame, so
 	   shotgun blasts give a single big kick */
@@ -1218,7 +1218,7 @@ struct edict_s
 
 	int style; /* also used as areaportal number */
 
-	gitem_t *item;              /* for bonus items */
+	const gitem_t *item;              /* for bonus items */
 
 	/* common data blocks */
 	moveinfo_t moveinfo;

@@ -238,7 +238,8 @@ edict_t *findNextCamera(edict_t *old)
 	return NULL;
 }
 
-void Use_Visor (edict_t *ent, gitem_t *item)
+void
+Use_Visor(edict_t *ent, const gitem_t *item)
 {
 	if (!ent || !item)
 	{
@@ -446,7 +447,8 @@ void PlasmaShield_killed (edict_t *self, edict_t *inflictor, edict_t *attacker, 
 	PlasmaShield_die(self);
 }
 
-void Use_PlasmaShield (edict_t *ent, gitem_t *item)
+void
+Use_PlasmaShield(edict_t *ent, const gitem_t *item)
 {
 	int ammoIdx = ITEM_INDEX(item);
 	edict_t	*PlasmaShield;

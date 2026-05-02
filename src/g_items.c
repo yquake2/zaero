@@ -193,7 +193,8 @@ qboolean Pickup_Powerup (edict_t *ent, edict_t *other)
 	return true;
 }
 
-void Drop_General (edict_t *ent, gitem_t *item)
+void
+Drop_General(edict_t *ent, const gitem_t *item)
 {
 	Drop_Item (ent, item);
 	ent->client->pers.inventory[ITEM_INDEX(item)]--;
@@ -409,7 +410,8 @@ qboolean Pickup_Pack (edict_t *ent, edict_t *other)
 
 //======================================================================
 
-void Use_Quad (edict_t *ent, gitem_t *item)
+void
+Use_Quad(edict_t *ent, const gitem_t *item)
 {
 	int		timeout;
 
@@ -441,7 +443,8 @@ void Use_Quad (edict_t *ent, gitem_t *item)
 
 //======================================================================
 
-void Use_Breather (edict_t *ent, gitem_t *item)
+void
+Use_Breather(edict_t *ent, const gitem_t *item)
 {
 	if (!ent || !item)
 	{
@@ -459,7 +462,8 @@ void Use_Breather (edict_t *ent, gitem_t *item)
 
 //======================================================================
 
-void Use_Envirosuit (edict_t *ent, gitem_t *item)
+void
+Use_Envirosuit(edict_t *ent, const gitem_t *item)
 {
 	if (!ent || !item)
 	{
@@ -477,7 +481,8 @@ void Use_Envirosuit (edict_t *ent, gitem_t *item)
 
 //======================================================================
 
-void	Use_Invulnerability (edict_t *ent, gitem_t *item)
+void
+Use_Invulnerability(edict_t *ent, const gitem_t *item)
 {
 	if (!ent || !item)
 	{
@@ -497,7 +502,8 @@ void	Use_Invulnerability (edict_t *ent, gitem_t *item)
 
 //======================================================================
 
-void	Use_Silencer (edict_t *ent, gitem_t *item)
+void
+Use_Silencer(edict_t *ent, const gitem_t *item)
 {
 	if (!ent || !item)
 	{
@@ -644,7 +650,8 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 	return true;
 }
 
-void Drop_Ammo (edict_t *ent, gitem_t *item)
+void
+Drop_Ammo(edict_t *ent, const gitem_t *item)
 {
 	edict_t	*dropped;
 	int		index;
@@ -892,7 +899,8 @@ PowerArmorType(const edict_t *ent)
 	return POWER_ARMOR_NONE;
 }
 
-void Use_PowerArmor (edict_t *ent, gitem_t *item)
+void
+Use_PowerArmor (edict_t *ent, const gitem_t *item)
 {
 	int		index;
 
@@ -944,7 +952,8 @@ qboolean Pickup_PowerArmor (edict_t *ent, edict_t *other)
 	return true;
 }
 
-void Drop_PowerArmor (edict_t *ent, gitem_t *item)
+void
+Drop_PowerArmor(edict_t *ent, const gitem_t *item)
 {
 	if (!ent || !item)
 	{
@@ -1012,7 +1021,8 @@ qboolean Pickup_Visor(edict_t *ent, edict_t *other)
 	return true;
 }
 
-void Drop_Visor(edict_t *ent, gitem_t *item)
+void
+Drop_Visor(edict_t *ent, const gitem_t *item)
 {
 	if (!ent || !item)
 	{
@@ -1143,7 +1153,8 @@ void drop_make_touchable (edict_t *ent)
 	}
 }
 
-edict_t *Drop_Item (edict_t *ent, gitem_t *item)
+edict_t *
+Drop_Item(edict_t *ent, const gitem_t *item)
 {
 	edict_t	*dropped;
 	vec3_t	forward, right;
@@ -1197,7 +1208,8 @@ edict_t *Drop_Item (edict_t *ent, gitem_t *item)
 	return dropped;
 }
 
-void Use_Item (edict_t *ent, edict_t *other, edict_t *activator)
+void
+Use_Item(edict_t *ent, edict_t *other, edict_t *activator)
 {
 	if (!ent)
 	{

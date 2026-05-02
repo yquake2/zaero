@@ -464,9 +464,10 @@ void ClientObituary (edict_t *self, edict_t *inflictor, edict_t *attacker)
 
 void Touch_Item (edict_t *ent, edict_t *other, const cplane_t *plane, const csurface_t *surf);
 
-void TossClientWeapon (edict_t *self)
+void
+TossClientWeapon(edict_t *self)
 {
-	gitem_t		*item;
+	const gitem_t		*item;
 	edict_t		*drop;
 	qboolean	quad;
 	float		spread;
