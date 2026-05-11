@@ -216,7 +216,7 @@ void handler_standWhatNext (edict_t *self)
 	{
 		self->monsterinfo.currentmove = &handler_stand3;
 	}
-	else 
+	else
 	{
 		self->monsterinfo.currentmove = &handler_stand5;
 	}
@@ -403,7 +403,7 @@ void handler_dead (edict_t *self)
 }
 
 
-void handler_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void handler_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	if (!self)
 	{
@@ -485,7 +485,7 @@ void SP_monster_handler (edict_t *self)
 
 	gi.linkentity (self);
 
-	self->monsterinfo.currentmove = &handler_stand1;	
+	self->monsterinfo.currentmove = &handler_stand1;
 	self->monsterinfo.scale = MODEL_SCALE;
 
 	if(!(self->spawnflags & 16))

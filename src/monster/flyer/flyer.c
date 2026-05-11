@@ -9,8 +9,6 @@ flyer
 #include "../../header/local.h"
 #include "flyer.h"
 
-qboolean visible (edict_t *self, edict_t *other);
-
 static int	nextmove;			// Used for start/stop frames
 
 static int	sound_sight;
@@ -318,7 +316,7 @@ mframe_t flyer_frames_rollleft [] =
 mmove_t flyer_move_rollleft = {FRAME_rollf01, FRAME_rollf09, flyer_frames_rollleft, NULL};
 
 mframe_t flyer_frames_pain3 [] =
-{	
+{
 		{ai_move, 0, NULL},
 		{ai_move, 0, NULL},
 		{ai_move, 0, NULL},
@@ -349,7 +347,7 @@ mframe_t flyer_frames_pain1 [] =
 };
 mmove_t flyer_move_pain1 = {FRAME_pain101, FRAME_pain109, flyer_frames_pain1, flyer_run};
 
-mframe_t flyer_frames_defense [] = 
+mframe_t flyer_frames_defense [] =
 {
 		{ai_move, 0, NULL},
 		{ai_move, 0, NULL},
@@ -382,7 +380,7 @@ mframe_t flyer_frames_bankleft [] =
 		{ai_move, 0, NULL},
 		{ai_move, 0, NULL}
 };
-mmove_t flyer_move_bankleft = {FRAME_bankl01, FRAME_bankl07, flyer_frames_bankleft, NULL};		
+mmove_t flyer_move_bankleft = {FRAME_bankl01, FRAME_bankl07, flyer_frames_bankleft, NULL};
 
 
 void flyer_fire (edict_t *self, int flash_number)
@@ -404,7 +402,7 @@ void flyer_fire (edict_t *self, int flash_number)
 		effect = 0;
 	AngleVectors (self->s.angles, forward, right, NULL);
 	G_ProjectSource (self->s.origin, monster_flash_offset[flash_number], forward, right, start);
-	
+
 	VectorCopy (self->enemy->s.origin, end);
 	end[2] += self->enemy->viewheight;
 	VectorSubtract (end, start, dir);
@@ -518,7 +516,7 @@ mframe_t flyer_frames_loop_melee [] =
 		{ai_charge, 0, NULL},
 		{ai_charge, 0, NULL},
 		{ai_charge, 0, NULL}		// Loop Ends
-		
+
 };
 mmove_t flyer_move_loop_melee = {FRAME_attak107, FRAME_attak118, flyer_frames_loop_melee, flyer_check_melee};
 
@@ -587,7 +585,7 @@ void flyer_check_melee(edict_t *self)
 		return;
 	}
 
-	if (range (self, self->enemy) == RANGE_MELEE)
+	if (ai_range (self, self->enemy) == RANGE_MELEE)
 		if (random() <= 0.8)
 			self->monsterinfo.currentmove = &flyer_move_loop_melee;
 		else
@@ -615,7 +613,7 @@ void flyer_pain (edict_t *self, edict_t *other, float kick, int damage)
 	if (skill->value == SKILL_HARDPLUS)
 		return;		// no pain anims in nightmare
 
-	n = rand() % 3;
+	n = randk() % 3;
 	if (n == 0)
 	{
 		gi.sound (self, CHAN_VOICE, sound_pain1, 1, ATTN_NORM, 0);
@@ -634,7 +632,7 @@ void flyer_pain (edict_t *self, edict_t *other, float kick, int damage)
 }
 
 
-void flyer_die(edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void flyer_die(edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	if (!self)
 	{
@@ -644,7 +642,7 @@ void flyer_die(edict_t *self, edict_t *inflictor, edict_t *attacker, int damage,
 	gi.sound (self, CHAN_VOICE, sound_die, 1, ATTN_NORM, 0);
 	BecomeExplosion1(self);
 }
-	
+
 
 /*QUAKED monster_flyer (1 .5 0) (-16 -16 -24) (16 16 32) Ambush Trigger_Spawn Sight
 */
@@ -702,7 +700,7 @@ void SP_monster_flyer (edict_t *self)
 
 	gi.linkentity (self);
 
-	self->monsterinfo.currentmove = &flyer_move_stand;	
+	self->monsterinfo.currentmove = &flyer_move_stand;
 	self->monsterinfo.scale = MODEL_SCALE;
 
 	flymonster_start (self);

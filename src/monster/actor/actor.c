@@ -76,7 +76,7 @@ void actor_stand (edict_t *self)
 
 	// randomize on startup
 	if (level.time < 1.0)
-		self->s.frame = self->monsterinfo.currentmove->firstframe + (rand() % (self->monsterinfo.currentmove->lastframe - self->monsterinfo.currentmove->firstframe + 1));
+		self->s.frame = self->monsterinfo.currentmove->firstframe + (randk() % (self->monsterinfo.currentmove->lastframe - self->monsterinfo.currentmove->firstframe + 1));
 }
 
 
@@ -252,11 +252,11 @@ void actor_pain (edict_t *self, edict_t *other, float kick, int damage)
 		else
 			self->monsterinfo.currentmove = &actor_move_taunt;
 		name = actor_names[(self - g_edicts)%MAX_ACTOR_NAMES];
-		gi.cprintf (other, PRINT_CHAT, "%s: %s!\n", name, messages[rand()%3]);
+		gi.cprintf (other, PRINT_CHAT, "%s: %s!\n", name, messages[randk()%3]);
 		return;
 	}
 
-	n = rand() % 3;
+	n = randk() % 3;
 	if (n == 0)
 		self->monsterinfo.currentmove = &actor_move_pain1;
 	else if (n == 1)
@@ -346,7 +346,7 @@ mframe_t actor_frames_death2 [] =
 };
 mmove_t actor_move_death2 = {FRAME_death201, FRAME_death213, actor_frames_death2, actor_dead};
 
-void actor_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void actor_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	int		n;
 
@@ -374,7 +374,7 @@ void actor_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage
 	self->deadflag = DEAD_DEAD;
 	self->takedamage = DAMAGE_YES;
 
-	n = rand() % 2;
+	n = randk() % 2;
 	if (n == 0)
 		self->monsterinfo.currentmove = &actor_move_death1;
 	else
@@ -416,7 +416,7 @@ void actor_attack(edict_t *self)
 	}
 
 	self->monsterinfo.currentmove = &actor_move_attack;
-	n = (rand() & 15) + 3 + 7;
+	n = (randk() & 15) + 3 + 7;
 	self->monsterinfo.pausetime = level.time + n * FRAMETIME;
 }
 
@@ -514,7 +514,7 @@ void SP_misc_actor (edict_t *self)
 /*QUAKED target_actor (.5 .3 0) (-8 -8 -8) (8 8 8) JUMP SHOOT ATTACK x HOLD BRUTAL
 JUMP			jump in set direction upon reaching this target
 SHOOT			take a single shot at the pathtarget
-ATTACK			attack pathtarget until it or actor is dead 
+ATTACK			attack pathtarget until it or actor is dead
 
 "target"		next target_actor
 "pathtarget"	target of any action to be taken at this point
@@ -526,7 +526,7 @@ for JUMP only:
 "height"		speed thrown upwards (default 200)
 */
 
-void target_actor_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *surf)
+void target_actor_touch (edict_t *self, edict_t *other, const cplane_t *plane, const csurface_t *surf)
 {
 	vec3_t	v;
 

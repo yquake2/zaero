@@ -41,7 +41,7 @@ void floater_idle (edict_t *self)
 
 
 void floater_dead (edict_t *self);
-void floater_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point);
+void floater_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point);
 void floater_run (edict_t *self);
 void floater_wham (edict_t *self);
 void floater_zap (edict_t *self);
@@ -204,35 +204,35 @@ void floater_stand (edict_t *self)
 
 mframe_t floater_frames_activate [] =
 {
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
-	{ai_move,	0,	NULL},	
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
+	{ai_move,	0,	NULL},
 	{ai_move,	0,	NULL}
 };
 mmove_t floater_move_activate = {FRAME_actvat01, FRAME_actvat31, floater_frames_activate, NULL};
@@ -532,7 +532,7 @@ void floater_wham (edict_t *self)
 	}
 
 	gi.sound (self, CHAN_WEAPON, sound_attack3, 1, ATTN_NORM, 0);
-	fire_hit (self, aim, 5 + rand() % 6, -50);
+	fire_hit (self, aim, 5 + randk() % 6, -50);
 }
 
 void floater_zap (edict_t *self)
@@ -565,7 +565,7 @@ void floater_zap (edict_t *self)
 	gi.WriteByte (1);	//sparks
 	gi.multicast (origin, MULTICAST_PVS);
 
-	T_Damage (self->enemy, self, self, dir, self->enemy->s.origin, vec3_origin, 5 + rand() % 6, -10, DAMAGE_ENERGY, MOD_UNKNOWN);
+	T_Damage (self->enemy, self, self, dir, self->enemy->s.origin, vec3_origin, 5 + randk() % 6, -10, DAMAGE_ENERGY, MOD_UNKNOWN);
 }
 
 void floater_attack(edict_t *self)
@@ -612,7 +612,7 @@ void floater_pain (edict_t *self, edict_t *other, float kick, int damage)
 	if (skill->value == SKILL_HARDPLUS)
 		return;		// no pain anims in nightmare
 
-	n = (rand() + 1) % 3;
+	n = (randk() + 1) % 3;
 	if (n == 0)
 	{
 		gi.sound (self, CHAN_VOICE, sound_pain1, 1, ATTN_NORM, 0);
@@ -640,7 +640,7 @@ void floater_dead (edict_t *self)
 	gi.linkentity (self);
 }
 
-void floater_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void floater_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	if (!self)
 	{
@@ -701,11 +701,11 @@ void SP_monster_floater (edict_t *self)
 
 	gi.linkentity (self);
 
-	if (random() <= 0.5)		
-		self->monsterinfo.currentmove = &floater_move_stand1;	
+	if (random() <= 0.5)
+		self->monsterinfo.currentmove = &floater_move_stand1;
 	else
-		self->monsterinfo.currentmove = &floater_move_stand2;	
-	
+		self->monsterinfo.currentmove = &floater_move_stand2;
+
 	self->monsterinfo.scale = MODEL_SCALE;
 
 	flymonster_start (self);

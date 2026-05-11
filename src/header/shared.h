@@ -257,6 +257,13 @@ char *Info_ValueForKey(char *s, char *key);
 void Info_RemoveKey(char *s, char *key);
 void Info_SetValueForKey(char *s, char *key, char *value);
 qboolean Info_Validate(char *s);
+/* ============================================= */
+
+/* Random number generator */
+int randk(void);
+float frandk(void);
+float crandk(void);
+void randk_seed(void);
 
 /*
  * ==============================================================
@@ -477,9 +484,9 @@ typedef enum
 #define PMF_NO_PREDICTION 64    /* temporarily disables prediction (used for grappling hook) */
 
 /* this structure needs to be communicated bit-accurate/
-   from the server to the client to guarantee that 
-   prediction stays in sync, so no floats are used. 
-   if any part of the game code modifies this struct, it 
+   from the server to the client to guarantee that
+   prediction stays in sync, so no floats are used.
+   if any part of the game code modifies this struct, it
    will result in a prediction error of some degree. */
 typedef struct
 {
@@ -490,7 +497,7 @@ typedef struct
 	byte pm_flags;              /* ducked, jump_held, etc */
 	byte pm_time;               /* each unit = 8 ms */
 	short gravity;
-	short delta_angles[3];      /* add to command angles to get view direction 
+	short delta_angles[3];      /* add to command angles to get view direction
 								   changed by spawns, rotating objects, and teleporters */
 } pmove_state_t;
 
@@ -535,12 +542,12 @@ typedef struct
 
 	/* callbacks to test the world */
 	trace_t (*trace)(vec3_t start, vec3_t mins, vec3_t maxs, vec3_t end);
-	int (*pointcontents)(vec3_t point);
+	int (*pointcontents)(const vec3_t point);
 } pmove_t;
 
-/* entity_state_t->effects 
+/* entity_state_t->effects
    Effects are things handled on the client side (lights, particles,
-   frame animations)  that happen constantly on the given entity. 
+   frame animations)  that happen constantly on the given entity.
    An entity that has effects will be sent to the client even if
    it has a zero index model. */
 #define EF_ROTATE 0x00000001                /* rotate (bonus items) */
@@ -799,7 +806,7 @@ typedef struct
 #define MZ2_WIDOW_DISRUPTOR 148
 #define MZ2_WIDOW_BLASTER 149
 #define MZ2_WIDOW_RAIL 150
-#define MZ2_WIDOW_PLASMABEAM 151 
+#define MZ2_WIDOW_PLASMABEAM 151
 #define MZ2_CARRIER_MACHINEGUN_L2 152
 #define MZ2_CARRIER_MACHINEGUN_R2 153
 #define MZ2_WIDOW_RAIL_LEFT 154
@@ -862,9 +869,9 @@ typedef struct
 
 extern vec3_t monster_flash_offset[];
 
-/* Temp entity events are for things that happen 
-   at a location seperate from any existing entity. 
-   Temporary entity messages are explicitly constructed 
+/* Temp entity events are for things that happen
+   at a location seperate from any existing entity.
+   Temporary entity messages are explicitly constructed
    and broadcast. */
 typedef enum
 {
@@ -935,7 +942,7 @@ typedef enum
 #define SPLASH_BLOOD 6
 
 /* sound channels:
-   channel 0 never willingly overrides 
+   channel 0 never willingly overrides
    other channels (1-7) allways override
    a playing sound on that channel */
 #define CHAN_AUTO 0
@@ -1018,8 +1025,8 @@ typedef enum
 #define ANGLE2SHORT(x) ((int)((x) * 65536 / 360) & 65535)
 #define SHORT2ANGLE(x) ((x) * (360.0 / 65536))
 
-/* config strings are a general means of communication from 
-   the server to all connected clients. Each config string 
+/* config strings are a general means of communication from
+   the server to all connected clients. Each config string
    can be at most MAX_QPATH characters. */
 #define CS_NAME 0
 #define CS_CDTRACK 1
@@ -1043,9 +1050,9 @@ typedef enum
 
 /* ============================================== */
 
-/* entity_state_t->event values 
-   entity events are for effects that take place reletive 
-   to an existing entities origin.  Very network efficient. 
+/* entity_state_t->event values
+   entity events are for effects that take place reletive
+   to an existing entities origin.  Very network efficient.
    All muzzle flashes really should be converted to events... */
 typedef enum
 {
@@ -1059,8 +1066,8 @@ typedef enum
 	EV_OTHER_TELEPORT
 } entity_event_t;
 
-/* entity_state_t is the information conveyed from the server 
-   in an update message about entities that the client will 
+/* entity_state_t is the information conveyed from the server
+   in an update message about entities that the client will
    need to render in some way */
 typedef struct entity_state_s
 {
@@ -1073,7 +1080,7 @@ typedef struct entity_state_s
 	int modelindex2, modelindex3, modelindex4;      /* weapons, CTF flags, etc */
 	int frame;
 	int skinnum;
-	unsigned int effects;   
+	unsigned int effects;
 	int renderfx;
 	int solid;              /* for client side prediction, 8*(bits 0-4) is x/y radius */
 							/* 8*(bits 5-9) is z down distance, 8(bits10-15) is z up */
@@ -1086,9 +1093,9 @@ typedef struct entity_state_s
 
 /* ============================================== */
 
-/* player_state_t is the information needed in addition to pmove_state_t 
-   to rendered a view.  There will only be 10 player_state_t sent each second, 
-   but the number of pmove_state_t changes will be reletive to client 
+/* player_state_t is the information needed in addition to pmove_state_t
+   to rendered a view.  There will only be 10 player_state_t sent each second,
+   but the number of pmove_state_t changes will be reletive to client
    frame rates */
 typedef struct
 {

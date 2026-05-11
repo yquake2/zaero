@@ -4,7 +4,7 @@
  * Functionpointers to every function in the game.so.
  *
  * =======================================================================
- */ 
+ */
 
 {"ReadLevel", (byte *)ReadLevel},
 {"WriteLevel", (byte *)WriteLevel},
@@ -375,8 +375,6 @@
 {"CopyToBodyQue", (byte *)CopyToBodyQue},
 {"body_die", (byte *)body_die},
 {"InitBodyQue", (byte *)InitBodyQue},
-{"SelectSpawnPoint", (byte *)SelectSpawnPoint},
-{"SelectCoopSpawnPoint", (byte *)SelectCoopSpawnPoint},
 {"SelectDeathmatchSpawnPoint", (byte *)SelectDeathmatchSpawnPoint},
 {"SelectFarthestDeathmatchSpawnPoint", (byte *)SelectFarthestDeathmatchSpawnPoint},
 {"SelectRandomDeathmatchSpawnPoint", (byte *)SelectRandomDeathmatchSpawnPoint},
@@ -1218,7 +1216,6 @@
 {"CheckTeamDamage", (byte *)CheckTeamDamage},
 {"M_ReactToDamage", (byte *)M_ReactToDamage},
 {"CheckArmor", (byte *)CheckArmor},
-{"CheckPowerArmor", (byte *)CheckPowerArmor},
 {"SpawnDamage", (byte *)SpawnDamage},
 {"Killed", (byte *)Killed},
 {"CanDamage", (byte *)CanDamage},
@@ -1259,7 +1256,7 @@
 {"inweaponLineOfSight", (byte *)inweaponLineOfSight},
 {"infront", (byte *)infront},
 {"visible", (byte *)visible},
-{"range", (byte *)range},
+{"ai_range", (byte *)ai_range},
 {"ai_turn", (byte *)ai_turn},
 {"ai_charge", (byte *)ai_charge},
 {"ai_walk", (byte *)ai_walk},

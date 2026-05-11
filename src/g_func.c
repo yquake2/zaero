@@ -258,10 +258,10 @@ void AngleMove_Begin (edict_t *ent)
 		VectorSubtract (ent->moveinfo.end_angles, ent->s.angles, destdelta);
 	else
 		VectorSubtract (ent->moveinfo.start_angles, ent->s.angles, destdelta);
-	
+
 	// calculate length of vector
 	len = VectorLength (destdelta);
-	
+
 	// divide by speed to get time to reach dest
 	traveltime = len / ent->moveinfo.speed;
 
@@ -473,14 +473,14 @@ void Think_SmoothAccelMove (edict_t *ent)
 	}
 
 	ent->moveinfo.current_speed += ent->moveinfo.decel;
-	
+
 	if(ent->moveinfo.accel)
 	{
 		if(ent->moveinfo.current_speed > ent->moveinfo.speed)
 		{
 			ent->moveinfo.current_speed = ent->moveinfo.speed;
 		}
-	} 
+	}
 	else if(ent->moveinfo.current_speed < ent->moveinfo.speed)
 	{
 		ent->moveinfo.current_speed = ent->moveinfo.speed;
@@ -610,7 +610,7 @@ void Use_Plat (edict_t *ent, edict_t *other /* unused */, edict_t *activator /* 
 }
 
 
-void Touch_Plat_Center (edict_t *ent, edict_t *other, cplane_t *plane /* unused */, csurface_t *surf /* unused */)
+void Touch_Plat_Center (edict_t *ent, edict_t *other, const cplane_t *plane /* unused */, const csurface_t *surf /* unused */)
 {
 	if (!ent || !other)
 	{
@@ -619,7 +619,7 @@ void Touch_Plat_Center (edict_t *ent, edict_t *other, cplane_t *plane /* unused 
 
 	if (!other->client)
 		return;
-		
+
 	if (other->health <= 0)
 		return;
 
@@ -628,7 +628,7 @@ void Touch_Plat_Center (edict_t *ent, edict_t *other, cplane_t *plane /* unused 
 	{
 		if (ent->spawnflags & PLAT_LOW_TRIGGER_2)
 		{
-			if (other->s.origin[2] + other->mins[2] > 
+			if (other->s.origin[2] + other->mins[2] >
 				ent->moveinfo.end_origin[2] + ent->maxs[2] /*+ ent->size[2] */+ 8)
 				return;
 		}
@@ -637,7 +637,7 @@ void Touch_Plat_Center (edict_t *ent, edict_t *other, cplane_t *plane /* unused 
 	else if (ent->think && ent->moveinfo.state == STATE_TOP)
 		ent->nextthink = level.time + 1;	// the player is still on the plat, so delay going down
 }
-                                            
+
 void plat_spawn_inside_trigger (edict_t *ent)
 {
 	edict_t	*trigger;
@@ -650,13 +650,13 @@ void plat_spawn_inside_trigger (edict_t *ent)
 
 	//
 	// middle trigger
-	//	
+	//
 	trigger = G_Spawn();
 	trigger->touch = Touch_Plat_Center;
 	trigger->movetype = MOVETYPE_NONE;
 	trigger->solid = SOLID_TRIGGER;
 	trigger->enemy = ent;
-	
+
 	tmin[0] = ent->mins[0] + 25;
 	tmin[1] = ent->mins[1] + 25;
 	tmin[2] = ent->mins[2];
@@ -669,7 +669,7 @@ void plat_spawn_inside_trigger (edict_t *ent)
 
 	if (ent->spawnflags & PLAT_LOW_TRIGGER)
 		tmax[2] = tmin[2] + 8;
-	
+
 	if (tmax[0] - tmin[0] <= 0)
 	{
 		tmin[0] = (ent->mins[0] + ent->maxs[0]) *0.5;
@@ -680,7 +680,7 @@ void plat_spawn_inside_trigger (edict_t *ent)
 		tmin[1] = (ent->mins[1] + ent->maxs[1]) *0.5;
 		tmax[1] = tmin[1] + 1;
 	}
-	
+
 	VectorCopy (tmin, trigger->mins);
 	VectorCopy (tmax, trigger->maxs);
 
@@ -751,7 +751,7 @@ void SP_func_plat (edict_t *ent)
 
 	ent->use = Use_Plat;
 
-	plat_spawn_inside_trigger (ent);	// the "start moving" trigger	
+	plat_spawn_inside_trigger (ent);	// the "start moving" trigger
 
 	if (ent->targetname)
 	{
@@ -804,7 +804,7 @@ void rotating_blocked (edict_t *self, edict_t *other)
 	T_Damage (other, self, self, vec3_origin, other->s.origin, vec3_origin, self->dmg, 1, 0, MOD_CRUSH);
 }
 
-void rotating_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *surf)
+void rotating_touch (edict_t *self, edict_t *other, const cplane_t *plane, const csurface_t *surf)
 {
 	if (!self || !other)
 	{
@@ -862,7 +862,7 @@ void rotating_use (edict_t *self, edict_t *other /* unused */, edict_t *activato
 	}
 
 	// if we're at full speed or we're accelerating
-	if (self->moveinfo.state == STATE_TOPSPEED || self->moveinfo.state == STATE_ACCEL) 
+	if (self->moveinfo.state == STATE_TOPSPEED || self->moveinfo.state == STATE_ACCEL)
 	{
 		// we need to slow down
 		if (self->decel <= 0)
@@ -886,7 +886,7 @@ void rotating_use (edict_t *self, edict_t *other /* unused */, edict_t *activato
 		{
 			VectorScale (self->movedir, self->speed, self->avelocity);
 			self->moveinfo.current_speed = self->speed;
-			self->moveinfo.state = STATE_TOPSPEED;	
+			self->moveinfo.state = STATE_TOPSPEED;
 		}
 		else
 		{
@@ -1051,7 +1051,7 @@ void button_use (edict_t *self, edict_t *other, edict_t *activator)
 	button_fire (self);
 }
 
-void button_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *surf)
+void button_touch (edict_t *self, edict_t *other, const cplane_t *plane, const csurface_t *surf)
 {
 	if (!self || !other)
 	{
@@ -1068,7 +1068,7 @@ void button_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *s
 	button_fire (self);
 }
 
-void button_killed (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void button_killed (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	if (!self)
 	{
@@ -1098,7 +1098,7 @@ void SP_func_button (edict_t *ent)
 
 	if (ent->sounds != 1)
 		ent->moveinfo.sound_start = gi.soundindex ("switches/butn2.wav");
-	
+
 	if (!ent->speed)
 		ent->speed = 40;
 	if (!ent->accel)
@@ -1256,7 +1256,7 @@ void door_go_down (edict_t *self)
 		self->takedamage = DAMAGE_YES;
 		self->health = self->max_health;
 	}
-	
+
 	self->moveinfo.state = STATE_DOWN;
 	if (strcmp(self->classname, "func_door") == 0)
 		Move_Calc (self, self->moveinfo.start_origin, door_hit_bottom, false);
@@ -1280,7 +1280,7 @@ void door_go_up (edict_t *self, edict_t *activator)
 			self->nextthink = level.time + self->moveinfo.wait;
 		return;
 	}
-	
+
 	if (!(self->flags & FL_TEAMSLAVE))
 	{
 		if (self->moveinfo.sound_start)
@@ -1325,7 +1325,7 @@ void door_openclose (edict_t *self, edict_t *other, edict_t *activator)
 			return;
 		}
 	}
-	
+
 	// trigger all paired doors
 	for (ent = self ; ent ; ent = ent->teamchain)
 	{
@@ -1337,7 +1337,7 @@ void door_openclose (edict_t *self, edict_t *other, edict_t *activator)
 	}
 };
 
-void door_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *surf);
+void door_touch (edict_t *self, edict_t *other, const cplane_t *plane, const csurface_t *surf);
 void door_use (edict_t *self, edict_t *other, edict_t *activator)
 {
 	// toggle active?
@@ -1368,7 +1368,7 @@ void door_use (edict_t *self, edict_t *other, edict_t *activator)
 	door_openclose(self, other, activator);
 }
 
-void Touch_DoorTrigger (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *surf)
+void Touch_DoorTrigger (edict_t *self, edict_t *other, const cplane_t *plane, const csurface_t *surf)
 {
 	if (!self || !other)
 	{
@@ -1390,7 +1390,7 @@ void Touch_DoorTrigger (edict_t *self, edict_t *other, cplane_t *plane, csurface
 	if (self->owner->active & DOOR_ACTIVE_TOGGLE &&
 		!(self->owner->active & DOOR_ACTIVE_ON))
 		return;
-	
+
 	self->touch_debounce_time = level.time + 1.0;
 
 	door_openclose (self->owner, other, other);
@@ -1463,7 +1463,7 @@ void Think_SpawnDoorTrigger (edict_t *ent)
 		AddPointToBounds (other->absmax, mins, maxs);
 	}
 
-	// expand 
+	// expand
 	mins[0] -= 60;
 	mins[1] -= 60;
 	maxs[0] += 60;
@@ -1530,7 +1530,7 @@ void door_blocked  (edict_t *self, edict_t *other)
 	}
 }
 
-void door_killed (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void door_killed (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	edict_t	*ent;
 
@@ -1547,7 +1547,7 @@ void door_killed (edict_t *self, edict_t *inflictor, edict_t *attacker, int dama
 	door_use (self->teammaster, attacker, attacker);
 }
 
-void door_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *surf)
+void door_touch (edict_t *self, edict_t *other, const cplane_t *plane, const csurface_t *surf)
 {
 	if (!self || !other)
 	{
@@ -1591,7 +1591,7 @@ void SP_func_door (edict_t *ent)
 
 	ent->blocked = door_blocked;
 	ent->use = door_use;
-	
+
 	if (!ent->speed)
 		ent->speed = 100;
 	if (deathmatch->value)
@@ -1638,7 +1638,7 @@ void SP_func_door (edict_t *ent)
 		gi.soundindex ("misc/talk.wav");
 		ent->touch = door_touch;
 	}
-	
+
 	ent->moveinfo.speed = ent->speed;
 	ent->moveinfo.accel = ent->accel;
 	ent->moveinfo.decel = ent->decel;
@@ -1771,7 +1771,7 @@ void SP_func_door_rotating (edict_t *ent)
 		ent->die = door_killed;
 		ent->max_health = ent->health;
 	}
-	
+
 	if (ent->targetname && ent->message)
 	{
 		gi.soundindex ("misc/talk.wav");
@@ -1989,7 +1989,7 @@ void train_wait (edict_t *self)
 	{
 		train_next (self);
 	}
-	
+
 }
 
 void train_next (edict_t *self)
@@ -2326,7 +2326,7 @@ void parseTargets(edict_t *self)
 		char *str = NULL;
 		char *targets[16];
 		int i = 0;
-		
+
 		// do we have a series of targets to choose from randomly?
 		str = Z_MALLOC(strlen(self->target)+1);
 		strcpy(str, self->target);
@@ -2350,7 +2350,7 @@ void parseTargets(edict_t *self)
 		}
 		self->target = NULL;
 		Z_FREE(str);
-	}	
+	}
 
 	self->numTargets = numTargets;
 }
@@ -2365,7 +2365,7 @@ void func_timer_think (edict_t *self)
 	if (self->numTargets <= 0)
 		return;
 
-	self->target = self->targets[rand() % self->numTargets];
+	self->target = self->targets[randk() % self->numTargets];
 
 	G_UseTargets (self, self->activator);
 	self->nextthink = level.time + self->wait + crandom() * self->random;
@@ -2624,7 +2624,7 @@ void door_secret_blocked  (edict_t *self, edict_t *other)
 	T_Damage (other, self, self, vec3_origin, other->s.origin, vec3_origin, self->dmg, 1, 0, MOD_CRUSH);
 }
 
-void door_secret_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void door_secret_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	if (!self || !attacker)
 	{
@@ -2701,7 +2701,7 @@ void SP_func_door_secret (edict_t *ent)
 		gi.soundindex ("misc/talk.wav");
 		ent->touch = door_touch;
 	}
-	
+
 	ent->classname = "func_door";
 
 	gi.linkentity (ent);
@@ -2723,7 +2723,7 @@ void use_killbox (edict_t *self, edict_t *other, edict_t *activator)
 	/* Hack to make sure that really everything is killed */
 	self->count--;
 
-	if (!self->count) 
+	if (!self->count)
 	{
 		self->think = G_FreeEdict;
 		self->nextthink = level.time + 1;

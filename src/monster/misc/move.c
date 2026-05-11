@@ -52,7 +52,7 @@ realcheck:
 	// check it for real...
 	//
 	start[2] = mins[2];
-	
+
 	// the midpoint must be within 16 of the bottom
 	start[0] = stop[0] = (mins[0] + maxs[0])*0.5;
 	start[1] = stop[1] = (mins[1] + maxs[1])*0.5;
@@ -62,16 +62,16 @@ realcheck:
 	if (trace.fraction == 1.0)
 		return false;
 	mid = bottom = trace.endpos[2];
-	
-	// the corners must be within 16 of the midpoint	
+
+	// the corners must be within 16 of the midpoint
 	for	(x=0 ; x<=1 ; x++)
 		for	(y=0 ; y<=1 ; y++)
 		{
 			start[0] = stop[0] = x ? maxs[0] : mins[0];
 			start[1] = stop[1] = y ? maxs[1] : mins[1];
-			
+
 			trace = gi.trace (start, vec3_origin, vec3_origin, stop, ent, MASK_MONSTERSOLID);
-			
+
 			if (trace.fraction != 1.0 && trace.endpos[2] > bottom)
 				bottom = trace.endpos[2];
 			if (trace.fraction == 1.0 || mid - trace.endpos[2] > STEPSIZE)
@@ -110,7 +110,7 @@ qboolean SV_movestep (edict_t *ent, vec3_t move, qboolean relink)
 		return false;
 	}
 
-	// try the move	
+	// try the move
 	VectorCopy (ent->s.origin, oldorg);
 	VectorAdd (ent->s.origin, move, neworg);
 
@@ -147,7 +147,7 @@ qboolean SV_movestep (edict_t *ent, vec3_t move, qboolean relink)
 				}
 			}
 			trace = gi.trace (ent->s.origin, ent->mins, ent->maxs, neworg, ent, MASK_MONSTERSOLID);
-	
+
 			// fly monsters don't enter water voluntarily
 			if (ent->flags & FL_FLY)
 			{
@@ -186,11 +186,11 @@ qboolean SV_movestep (edict_t *ent, vec3_t move, qboolean relink)
 				}
 				return true;
 			}
-			
+
 			if (!ent->enemy)
 				break;
 		}
-		
+
 		return false;
 	}
 
@@ -223,7 +223,7 @@ qboolean SV_movestep (edict_t *ent, vec3_t move, qboolean relink)
 	{
 		test[0] = trace.endpos[0];
 		test[1] = trace.endpos[1];
-		test[2] = trace.endpos[2] + ent->mins[2] + 1;	
+		test[2] = trace.endpos[2] + ent->mins[2] + 1;
 		contents = gi.pointcontents(test);
 
 		if (contents & MASK_WATER && ent->movetype != MOVETYPE_FALLFLOAT)
@@ -256,13 +256,13 @@ qboolean SV_movestep (edict_t *ent, vec3_t move, qboolean relink)
 			ent->groundentity = NULL;
 			return true;
 		}
-	
+
 		return false;		// walked off an edge
 	}
 
 	// check point traces down for dangling corners
 	VectorCopy (trace.endpos, ent->s.origin);
-	
+
 	if (!M_CheckBottom (ent))
 	{
 		if ( ent->flags & FL_PARTIALGROUND )
@@ -354,7 +354,7 @@ void M_ChangeYaw (edict_t *ent)
 		if (move < -speed)
 			move = -speed;
 	}
-	
+
 	ent->s.angles[YAW] = anglemod (current + move);
 }
 
@@ -464,20 +464,20 @@ void SV_NewChaseDir (edict_t *actor, edict_t *enemy, float dist)
 			tdir = d[2] == 90 ? 45 : 315;
 		else
 			tdir = d[2] == 90 ? 135 : 215;
-			
+
 		if (tdir != turnaround && SV_StepDirection(actor, tdir, dist))
 			return;
 	}
 
 	// try other directions
-	if ( ((rand()&3) & 1) ||  fabs(deltay)>fabs(deltax))
+	if ( ((randk()&3) & 1) ||  fabs(deltay)>fabs(deltax))
 	{
 		tdir=d[1];
 		d[1]=d[2];
 		d[2]=tdir;
 	}
 
-	if (d[1]!=DI_NODIR && d[1]!=turnaround 
+	if (d[1]!=DI_NODIR && d[1]!=turnaround
 	&& SV_StepDirection(actor, d[1], dist))
 			return;
 
@@ -490,7 +490,7 @@ void SV_NewChaseDir (edict_t *actor, edict_t *enemy, float dist)
 	if (olddir!=DI_NODIR && SV_StepDirection(actor, olddir, dist))
 			return;
 
-	if (rand()&1) 	/*randomly determine direction of search*/
+	if (randk()&1) 	/*randomly determine direction of search*/
 	{
 		for (tdir=0 ; tdir<=315 ; tdir += 45)
 			if (tdir!=turnaround && SV_StepDirection(actor, tdir, dist) )
@@ -565,7 +565,7 @@ void M_MoveToGoal (edict_t *ent, float dist)
 		return;
 
 	// bump around...
-	if ( (rand()&3)==1 || !SV_StepDirection (ent, ent->ideal_yaw, dist))
+	if ( (randk()&3)==1 || !SV_StepDirection (ent, ent->ideal_yaw, dist))
 	{
 		if (ent->inuse)
 			SV_NewChaseDir (ent, goal, dist);
@@ -591,7 +591,7 @@ qboolean M_walkmove (edict_t *ent, float yaw, float dist)
 		return false;
 
 	yaw = yaw*M_PI*2 / 360;
-	
+
 	move[0] = cos(yaw)*dist;
 	move[1] = sin(yaw)*dist;
 	move[2] = 0;
@@ -627,7 +627,7 @@ qboolean M_MoveAwayFromFlare(edict_t *self, float dist)
 		if (Q_stricmp(e->classname, "flare") == 0)
 			break;
 	}
-	
+
 	goal = G_Spawn();
 	self->goalentity = goal;
 	if (e == NULL)
@@ -643,14 +643,14 @@ qboolean M_MoveAwayFromFlare(edict_t *self, float dist)
 		VectorMA(self->s.origin, 128, delta, goal->s.origin);
 	}
 
-	if (rand() & (7 == 1))
+	if ((randk() & 7) == 1)
 	{
 		// set the ideal_yaw
 		VectorSubtract(goal->s.origin, self->s.origin, delta);
 		self->ideal_yaw = vectoyaw(delta);
 	}
 
-	if ( (rand()&3)==1 || !SV_StepDirection (self, self->ideal_yaw, dist))
+	if ( (randk()&3)==1 || !SV_StepDirection (self, self->ideal_yaw, dist))
 	{
 		SV_NewChaseDir (self, goal, dist);
 	}

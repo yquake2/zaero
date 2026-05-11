@@ -49,13 +49,10 @@ void gunner_search (edict_t *self)
 	gi.sound (self, CHAN_VOICE, sound_search, 1, ATTN_NORM, 0);
 }
 
-
-qboolean visible (edict_t *self, edict_t *other);
 void GunnerGrenade (edict_t *self);
 void GunnerFire (edict_t *self);
 void gunner_fire_chain(edict_t *self);
 void gunner_refire_chain(edict_t *self);
-
 
 void gunner_stand (edict_t *self);
 
@@ -318,7 +315,7 @@ void gunner_pain (edict_t *self, edict_t *other, float kick, int damage)
 
 	self->pain_debounce_time = level.time + 3;
 
-	if (rand()&1)
+	if (randk()&1)
 		gi.sound (self, CHAN_VOICE, sound_pain, 1, ATTN_NORM, 0);
 	else
 		gi.sound (self, CHAN_VOICE, sound_pain2, 1, ATTN_NORM, 0);
@@ -365,7 +362,7 @@ mframe_t gunner_frames_death [] =
 };
 mmove_t gunner_move_death = {FRAME_death01, FRAME_death11, gunner_frames_death, gunner_dead};
 
-void gunner_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void gunner_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	int		n;
 
@@ -535,7 +532,7 @@ void GunnerGrenade (edict_t *self)
 		flash_number = MZ2_GUNNER_GRENADE_2;
 	else if (self->s.frame == FRAME_attak111)
 		flash_number = MZ2_GUNNER_GRENADE_3;
-	else 
+	else
 		flash_number = MZ2_GUNNER_GRENADE_4;
 
 	AngleVectors (self->s.angles, forward, right, NULL);
@@ -617,7 +614,7 @@ void gunner_attack(edict_t *self)
 		return;
 	}
 
-	if (range (self, self->enemy) == RANGE_MELEE)
+	if (ai_range (self, self->enemy) == RANGE_MELEE)
 	{
 		self->monsterinfo.currentmove = &gunner_move_attack_chain;
 	}
@@ -672,13 +669,13 @@ void SP_monster_gunner (edict_t *self)
 		return;
 	}
 
-	sound_death = gi.soundindex ("gunner/death1.wav");	
-	sound_pain = gi.soundindex ("gunner/gunpain2.wav");	
-	sound_pain2 = gi.soundindex ("gunner/gunpain1.wav");	
-	sound_idle = gi.soundindex ("gunner/gunidle1.wav");	
-	sound_open = gi.soundindex ("gunner/gunatck1.wav");	
-	sound_search = gi.soundindex ("gunner/gunsrch1.wav");	
-	sound_sight = gi.soundindex ("gunner/sight1.wav");	
+	sound_death = gi.soundindex ("gunner/death1.wav");
+	sound_pain = gi.soundindex ("gunner/gunpain2.wav");
+	sound_pain2 = gi.soundindex ("gunner/gunpain1.wav");
+	sound_idle = gi.soundindex ("gunner/gunidle1.wav");
+	sound_open = gi.soundindex ("gunner/gunatck1.wav");
+	sound_search = gi.soundindex ("gunner/gunsrch1.wav");
+	sound_sight = gi.soundindex ("gunner/sight1.wav");
 
 	gi.soundindex ("gunner/gunatck2.wav");
 	gi.soundindex ("gunner/gunatck3.wav");
@@ -707,7 +704,7 @@ void SP_monster_gunner (edict_t *self)
 
 	gi.linkentity (self);
 
-	self->monsterinfo.currentmove = &gunner_move_stand;	
+	self->monsterinfo.currentmove = &gunner_move_stand;
 	self->monsterinfo.scale = MODEL_SCALE;
 
 	walkmonster_start (self);

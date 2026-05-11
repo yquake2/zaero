@@ -125,7 +125,7 @@ void P_DamageFeedback (edict_t *player)
 	// play an apropriate pain sound
 	if ((level.time > player->pain_debounce_time) && !(player->flags & FL_GODMODE) && (client->invincible_framenum <= level.framenum) && player->health > 0)
 	{
-		r = 1 + (rand()&1);
+		r = 1 + (randk()&1);
 		player->pain_debounce_time = level.time + 0.7;
 		if (player->health < 25)
 			l = 25;
@@ -206,7 +206,7 @@ Auto pitching on slopes?
   fall from 256: 580 = 336400
   fall from 384: 720 = 518400
   fall from 512: 800 = 640000
-  fall from 640: 960 = 
+  fall from 640: 960 =
 
   damage = deltavelocity*deltavelocity  * 0.0001
 
@@ -342,7 +342,7 @@ void SV_CalcViewOffset (edict_t *ent)
 			ent->client->ps.viewangles[YAW] += framepercent * 15;
 		}
 		else
-			VectorCopy (ent->client->zCameraTrack->s.angles, ent->client->ps.viewangles);  
+			VectorCopy (ent->client->zCameraTrack->s.angles, ent->client->ps.viewangles);
 
 		for(i = 0; i < 3; i++)
 		{
@@ -484,7 +484,7 @@ void SV_CalcBlend (edict_t *ent)
 		return;
 	}
 
-	ent->client->ps.blend[0] = ent->client->ps.blend[1] = 
+	ent->client->ps.blend[0] = ent->client->ps.blend[1] =
 	ent->client->ps.blend[2] = ent->client->ps.blend[3] = 0;
 
 	// add for contents
@@ -755,7 +755,7 @@ void P_WorldEffects (void)
 		// if out of air, start drowning
 		if (current_player->air_finished < level.time)
 		{	// drown!
-			if (current_player->client->next_drown_time < level.time 
+			if (current_player->client->next_drown_time < level.time
 				&& current_player->health > 0)
 			{
 				current_player->client->next_drown_time = level.time + 1;
@@ -768,7 +768,7 @@ void P_WorldEffects (void)
 				// play a gurp sound instead of a normal pain sound
 				if (current_player->health <= current_player->dmg)
 					gi.sound (current_player, CHAN_VOICE, gi.soundindex("player/drown1.wav"), 1, ATTN_NORM, 0);
-				else if (rand()&1)
+				else if (randk()&1)
 					gi.sound (current_player, CHAN_VOICE, gi.soundindex("*gurp1.wav"), 1, ATTN_NORM, 0);
 				else
 					gi.sound (current_player, CHAN_VOICE, gi.soundindex("*gurp2.wav"), 1, ATTN_NORM, 0);
@@ -797,7 +797,7 @@ void P_WorldEffects (void)
 				&& current_client->invincible_framenum < level.framenum
 				&& !(current_player->flags & FL_GODMODE))
 			{
-				if (rand()&1)
+				if (randk()&1)
 					gi.sound (current_player, CHAN_VOICE, gi.soundindex("player/burn1.wav"), 1, ATTN_NORM, 0);
 				else
 					gi.sound (current_player, CHAN_VOICE, gi.soundindex("player/burn2.wav"), 1, ATTN_NORM, 0);
@@ -918,9 +918,10 @@ void G_SetClientEvent (edict_t *ent)
 G_SetClientSound
 ===============
 */
-void G_SetClientSound (edict_t *ent)
+void
+G_SetClientSound(edict_t *ent)
 {
-	char	*weap;
+	const char *weap;
 
 	if (!ent)
 	{
@@ -1093,7 +1094,7 @@ void ClientEndServerFrame (edict_t *ent)
 	// If the origin or velocity have changed since ClientThink(),
 	// update the pmove values.  This will happen when the client
 	// is pushed by a bmodel or kicked by an explosion.
-	// 
+	//
 	// If it wasn't updated here, the view position would lag a frame
 	// behind the body position when pushed -- "sinking into plats"
 	//

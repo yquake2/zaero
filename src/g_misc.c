@@ -56,7 +56,7 @@ void VelocityForDamage (int damage, vec3_t v)
 
 	if (damage < 50)
 		VectorScale (v, 0.7, v);
-	else 
+	else
 		VectorScale (v, 1.2, v);
 }
 
@@ -104,7 +104,7 @@ void gib_think (edict_t *self)
 	}
 }
 
-void gib_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *surf)
+void gib_touch (edict_t *self, edict_t *other, const cplane_t *plane, const csurface_t *surf)
 {
 	vec3_t	normal_angles, right;
 
@@ -135,7 +135,7 @@ void gib_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *surf
 	}
 }
 
-void gib_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void gib_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	if (!self)
 	{
@@ -145,7 +145,8 @@ void gib_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, 
 	G_FreeEdict (self);
 }
 
-void ThrowGib (edict_t *self, char *gibname, int damage, int type)
+void
+ThrowGib(edict_t *self, const char *gibname, int damage, gibtype_t type)
 {
 	edict_t *gib;
 	vec3_t	vd;
@@ -165,7 +166,7 @@ void ThrowGib (edict_t *self, char *gibname, int damage, int type)
 	}
 
 	gibsthisframe++;
-	
+
 	if (gibsthisframe > 20)
 	{
 		return;
@@ -211,7 +212,8 @@ void ThrowGib (edict_t *self, char *gibname, int damage, int type)
 	gi.linkentity (gib);
 }
 
-void ThrowHead (edict_t *self, char *gibname, int damage, int type)
+void
+ThrowHead(edict_t *self, const char *gibname, int damage, gibtype_t type)
 {
 	vec3_t	vd;
 	float	vscale;
@@ -272,7 +274,7 @@ void ThrowClientHead (edict_t *self, int damage)
 		return;
 	}
 
-	if (rand()&1)
+	if (randk() & 1)
 	{
 		gibname = "models/objects/gibs/head2/tris.md2";
 		self->s.skinnum = 1;		// second skin is player
@@ -314,7 +316,7 @@ void ThrowClientHead (edict_t *self, int damage)
 debris
 =================
 */
-void debris_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void debris_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	if (!self)
 	{
@@ -333,7 +335,7 @@ void ThrowDebris (edict_t *self, char *modelname, float speed, vec3_t origin)
 	{
 		return;
 	}
-     
+
 	if (level.framenum > lastgibframe)
 	{
 		gibsthisframe = 0;
@@ -341,7 +343,7 @@ void ThrowDebris (edict_t *self, char *modelname, float speed, vec3_t origin)
 	}
 
 	gibsthisframe++;
-	
+
 	if (gibsthisframe > 20)
 	{
 		return;
@@ -408,7 +410,7 @@ Pathtarget: gets used when an entity that has
 	this path_corner targeted touches it
 */
 
-void path_corner_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *surf)
+void path_corner_touch (edict_t *self, edict_t *other, const cplane_t *plane, const csurface_t *surf)
 {
 	vec3_t		v;
 	edict_t		*next;
@@ -420,7 +422,7 @@ void path_corner_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface
 
 	if (other->movetarget != self)
 		return;
-	
+
 	if (other->enemy)
 		return;
 
@@ -503,7 +505,7 @@ Makes this the target of a monster and it will head here
 when first activated before going after the activator.  If
 hold is selected, it will stay here.
 */
-void point_combat_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *surf)
+void point_combat_touch (edict_t *self, edict_t *other, const cplane_t *plane, const csurface_t *surf)
 {
 	edict_t	*activator;
 
@@ -795,7 +797,7 @@ void SP_func_wall (edict_t *self)
 This is solid bmodel that will fall if it's support it removed.
 */
 
-void func_object_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *surf)
+void func_object_touch (edict_t *self, edict_t *other, const cplane_t *plane, const csurface_t *surf)
 {
 	if (!self || !other)
 	{
@@ -895,7 +897,7 @@ mass defaults to 75.  This determines how much debris is emitted when
 it explodes.  You get one large chunk per 100 of mass (up to 8) and
 one small chunk per 25 of mass (up to 16).  So 800 gives the most.
 */
-void func_explosive_explode (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void func_explosive_explode (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	vec3_t	origin;
 	vec3_t	chunkorigin;
@@ -1044,7 +1046,7 @@ health (80), and dmg (150).
 */
 qboolean SV_movestep (edict_t *ent, vec3_t move, qboolean relink);
 
-void barrel_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *surf)
+void barrel_touch (edict_t *self, edict_t *other, const cplane_t *plane, const csurface_t *surf)
 {
 	float	ratio;
 	vec3_t	v;
@@ -1065,7 +1067,7 @@ void barrel_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *s
 	dist = 20 * ratio * FRAMETIME;
 
 	yaw = yaw*M_PI*2 / 360;
-	
+
 	move[0] = cos(yaw)*dist;
 	move[1] = sin(yaw)*dist;
 	move[2] = 0;
@@ -1157,7 +1159,7 @@ void barrel_explode (edict_t *self)
 		BecomeExplosion1 (self);
 }
 
-void barrel_delay (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void barrel_delay (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	if (!self)
 	{
@@ -1248,7 +1250,7 @@ void misc_blackhole_think (edict_t *self)
 	if (++self->s.frame < 19)
 		self->nextthink = level.time + FRAMETIME;
 	else
-	{		
+	{
 		self->s.frame = 0;
 		self->nextthink = level.time + FRAMETIME;
 	}
@@ -1286,7 +1288,7 @@ void misc_eastertank_think (edict_t *self)
 	if (++self->s.frame < 293)
 		self->nextthink = level.time + FRAMETIME;
 	else
-	{		
+	{
 		self->s.frame = 254;
 		self->nextthink = level.time + FRAMETIME;
 	}
@@ -1324,7 +1326,7 @@ void misc_easterchick_think (edict_t *self)
 	if (++self->s.frame < 247)
 		self->nextthink = level.time + FRAMETIME;
 	else
-	{		
+	{
 		self->s.frame = 208;
 		self->nextthink = level.time + FRAMETIME;
 	}
@@ -1362,7 +1364,7 @@ void misc_easterchick2_think (edict_t *self)
 	if (++self->s.frame < 287)
 		self->nextthink = level.time + FRAMETIME;
 	else
-	{		
+	{
 		self->s.frame = 248;
 		self->nextthink = level.time + FRAMETIME;
 	}
@@ -1483,7 +1485,7 @@ void SP_misc_banner (edict_t *ent)
 	ent->movetype = MOVETYPE_NONE;
 	ent->solid = SOLID_NOT;
 	ent->s.modelindex = gi.modelindex ("models/objects/banner/tris.md2");
-	ent->s.frame = rand() % 16;
+	ent->s.frame = randk() % 16;
 	gi.linkentity (ent);
 
 	ent->think = misc_banner_think;
@@ -1493,7 +1495,7 @@ void SP_misc_banner (edict_t *ent)
 /*QUAKED misc_deadsoldier (1 .5 0) (-16 -16 0) (16 16 16) ON_BACK ON_STOMACH BACK_DECAP FETAL_POS SIT_DECAP IMPALED
 This is the dead player model. Comes in 6 exciting different poses!
 */
-void misc_deadsoldier_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void misc_deadsoldier_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	int		n;
 
@@ -1655,7 +1657,7 @@ void SP_misc_viper (edict_t *ent)
 }
 
 
-/*QUAKED misc_bigviper (1 .5 0) (-176 -120 -24) (176 120 72) 
+/*QUAKED misc_bigviper (1 .5 0) (-176 -120 -24) (176 120 72)
 This is a large stationary viper as seen in Paul's intro
 */
 void SP_misc_bigviper (edict_t *ent)
@@ -1677,7 +1679,7 @@ void SP_misc_bigviper (edict_t *ent)
 /*QUAKED misc_viper_bomb (1 0 0) (-8 -8 -8) (8 8 8)
 "dmg"	how much boom should the bomb make?
 */
-void misc_viper_bomb_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *surf)
+void misc_viper_bomb_touch (edict_t *self, edict_t *other, const cplane_t *plane, const csurface_t *surf)
 {
 	if (!self)
 	{
@@ -2319,7 +2321,7 @@ SP_func_clock(edict_t *self)
 
 //=================================================================================
 
-void teleporter_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *surf)
+void teleporter_touch (edict_t *self, edict_t *other, const cplane_t *plane, const csurface_t *surf)
 {
 	edict_t		*dest;
 	int			i;
@@ -2408,7 +2410,7 @@ void SP_misc_teleporter (edict_t *ent)
 	VectorSet (trig->mins, -8, -8, 8);
 	VectorSet (trig->maxs, 8, 8, 24);
 	gi.linkentity (trig);
-	
+
 }
 
 /*QUAKED misc_teleporter_dest (1 0 0) (-32 -32 -24) (32 32 -16)

@@ -53,7 +53,7 @@ qboolean SpawnZ(gitem_t *item, edict_t *spot)
 	ent->movetype = MOVETYPE_BOUNCE;
 	ED_CallSpawn(ent);
 
-	startAng = rand() % 360;
+	startAng = randk() % 360;
 	VectorCopy(spot->s.origin, start);
 	start[2] += 16;
 

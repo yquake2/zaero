@@ -9,8 +9,6 @@ Makron -- Final Boss
 #include "../../header/local.h"
 #include "boss32.h"
 
-qboolean visible (edict_t *self, edict_t *other);
-
 void MakronRailgun (edict_t *self);
 void MakronSaveloc (edict_t *self);
 void MakronHyperblaster (edict_t *self);
@@ -731,7 +729,7 @@ static void makron_torso_origin (edict_t *self, edict_t *torso)
 	VectorCopy (tr.endpos, torso->s.origin);
 }
 
-void makron_torso_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void makron_torso_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	int n;
 
@@ -809,7 +807,7 @@ void makron_dead (edict_t *self)
 }
 
 
-void makron_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void makron_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	int		n;
 
@@ -878,7 +876,7 @@ qboolean Makron_CheckAttack (edict_t *self)
 			return false;
 	}
 
-	enemy_range = range(self, self->enemy);
+	enemy_range = ai_range(self, self->enemy);
 	VectorSubtract (self->enemy->s.origin, self->s.origin, temp);
 	enemy_yaw = vectoyaw(temp);
 

@@ -4,13 +4,13 @@ extern qboolean is_quad;
 extern byte is_silenced;
 
 void playQuadSound(edict_t *ent);
-void Weapon_Generic (edict_t *ent, 
-					 int FRAME_ACTIVATE_LAST, 
-					 int FRAME_FIRE_LAST, 
-					 int FRAME_IDLE_LAST, 
-					 int FRAME_DEACTIVATE_LAST, 
-					 int *pause_frames, 
-					 int *fire_frames, 
+void Weapon_Generic (edict_t *ent,
+					 int FRAME_ACTIVATE_LAST,
+					 int FRAME_FIRE_LAST,
+					 int FRAME_IDLE_LAST,
+					 int FRAME_DEACTIVATE_LAST,
+					 int *pause_frames,
+					 int *fire_frames,
 					 void (*fire)(edict_t *ent));
 void NoAmmoWeaponChange (edict_t *ent);
 void check_dodge (edict_t *self, vec3_t start, vec3_t dir, int speed);
@@ -106,7 +106,7 @@ void SP_misc_securitycamera(edict_t *self)
 	// set the angle of direction
 	VectorCopy(self->mangle, self->move_angles);
 	VectorSet(self->s.angles, 0, self->mangle[YAW], 0);
-	
+
 	// get an offset
 	AngleVectors(self->s.angles, forward, NULL, up);
 	VectorSet(offset, 0, 0, 0);
@@ -229,7 +229,7 @@ edict_t *findNextCamera(edict_t *old)
 
 		if (e == old)
 			return e;
-		
+
 		if (!e->active)
 			continue;
 
@@ -238,7 +238,8 @@ edict_t *findNextCamera(edict_t *old)
 	return NULL;
 }
 
-void Use_Visor (edict_t *ent, gitem_t *item)
+void
+Use_Visor(edict_t *ent, const gitem_t *item)
 {
 	if (!ent || !item)
 	{
@@ -259,7 +260,7 @@ void Use_Visor (edict_t *ent, gitem_t *item)
 	else
 	{
 		edict_t *e = findNextCamera(ent->client->zCameraTrack);
-		if (e != NULL && 
+		if (e != NULL &&
 			e != ent->client->zCameraTrack)
 		{
 			ent->client->zCameraTrack = e;
@@ -390,7 +391,8 @@ void fire_empnuke(edict_t *ent, vec3_t center, int radius)
 	gi.linkentity (empnuke);
 }
 
-qboolean EMPNukeCheck(edict_t *ent, vec3_t pos)
+qboolean
+EMPNukeCheck(const edict_t *ent, const vec3_t pos)
 {
 	edict_t	*check = NULL;
 
@@ -435,7 +437,7 @@ void PlasmaShield_die (edict_t *self)
 	G_FreeEdict(self);
 }
 
-void PlasmaShield_killed (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void PlasmaShield_killed (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	if (!self)
 	{
@@ -445,7 +447,8 @@ void PlasmaShield_killed (edict_t *self, edict_t *inflictor, edict_t *attacker, 
 	PlasmaShield_die(self);
 }
 
-void Use_PlasmaShield (edict_t *ent, gitem_t *item)
+void
+Use_PlasmaShield(edict_t *ent, const gitem_t *item)
 {
 	int ammoIdx = ITEM_INDEX(item);
 	edict_t	*PlasmaShield;
@@ -514,7 +517,7 @@ void Use_PlasmaShield (edict_t *ent, gitem_t *item)
 /*
 	misc_crate
 */
-void barrel_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *surf);
+void barrel_touch (edict_t *self, edict_t *other, const cplane_t *plane, const csurface_t *surf);
 
 void setupCrate(edict_t *self)
 {
@@ -648,7 +651,7 @@ void barrier_pain(edict_t *self, edict_t *other, float kick, int damage)
 	}
 }
 
-void barrier_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *surf)
+void barrier_touch (edict_t *self, edict_t *other, const cplane_t *plane, const csurface_t *surf)
 {
 	if (!self || !other)
 	{

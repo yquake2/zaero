@@ -3,7 +3,8 @@
 #include "header/local.h"
 
 
-void G_ProjectSource (vec3_t point, vec3_t distance, vec3_t forward, vec3_t right, vec3_t result)
+void
+G_ProjectSource(const vec3_t point, const vec3_t distance, const vec3_t forward, const vec3_t right, vec3_t result)
 {
 	result[0] = point[0] + forward[0] * distance[0] + right[0] * distance[1];
 	result[1] = point[1] + forward[1] * distance[0] + right[1] * distance[1];
@@ -23,7 +24,7 @@ NULL will be returned if the end of the list is reached.
 
 =============
 */
-edict_t *G_Find (edict_t *from, int fieldofs, char *match)
+edict_t *G_Find (edict_t *from, int fieldofs, const char *match)
 {
 	char	*s;
 
@@ -61,7 +62,8 @@ Returns entities that have origins within a spherical area
 findradius (origin, radius)
 =================
 */
-edict_t *findradius (edict_t *from, vec3_t org, float rad)
+edict_t *
+findradius(edict_t *from, const vec3_t org, float rad)
 {
 	vec3_t	eorg;
 	int		j;
@@ -130,7 +132,7 @@ edict_t *G_PickTarget (char *targetname)
 		return NULL;
 	}
 
-	return choice[rand() % num_choices];
+	return choice[randk() % num_choices];
 }
 
 
@@ -331,14 +333,14 @@ float vectoyaw (vec3_t vec)
 {
 	float	yaw;
 
-	if (/*vec[YAW] == 0 &&*/ vec[PITCH] == 0) 
+	if (/*vec[YAW] == 0 &&*/ vec[PITCH] == 0)
 	{
 		yaw = 0;
 		if (vec[YAW] > 0)
 			yaw = 90;
 		else if (vec[YAW] < 0)
 			yaw = -90;
-	} 
+	}
 	else
 	{
 		yaw = (int) (atan2(vec[YAW], vec[PITCH]) * 180 / M_PI);
@@ -350,32 +352,33 @@ float vectoyaw (vec3_t vec)
 }
 
 
-void vectoangles (vec3_t value1, vec3_t angles)
+void
+vectoangles(const vec3_t value, vec3_t angles)
 {
 	float	forward;
 	float	yaw, pitch;
 
-	if (value1[1] == 0 && value1[0] == 0)
+	if (value[1] == 0 && value[0] == 0)
 	{
 		yaw = 0;
-		if (value1[2] > 0)
+		if (value[2] > 0)
 			pitch = 90;
 		else
 			pitch = 270;
 	}
 	else
 	{
-		if (value1[0])
-			yaw = (int) (atan2(value1[1], value1[0]) * 180 / M_PI);
-		else if (value1[1] > 0)
+		if (value[0])
+			yaw = (int) (atan2(value[1], value[0]) * 180 / M_PI);
+		else if (value[1] > 0)
 			yaw = 90;
 		else
 			yaw = -90;
 		if (yaw < 0)
 			yaw += 360;
 
-		forward = sqrt (value1[0]*value1[0] + value1[1]*value1[1]);
-		pitch = (int) (atan2(value1[2], forward) * 180 / M_PI);
+		forward = sqrt (value[0]*value[0] + value[1]*value[1]);
+		pitch = (int) (atan2(value[2], forward) * 180 / M_PI);
 		if (pitch < 0)
 			pitch += 360;
 	}
@@ -385,7 +388,8 @@ void vectoangles (vec3_t value1, vec3_t angles)
 	angles[ROLL] = 0;
 }
 
-char *G_CopyString (char *in)
+char *
+G_CopyString (const char *in)
 {
 	char	*out;
 
@@ -590,7 +594,7 @@ qboolean KillBox (edict_t *ent)
 =================
 MonsterKillBox
 
-Kills all entities except players that would touch the proposed new 
+Kills all entities except players that would touch the proposed new
 positioning of ent.  Ent should be unlinked before calling this!
 =================
 */
@@ -627,7 +631,7 @@ qboolean MonsterKillBox (edict_t *ent)
 =================
 MonsterPlayerKillBox
 
-Kills all entities except players that would touch the proposed new 
+Kills all entities except players that would touch the proposed new
 positioning of ent.  Ent should be unlinked before calling this!
 =================
 */

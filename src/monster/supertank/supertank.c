@@ -9,8 +9,6 @@ SUPERTANK
 #include "../../header/local.h"
 #include "supertank.h"
 
-qboolean visible (edict_t *self, edict_t *other);
-
 static int	sound_pain1;
 static int	sound_pain2;
 static int	sound_pain3;
@@ -460,7 +458,7 @@ void supertank_reattack1(edict_t *self)
 		if (random() < 0.9)
 			self->monsterinfo.currentmove = &supertank_move_attack1;
 		else
-			self->monsterinfo.currentmove = &supertank_move_end_attack1;	
+			self->monsterinfo.currentmove = &supertank_move_end_attack1;
 	else
 		self->monsterinfo.currentmove = &supertank_move_end_attack1;
 }
@@ -528,7 +526,7 @@ void supertankRocket (edict_t *self)
 		flash_number = MZ2_SUPERTANK_ROCKET_1;
 	else if (self->s.frame == FRAME_attak2_11)
 		flash_number = MZ2_SUPERTANK_ROCKET_2;
-	else 
+	else
 		flash_number = MZ2_SUPERTANK_ROCKET_3;
 
 	AngleVectors (self->s.angles, forward, right, NULL);
@@ -540,7 +538,7 @@ void supertankRocket (edict_t *self)
 	VectorNormalize (dir);
 
 	monster_fire_rocket (self, start, dir, 50, 500, flash_number);
-}	
+}
 
 void supertankMachineGun (edict_t *self)
 {
@@ -581,7 +579,7 @@ void supertankMachineGun (edict_t *self)
 	}
 
 	monster_fire_bullet (self, start, forward, 6, 4, DEFAULT_BULLET_HSPREAD, DEFAULT_BULLET_VSPREAD, flash_number);
-}	
+}
 
 
 void supertank_attack(edict_t *self)
@@ -643,7 +641,7 @@ void BossExplode (edict_t *self)
 
 	self->think = BossExplode;
 	VectorCopy (self->s.origin, org);
-	org[2] += 24 + (rand()&15);
+	org[2] += 24 + (randk()&15);
 	switch (self->count++)
 	{
 	case 0:
@@ -699,7 +697,7 @@ void BossExplode (edict_t *self)
 }
 
 
-void supertank_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void supertank_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	if (!self)
 	{
@@ -763,7 +761,7 @@ void SP_monster_supertank (edict_t *self)
 	self->monsterinfo.sight = NULL;
 
 	gi.linkentity (self);
-	
+
 	self->monsterinfo.currentmove = &supertank_move_stand;
 	self->monsterinfo.scale = MODEL_SCALE;
 

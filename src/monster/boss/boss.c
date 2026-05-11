@@ -532,7 +532,7 @@ void zboss_swing (edict_t *self)
 	}
 
 	static	vec3_t	aim = {MELEE_DISTANCE, 0, -24};
-	fire_hit (self, aim, (15 + (rand() % 6)), 800);
+	fire_hit (self, aim, (15 + (randk() % 6)), 800);
 }
 
 mframe_t zboss_frames_attack2c [] =
@@ -837,7 +837,7 @@ void HookDragThink (edict_t *self)
 }
 
 
-void HookTouch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *surf)
+void HookTouch (edict_t *ent, edict_t *other, const cplane_t *plane, const csurface_t *surf)
 {
 	if (other == ent->owner)
 		return;
@@ -1087,7 +1087,7 @@ void Plasmaball_Explode (edict_t *ent)
 	ent->nextthink = level.time + FRAMETIME;
 }
 
-void Plasmaball_Touch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *surf)
+void Plasmaball_Touch (edict_t *ent, edict_t *other, const cplane_t *plane, const csurface_t *surf)
 {
 	if (!ent || !other)
 	{
@@ -1668,7 +1668,7 @@ void FireDeadCannon3(edict_t *self)
 	gi.multicast (start, MULTICAST_PVS);
 }
 
-void DeadHookTouch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *surf)
+void DeadHookTouch (edict_t *ent, edict_t *other, const cplane_t *plane, const csurface_t *surf)
 {
 	if (!ent || !other)
 	{
@@ -1789,7 +1789,7 @@ mframe_t zboss_frames_death2 [] =
 };
 mmove_t zboss_move_death2 = {FRAME_die2Start, FRAME_die2End, zboss_frames_death2, zboss_dead};
 
-void zboss_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void zboss_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	int		n;
 

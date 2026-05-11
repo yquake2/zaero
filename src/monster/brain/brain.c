@@ -390,7 +390,7 @@ void brain_hit_right (edict_t *self)
 	}
 
 	VectorSet (aim, MELEE_DISTANCE, self->maxs[0], 8);
-	if (fire_hit (self, aim, (15 + (rand() %5)), 40))
+	if (fire_hit (self, aim, (15 + (randk() %5)), 40))
 		gi.sound (self, CHAN_WEAPON, sound_melee3, 1, ATTN_NORM, 0);
 }
 
@@ -414,7 +414,7 @@ void brain_hit_left (edict_t *self)
 	}
 
 	VectorSet (aim, MELEE_DISTANCE, self->mins[0], 8);
-	if (fire_hit (self, aim, (15 + (rand() %5)), 40))
+	if (fire_hit (self, aim, (15 + (randk() %5)), 40))
 		gi.sound (self, CHAN_WEAPON, sound_melee3, 1, ATTN_NORM, 0);
 }
 
@@ -463,7 +463,7 @@ void brain_tentacle_attack (edict_t *self)
 	}
 
 	VectorSet (aim, MELEE_DISTANCE, 0, 8);
-	if (fire_hit (self, aim, (10 + (rand() %5)), -600) && skill->value > SKILL_EASY)
+	if (fire_hit (self, aim, (10 + (randk() %5)), -600) && skill->value > SKILL_EASY)
 		self->spawnflags |= 65536;
 	gi.sound (self, CHAN_WEAPON, sound_tentacles_retract, 1, ATTN_NORM, 0);
 }
@@ -608,7 +608,7 @@ void brain_dead (edict_t *self)
 
 
 
-void brain_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void brain_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	int		n;
 
@@ -703,7 +703,7 @@ void SP_monster_brain (edict_t *self)
 
 	gi.linkentity (self);
 
-	self->monsterinfo.currentmove = &brain_move_stand;	
+	self->monsterinfo.currentmove = &brain_move_stand;
 	self->monsterinfo.scale = MODEL_SCALE;
 
 	walkmonster_start (self);

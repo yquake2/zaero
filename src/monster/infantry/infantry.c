@@ -229,11 +229,11 @@ void infantry_pain (edict_t *self, edict_t *other, float kick, int damage)
 		return;
 
 	self->pain_debounce_time = level.time + 3;
-	
+
 	if (skill->value == SKILL_HARDPLUS)
 		return;		// no pain anims in nightmare
 
-	n = rand() % 2;
+	n = randk() % 2;
 	if (n == 0)
 	{
 		self->monsterinfo.currentmove = &infantry_move_pain1;
@@ -410,7 +410,7 @@ mframe_t infantry_frames_death3 [] =
 mmove_t infantry_move_death3 = {FRAME_death301, FRAME_death309, infantry_frames_death3, infantry_dead};
 
 
-void infantry_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void infantry_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	int		n;
 
@@ -440,7 +440,7 @@ void infantry_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int dam
 	self->takedamage = DAMAGE_YES;
 	self->s.skinnum = 1; /* switch to bloody skin */
 
-	n = rand() % 3;
+	n = randk() % 3;
 	if (n == 0)
 	{
 		self->monsterinfo.currentmove = &infantry_move_death1;
@@ -541,7 +541,7 @@ void infantry_cock_gun (edict_t *self)
 	}
 
 	gi.sound (self, CHAN_WEAPON, sound_weapon_cock, 1, ATTN_NORM, 0);
-	n = (rand() & 15) + 3 + 7;
+	n = (randk() & 15) + 3 + 7;
 	self->monsterinfo.pausetime = level.time + n * FRAMETIME;
 }
 
@@ -601,7 +601,7 @@ void infantry_smack (edict_t *self)
 	}
 
 	VectorSet (aim, MELEE_DISTANCE, 0, 0);
-	if (fire_hit (self, aim, (5 + (rand() % 5)), 50))
+	if (fire_hit (self, aim, (5 + (randk() % 5)), 50))
 		gi.sound (self, CHAN_WEAPON, sound_punch_hit, 1, ATTN_NORM, 0);
 }
 
@@ -625,7 +625,7 @@ void infantry_attack(edict_t *self)
 		return;
 	}
 
-	if (range (self, self->enemy) == RANGE_MELEE)
+	if (ai_range (self, self->enemy) == RANGE_MELEE)
 		self->monsterinfo.currentmove = &infantry_move_attack2;
 	else
 		self->monsterinfo.currentmove = &infantry_move_attack1;
@@ -656,11 +656,11 @@ void SP_monster_infantry (edict_t *self)
 	sound_weapon_cock = gi.soundindex ("infantry/infatck3.wav");
 	sound_punch_swing = gi.soundindex ("infantry/infatck2.wav");
 	sound_punch_hit = gi.soundindex ("infantry/melee2.wav");
-	
+
 	sound_sight = gi.soundindex ("infantry/infsght1.wav");
 	sound_search = gi.soundindex ("infantry/infsrch1.wav");
 	sound_idle = gi.soundindex ("infantry/infidle1.wav");
-	
+
 
 	self->movetype = MOVETYPE_STEP;
 	self->solid = SOLID_BBOX;

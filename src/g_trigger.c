@@ -45,13 +45,13 @@ void multi_trigger (edict_t *ent)
 
 	G_UseTargets (ent, ent->activator);
 
-	if (ent->wait > 0)	
+	if (ent->wait > 0)
 	{
 		ent->think = multi_wait;
 		ent->nextthink = level.time + ent->wait;
 	}
 	else
-	{	
+	{
 		// we can't just remove (self) here, because this is a touch function
 		// called while looping through area links...
 		ent->touch = NULL;
@@ -71,7 +71,7 @@ void Use_Multi (edict_t *ent, edict_t *other, edict_t *activator)
 	multi_trigger (ent);
 }
 
-void Touch_Multi (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *surf)
+void Touch_Multi (edict_t *self, edict_t *other, const cplane_t *plane, const csurface_t *surf)
 {
 	if (!self || !other)
 	{
@@ -450,7 +450,7 @@ trigger_push
 
 static int windsound;  // fixup or zaero or may not work with mirror level's...
 
-void trigger_push_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *surf)
+void trigger_push_touch (edict_t *self, edict_t *other, const cplane_t *plane, const csurface_t *surf)
 {
 	if (!self || !other)
 	{
@@ -566,7 +566,7 @@ void hurt_use (edict_t *self, edict_t *other, edict_t *activator)
 }
 
 
-void hurt_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *surf)
+void hurt_touch (edict_t *self, edict_t *other, const cplane_t *plane, const csurface_t *surf)
 {
 	int		dflags;
 
@@ -640,7 +640,7 @@ the value of "gravity".  1.0 is standard
 gravity for the level.
 */
 
-void trigger_gravity_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *surf)
+void trigger_gravity_touch (edict_t *self, edict_t *other, const cplane_t *plane, const csurface_t *surf)
 {
 	if (!self || !other)
 	{
@@ -684,7 +684,7 @@ Walking monsters that touch this will jump in the direction of the trigger's ang
 "height" default to 200, the speed thrown upwards
 */
 
-void trigger_monsterjump_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *surf)
+void trigger_monsterjump_touch (edict_t *self, edict_t *other, const cplane_t *plane, const csurface_t *surf)
 {
 	if (!self || !other)
 	{

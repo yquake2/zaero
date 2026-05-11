@@ -9,9 +9,6 @@ hover
 #include "../../header/local.h"
 #include "hover.h"
 
-qboolean visible (edict_t *self, edict_t *other);
-
-
 static int	sound_pain1;
 static int	sound_pain2;
 static int	sound_death1;
@@ -51,7 +48,7 @@ void hover_dead (edict_t *self);
 void hover_attack (edict_t *self);
 void hover_reattack (edict_t *self);
 void hover_fire_blaster (edict_t *self);
-void hover_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point);
+void hover_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point);
 
 mframe_t hover_frames_stand [] =
 {
@@ -418,7 +415,7 @@ void hover_reattack (edict_t *self)
 
 	if (self->enemy->health > 0 )
 		if (visible (self, self->enemy) )
-			if (random() <= 0.6)		
+			if (random() <= 0.6)
 			{
 				self->monsterinfo.currentmove = &hover_move_attack1;
 				return;
@@ -579,7 +576,7 @@ void hover_dead (edict_t *self)
 	gi.linkentity (self);
 }
 
-void hover_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void hover_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	int		n;
 
@@ -638,7 +635,7 @@ void hover_dodge (edict_t *self, edict_t *attacker, float eta)
 
 	// start at a random value
 	self->monsterinfo.flyStrafePitch = crandom() * 180;
-	
+
 	// choose a random delta dir
 	delta = (random() < 0.5 ? 10 : -10);
 	AngleVectors(self->s.angles, forward, right, NULL);
@@ -669,13 +666,13 @@ void hover_dodge (edict_t *self, edict_t *attacker, float eta)
 
 void SP_monster_hover_precache(void)
 {
-	sound_pain1 = gi.soundindex ("hover/hovpain1.wav");	
-	sound_pain2 = gi.soundindex ("hover/hovpain2.wav");	
-	sound_death1 = gi.soundindex ("hover/hovdeth1.wav");	
-	sound_death2 = gi.soundindex ("hover/hovdeth2.wav");	
-	sound_sight = gi.soundindex ("hover/hovsght1.wav");	
-	sound_search1 = gi.soundindex ("hover/hovsrch1.wav");	
-	sound_search2 = gi.soundindex ("hover/hovsrch2.wav");	
+	sound_pain1 = gi.soundindex ("hover/hovpain1.wav");
+	sound_pain2 = gi.soundindex ("hover/hovpain2.wav");
+	sound_death1 = gi.soundindex ("hover/hovdeth1.wav");
+	sound_death2 = gi.soundindex ("hover/hovdeth2.wav");
+	sound_sight = gi.soundindex ("hover/hovsght1.wav");
+	sound_search1 = gi.soundindex ("hover/hovsrch1.wav");
+	sound_search2 = gi.soundindex ("hover/hovsrch2.wav");
 }
 
 /*QUAKED monster_hover (1 .5 0) (-16 -16 -24) (16 16 32) Ambush Trigger_Spawn Sight
@@ -695,7 +692,7 @@ void SP_monster_hover (edict_t *self)
 
   SP_monster_hover_precache();
 
-	gi.soundindex ("hover/hovatck1.wav");	
+	gi.soundindex ("hover/hovatck1.wav");
 
 	self->s.sound = gi.soundindex ("hover/hovidle1.wav");
 
@@ -722,7 +719,7 @@ void SP_monster_hover (edict_t *self)
 
 	gi.linkentity (self);
 
-	self->monsterinfo.currentmove = &hover_move_stand;	
+	self->monsterinfo.currentmove = &hover_move_stand;
 	self->monsterinfo.scale = MODEL_SCALE;
 
 	flymonster_start (self);

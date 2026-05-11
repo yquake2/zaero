@@ -145,7 +145,7 @@ qboolean Pickup_Weapon (edict_t *ent, edict_t *other)
 
 	index = ITEM_INDEX(ent->item);
 
-	if ( ( ((int)(dmflags->value) & DF_WEAPONS_STAY) || coop->value) 
+	if ( ( ((int)(dmflags->value) & DF_WEAPONS_STAY) || coop->value)
 		&& other->client->pers.inventory[index])
 	{
 		if (!(ent->spawnflags & (DROPPED_ITEM | DROPPED_PLAYER_ITEM) ) )
@@ -178,8 +178,8 @@ qboolean Pickup_Weapon (edict_t *ent, edict_t *other)
 		}
 	}
 
-	if (other->client->pers.weapon != ent->item && 
-		!(ent->item->hideFlags & HIDE_FROM_SELECTION) && 
+	if (other->client->pers.weapon != ent->item &&
+		!(ent->item->hideFlags & HIDE_FROM_SELECTION) &&
 		(other->client->pers.inventory[index] == 1) &&
 		( !deathmatch->value || other->client->pers.weapon == FindItem("blaster") ) )
 		other->client->newweapon = ent->item;
@@ -359,7 +359,8 @@ Use_Weapon
 Make the weapon ready if there is ammo
 ================
 */
-void Use_Weapon (edict_t *ent, gitem_t *item)
+void
+Use_Weapon(edict_t *ent, const gitem_t *item)
 {
 	int			ammo_index;
 	gitem_t		*ammo_item;
@@ -408,7 +409,8 @@ void Use_Weapon (edict_t *ent, gitem_t *item)
 Drop_Weapon
 ================
 */
-void Drop_Weapon (edict_t *ent, gitem_t *item)
+void
+Drop_Weapon(edict_t *ent, const gitem_t *item)
 {
 	int		index;
 
@@ -436,7 +438,7 @@ void Drop_Weapon (edict_t *ent, gitem_t *item)
  * Returns ammo used on a single shot for the given weapon
  */
 int
-get_ammo_usage(gitem_t *weap)
+get_ammo_usage(const gitem_t *weap)
 {
 	if (!weap)
 	{
@@ -553,7 +555,7 @@ void Weapon_Generic (edict_t *ent, int FRAME_ACTIVATE_LAST, int FRAME_FIRE_LAST,
 		if ( ((ent->client->latched_buttons|ent->client->buttons) & BUTTON_ATTACK) )
 		{
 			ent->client->latched_buttons &= ~BUTTON_ATTACK;
-			if ((!ent->client->ammo_index) || 
+			if ((!ent->client->ammo_index) ||
 				( ent->client->pers.inventory[ent->client->ammo_index] >= get_ammo_usage(ent->client->pers.weapon) ))
 			{
 				ent->client->ps.gunframe = FRAME_FIRE_FIRST;
@@ -596,7 +598,7 @@ void Weapon_Generic (edict_t *ent, int FRAME_ACTIVATE_LAST, int FRAME_FIRE_LAST,
 				{
 					if (ent->client->ps.gunframe == pause_frames[n])
 					{
-						if (rand()&15)
+						if (randk()&15)
 							return;
 					}
 				}
@@ -738,7 +740,7 @@ void Weapon_Grenade (edict_t *ent)
 
 		if ((ent->client->ps.gunframe == 29) || (ent->client->ps.gunframe == 34) || (ent->client->ps.gunframe == 39) || (ent->client->ps.gunframe == 48))
 		{
-			if (rand()&15)
+			if (randk()&15)
 				return;
 		}
 
@@ -846,7 +848,7 @@ void weapon_grenadelauncher_fire (edict_t *ent)
 	ent->client->kick_angles[0] = -1;
 
 	fire_grenade (ent, start, forward, damage, 600, 2.5, radius);
-  
+
 	gi.WriteByte (svc_muzzleflash);
 	gi.WriteShort (ent-g_edicts);
 	gi.WriteByte (MZ_GRENADE | is_silenced);
@@ -1469,9 +1471,9 @@ void weapon_supershotgun_fire (edict_t *ent)
 	v[YAW]   = ent->client->v_angle[YAW] - 5;
 	v[ROLL]  = ent->client->v_angle[ROLL];
 	AngleVectors (v, forward, NULL, NULL);
-	
+
 	if (aimfix->value)
-	{	
+	{
 		AngleVectors(v, forward, right, NULL);
 
 		VectorScale(forward, -2, ent->client->kick_origin);
@@ -1479,15 +1481,15 @@ void weapon_supershotgun_fire (edict_t *ent)
 
 		VectorSet(offset, 0, 8, ent->viewheight - 8);
 		P_ProjectSource(ent, offset, forward, right, start);
-	}	
-	
+	}
+
 	fire_shotgun (ent, start, forward, damage, kick, DEFAULT_SHOTGUN_HSPREAD, DEFAULT_SHOTGUN_VSPREAD, DEFAULT_SSHOTGUN_COUNT/2, MOD_SSHOTGUN);
-	
+
 	v[YAW]   = ent->client->v_angle[YAW] + 5;
 	AngleVectors (v, forward, NULL, NULL);
-	
+
 	if (aimfix->value)
-	{	
+	{
 		AngleVectors(v, forward, right, NULL);
 
 		VectorScale(forward, -2, ent->client->kick_origin);
@@ -1495,8 +1497,8 @@ void weapon_supershotgun_fire (edict_t *ent)
 
 		VectorSet(offset, 0, 8, ent->viewheight - 8);
 		P_ProjectSource(ent, offset, forward, right, start);
-	}	
-	
+	}
+
 	fire_shotgun (ent, start, forward, damage, kick, DEFAULT_SHOTGUN_HSPREAD, DEFAULT_SHOTGUN_VSPREAD, DEFAULT_SSHOTGUN_COUNT/2, MOD_SSHOTGUN);
 
 	// send muzzle flash

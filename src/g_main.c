@@ -50,27 +50,11 @@ cvar_t *g_machinegun_norecoil;
 cvar_t *g_quick_weap;
 cvar_t *g_swap_speed;
 
-void SpawnEntities (char *mapname, char *entities, char *spawnpoint);
-void ClientThink (edict_t *ent, usercmd_t *cmd);
-qboolean ClientConnect (edict_t *ent, char *userinfo);
-void ClientUserinfoChanged (edict_t *ent, char *userinfo);
-void ClientDisconnect (edict_t *ent);
-void ClientBegin (edict_t *ent);
-void ClientCommand (edict_t *ent);
-void RunEntity (edict_t *ent);
-void WriteGame (char *filename, qboolean autosave);
-void ReadGame (char *filename);
-void WriteLevel (char *filename);
-void ReadLevel (char *filename);
-void InitGame (void);
-void G_RunFrame (void);
-void ServerCommand(void);
-
-
 //===================================================================
 
 
-void ShutdownGame (void)
+void
+ShutdownGame(void)
 {
 	gi.dprintf ("==== ShutdownGame ====\n");
 
@@ -88,9 +72,10 @@ and global variables
 =================
 */
 Q2_DLL_EXPORTED game_export_t *
-GetGameAPI(game_import_t *import)
+GetGameAPI(const game_import_t *import)
 {
 	gi = *import;
+
 	globals.apiversion = GAME_API_VERSION;
 	globals.Init = InitGame;
 	globals.Shutdown = ShutdownGame;
@@ -114,24 +99,27 @@ GetGameAPI(game_import_t *import)
 
 	globals.edict_size = sizeof(edict_t);
 
+	/* Initalize the PRNG */
+	randk_seed();
+
 	return &globals;
 }
 
-#ifndef GAME_HARD_LINKED
-// this is only here so the functions in q_shared.c and q_shwin.c can link
-void Sys_Error (char *error, ...)
+void
+Sys_Error(char *error, ...)
 {
-	va_list		argptr;
-	char		text[1024];
+	va_list argptr;
+	char text[1024];
 
-	va_start (argptr, error);
-	vsprintf (text, error, argptr);
-	va_end (argptr);
+	va_start(argptr, error);
+	vsprintf(text, error, argptr);
+	va_end(argptr);
 
-	gi.error (ERR_FATAL, "%s", text);
+	gi.error(ERR_FATAL, "%s", text);
 }
 
-void Com_Printf (char *msg, ...)
+void
+Com_Printf(char *msg, ...)
 {
 	va_list		argptr;
 	char		text[1024];
@@ -142,8 +130,6 @@ void Com_Printf (char *msg, ...)
 
 	gi.dprintf ("%s", text);
 }
-
-#endif
 
 //======================================================================
 
