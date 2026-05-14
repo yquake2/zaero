@@ -790,9 +790,9 @@ PlayersRangeFromSpot
 Returns the distance to the nearest player from the given spot
 ================
 */
-float	PlayersRangeFromSpot (edict_t *spot)
+float
+PlayersRangeFromSpot(edict_t *spot)
 {
-	edict_t	*player;
 	float	bestplayerdistance;
 	vec3_t	v;
 	int		n;
@@ -803,24 +803,31 @@ float	PlayersRangeFromSpot (edict_t *spot)
 		return 0.0;
 	}
 
-
 	bestplayerdistance = 9999999;
 
 	for (n = 1; n <= maxclients->value; n++)
 	{
+		edict_t *player;
+
 		player = &g_edicts[n];
 
 		if (!player->inuse)
+		{
 			continue;
+		}
 
 		if (player->health <= 0)
+		{
 			continue;
+		}
 
-		VectorSubtract (spot->s.origin, player->s.origin, v);
-		playerdistance = VectorLength (v);
+		VectorSubtract(spot->s.origin, player->s.origin, v);
+		playerdistance = VectorLength(v);
 
 		if (playerdistance < bestplayerdistance)
+		{
 			bestplayerdistance = playerdistance;
+		}
 	}
 
 	return bestplayerdistance;
@@ -994,10 +1001,9 @@ static void
 SelectSpawnPoint(const edict_t *ent, vec3_t origin, vec3_t angles)
 {
 	edict_t *spot = NULL;
-	edict_t *coopspot = NULL;
-	int index;
-	int counter = 0;
-	vec3_t d;
+
+	VectorClear(origin);
+	VectorClear(angles);
 
 	if (!ent)
 	{
@@ -1057,12 +1063,19 @@ SelectSpawnPoint(const edict_t *ent, vec3_t origin, vec3_t angles)
 	   client) use one in 550 units radius. */
 	if (coop->value)
 	{
+		int index;
+
 		index = ent->client - game.clients;
 
 		if (Q_stricmp(spot->classname, "info_player_start") == 0 && index != 0)
 		{
-			while(counter < 3)
+			int counter = 0;
+
+			while (counter < 3)
 			{
+				edict_t *coopspot = NULL;
+				vec3_t d;
+
 				coopspot = G_Find(coopspot, FOFS(classname), "info_player_coop");
 
 				if (!coopspot)
@@ -1111,7 +1124,8 @@ InitBodyQue(void)
 	}
 }
 
-void body_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
+void
+body_die(edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	int	n;
 
@@ -1153,11 +1167,11 @@ void CopyToBodyQue (edict_t *ent)
 	body->s.number = body - g_edicts;
 
 	body->svflags = ent->svflags;
-	VectorCopy (ent->mins, body->mins);
-	VectorCopy (ent->maxs, body->maxs);
-	VectorCopy (ent->absmin, body->absmin);
-	VectorCopy (ent->absmax, body->absmax);
-	VectorCopy (ent->size, body->size);
+	VectorCopy(ent->mins, body->mins);
+	VectorCopy(ent->maxs, body->maxs);
+	VectorCopy(ent->absmin, body->absmin);
+	VectorCopy(ent->absmax, body->absmax);
+	VectorCopy(ent->size, body->size);
 	body->solid = ent->solid;
 	body->clipmask = ent->clipmask;
 	body->owner = ent->owner;
@@ -1166,11 +1180,11 @@ void CopyToBodyQue (edict_t *ent)
 	body->die = body_die;
 	body->takedamage = DAMAGE_YES;
 
-	gi.linkentity (body);
+	gi.linkentity(body);
 }
 
-
-void respawn (edict_t *self)
+void
+respawn(edict_t *self)
 {
 	if (!self)
 	{
@@ -1179,16 +1193,19 @@ void respawn (edict_t *self)
 
 	if (deathmatch->value || coop->value)
 	{
-		// spectator's don't leave bodies
+		/* spectator's don't leave bodies */
 		if (self->movetype != MOVETYPE_NOCLIP)
-			CopyToBodyQue (self);
-		self->svflags &= ~SVF_NOCLIENT;
-		PutClientInServer (self);
+		{
+			CopyToBodyQue(self);
+		}
 
-		// add a teleportation effect
+		self->svflags &= ~SVF_NOCLIENT;
+		PutClientInServer(self);
+
+		/* add a teleportation effect */
 		self->s.event = EV_PLAYER_TELEPORT;
 
-		// hold in place briefly
+		/* hold in place briefly */
 		self->client->ps.pmove.pm_flags = PMF_TIME_TELEPORT;
 		self->client->ps.pmove.pm_time = 14;
 
@@ -1197,22 +1214,19 @@ void respawn (edict_t *self)
 		return;
 	}
 
-	// restart the entire server
-	gi.AddCommandString ("menu_loadgame\n");
+	/* restart the entire server */
+	gi.AddCommandString("menu_loadgame\n");
 }
 
 //==============================================================
 
 
 /*
-===========
-PutClientInServer
-
-Called when a player connects to a server or respawns in
-a deathmatch.
-============
-*/
-void PutClientInServer (edict_t *ent)
+ * Called when a player connects to
+ * a server or respawns in a deathmatch.
+ */
+void
+PutClientInServer(edict_t *ent)
 {
 	vec3_t	mins = {-16, -16, -24};
 	vec3_t	maxs = {16, 16, 32};
@@ -1228,23 +1242,23 @@ void PutClientInServer (edict_t *ent)
 		return;
 	}
 
-	// find a spawn point
-	// do it before setting health back up, so farthest
-	// ranging doesn't count this client
-	SelectSpawnPoint (ent, spawn_origin, spawn_angles);
+	/* find a spawn point do it before setting
+	   health back up, so farthest ranging
+	   doesn't count this client */
+	SelectSpawnPoint(ent, spawn_origin, spawn_angles);
 
-	index = ent-g_edicts-1;
+	index = ent - g_edicts - 1;
 	client = ent->client;
 
-	// deathmatch wipes most client data every spawn
+	/* deathmatch wipes most client data every spawn */
 	if (deathmatch->value)
 	{
 		char		userinfo[MAX_INFO_STRING];
 
 		resp = client->resp;
-		memcpy (userinfo, client->pers.userinfo, sizeof(userinfo));
-		InitClientPersistant (client);
-		ClientUserinfoChanged (ent, userinfo);
+		memcpy(userinfo, client->pers.userinfo, sizeof(userinfo));
+		InitClientPersistant(client);
+		ClientUserinfoChanged(ent, userinfo);
 	}
 	else if (coop->value)
 	{
@@ -1257,31 +1271,40 @@ void PutClientInServer (edict_t *ent)
 		for (n = 0; n < itemlist_len; n++)
 		{
 			if (itemlist[n].flags & IT_KEY)
+			{
 				resp.coop_respawn.inventory[n] = client->pers.inventory[n];
+			}
 		}
+
 		client->pers = resp.coop_respawn;
-		ClientUserinfoChanged (ent, userinfo);
+		ClientUserinfoChanged(ent, userinfo);
+
 		if (resp.score > client->pers.score)
+		{
 			client->pers.score = resp.score;
+		}
 	}
 	else
 	{
-		memset (&resp, 0, sizeof(resp));
+		memset(&resp, 0, sizeof(resp));
 
 		// avoid redundant help icon flashing on level transitions
 		resp.helpchanged = client->resp.helpchanged;
 		resp.game_helpchanged = client->resp.game_helpchanged;
 	}
 
-	// clear everything but the persistant data
+	/* clear everything but the persistant data */
 	saved = client->pers;
-	memset (client, 0, sizeof(*client));
+	memset(client, 0, sizeof(*client));
 	client->pers = saved;
+
 	if (client->pers.health <= 0)
+	{
 		InitClientPersistant(client);
+	}
 	else if (Q_stricmp(level.mapname, "zboss") == 0)
 	{
-		char		userinfo[MAX_INFO_STRING];
+		char userinfo[MAX_INFO_STRING];
 
 		int health = client->pers.health;
 
@@ -1290,12 +1313,13 @@ void PutClientInServer (edict_t *ent)
 		ClientUserinfoChanged (ent, userinfo);
 		client->pers.health = health;
 	}
+
 	client->resp = resp;
 
-	// copy some data from the client to the entity
-	FetchClientEntData (ent);
+	/* copy some data from the client to the entity */
+	FetchClientEntData(ent);
 
-	// clear entity values
+	/* clear entity values */
 	ent->groundentity = NULL;
 	ent->client = &game.clients[index];
 	ent->takedamage = DAMAGE_AIM;
@@ -1316,16 +1340,16 @@ void PutClientInServer (edict_t *ent)
 	ent->flags &= ~FL_NO_KNOCKBACK;
 	ent->svflags = 0;
 
-	VectorCopy (mins, ent->mins);
-	VectorCopy (maxs, ent->maxs);
-	VectorClear (ent->velocity);
+	VectorCopy(mins, ent->mins);
+	VectorCopy(maxs, ent->maxs);
+	VectorClear(ent->velocity);
 
-	// clear playerstate values
-	memset (&ent->client->ps, 0, sizeof(client->ps));
+	/* clear playerstate values */
+	memset(&ent->client->ps, 0, sizeof(client->ps));
 
-	client->ps.pmove.origin[0] = spawn_origin[0]*8;
-	client->ps.pmove.origin[1] = spawn_origin[1]*8;
-	client->ps.pmove.origin[2] = spawn_origin[2]*8;
+	client->ps.pmove.origin[0] = spawn_origin[0] * 8;
+	client->ps.pmove.origin[1] = spawn_origin[1] * 8;
+	client->ps.pmove.origin[2] = spawn_origin[2] * 8;
 
 	if (deathmatch->value && ((int)dmflags->value & DF_FIXED_FOV))
 	{
@@ -1333,46 +1357,57 @@ void PutClientInServer (edict_t *ent)
 	}
 	else
 	{
-		client->ps.fov = atoi(Info_ValueForKey(client->pers.userinfo, "fov"));
+		client->ps.fov = (int)strtol(Info_ValueForKey(client->pers.userinfo, "fov"), (char **)NULL, 10);
+
 		if (client->ps.fov < 1)
+		{
 			client->ps.fov = 90;
+		}
 		else if (client->ps.fov > 160)
+		{
 			client->ps.fov = 160;
+		}
 	}
 
 	client->ps.gunindex = gi.modelindex(client->pers.weapon->view_model);
 
-	// clear entity state values
+	/* clear entity state values */
 	ent->s.effects = 0;
-	ent->s.skinnum = ent - g_edicts - 1;
-	ent->s.modelindex = 255;		// will use the skin specified model
-	ent->s.modelindex2 = 255;		// custom gun model
-	ent->s.frame = 0;
-	VectorCopy (spawn_origin, ent->s.origin);
-	ent->s.origin[2] += 1;	// make sure off ground
-	VectorCopy (ent->s.origin, ent->s.old_origin);
+	ent->s.modelindex = 255; /* will use the skin specified model */
+	ent->s.modelindex2 = 255; /* custom gun model */
 
-	// set the delta angle
-	for (i=0 ; i<3 ; i++)
+	/* sknum is player num and weapon number
+	   weapon number will be added in changeweapon */
+	ent->s.skinnum = ent - g_edicts - 1;
+
+	ent->s.frame = 0;
+	VectorCopy(spawn_origin, ent->s.origin);
+	ent->s.origin[2] += 1;  /* make sure off ground */
+	VectorCopy(ent->s.origin, ent->s.old_origin);
+
+	/* set the delta angle */
+	for (i = 0; i < 3; i++)
 	{
-		client->ps.pmove.delta_angles[i] = ANGLE2SHORT(spawn_angles[i] - client->resp.cmd_angles[i]);
+		client->ps.pmove.delta_angles[i] = ANGLE2SHORT(
+				spawn_angles[i] - client->resp.cmd_angles[i]);
 	}
 
 	ent->s.angles[PITCH] = 0;
 	ent->s.angles[YAW] = spawn_angles[YAW];
 	ent->s.angles[ROLL] = 0;
-	VectorCopy (ent->s.angles, client->ps.viewangles);
-	VectorCopy (ent->s.angles, client->v_angle);
+	VectorCopy(ent->s.angles, client->ps.viewangles);
+	VectorCopy(ent->s.angles, client->v_angle);
 
-	if (!KillBox (ent))
-	{	// could't spawn in?
+	if (!KillBox(ent))
+	{
+		/* could't spawn in? */
 	}
 
-	gi.linkentity (ent);
+	gi.linkentity(ent);
 
-	// force the current weapon up
+	/* force the current weapon up */
 	client->newweapon = client->pers.weapon;
-	ChangeWeapon (ent);
+	ChangeWeapon(ent);
 }
 
 /*
