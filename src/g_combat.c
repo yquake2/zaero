@@ -1,71 +1,100 @@
-// g_combat.c
+/*
+ * =======================================================================
+ *
+ * Combat code like damage, death and so on.
+ *
+ * =======================================================================
+ */
 
 #include "header/local.h"
 
 /*
-============
-CanDamage
-
-Returns true if the inflictor can directly damage the target.  Used for
-explosions and melee attacks.
-============
-*/
+ * Returns true if the inflictor can directly damage the
+ * target. Used for explosions and melee attacks.
+ */
 qboolean
 CanDamage(edict_t *targ, edict_t *inflictor)
 {
-	vec3_t	dest;
-	trace_t	trace;
+	vec3_t dest;
+	trace_t trace;
 
 	if (!targ || !inflictor)
 	{
 		return false;
 	}
 
-	// bmodels need special checking because their origin is 0,0,0
+	/* bmodels need special checking because their origin is 0,0,0 */
 	if (targ->movetype == MOVETYPE_PUSH)
 	{
-		VectorAdd (targ->absmin, targ->absmax, dest);
-		VectorScale (dest, 0.5, dest);
-		trace = gi.trace (inflictor->s.origin, vec3_origin, vec3_origin, dest, inflictor, MASK_SOLID);
+		VectorAdd(targ->absmin, targ->absmax, dest);
+		VectorScale(dest, 0.5, dest);
+		trace = gi.trace(inflictor->s.origin, vec3_origin, vec3_origin,
+				dest, inflictor, MASK_SOLID);
+
 		if (trace.fraction == 1.0)
+		{
 			return true;
+		}
+
 		if (trace.ent == targ)
+		{
 			return true;
+		}
+
 		return false;
 	}
 
-	trace = gi.trace (inflictor->s.origin, vec3_origin, vec3_origin, targ->s.origin, inflictor, MASK_SOLID);
-	if (trace.fraction == 1.0)
-		return true;
+	trace = gi.trace(inflictor->s.origin, vec3_origin, vec3_origin,
+			targ->s.origin, inflictor, MASK_SOLID);
 
-	VectorCopy (targ->s.origin, dest);
+	if (trace.fraction == 1.0)
+	{
+		return true;
+	}
+
+	VectorCopy(targ->s.origin, dest);
 	dest[0] += 15.0;
 	dest[1] += 15.0;
-	trace = gi.trace (inflictor->s.origin, vec3_origin, vec3_origin, dest, inflictor, MASK_SOLID);
-	if (trace.fraction == 1.0)
-		return true;
+	trace = gi.trace(inflictor->s.origin, vec3_origin, vec3_origin,
+			dest, inflictor, MASK_SOLID);
 
-	VectorCopy (targ->s.origin, dest);
+	if (trace.fraction == 1.0)
+	{
+		return true;
+	}
+
+	VectorCopy(targ->s.origin, dest);
 	dest[0] += 15.0;
 	dest[1] -= 15.0;
-	trace = gi.trace (inflictor->s.origin, vec3_origin, vec3_origin, dest, inflictor, MASK_SOLID);
-	if (trace.fraction == 1.0)
-		return true;
+	trace = gi.trace(inflictor->s.origin, vec3_origin, vec3_origin,
+			dest, inflictor, MASK_SOLID);
 
-	VectorCopy (targ->s.origin, dest);
+	if (trace.fraction == 1.0)
+	{
+		return true;
+	}
+
+	VectorCopy(targ->s.origin, dest);
 	dest[0] -= 15.0;
 	dest[1] += 15.0;
-	trace = gi.trace (inflictor->s.origin, vec3_origin, vec3_origin, dest, inflictor, MASK_SOLID);
-	if (trace.fraction == 1.0)
-		return true;
+	trace = gi.trace(inflictor->s.origin, vec3_origin, vec3_origin,
+			dest, inflictor, MASK_SOLID);
 
-	VectorCopy (targ->s.origin, dest);
+	if (trace.fraction == 1.0)
+	{
+		return true;
+	}
+
+	VectorCopy(targ->s.origin, dest);
 	dest[0] -= 15.0;
 	dest[1] -= 15.0;
-	trace = gi.trace (inflictor->s.origin, vec3_origin, vec3_origin, dest, inflictor, MASK_SOLID);
-	if (trace.fraction == 1.0)
-		return true;
+	trace = gi.trace(inflictor->s.origin, vec3_origin, vec3_origin,
+			dest, inflictor, MASK_SOLID);
 
+	if (trace.fraction == 1.0)
+	{
+		return true;
+	}
 
 	return false;
 }
@@ -189,8 +218,8 @@ CheckPowerArmor(edict_t *ent, const vec3_t point, const vec3_t normal,
 
 	if(EMPNukeCheck(ent, point))
 	{
-   		return 0;
-  	}
+		return 0;
+	}
 
 	if (client)
 	{
@@ -248,7 +277,7 @@ CheckPowerArmor(edict_t *ent, const vec3_t point, const vec3_t normal,
 
     if(!(dflags & DAMAGE_ARMORMOSTLY))
     {
-  		damage = (2 * damage) / 3;
+		damage = (2 * damage) / 3;
     }
 	}
 
@@ -400,26 +429,28 @@ void M_ReactToDamage (edict_t *targ, edict_t *attacker)
 	}
 }
 
-qboolean CheckTeamDamage (edict_t *targ, edict_t *attacker)
+qboolean
+CheckTeamDamage(edict_t *targ, edict_t *attacker)
 {
-		//FIXME make the next line real and uncomment this block
-		// if ((ability to damage a teammate == OFF) && (targ's team == attacker's team))
 	return false;
 }
 
-static void apply_knockback(edict_t *targ, vec3_t dir, float knockback, float scale)
+static void
+apply_knockback(edict_t *targ, vec3_t dir, float knockback, float scale)
 {
-	vec3_t	kvel;
-	float	mass;
+	vec3_t kvel;
+	float mass;
 
 	if (!knockback)
+	{
 		return;
+	}
 
 	mass = (targ->mass < 50) ? 50.0f : (float)targ->mass;
 
-	VectorNormalize2 (dir, kvel);
-	VectorScale (kvel, scale * (knockback / mass), kvel);
-	VectorAdd (targ->velocity, kvel, targ->velocity);
+	VectorNormalize2(dir, kvel);
+	VectorScale(kvel, scale * (knockback / mass), kvel);
+	VectorAdd(targ->velocity, kvel, targ->velocity);
 }
 
 void

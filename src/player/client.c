@@ -30,13 +30,20 @@ void SP_FixCoopSpots (edict_t *self)
 
 	spot = NULL;
 
-	while(1)
+	while (1)
 	{
 		spot = G_Find(spot, FOFS(classname), "info_player_start");
+
 		if (!spot)
+		{
 			return;
+		}
+
 		if (!spot->targetname)
+		{
 			continue;
+		}
+
 		VectorSubtract(self->s.origin, spot->s.origin, d);
 		if (VectorLength(d) < 384)
 		{
@@ -44,18 +51,16 @@ void SP_FixCoopSpots (edict_t *self)
 			{
 				self->targetname = spot->targetname;
 			}
+
 			return;
 		}
 	}
 }
 
-// now if that one wasn't ugly enough for you then try this one on for size
-// some maps don't have any coop spots at all, so we need to create them
-// where they should have been
-
-void SP_CreateCoopSpots (edict_t *self)
+void
+SP_CreateCoopSpots(edict_t *self)
 {
-	// nothing, currently
+	/* Necessary for savegame compatiblity */
 }
 
 
@@ -79,10 +84,12 @@ void SP_info_player_start(edict_t *self)
 	}
 }
 
-/*QUAKED info_player_deathmatch (1 0 1) (-16 -16 -24) (16 16 32)
-potential spawning position for deathmatch games
-*/
-void SP_info_player_deathmatch(edict_t *self)
+/*
+ * QUAKED info_player_deathmatch (1 0 1) (-16 -16 -24) (16 16 32)
+ * potential spawning position for deathmatch games
+ */
+void
+SP_info_player_deathmatch(edict_t *self)
 {
 	if (!self)
 	{
@@ -91,10 +98,11 @@ void SP_info_player_deathmatch(edict_t *self)
 
 	if (!deathmatch->value)
 	{
-		G_FreeEdict (self);
+		G_FreeEdict(self);
 		return;
 	}
-	SP_misc_teleporter_dest (self);
+
+	SP_misc_teleporter_dest(self);
 }
 
 /*QUAKED info_player_coop (1 0 1) (-16 -16 -24) (16 16 32)
@@ -135,13 +143,19 @@ void SP_info_player_coop(edict_t *self)
 	}
 }
 
-
-/*QUAKED info_player_intermission (1 0 1) (-16 -16 -24) (16 16 32)
-The deathmatch intermission point will be at one of these
-Use 'angles' instead of 'angle', so you can set pitch or roll as well as yaw.  'pitch yaw roll'
-*/
-void SP_info_player_intermission(edict_t *ent)
+/*
+ * QUAKED info_player_intermission (1 0 1) (-16 -16 -24) (16 16 32)
+ * The deathmatch intermission point will be at one of these
+ * Use 'angles' instead of 'angle', so you can set pitch or
+ * roll as well as yaw.  'pitch yaw roll'
+ */
+void
+SP_info_player_intermission(edict_t *ent)
 {
+	/* This function cannot be removed
+	 * since the info_player_intermission
+	 * needs a callback function. Like
+	 * every entity. */
 }
 
 
@@ -717,15 +731,15 @@ void InitClientPersistant (gclient_t *client)
 	client->pers.gl_polyblend = 1;
 }
 
-
-void InitClientResp (gclient_t *client)
+void
+InitClientResp(gclient_t *client)
 {
 	if (!client)
 	{
 		return;
 	}
 
-	memset (&client->resp, 0, sizeof(client->resp));
+	memset(&client->resp, 0, sizeof(client->resp));
 	client->resp.enterframe = level.framenum;
 	client->resp.coop_respawn = client->pers;
 }
@@ -891,25 +905,21 @@ edict_t *SelectRandomDeathmatchSpawnPoint (void)
 	return spot;
 }
 
-/*
-================
-SelectFarthestDeathmatchSpawnPoint
-
-================
-*/
-edict_t *SelectFarthestDeathmatchSpawnPoint (void)
+edict_t *
+SelectFarthestDeathmatchSpawnPoint(void)
 {
-	edict_t	*bestspot;
-	float	bestdistance, bestplayerdistance;
-	edict_t	*spot;
-
+	edict_t *bestspot;
+	float bestdistance, bestplayerdistance;
+	edict_t *spot;
 
 	spot = NULL;
 	bestspot = NULL;
 	bestdistance = 0;
-	while ((spot = G_Find (spot, FOFS(classname), "info_player_deathmatch")) != NULL)
+
+	while ((spot = G_Find(spot, FOFS(classname),
+					"info_player_deathmatch")) != NULL)
 	{
-		bestplayerdistance = PlayersRangeFromSpot (spot);
+		bestplayerdistance = PlayersRangeFromSpot(spot);
 
 		if (bestplayerdistance > bestdistance)
 		{
@@ -923,19 +933,24 @@ edict_t *SelectFarthestDeathmatchSpawnPoint (void)
 		return bestspot;
 	}
 
-	// if there is a player just spawned on each and every start spot
-	// we have no choice to turn one into a telefrag meltdown
-	spot = G_Find (NULL, FOFS(classname), "info_player_deathmatch");
+	/* if there is a player just spawned on each and every start spot
+	   we have no choice to turn one into a telefrag meltdown */
+	spot = G_Find(NULL, FOFS(classname), "info_player_deathmatch");
 
 	return spot;
 }
 
-edict_t *SelectDeathmatchSpawnPoint (void)
+edict_t *
+SelectDeathmatchSpawnPoint(void)
 {
-	if ( (int)(dmflags->value) & DF_SPAWN_FARTHEST)
-		return SelectFarthestDeathmatchSpawnPoint ();
+	if ((int)(dmflags->value) & DF_SPAWN_FARTHEST)
+	{
+		return SelectFarthestDeathmatchSpawnPoint();
+	}
 	else
-		return SelectRandomDeathmatchSpawnPoint ();
+	{
+		return SelectRandomDeathmatchSpawnPoint();
+	}
 }
 
 static edict_t *
@@ -1145,24 +1160,23 @@ body_die(edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const
 	}
 }
 
-void CopyToBodyQue (edict_t *ent)
+void
+CopyToBodyQue(edict_t *ent)
 {
-	edict_t		*body;
+	edict_t *body;
 
 	if (!ent)
 	{
 		return;
 	}
 
-	// grab a body que and cycle to the next one
+	/* grab a body que and cycle to the next one */
 	body = &g_edicts[(int)maxclients->value + level.body_que + 1];
 	level.body_que = (level.body_que + 1) % BODY_QUEUE_SIZE;
 
-	// FIXME: send an effect on the removed body
+	gi.unlinkentity(ent);
+	gi.unlinkentity(body);
 
-	gi.unlinkentity (ent);
-
-	gi.unlinkentity (body);
 	body->s = ent->s;
 	body->s.number = body - g_edicts;
 
@@ -1654,16 +1668,13 @@ qboolean ClientConnect (edict_t *ent, char *userinfo)
 }
 
 /*
-===========
-ClientDisconnect
-
-Called when a player drops from the server.
-Will not be called between levels.
-============
-*/
-void ClientDisconnect (edict_t *ent)
+ * Called when a player drops from the server.
+ * Will not be called between levels.
+ */
+void
+ClientDisconnect(edict_t *ent)
 {
-	int		playernum;
+	int playernum;
 
 	if (!ent)
 	{
@@ -1671,40 +1682,46 @@ void ClientDisconnect (edict_t *ent)
 	}
 
 	if (!ent->client)
+	{
 		return;
+	}
 
-	gi.bprintf (PRINT_HIGH, "%s disconnected\n", ent->client->pers.netname);
+	gi.bprintf(PRINT_HIGH, "%s disconnected\n", ent->client->pers.netname);
 
-	// send effect
-	gi.WriteByte (svc_muzzleflash);
-	gi.WriteShort (ent-g_edicts);
-	gi.WriteByte (MZ_LOGOUT);
-	gi.multicast (ent->s.origin, MULTICAST_PVS);
+	/* send effect */
+	gi.WriteByte(svc_muzzleflash);
+	gi.WriteShort(ent - g_edicts);
+	gi.WriteByte(MZ_LOGOUT);
+	gi.multicast(ent->s.origin, MULTICAST_PVS);
 
-	gi.unlinkentity (ent);
+	gi.unlinkentity(ent);
 	ent->s.modelindex = 0;
 	ent->solid = SOLID_NOT;
 	ent->inuse = false;
 	ent->classname = "disconnected";
 	ent->client->pers.connected = false;
 
-	playernum = ent-g_edicts-1;
-	gi.configstring (CS_PLAYERSKINS+playernum, "");
+	playernum = ent - g_edicts - 1;
+	gi.configstring(CS_PLAYERSKINS + playernum, "");
 }
 
+/* ============================================================== */
 
-//==============================================================
+edict_t *pm_passent;
 
-
-edict_t	*pm_passent;
-
-// pmove doesn't need to know about passent and contentmask
-trace_t	PM_trace (vec3_t start, vec3_t mins, vec3_t maxs, vec3_t end)
+/* pmove doesn't need to know
+   about passent and contentmask */
+trace_t
+PM_trace(vec3_t start, vec3_t mins, vec3_t maxs, vec3_t end)
 {
 	if (pm_passent->health > 0)
-		return gi.trace (start, mins, maxs, end, pm_passent, MASK_PLAYERSOLID);
+	{
+		return gi.trace(start, mins, maxs, end, pm_passent, MASK_PLAYERSOLID);
+	}
 	else
-		return gi.trace (start, mins, maxs, end, pm_passent, MASK_DEADSOLID);
+	{
+		return gi.trace(start, mins, maxs, end, pm_passent, MASK_DEADSOLID);
+	}
 }
 
 unsigned CheckBlock (void *b, int c)
@@ -1715,18 +1732,20 @@ unsigned CheckBlock (void *b, int c)
 		v+= ((byte *)b)[i];
 	return v;
 }
-void PrintPmove (pmove_t *pm)
+
+void
+PrintPmove(pmove_t *pm)
 {
-	unsigned	c1, c2;
+	unsigned c1, c2;
 
 	if (!pm)
 	{
 		return;
 	}
 
-	c1 = CheckBlock (&pm->s, sizeof(pm->s));
-	c2 = CheckBlock (&pm->cmd, sizeof(pm->cmd));
-	Com_Printf ("sv %3i:%i %i\n", pm->cmd.impulse, c1, c2);
+	c1 = CheckBlock(&pm->s, sizeof(pm->s));
+	c2 = CheckBlock(&pm->cmd, sizeof(pm->cmd));
+	Com_Printf("sv %3i:%i %i\n", pm->cmd.impulse, c1, c2);
 }
 
 /*

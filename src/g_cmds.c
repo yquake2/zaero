@@ -367,19 +367,13 @@ void Cmd_Give_f (edict_t *ent)
 	}
 }
 
-
 /*
-==================
-Cmd_God_f
-
-Sets client to godmode
-
-argv(0) god
-==================
-*/
-void Cmd_God_f (edict_t *ent)
+ * Sets client to godmode
+ */
+void
+Cmd_God_f(edict_t *ent)
 {
-	char	*msg;
+	char *msg;
 
 	if (!ent)
 	{
@@ -388,32 +382,32 @@ void Cmd_God_f (edict_t *ent)
 
 	if ((deathmatch->value || coop->value) && !sv_cheats->value)
 	{
-		gi.cprintf (ent, PRINT_HIGH, "You must run the server with '+set cheats 1' to enable this command.\n");
+		gi.cprintf(ent, PRINT_HIGH,
+				"You must run the server with '+set cheats 1' to enable this command.\n");
 		return;
 	}
 
 	ent->flags ^= FL_GODMODE;
-	if (!(ent->flags & FL_GODMODE) )
-		msg = "godmode OFF\n";
-	else
-		msg = "godmode ON\n";
 
-	gi.cprintf (ent, PRINT_HIGH, msg);
+	if (!(ent->flags & FL_GODMODE))
+	{
+		msg = "godmode OFF\n";
+	}
+	else
+	{
+		msg = "godmode ON\n";
+	}
+
+	gi.cprintf(ent, PRINT_HIGH, msg);
 }
 
-
 /*
-==================
-Cmd_Notarget_f
-
-Sets client to notarget
-
-argv(0) notarget
-==================
-*/
-void Cmd_Notarget_f (edict_t *ent)
+ * Sets client to notarget
+ */
+void
+Cmd_Notarget_f(edict_t *ent)
 {
-	char	*msg;
+	char *msg;
 
 	if (!ent)
 	{
@@ -422,30 +416,29 @@ void Cmd_Notarget_f (edict_t *ent)
 
 	if ((deathmatch->value || coop->value) && !sv_cheats->value)
 	{
-		gi.cprintf (ent, PRINT_HIGH, "You must run the server with '+set cheats 1' to enable this command.\n");
+		gi.cprintf(ent, PRINT_HIGH,
+				"You must run the server with '+set cheats 1' to enable this command.\n");
 		return;
 	}
 
 	ent->flags ^= FL_NOTARGET;
-	if (!(ent->flags & FL_NOTARGET) )
-		msg = "notarget OFF\n";
-	else
-		msg = "notarget ON\n";
 
-	gi.cprintf (ent, PRINT_HIGH, msg);
+	if (!(ent->flags & FL_NOTARGET))
+	{
+		msg = "notarget OFF\n";
+	}
+	else
+	{
+		msg = "notarget ON\n";
+	}
+
+	gi.cprintf(ent, PRINT_HIGH, msg);
 }
 
-
-/*
-==================
-Cmd_Noclip_f
-
-argv(0) noclip
-==================
-*/
-void Cmd_Noclip_f (edict_t *ent)
+void
+Cmd_Noclip_f(edict_t *ent)
 {
-	char	*msg;
+	char *msg;
 
 	if (!ent)
 	{
@@ -454,7 +447,8 @@ void Cmd_Noclip_f (edict_t *ent)
 
 	if ((deathmatch->value || coop->value) && !sv_cheats->value)
 	{
-		gi.cprintf (ent, PRINT_HIGH, "You must run the server with '+set cheats 1' to enable this command.\n");
+		gi.cprintf(ent, PRINT_HIGH,
+				"You must run the server with '+set cheats 1' to enable this command.\n");
 		return;
 	}
 
@@ -469,7 +463,7 @@ void Cmd_Noclip_f (edict_t *ent)
 		msg = "noclip ON\n";
 	}
 
-	gi.cprintf (ent, PRINT_HIGH, msg);
+	gi.cprintf(ent, PRINT_HIGH, msg);
 }
 
 #define MAX_ALT 2
@@ -640,19 +634,15 @@ void Cmd_Use_f (edict_t *ent)
 	it->use (ent, it);
 }
 
-
 /*
-==================
-Cmd_Drop_f
-
-Drop an inventory item
-==================
-*/
-void Cmd_Drop_f (edict_t *ent)
+ * Drop an inventory item
+ */
+void
+Cmd_Drop_f(edict_t *ent)
 {
-	int			index;
-	gitem_t		*it;
-	char		*s;
+	int index;
+	gitem_t *it;
+	char *s;
 
 	if (!ent)
 	{
@@ -660,25 +650,29 @@ void Cmd_Drop_f (edict_t *ent)
 	}
 
 	s = gi.args();
-	it = FindItem (s);
+	it = FindItem(s);
+
 	if (!it)
 	{
-		gi.cprintf (ent, PRINT_HIGH, "unknown item: %s\n", s);
-		return;
-	}
-	if (!it->drop)
-	{
-		gi.cprintf (ent, PRINT_HIGH, "Item is not dropable.\n");
-		return;
-	}
-	index = ITEM_INDEX(it);
-	if (!ent->client->pers.inventory[index])
-	{
-		gi.cprintf (ent, PRINT_HIGH, "Out of item: %s\n", s);
+		gi.cprintf(ent, PRINT_HIGH, "unknown item: %s\n", s);
 		return;
 	}
 
-	it->drop (ent, it);
+	if (!it->drop)
+	{
+		gi.cprintf(ent, PRINT_HIGH, "Item is not dropable.\n");
+		return;
+	}
+
+	index = ITEM_INDEX(it);
+
+	if (!ent->client->pers.inventory[index])
+	{
+		gi.cprintf(ent, PRINT_HIGH, "Out of item: %s\n", s);
+		return;
+	}
+
+	it->drop(ent, it);
 }
 
 
@@ -887,16 +881,12 @@ void Cmd_WeapNext_f (edict_t *ent)
 	}
 }
 
-/*
-=================
-Cmd_WeapLast_f
-=================
-*/
-void Cmd_WeapLast_f (edict_t *ent)
+void
+Cmd_WeapLast_f(edict_t *ent)
 {
-	gclient_t	*cl;
-	int			index;
-	gitem_t		*it;
+	gclient_t *cl;
+	int index;
+	gitem_t *it;
 
 	if (!ent)
 	{
@@ -906,17 +896,30 @@ void Cmd_WeapLast_f (edict_t *ent)
 	cl = ent->client;
 
 	if (!cl->pers.weapon || !cl->pers.lastweapon)
+	{
 		return;
+	}
 
 	index = ITEM_INDEX(cl->pers.lastweapon);
+
 	if (!cl->pers.inventory[index])
+	{
 		return;
+	}
+
 	it = &itemlist[index];
+
 	if (!it->use)
+	{
 		return;
-	if (! (it->flags & IT_WEAPON) )
+	}
+
+	if (!(it->flags & IT_WEAPON))
+	{
 		return;
-	it->use (ent, it);
+	}
+
+	it->use(ent, it);
 }
 
 /*
@@ -1060,59 +1063,59 @@ void Cmd_Players_f (edict_t *ent)
 	gi.cprintf (ent, PRINT_HIGH, "%s\n%i players\n", large, count);
 }
 
-/*
-=================
-Cmd_Wave_f
-=================
-*/
-void Cmd_Wave_f (edict_t *ent)
+void
+Cmd_Wave_f(edict_t *ent)
 {
-	int		i;
+	int i;
 
 	if (!ent)
 	{
 		return;
 	}
 
-	i = atoi (gi.argv(1));
+	i = atoi(gi.argv(1));
 
-	// can't wave when ducked
+	/* can't wave when ducked */
 	if (ent->client->ps.pmove.pm_flags & PMF_DUCKED)
+	{
 		return;
+	}
 
 	if (ent->client->anim_priority > ANIM_WAVE)
+	{
 		return;
+	}
 
 	ent->client->anim_priority = ANIM_WAVE;
 
 	switch (i)
 	{
-	case 0:
-		gi.cprintf (ent, PRINT_HIGH, "flipoff\n");
-		ent->s.frame = FRAME_flip01-1;
-		ent->client->anim_end = FRAME_flip12;
-		break;
-	case 1:
-		gi.cprintf (ent, PRINT_HIGH, "salute\n");
-		ent->s.frame = FRAME_salute01-1;
-		ent->client->anim_end = FRAME_salute11;
-		break;
-	case 2:
-		gi.cprintf (ent, PRINT_HIGH, "taunt\n");
-		ent->s.frame = FRAME_taunt01-1;
-		ent->client->anim_end = FRAME_taunt17;
-		break;
-	case 3:
-		gi.cprintf (ent, PRINT_HIGH, "wave\n");
-		ent->s.frame = FRAME_wave01-1;
-		ent->client->anim_end = FRAME_wave11;
-		break;
-	case 4:
-	default:
-		gi.cprintf (ent, PRINT_HIGH, "point\n");
-		ent->s.frame = FRAME_point01-1;
-		ent->client->anim_end = FRAME_point12;
-		break;
+		case 0:
+			gi.cprintf(ent, PRINT_HIGH, "flipoff\n");
+			ent->s.frame = FRAME_flip01 - 1;
+			ent->client->anim_end = FRAME_flip12;
+			break;
+		case 1:
+			gi.cprintf(ent, PRINT_HIGH, "salute\n");
+			ent->s.frame = FRAME_salute01 - 1;
+			ent->client->anim_end = FRAME_salute11;
+			break;
+		case 2:
+			gi.cprintf(ent, PRINT_HIGH, "taunt\n");
+			ent->s.frame = FRAME_taunt01 - 1;
+			ent->client->anim_end = FRAME_taunt17;
+			break;
+		case 3:
+			gi.cprintf(ent, PRINT_HIGH, "wave\n");
+			ent->s.frame = FRAME_wave01 - 1;
+			ent->client->anim_end = FRAME_wave11;
+			break;
+		case 4:
+		default:
+			gi.cprintf(ent, PRINT_HIGH, "point\n");
+			ent->s.frame = FRAME_point01 - 1;
+			ent->client->anim_end = FRAME_point12;
+			break;
 	}
 }
 

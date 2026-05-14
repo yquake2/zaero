@@ -34,27 +34,25 @@
  *  - If the operating system is changed internal structures
  *    may change in an unrepairable way.
  *  - If the architecture is changed pointer length and
- *    other internal datastructures change in an 
+ *    other internal datastructures change in an
  *    incompatible way.
  *  - If the edict_t struct is changed, savegames
  *    will break.
  * This is not so bad as it looks since functions and
- * struct won't be added and edict_t won't be changed 
+ * struct won't be added and edict_t won't be changed
  * if no big, sweeping changes are done. The operating
  * system and architecture are in the hands of the user.
  */
 
 #include "../header/local.h"
 
-/* 
- * When ever the savegame version
- * is changed, q2 will refuse to
- * load older savegames. This 
- * should be bumped if the files
- * in tables/ are changed, otherwise
- * strange things may happen.
+/*
+ * When ever the savegame version is changed, q2 will refuse to
+ * load older savegames. This should be bumped if the files
+ * in tables/ are changed, otherwise strange things may happen.
  */
 #define SAVEGAMEVER "YQ2-4"
+
 
 /*
  * This macros are used to prohibit loading of savegames
@@ -104,7 +102,7 @@
  * function signature with
  * the corresponding pointer
  */
-typedef struct 
+typedef struct
 {
 	char *funcStr;
 	byte *funcPtr;
@@ -115,7 +113,7 @@ typedef struct
  * mmove_t string with the
  * correspondig pointer
  * */
-typedef struct 
+typedef struct
 {
 	char	*mmoveStr;
 	mmove_t *mmovePtr;

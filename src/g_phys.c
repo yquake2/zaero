@@ -319,14 +319,8 @@ int SV_FlyMove (edict_t *ent, float time, int mask)
 	return blocked;
 }
 
-
-/*
-============
-SV_AddGravity
-
-============
-*/
-void SV_AddGravity (edict_t *ent)
+void
+SV_AddGravity(edict_t *ent)
 {
 	if (!ent)
 	{
@@ -762,48 +756,44 @@ void SV_Physics_Pusher (edict_t *ent)
 	}
 }
 
-//==================================================================
+/* ================================================================== */
 
 /*
-=============
-SV_Physics_None
-
-Non moving objects can only think
-=============
-*/
-void SV_Physics_None (edict_t *ent)
+ * Non moving objects can only think
+ */
+void
+SV_Physics_None(edict_t *ent)
 {
 	if (!ent)
 	{
 		return;
 	}
 
-	// regular thinking
-	SV_RunThink (ent);
+	/* regular thinking */
+	SV_RunThink(ent);
 }
 
 /*
-=============
-SV_Physics_Noclip
-
-A moving object that doesn't obey physics
-=============
-*/
-void SV_Physics_Noclip (edict_t *ent)
+ * A moving object that doesn't obey physics
+ */
+void
+SV_Physics_Noclip(edict_t *ent)
 {
 	if (!ent)
 	{
 		return;
 	}
 
-	// regular thinking
-	if (!SV_RunThink (ent))
+	/* regular thinking */
+	if (!SV_RunThink(ent))
+	{
 		return;
+	}
 
-	VectorMA (ent->s.angles, FRAMETIME, ent->avelocity, ent->s.angles);
-	VectorMA (ent->s.origin, FRAMETIME, ent->velocity, ent->s.origin);
+	VectorMA(ent->s.angles, FRAMETIME, ent->avelocity, ent->s.angles);
+	VectorMA(ent->s.origin, FRAMETIME, ent->velocity, ent->s.origin);
 
-	gi.linkentity (ent);
+	gi.linkentity(ent);
 }
 
 /*

@@ -1139,7 +1139,7 @@ void weapon_sniperrifle_fire (edict_t *ent)
 	else
 		gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/sniper/fire.wav"), 0.4, ATTN_NORM, 0);
 
-  	PlayerNoise(ent, start, PNOISE_WEAPON);
+	PlayerNoise(ent, start, PNOISE_WEAPON);
 
 	// play quad sound
 	playQuadSound(ent);

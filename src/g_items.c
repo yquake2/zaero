@@ -3,7 +3,7 @@
 
 gitem_armor_t jacketarmor_info	= { 25,  50, .30, .00, ARMOR_JACKET};
 gitem_armor_t combatarmor_info	= { 50, 100, .60, .30, ARMOR_COMBAT};
-gitem_armor_t bodyarmor_info	= {100, 200, .80, .60, ARMOR_BODY};
+gitem_armor_t bodyarmor_info = {100, 200, .80, .60, ARMOR_BODY};
 
 int	jacket_armor_index;
 int	combat_armor_index;
@@ -142,7 +142,8 @@ void DoRespawn (edict_t *ent)
 	ent->s.event = EV_ITEM_RESPAWN;
 }
 
-void SetRespawn (edict_t *ent, float delay)
+void
+SetRespawn(edict_t *ent, float delay)
 {
 	if (!ent)
 	{
@@ -154,7 +155,7 @@ void SetRespawn (edict_t *ent, float delay)
 	ent->solid = SOLID_NOT;
 	ent->nextthink = level.time + delay;
 	ent->think = DoRespawn;
-	gi.linkentity (ent);
+	gi.linkentity(ent);
 }
 
 
@@ -201,10 +202,10 @@ Drop_General(edict_t *ent, const gitem_t *item)
 	ValidateSelectedItem (ent->client);
 }
 
+/* ====================================================================== */
 
-//======================================================================
-
-qboolean Pickup_Adrenaline (edict_t *ent, edict_t *other)
+qboolean
+Pickup_Adrenaline(edict_t *ent, edict_t *other)
 {
 	if (!ent || !other)
 	{
@@ -212,18 +213,25 @@ qboolean Pickup_Adrenaline (edict_t *ent, edict_t *other)
 	}
 
 	if (!deathmatch->value)
+	{
 		other->max_health += 1;
+	}
 
 	if (other->health < other->max_health)
+	{
 		other->health = other->max_health;
+	}
 
 	if (!(ent->spawnflags & DROPPED_ITEM) && (deathmatch->value))
-		SetRespawn (ent, ent->item->quantity);
+	{
+		SetRespawn(ent, ent->item->quantity);
+	}
 
 	return true;
 }
 
-qboolean Pickup_AncientHead (edict_t *ent, edict_t *other)
+qboolean
+Pickup_AncientHead(edict_t *ent, edict_t *other)
 {
 	if (!ent || !other)
 	{
@@ -233,7 +241,9 @@ qboolean Pickup_AncientHead (edict_t *ent, edict_t *other)
 	other->max_health += 2;
 
 	if (!(ent->spawnflags & DROPPED_ITEM) && (deathmatch->value))
-		SetRespawn (ent, ent->item->quantity);
+	{
+		SetRespawn(ent, ent->item->quantity);
+	}
 
 	return true;
 }
@@ -515,9 +525,10 @@ Use_Silencer(edict_t *ent, const gitem_t *item)
 	ent->client->silencer_shots += 30;
 }
 
-//======================================================================
+/* ====================================================================== */
 
-qboolean Pickup_Key (edict_t *ent, edict_t *other)
+qboolean
+Pickup_Key(edict_t *ent, edict_t *other)
 {
 	if (!ent || !other)
 	{
@@ -528,19 +539,29 @@ qboolean Pickup_Key (edict_t *ent, edict_t *other)
 	{
 		if (strcmp(ent->classname, "key_power_cube") == 0)
 		{
-			if (other->client->pers.power_cubes & ((ent->spawnflags & 0x0000ff00)>> 8))
+			if (other->client->pers.power_cubes &
+				((ent->spawnflags & 0x0000ff00) >> 8))
+			{
 				return false;
+			}
+
 			other->client->pers.inventory[ITEM_INDEX(ent->item)]++;
-			other->client->pers.power_cubes |= ((ent->spawnflags & 0x0000ff00) >> 8);
+			other->client->pers.power_cubes |=
+				((ent->spawnflags & 0x0000ff00) >> 8);
 		}
 		else
 		{
 			if (other->client->pers.inventory[ITEM_INDEX(ent->item)])
+			{
 				return false;
+			}
+
 			other->client->pers.inventory[ITEM_INDEX(ent->item)] = 1;
 		}
+
 		return true;
 	}
+
 	other->client->pers.inventory[ITEM_INDEX(ent->item)]++;
 	return true;
 }
@@ -694,11 +715,10 @@ qboolean Pickup_A2k (edict_t *ent, edict_t *other)
 	return true;
 }
 
+/* ====================================================================== */
 
-
-//======================================================================
-
-void MegaHealth_think (edict_t *self)
+void
+MegaHealth_think(edict_t *self)
 {
 	if (!self)
 	{
@@ -713,9 +733,13 @@ void MegaHealth_think (edict_t *self)
 	}
 
 	if (!(self->spawnflags & DROPPED_ITEM) && (deathmatch->value))
-		SetRespawn (self, 20);
+	{
+		SetRespawn(self, 20);
+	}
 	else
-		G_FreeEdict (self);
+	{
+		G_FreeEdict(self);
+	}
 }
 
 qboolean
@@ -788,86 +812,109 @@ int ArmorIndex (const edict_t *ent)
 	return 0;
 }
 
-qboolean Pickup_Armor (edict_t *ent, edict_t *other)
+qboolean
+Pickup_Armor(edict_t *ent, edict_t *other)
 {
-	int				old_armor_index;
-	gitem_armor_t	*oldinfo;
-	gitem_armor_t	*newinfo;
-	int				newcount;
-	float			salvage;
-	int				salvagecount;
+	int old_armor_index;
+	gitem_armor_t *oldinfo;
+	gitem_armor_t *newinfo;
+	int newcount;
+	float salvage;
+	int salvagecount;
 
 	if (!ent || !other)
 	{
 		return false;
 	}
 
-	// get info on new armor
+	/* get info on new armor */
 	newinfo = (gitem_armor_t *)ent->item->info;
 
-	old_armor_index = ArmorIndex (other);
+	old_armor_index = ArmorIndex(other);
 
-	// handle armor shards specially
+	/* handle armor shards specially */
 	if (ent->item->tag == ARMOR_SHARD)
 	{
 		if (!old_armor_index)
+		{
 			other->client->pers.inventory[jacket_armor_index] = 2;
+		}
 		else
+		{
 			other->client->pers.inventory[old_armor_index] += 2;
+		}
 	}
 
-	// if player has no armor, just use it
+	/* if player has no armor, just use it */
 	else if (!old_armor_index)
 	{
-		other->client->pers.inventory[ITEM_INDEX(ent->item)] = newinfo->base_count;
+		other->client->pers.inventory[ITEM_INDEX(ent->item)] =
+			newinfo->base_count;
 	}
 
-	// use the better armor
+	/* use the better armor */
 	else
 	{
-		// get info on old armor
+		/* get info on old armor */
 		if (old_armor_index == jacket_armor_index)
+		{
 			oldinfo = &jacketarmor_info;
+		}
 		else if (old_armor_index == combat_armor_index)
+		{
 			oldinfo = &combatarmor_info;
-		else // (old_armor_index == body_armor_index)
+		}
+		else /* (old_armor_index == body_armor_index) */
+		{
 			oldinfo = &bodyarmor_info;
+		}
 
 		if (newinfo->normal_protection > oldinfo->normal_protection)
 		{
-			// calc new armor values
+			/* calc new armor values */
 			salvage = oldinfo->normal_protection / newinfo->normal_protection;
 			salvagecount = salvage * other->client->pers.inventory[old_armor_index];
 			newcount = newinfo->base_count + salvagecount;
-			if (newcount > newinfo->max_count)
-				newcount = newinfo->max_count;
 
-			// zero count of old armor so it goes away
+			if (newcount > newinfo->max_count)
+			{
+				newcount = newinfo->max_count;
+			}
+
+			/* zero count of old armor so it goes away */
 			other->client->pers.inventory[old_armor_index] = 0;
 
-			// change armor to new item with computed value
+			/* change armor to new item with computed value */
 			other->client->pers.inventory[ITEM_INDEX(ent->item)] = newcount;
 		}
 		else
 		{
-			// calc new armor values
+			/* calc new armor values */
 			salvage = newinfo->normal_protection / oldinfo->normal_protection;
 			salvagecount = salvage * newinfo->base_count;
-			newcount = other->client->pers.inventory[old_armor_index] + salvagecount;
+			newcount = other->client->pers.inventory[old_armor_index] +
+					   salvagecount;
+
 			if (newcount > oldinfo->max_count)
+			{
 				newcount = oldinfo->max_count;
+			}
 
-			// if we're already maxed out then we don't need the new armor
+			/* if we're already maxed out then we don't need the new armor */
 			if (other->client->pers.inventory[old_armor_index] >= newcount)
+			{
 				return false;
+			}
 
-			// update current armor value
+			/* update current armor value */
 			other->client->pers.inventory[old_armor_index] = newcount;
 		}
 	}
 
 	if (!(ent->spawnflags & DROPPED_ITEM) && (deathmatch->value))
-		SetRespawn (ent, 20);
+	{
+		SetRespawn(ent, 20);
+	}
 
 	return true;
 }
@@ -927,9 +974,10 @@ Use_PowerArmor (edict_t *ent, const gitem_t *item)
 	}
 }
 
-qboolean Pickup_PowerArmor (edict_t *ent, edict_t *other)
+qboolean
+Pickup_PowerArmor(edict_t *ent, edict_t *other)
 {
-	int		quantity;
+	int quantity;
 
 	if (!ent || !other)
 	{
@@ -942,11 +990,16 @@ qboolean Pickup_PowerArmor (edict_t *ent, edict_t *other)
 
 	if (deathmatch->value)
 	{
-		if (!(ent->spawnflags & DROPPED_ITEM) )
-			SetRespawn (ent, ent->item->quantity);
-		// auto-use for DM only if we didn't already have one
+		if (!(ent->spawnflags & DROPPED_ITEM))
+		{
+			SetRespawn(ent, ent->item->quantity);
+		}
+
+		/* auto-use for DM only if we didn't already have one */
 		if (!quantity)
-			ent->item->use (other, ent->item);
+		{
+			ent->item->use(other, ent->item);
+		}
 	}
 
 	return true;
@@ -1138,7 +1191,8 @@ void drop_temp_touch (edict_t *ent, edict_t *other, const cplane_t *plane, const
 	Touch_Item (ent, other, plane, surf);
 }
 
-void drop_make_touchable (edict_t *ent)
+void
+drop_make_touchable(edict_t *ent)
 {
 	if (!ent)
 	{
@@ -1146,6 +1200,7 @@ void drop_make_touchable (edict_t *ent)
 	}
 
 	ent->touch = Touch_Item;
+
 	if (deathmatch->value)
 	{
 		ent->nextthink = level.time + 29;
@@ -2850,46 +2905,50 @@ void SP_item_health (edict_t *self)
 	gi.soundindex("items/n_health.wav");
 }
 
-/*QUAKED item_health_small (.3 .3 1) (-16 -16 -16) (16 16 16)
-*/
-void SP_item_health_small (edict_t *self)
+/*
+ * QUAKED item_health_small (.3 .3 1) (-16 -16 -16) (16 16 16)
+ */
+void
+SP_item_health_small(edict_t *self)
 {
 	if (!self)
 	{
 		return;
 	}
 
-	if ( deathmatch->value && ((int)dmflags->value & DF_NO_HEALTH) )
+	if (deathmatch->value && ((int)dmflags->value & DF_NO_HEALTH))
 	{
-		G_FreeEdict (self);
+		G_FreeEdict(self);
 		return;
 	}
 
 	self->model = "models/items/healing/stimpack/tris.md2";
 	self->count = 2;
-	SpawnItem (self, FindItem ("Health"));
+	SpawnItem(self, FindItem("Health"));
 	self->style = HEALTH_IGNORE_MAX;
 	gi.soundindex("items/s_health.wav");
 }
 
-/*QUAKED item_health_large (.3 .3 1) (-16 -16 -16) (16 16 16)
-*/
-void SP_item_health_large (edict_t *self)
+/*
+ * QUAKED item_health_large (.3 .3 1) (-16 -16 -16) (16 16 16)
+ */
+void
+SP_item_health_large(edict_t *self)
 {
 	if (!self)
 	{
 		return;
 	}
 
-	if ( deathmatch->value && ((int)dmflags->value & DF_NO_HEALTH) )
+	if (deathmatch->value && ((int)dmflags->value & DF_NO_HEALTH))
 	{
-		G_FreeEdict (self);
+		G_FreeEdict(self);
 		return;
 	}
 
 	self->model = "models/items/healing/large/tris.md2";
 	self->count = 25;
-	SpawnItem (self, FindItem ("Health"));
+	SpawnItem(self, FindItem("Health"));
 	gi.soundindex("items/l_health.wav");
 }
 

@@ -1,14 +1,12 @@
-/*
-==============================================================================
-
-BERSERK
-
-==============================================================================
-*/
+/* =======================================================================
+ *
+ * The berserker.
+ *
+ * =======================================================================
+ */
 
 #include "../../header/local.h"
 #include "berserker.h"
-
 
 static int sound_pain;
 static int sound_die;
@@ -17,30 +15,31 @@ static int sound_punch;
 static int sound_sight;
 static int sound_search;
 
-void berserk_sight (edict_t *self, edict_t *other)
+void
+berserk_sight(edict_t *self, edict_t *other /* unused */)
 {
 	if (!self)
 	{
 		return;
 	}
 
-	gi.sound (self, CHAN_VOICE, sound_sight, 1, ATTN_NORM, 0);
+	gi.sound(self, CHAN_VOICE, sound_sight, 1, ATTN_NORM, 0);
 }
 
-void berserk_search (edict_t *self)
+void
+berserk_search(edict_t *self)
 {
 	if (!self)
 	{
 		return;
 	}
 
-	gi.sound (self, CHAN_VOICE, sound_search, 1, ATTN_NORM, 0);
+	gi.sound(self, CHAN_VOICE, sound_search, 1, ATTN_NORM, 0);
 }
 
+void berserk_fidget(edict_t *self);
 
-void berserk_fidget (edict_t *self);
-mframe_t berserk_frames_stand [] =
-{
+mframe_t berserk_frames_stand[] = {
 	{ai_stand, 0, berserk_fidget},
 	{ai_stand, 0, NULL},
 	{ai_stand, 0, NULL},
@@ -49,7 +48,8 @@ mframe_t berserk_frames_stand [] =
 };
 mmove_t berserk_move_stand = {FRAME_stand1, FRAME_stand5, berserk_frames_stand, NULL};
 
-void berserk_stand (edict_t *self)
+void
+berserk_stand(edict_t *self)
 {
 	if (!self)
 	{
@@ -59,8 +59,7 @@ void berserk_stand (edict_t *self)
 	self->monsterinfo.currentmove = &berserk_move_stand;
 }
 
-mframe_t berserk_frames_stand_fidget [] =
-{
+mframe_t berserk_frames_stand_fidget[] = {
 	{ai_stand, 0, NULL},
 	{ai_stand, 0, NULL},
 	{ai_stand, 0, NULL},
@@ -84,7 +83,8 @@ mframe_t berserk_frames_stand_fidget [] =
 };
 mmove_t berserk_move_stand_fidget = {FRAME_standb1, FRAME_standb20, berserk_frames_stand_fidget, berserk_stand};
 
-void berserk_fidget (edict_t *self)
+void
+berserk_fidget(edict_t *self)
 {
 	if (!self)
 	{
@@ -92,19 +92,25 @@ void berserk_fidget (edict_t *self)
 	}
 
 	if (self->enemy)
+	{
 		return;
+	}
+
 	if (self->monsterinfo.aiflags & AI_STAND_GROUND)
+	{
 		return;
+	}
+
 	if (random() > 0.15)
+	{
 		return;
+	}
 
 	self->monsterinfo.currentmove = &berserk_move_stand_fidget;
-	gi.sound (self, CHAN_WEAPON, sound_idle, 1, ATTN_IDLE, 0);
+	gi.sound(self, CHAN_WEAPON, sound_idle, 1, ATTN_IDLE, 0);
 }
 
-
-mframe_t berserk_frames_walk [] =
-{
+mframe_t berserk_frames_walk[] = {
 	{ai_walk, 9.1, NULL},
 	{ai_walk, 6.3, NULL},
 	{ai_walk, 4.9, NULL},
@@ -120,7 +126,8 @@ mframe_t berserk_frames_walk [] =
 };
 mmove_t berserk_move_walk = {FRAME_walkc1, FRAME_walkc11, berserk_frames_walk, NULL};
 
-void berserk_walk (edict_t *self)
+void
+berserk_walk(edict_t *self)
 {
 	if (!self)
 	{
@@ -130,8 +137,7 @@ void berserk_walk (edict_t *self)
 	self->monsterinfo.currentmove = &berserk_move_walk;
 }
 
-mframe_t berserk_frames_run1 [] =
-{
+mframe_t berserk_frames_run1[] = {
 	{ai_run, 21, NULL},
 	{ai_run, 11, NULL},
 	{ai_run, 21, NULL},
@@ -141,7 +147,8 @@ mframe_t berserk_frames_run1 [] =
 };
 mmove_t berserk_move_run1 = {FRAME_run1, FRAME_run6, berserk_frames_run1, NULL};
 
-void berserk_run (edict_t *self)
+void
+berserk_run(edict_t *self)
 {
 	if (!self)
 	{
@@ -149,9 +156,13 @@ void berserk_run (edict_t *self)
 	}
 
 	if (self->monsterinfo.aiflags & AI_STAND_GROUND)
+	{
 		self->monsterinfo.currentmove = &berserk_move_stand;
+	}
 	else
+	{
 		self->monsterinfo.currentmove = &berserk_move_run1;
+	}
 }
 
 
@@ -166,27 +177,26 @@ void berserk_attack_spike (edict_t *self)
 	fire_hit (self, aim, (15 + (randk() % 6)), 400);		//	Faster attack -- upwards and backwards
 }
 
-
-void berserk_swing (edict_t *self)
+void
+berserk_swing(edict_t *self)
 {
 	if (!self)
 	{
 		return;
 	}
 
-	gi.sound (self, CHAN_WEAPON, sound_punch, 1, ATTN_NORM, 0);
+	gi.sound(self, CHAN_WEAPON, sound_punch, 1, ATTN_NORM, 0);
 }
 
-mframe_t berserk_frames_attack_spike [] =
-{
-		{ai_charge, 0, NULL},
-		{ai_charge, 0, NULL},
-		{ai_charge, 0, berserk_swing},
-		{ai_charge, 0, berserk_attack_spike},
-		{ai_charge, 0, NULL},
-		{ai_charge, 0, NULL},
-		{ai_charge, 0, NULL},
-		{ai_charge, 0, NULL}
+mframe_t berserk_frames_attack_spike[] = {
+	{ai_charge, 0, NULL},
+	{ai_charge, 0, NULL},
+	{ai_charge, 0, berserk_swing},
+	{ai_charge, 0, berserk_attack_spike},
+	{ai_charge, 0, NULL},
+	{ai_charge, 0, NULL},
+	{ai_charge, 0, NULL},
+	{ai_charge, 0, NULL}
 };
 mmove_t berserk_move_attack_spike = {FRAME_att_c1, FRAME_att_c8, berserk_frames_attack_spike, berserk_run};
 
@@ -204,8 +214,7 @@ void berserk_attack_club (edict_t *self)
 	fire_hit (self, aim, (5 + (randk() % 6)), 400);		// Slower attack
 }
 
-mframe_t berserk_frames_attack_club [] =
-{
+mframe_t berserk_frames_attack_club[] = {
 	{ai_charge, 0, NULL},
 	{ai_charge, 0, NULL},
 	{ai_charge, 0, NULL},
@@ -221,14 +230,14 @@ mframe_t berserk_frames_attack_club [] =
 };
 mmove_t berserk_move_attack_club = {FRAME_att_c9, FRAME_att_c20, berserk_frames_attack_club, berserk_run};
 
-
-void berserk_strike (edict_t *self)
+void
+berserk_strike(edict_t *self)
 {
+	/* Unused, but removal is
+	   very PITA. Let it be... */
 }
 
-
-mframe_t berserk_frames_attack_strike [] =
-{
+mframe_t berserk_frames_attack_strike[] = {
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL},
@@ -261,8 +270,7 @@ void berserk_melee (edict_t *self)
 		self->monsterinfo.currentmove = &berserk_move_attack_club;
 }
 
-mframe_t berserk_frames_pain1 [] =
-{
+mframe_t berserk_frames_pain1[] = {
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL},
@@ -270,9 +278,7 @@ mframe_t berserk_frames_pain1 [] =
 };
 mmove_t berserk_move_pain1 = {FRAME_painc1, FRAME_painc4, berserk_frames_pain1, berserk_run};
 
-
-mframe_t berserk_frames_pain2 [] =
-{
+mframe_t berserk_frames_pain2[] = {
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL},
@@ -321,25 +327,23 @@ void berserk_pain (edict_t *self, edict_t *other, float kick, int damage)
 		self->monsterinfo.currentmove = &berserk_move_pain2;
 }
 
-
-void berserk_dead (edict_t *self)
+void
+berserk_dead(edict_t *self)
 {
 	if (!self)
 	{
 		return;
 	}
 
-	VectorSet (self->mins, -16, -16, -24);
-	VectorSet (self->maxs, 16, 16, -8);
+	VectorSet(self->mins, -16, -16, -24);
+	VectorSet(self->maxs, 16, 16, -8);
 	self->movetype = MOVETYPE_TOSS;
 	self->svflags |= SVF_DEADMONSTER;
 	self->nextthink = 0;
-	gi.linkentity (self);
+	gi.linkentity(self);
 }
 
-
-mframe_t berserk_frames_death1 [] =
-{
+mframe_t berserk_frames_death1[] = {
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL},
@@ -353,13 +357,10 @@ mframe_t berserk_frames_death1 [] =
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL}
-
 };
 mmove_t berserk_move_death1 = {FRAME_death1, FRAME_death13, berserk_frames_death1, berserk_dead};
 
-
-mframe_t berserk_frames_death2 [] =
-{
+mframe_t berserk_frames_death2[] = {
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL},
@@ -406,10 +407,11 @@ void berserk_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int dama
 		self->monsterinfo.currentmove = &berserk_move_death2;
 }
 
-
-/*QUAKED monster_berserk (1 .5 0) (-16 -16 -24) (16 16 32) Ambush Trigger_Spawn Sight
-*/
-void SP_monster_berserk (edict_t *self)
+/*
+ * QUAKED monster_berserk (1 .5 0) (-16 -16 -24) (16 16 32) Ambush Trigger_Spawn Sight
+ */
+void
+SP_monster_berserk(edict_t *self)
 {
 	if (!self)
 	{
@@ -418,21 +420,21 @@ void SP_monster_berserk (edict_t *self)
 
 	if (deathmatch->value)
 	{
-		G_FreeEdict (self);
+		G_FreeEdict(self);
 		return;
 	}
 
-	// pre-caches
-	sound_pain  = gi.soundindex ("berserk/berpain2.wav");
-	sound_die   = gi.soundindex ("berserk/berdeth2.wav");
-	sound_idle  = gi.soundindex ("berserk/beridle1.wav");
-	sound_punch = gi.soundindex ("berserk/attack.wav");
-	sound_search = gi.soundindex ("berserk/bersrch1.wav");
-	sound_sight = gi.soundindex ("berserk/sight.wav");
+	/* pre-caches */
+	sound_pain = gi.soundindex("berserk/berpain2.wav");
+	sound_die = gi.soundindex("berserk/berdeth2.wav");
+	sound_idle = gi.soundindex("berserk/beridle1.wav");
+	sound_punch = gi.soundindex("berserk/attack.wav");
+	sound_search = gi.soundindex("berserk/bersrch1.wav");
+	sound_sight = gi.soundindex("berserk/sight.wav");
 
 	self->s.modelindex = gi.modelindex("models/monsters/berserk/tris.md2");
-	VectorSet (self->mins, -16, -16, -24);
-	VectorSet (self->maxs, 16, 16, 32);
+	VectorSet(self->mins, -16, -16, -24);
+	VectorSet(self->maxs, 16, 16, 32);
 	self->movetype = MOVETYPE_STEP;
 	self->solid = SOLID_BBOX;
 
@@ -455,8 +457,8 @@ void SP_monster_berserk (edict_t *self)
 	self->monsterinfo.currentmove = &berserk_move_stand;
 	self->monsterinfo.scale = MODEL_SCALE;
 
-	gi.linkentity (self);
+	gi.linkentity(self);
 
-	walkmonster_start (self);
+	walkmonster_start(self);
 }
 

@@ -865,17 +865,19 @@ void weapon_grenadelauncher_fire (edict_t *ent)
 	playQuadSound(ent);
 }
 
-void Weapon_GrenadeLauncher (edict_t *ent)
+void
+Weapon_GrenadeLauncher(edict_t *ent)
 {
-	static int	pause_frames[]	= {34, 51, 59, 0};
-	static int	fire_frames[]	= {6, 0};
+	static int pause_frames[] = {34, 51, 59, 0};
+	static int fire_frames[] = {6, 0};
 
 	if (!ent)
 	{
 		return;
 	}
 
-	Weapon_Generic (ent, 5, 16, 59, 64, pause_frames, fire_frames, weapon_grenadelauncher_fire);
+	Weapon_Generic(ent, 5, 16, 59, 64, pause_frames,
+			fire_frames, weapon_grenadelauncher_fire);
 }
 
 /*
@@ -941,17 +943,19 @@ void Weapon_RocketLauncher_Fire (edict_t *ent)
 	}
 }
 
-void Weapon_RocketLauncher (edict_t *ent)
+void
+Weapon_RocketLauncher(edict_t *ent)
 {
-	static int	pause_frames[]	= {25, 33, 42, 50, 0};
-	static int	fire_frames[]	= {5, 0};
+	static int pause_frames[] = {25, 33, 42, 50, 0};
+	static int fire_frames[] = {5, 0};
 
 	if (!ent)
 	{
 		return;
 	}
 
-	Weapon_Generic (ent, 4, 12, 50, 54, pause_frames, fire_frames, Weapon_RocketLauncher_Fire);
+	Weapon_Generic(ent, 4, 12, 50, 54, pause_frames,
+			fire_frames, Weapon_RocketLauncher_Fire);
 }
 
 
@@ -1012,10 +1016,10 @@ int Blaster_Fire (edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, int
 	return ret;
 }
 
-
-void Weapon_Blaster_Fire (edict_t *ent)
+void
+Weapon_Blaster_Fire(edict_t *ent)
 {
-	int		damage;
+	int damage;
 
 	if (!ent)
 	{
@@ -1023,24 +1027,31 @@ void Weapon_Blaster_Fire (edict_t *ent)
 	}
 
 	if (deathmatch->value)
+	{
 		damage = 15;
+	}
 	else
+	{
 		damage = 10;
-	Blaster_Fire (ent, vec3_origin, damage, false, EF_BLASTER);
+	}
+
+	Blaster_Fire(ent, vec3_origin, damage, false, EF_BLASTER);
 	ent->client->ps.gunframe++;
 }
 
-void Weapon_Blaster (edict_t *ent)
+void
+Weapon_Blaster(edict_t *ent)
 {
-	static int	pause_frames[]	= {19, 32, 0};
-	static int	fire_frames[]	= {5, 0};
+	static int pause_frames[] = {19, 32, 0};
+	static int fire_frames[] = {5, 0};
 
 	if (!ent)
 	{
 		return;
 	}
 
-	Weapon_Generic (ent, 4, 8, 52, 55, pause_frames, fire_frames, Weapon_Blaster_Fire);
+	Weapon_Generic(ent, 4, 8, 52, 55, pause_frames,
+			fire_frames, Weapon_Blaster_Fire);
 }
 
 
@@ -1109,17 +1120,19 @@ void Weapon_HyperBlaster_Fire (edict_t *ent)
 
 }
 
-void Weapon_HyperBlaster (edict_t *ent)
+void
+Weapon_HyperBlaster(edict_t *ent)
 {
-	static int	pause_frames[]	= {0};
-	static int	fire_frames[]	= {6, 7, 8, 9, 10, 11, 0};
+	static int pause_frames[] = {0};
+	static int fire_frames[] = {6, 7, 8, 9, 10, 11, 0};
 
 	if (!ent)
 	{
 		return;
 	}
 
-	Weapon_Generic (ent, 5, 20, 49, 53, pause_frames, fire_frames, Weapon_HyperBlaster_Fire);
+	Weapon_Generic(ent, 5, 20, 49, 53, pause_frames,
+			fire_frames, Weapon_HyperBlaster_Fire);
 }
 
 /*
@@ -1214,17 +1227,19 @@ void Machinegun_Fire (edict_t *ent)
 	playQuadSound(ent);
 }
 
-void Weapon_Machinegun (edict_t *ent)
+void
+Weapon_Machinegun(edict_t *ent)
 {
-	static int	pause_frames[]	= {23, 45, 0};
-	static int	fire_frames[]	= {4, 5, 0};
+	static int pause_frames[] = {23, 45, 0};
+	static int fire_frames[] = {4, 5, 0};
 
 	if (!ent)
 	{
 		return;
 	}
 
-	Weapon_Generic (ent, 3, 5, 45, 49, pause_frames, fire_frames, Machinegun_Fire);
+	Weapon_Generic(ent, 3, 5, 45, 49, pause_frames, fire_frames,
+			Machinegun_Fire);
 }
 
 void Chaingun_Fire (edict_t *ent)
@@ -1348,18 +1363,19 @@ void Chaingun_Fire (edict_t *ent)
 	playQuadSound(ent);
 }
 
-
-void Weapon_Chaingun (edict_t *ent)
+void
+Weapon_Chaingun(edict_t *ent)
 {
-	static int	pause_frames[]	= {38, 43, 51, 61, 0};
-	static int	fire_frames[]	= {5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 0};
+	static int pause_frames[] = {38, 43, 51, 61, 0};
+	static int fire_frames[] = {5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 0};
 
 	if (!ent)
 	{
 		return;
 	}
 
-	Weapon_Generic (ent, 4, 31, 61, 64, pause_frames, fire_frames, Chaingun_Fire);
+	Weapon_Generic(ent, 4, 31, 61, 64, pause_frames, fire_frames,
+			Chaingun_Fire);
 }
 
 
@@ -1425,17 +1441,19 @@ void weapon_shotgun_fire (edict_t *ent)
 	playQuadSound(ent);
 }
 
-void Weapon_Shotgun (edict_t *ent)
+void
+Weapon_Shotgun(edict_t *ent)
 {
-	static int	pause_frames[]	= {22, 28, 34, 0};
-	static int	fire_frames[]	= {8, 9, 0};
+	static int pause_frames[] = {22, 28, 34, 0};
+	static int fire_frames[] = {8, 9, 0};
 
 	if (!ent)
 	{
 		return;
 	}
 
-	Weapon_Generic (ent, 7, 18, 36, 39, pause_frames, fire_frames, weapon_shotgun_fire);
+	Weapon_Generic(ent, 7, 18, 36, 39, pause_frames,
+			fire_frames, weapon_shotgun_fire);
 }
 
 
@@ -1517,17 +1535,19 @@ void weapon_supershotgun_fire (edict_t *ent)
 	playQuadSound(ent);
 }
 
-void Weapon_SuperShotgun (edict_t *ent)
+void
+Weapon_SuperShotgun(edict_t *ent)
 {
-	static int	pause_frames[]	= {29, 42, 57, 0};
-	static int	fire_frames[]	= {7, 0};
+	static int pause_frames[] = {29, 42, 57, 0};
+	static int fire_frames[] = {7, 0};
 
 	if (!ent)
 	{
 		return;
 	}
 
-	Weapon_Generic (ent, 6, 17, 57, 61, pause_frames, fire_frames, weapon_supershotgun_fire);
+	Weapon_Generic(ent, 6, 17, 57, 61, pause_frames,
+			fire_frames, weapon_supershotgun_fire);
 }
 
 
@@ -1603,18 +1623,19 @@ void weapon_railgun_fire (edict_t *ent)
 	playQuadSound(ent);
 }
 
-
-void Weapon_Railgun (edict_t *ent)
+void
+Weapon_Railgun(edict_t *ent)
 {
-	static int	pause_frames[]	= {56, 0};
-	static int	fire_frames[]	= {4, 0};
+	static int pause_frames[] = {56, 0};
+	static int fire_frames[] = {4, 0};
 
 	if (!ent)
 	{
 		return;
 	}
 
-	Weapon_Generic (ent, 3, 18, 56, 61, pause_frames, fire_frames, weapon_railgun_fire);
+	Weapon_Generic(ent, 3, 18, 56, 61, pause_frames,
+			fire_frames, weapon_railgun_fire);
 }
 
 
@@ -1710,16 +1731,18 @@ void weapon_bfg_fire (edict_t *ent)
 	playQuadSound(ent);
 }
 
-void Weapon_BFG (edict_t *ent)
+void
+Weapon_BFG(edict_t *ent)
 {
-	static int	pause_frames[]	= {39, 45, 50, 55, 0};
-	static int	fire_frames[]	= {9, 17, 0};
+	static int pause_frames[] = {39, 45, 50, 55, 0};
+	static int fire_frames[] = {9, 17, 0};
 
 	if (!ent)
 	{
 		return;
 	}
 
-	Weapon_Generic (ent, 8, 32, 55, 58, pause_frames, fire_frames, weapon_bfg_fire);
+	Weapon_Generic(ent, 8, 32, 55, 58, pause_frames,
+			fire_frames, weapon_bfg_fire);
 }
 

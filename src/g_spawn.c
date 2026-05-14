@@ -1,10 +1,16 @@
+/* =======================================================================
+ *
+ * Item spawning.
+ *
+ * =======================================================================
+ */
 
 #include "header/local.h"
 
 typedef struct
 {
-	char	*name;
-	void	(*spawn)(edict_t *ent);
+	char *name;
+	void (*spawn)(edict_t *ent);
 } spawn_t;
 
 

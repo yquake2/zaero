@@ -403,13 +403,8 @@ qboolean SV_StepDirection (edict_t *ent, float yaw, float dist)
 	return false;
 }
 
-/*
-======================
-SV_FixCheckBottom
-
-======================
-*/
-void SV_FixCheckBottom (edict_t *ent)
+void
+SV_FixCheckBottom(edict_t *ent)
 {
 	if (!ent)
 	{

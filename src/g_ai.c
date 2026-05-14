@@ -60,24 +60,18 @@ void AI_SetSightClient (void)
 	}
 }
 
-//============================================================================
-
 /*
-=============
-ai_move
-
-Move the specified distance at current facing.
-This replaces the QC functions: ai_forward, ai_back, ai_pain, and ai_painforward
-==============
-*/
-void ai_move (edict_t *self, float dist)
+ * Move the specified distance at current facing.
+ */
+void
+ai_move(edict_t *self, float dist)
 {
 	if (!self)
 	{
 		return;
 	}
 
-	M_walkmove (self, self->s.angles[YAW], dist);
+	M_walkmove(self, self->s.angles[YAW], dist);
 }
 
 
@@ -143,32 +137,30 @@ void ai_stand (edict_t *self, float dist)
 	}
 }
 
-
 /*
-=============
-ai_walk
-
-The monster is walking it's beat
-=============
-*/
-void ai_walk (edict_t *self, float dist)
+ * The monster is walking it's beat
+ */
+void
+ai_walk(edict_t *self, float dist)
 {
 	if (!self)
 	{
 		return;
 	}
 
-	M_MoveToGoal (self, dist);
+	M_MoveToGoal(self, dist);
 
-	// check for noticing a player
-	if (FindTarget (self))
+	/* check for noticing a player */
+	if (FindTarget(self))
+	{
 		return;
+	}
 
 	if ((self->monsterinfo.search) && (level.time > self->monsterinfo.idle_time))
 	{
 		if (self->monsterinfo.idle_time)
 		{
-			self->monsterinfo.search (self);
+			self->monsterinfo.search(self);
 			self->monsterinfo.idle_time = level.time + 15 + random() * 15;
 		}
 		else
@@ -216,16 +208,13 @@ void ai_charge (edict_t *self, float dist)
 		M_walkmove (self, self->s.angles[YAW], dist);
 }
 
-
 /*
-=============
-ai_turn
-
-don't move, but turn towards ideal_yaw
-Distance is for slight position adjustments needed by the animations
-=============
-*/
-void ai_turn (edict_t *self, float dist)
+ * Don't move, but turn towards ideal_yaw
+ * Distance is for slight position adjustments
+ * needed by the animations
+ */
+void
+ai_turn(edict_t *self, float dist)
 {
 	if (!self)
 	{
@@ -233,12 +222,16 @@ void ai_turn (edict_t *self, float dist)
 	}
 
 	if (dist)
-		M_walkmove (self, self->s.angles[YAW], dist);
+	{
+		M_walkmove(self, self->s.angles[YAW], dist);
+	}
 
-	if (FindTarget (self))
+	if (FindTarget(self))
+	{
 		return;
+	}
 
-	M_ChangeYaw (self);
+	M_ChangeYaw(self);
 }
 
 
@@ -285,7 +278,7 @@ ai_range(edict_t *self, edict_t *other)
 	vec3_t	v;
 	float	len;
 
- 	if (!self || !other)
+	if (!self || !other)
 	{
 		return 0;
 	}
@@ -334,32 +327,32 @@ visible(const edict_t *self, const edict_t *other)
 	return false;
 }
 
-
 /*
-=============
-infront
-
-returns 1 if the entity is in front (in sight) of self
-=============
-*/
-qboolean infront (edict_t *self, edict_t *other)
+ * returns 1 if the entity is in
+ * front (in sight) of self
+ */
+qboolean
+infront(edict_t *self, edict_t *other)
 {
-	vec3_t	vec;
-	float	dot;
-	vec3_t	forward;
+	vec3_t vec;
+	float dot;
+	vec3_t forward;
 
 	if (!self || !other)
 	{
 		return false;
 	}
 
-	AngleVectors (self->s.angles, forward, NULL, NULL);
-	VectorSubtract (other->s.origin, self->s.origin, vec);
-	VectorNormalize (vec);
-	dot = DotProduct (vec, forward);
+	AngleVectors(self->s.angles, forward, NULL, NULL);
+	VectorSubtract(other->s.origin, self->s.origin, vec);
+	VectorNormalize(vec);
+	dot = DotProduct(vec, forward);
 
 	if (dot > 0.3)
+	{
 		return true;
+	}
+
 	return false;
 }
 
@@ -845,17 +838,14 @@ void ai_run_missile(edict_t *self)
 	}
 }
 
-
 /*
-=============
-ai_run_slide
-
-Strafe sideways, but stay at aproximately the same range
-=============
-*/
-void ai_run_slide(edict_t *self, float distance)
+ * Strafe sideways, but stay
+ * at aproximately the same range
+ */
+void
+ai_run_slide(edict_t *self, float distance)
 {
-	float	ofs;
+	float ofs;
 
 	if (!self)
 	{
@@ -863,18 +853,24 @@ void ai_run_slide(edict_t *self, float distance)
 	}
 
 	self->ideal_yaw = enemy_yaw;
-	M_ChangeYaw (self);
+	M_ChangeYaw(self);
 
 	if (self->monsterinfo.lefty)
+	{
 		ofs = 90;
+	}
 	else
+	{
 		ofs = -90;
+	}
 
-	if (M_walkmove (self, self->ideal_yaw + ofs, distance))
+	if (M_walkmove(self, self->ideal_yaw + ofs, distance))
+	{
 		return;
+	}
 
 	self->monsterinfo.lefty = 1 - self->monsterinfo.lefty;
-	M_walkmove (self, self->ideal_yaw - ofs, distance);
+	M_walkmove(self, self->ideal_yaw - ofs, distance);
 }
 
 /*
@@ -907,16 +903,12 @@ void ai_fly_strafe(edict_t *self, float dist)
 	}
 }
 
-
 /*
-=============
-ai_checkattack
-
-Decides if we're going to attack or do something else
-used by ai_run and ai_stand
-=============
-*/
-static qboolean hesDeadJim (const edict_t *self)
+ * Decides if we're going to
+ * attack or do something else
+ */
+static qboolean
+hesDeadJim(const edict_t *self)
 {
 	const edict_t *enemy = self->enemy;
 

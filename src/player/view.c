@@ -1,44 +1,46 @@
+/* =======================================================================
+ *
+ * The "camera" through which the player looks into the game.
+ *
+ * =======================================================================
+ */
 
 #include "../header/local.h"
 #include "../monster/misc/player.h"
 
+static edict_t *current_player;
+static gclient_t *current_client;
 
+static vec3_t forward, right, up;
+float xyspeed;
 
-static	edict_t		*current_player;
-static	gclient_t	*current_client;
+float bobmove;
+int bobcycle; /* odd cycles are right foot going forward */
+float bobfracsin; /* sin(bobfrac*M_PI) */
 
-static	vec3_t	forward, right, up;
-float	xyspeed;
-
-float	bobmove;
-int		bobcycle;		// odd cycles are right foot going forward
-float	bobfracsin;		// sin(bobfrac*M_PI)
-
-/*
-===============
-SV_CalcRoll
-
-===============
-*/
-float SV_CalcRoll (vec3_t angles, vec3_t velocity)
+float
+SV_CalcRoll(vec3_t angles, vec3_t velocity)
 {
-	float	sign;
-	float	side;
-	float	value;
+	float sign;
+	float side;
+	float value;
 
-	side = DotProduct (velocity, right);
+	side = DotProduct(velocity, right);
 	sign = side < 0 ? -1 : 1;
 	side = fabs(side);
 
 	value = sv_rollangle->value;
 
 	if (side < sv_rollspeed->value)
+	{
 		side = side * value / sv_rollspeed->value;
+	}
 	else
+	{
 		side = value;
+	}
 
-	return side*sign;
-
+	return side * sign;
 }
 
 
@@ -570,17 +572,12 @@ void SV_CalcBlend (edict_t *ent)
 		ent->client->bonus_alpha = 0;
 }
 
-
-/*
-=================
-P_FallingDamage
-=================
-*/
-void P_FallingDamage (edict_t *ent)
+void
+P_FallingDamage(edict_t *ent)
 {
-	float	delta;
-	int		damage;
-	vec3_t	dir;
+	float delta;
+	int damage;
+	vec3_t dir;
 
 	if (!ent)
 	{
@@ -588,33 +585,52 @@ void P_FallingDamage (edict_t *ent)
 	}
 
 	if (ent->s.modelindex != 255)
-		return;		// not in the player model
+	{
+		return; /* not in the player model */
+	}
 
 	if (ent->movetype == MOVETYPE_NOCLIP)
+	{
 		return;
+	}
 
-	if ((ent->client->oldvelocity[2] < 0) && (ent->velocity[2] > ent->client->oldvelocity[2]) && (!ent->groundentity))
+	if ((ent->client->oldvelocity[2] < 0) &&
+		(ent->velocity[2] > ent->client->oldvelocity[2]) && (!ent->groundentity))
 	{
 		delta = ent->client->oldvelocity[2];
 	}
 	else
 	{
 		if (!ent->groundentity)
+		{
 			return;
+		}
+
 		delta = ent->velocity[2] - ent->client->oldvelocity[2];
 	}
-	delta = delta*delta * 0.0001;
 
-	// never take falling damage if completely underwater
+	delta = delta * delta * 0.0001;
+
+	/* never take falling damage if completely underwater */
 	if (ent->waterlevel == 3)
+	{
 		return;
+	}
+
 	if (ent->waterlevel == 2)
+	{
 		delta *= 0.25;
+	}
+
 	if (ent->waterlevel == 1)
+	{
 		delta *= 0.5;
+	}
 
 	if (delta < 1)
+	{
 		return;
+	}
 
 	if (delta < 15)
 	{
@@ -622,9 +638,13 @@ void P_FallingDamage (edict_t *ent)
 		return;
 	}
 
-	ent->client->fall_value = delta*0.5;
+	ent->client->fall_value = delta * 0.5;
+
 	if (ent->client->fall_value > 40)
+	{
 		ent->client->fall_value = 40;
+	}
+
 	ent->client->fall_time = level.time + FALL_TIME;
 
 	if (delta > 30)
@@ -632,18 +652,30 @@ void P_FallingDamage (edict_t *ent)
 		if (ent->health > 0)
 		{
 			if (delta >= 55)
+			{
 				ent->s.event = EV_FALLFAR;
+			}
 			else
+			{
 				ent->s.event = EV_FALL;
+			}
 		}
-		ent->pain_debounce_time = level.time;	// no normal pain sound
-		damage = (delta-30)/2;
-		if (damage < 1)
-			damage = 1;
-		VectorSet (dir, 0, 0, 1);
 
-		if (!deathmatch->value || !((int)dmflags->value & DF_NO_FALLING) )
-			T_Damage (ent, world, world, dir, ent->s.origin, vec3_origin, damage, 0, 0, MOD_FALLING);
+		ent->pain_debounce_time = level.time; /* no normal pain sound */
+		damage = (delta - 30) / 2;
+
+		if (damage < 1)
+		{
+			damage = 1;
+		}
+
+		VectorSet(dir, 0, 0, 1);
+
+		if (!deathmatch->value || !((int)dmflags->value & DF_NO_FALLING))
+		{
+			T_Damage(ent, world, world, dir, ent->s.origin, vec3_origin,
+					damage, 0, 0, MOD_FALLING);
+		}
 	}
 	else
 	{

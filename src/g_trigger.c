@@ -17,9 +17,12 @@ void InitTrigger (edict_t *self)
 	self->svflags = SVF_NOCLIENT;
 }
 
-
-// the wait time has passed, so set back up for another activation
-void multi_wait (edict_t *ent)
+/*
+ * The wait time has passed, so set
+ * back up for another activation
+ */
+void
+multi_wait(edict_t *ent)
 {
 	if (!ent)
 	{
@@ -29,11 +32,13 @@ void multi_wait (edict_t *ent)
 	ent->nextthink = 0;
 }
 
-
-// the trigger was just activated
-// ent->activator should be set to the activator so it can be held through a delay
-// so wait for the delay time before firing
-void multi_trigger (edict_t *ent)
+/*
+ * The trigger was just activated.  ent->activator should
+ * be set to the activator so it can be held through a delay
+ * so wait for the delay time before firing
+ */
+void
+multi_trigger(edict_t *ent)
 {
 	if (!ent)
 	{
@@ -41,9 +46,11 @@ void multi_trigger (edict_t *ent)
 	}
 
 	if (ent->nextthink)
-		return;		// already been triggered
+	{
+		return; /* already been triggered */
+	}
 
-	G_UseTargets (ent, ent->activator);
+	G_UseTargets(ent, ent->activator);
 
 	if (ent->wait > 0)
 	{
@@ -52,8 +59,9 @@ void multi_trigger (edict_t *ent)
 	}
 	else
 	{
-		// we can't just remove (self) here, because this is a touch function
-		// called while looping through area links...
+		/* we can't just remove (self) here,
+		   because this is a touch function
+		   called while looping through area links... */
 		ent->touch = NULL;
 		ent->nextthink = level.time + FRAMETIME;
 		ent->think = G_FreeEdict;
@@ -127,7 +135,8 @@ void trigger_enable (edict_t *self, edict_t *other, edict_t *activator)
 	gi.linkentity (self);
 }
 
-void SP_trigger_multiple (edict_t *ent)
+void
+SP_trigger_multiple(edict_t *ent)
 {
 	if (!ent)
 	{
@@ -135,18 +144,26 @@ void SP_trigger_multiple (edict_t *ent)
 	}
 
 	if (ent->sounds == 1)
-		ent->noise_index = gi.soundindex ("misc/secret.wav");
+	{
+		ent->noise_index = gi.soundindex("misc/secret.wav");
+	}
 	else if (ent->sounds == 2)
-		ent->noise_index = gi.soundindex ("misc/talk.wav");
+	{
+		ent->noise_index = gi.soundindex("misc/talk.wav");
+	}
 	else if (ent->sounds == 3)
-		ent->noise_index = gi.soundindex ("misc/trigger1.wav");
+	{
+		ent->noise_index = gi.soundindex("misc/trigger1.wav");
+	}
 
 	if (!ent->wait)
+	{
 		ent->wait = 0.2;
+	}
+
 	ent->touch = Touch_Multi;
 	ent->movetype = MOVETYPE_NONE;
 	ent->svflags |= SVF_NOCLIENT;
-
 
 	if (ent->spawnflags & 4)
 	{
@@ -160,49 +177,53 @@ void SP_trigger_multiple (edict_t *ent)
 	}
 
 	if (!VectorCompare(ent->s.angles, vec3_origin))
-		G_SetMovedir (ent->s.angles, ent->movedir);
+	{
+		G_SetMovedir(ent->s.angles, ent->movedir);
+	}
 
-	gi.setmodel (ent, ent->model);
-	gi.linkentity (ent);
+	gi.setmodel(ent, ent->model);
+	gi.linkentity(ent);
 }
 
-
-/*QUAKED trigger_once (.5 .5 .5) ? x x TRIGGERED
-Triggers once, then removes itself.
-You must set the key "target" to the name of another object in the level that has a matching "targetname".
-
-If TRIGGERED, this trigger must be triggered before it is live.
-
-sounds
- 1)	secret
- 2)	beep beep
- 3)	large switch
- 4)
-
-"message"	string to be displayed when triggered
-*/
-
-void SP_trigger_once(edict_t *ent)
+/*
+ * QUAKED trigger_once (.5 .5 .5) ? x x TRIGGERED
+ * Triggers once, then removes itself.
+ *
+ * You must set the key "target" to the name of another
+ * object in the level that has a matching "targetname".
+ *
+ * If TRIGGERED, this trigger must be triggered before it is live.
+ *
+ * sounds
+ *  1) secret
+ *  2) beep beep
+ *  3) large switch
+ *
+ * "message" string to be displayed when triggered
+ */
+void
+SP_trigger_once(edict_t *ent)
 {
 	if (!ent)
 	{
 		return;
 	}
 
-	// make old maps work because I messed up on flag assignments here
-	// triggered was on bit 1 when it should have been on bit 4
+	/* make old maps work because I messed up
+	   on flag assignments here. triggered was
+	   on bit 1 when it should have been on bit 4 */
 	if (ent->spawnflags & 1)
 	{
-		vec3_t	v;
+		vec3_t v;
 
-		VectorMA (ent->mins, 0.5, ent->size, v);
+		VectorMA(ent->mins, 0.5, ent->size, v);
 		ent->spawnflags &= ~1;
 		ent->spawnflags |= 4;
 		gi.dprintf("fixed TRIGGERED flag on %s at %s\n", ent->classname, vtos(v));
 	}
 
 	ent->wait = -1;
-	SP_trigger_multiple (ent);
+	SP_trigger_multiple(ent);
 }
 
 /*QUAKED trigger_relay (.5 .5 .5) (-8 -8 -8) (8 8 8)
@@ -218,7 +239,8 @@ void trigger_relay_use (edict_t *self, edict_t *other, edict_t *activator)
 	G_UseTargets (self, activator);
 }
 
-void SP_trigger_relay (edict_t *self)
+void
+SP_trigger_relay(edict_t *self)
 {
 	if (!self)
 	{
@@ -316,7 +338,8 @@ void trigger_key_use (edict_t *self, edict_t *other, edict_t *activator)
 	self->use = NULL;
 }
 
-void SP_trigger_key (edict_t *self)
+void
+SP_trigger_key(edict_t *self)
 {
 	if (!self)
 	{
@@ -328,22 +351,25 @@ void SP_trigger_key (edict_t *self)
 		gi.dprintf("no key item for trigger_key at %s\n", vtos(self->s.origin));
 		return;
 	}
-	self->item = FindItemByClassname (st.item);
+
+	self->item = FindItemByClassname(st.item);
 
 	if (!self->item)
 	{
-		gi.dprintf("item %s not found for trigger_key at %s\n", st.item, vtos(self->s.origin));
+		gi.dprintf("item %s not found for trigger_key at %s\n", st.item,
+				vtos(self->s.origin));
 		return;
 	}
 
 	if (!self->target)
 	{
-		gi.dprintf("%s at %s has no target\n", self->classname, vtos(self->s.origin));
+		gi.dprintf("%s at %s has no target\n", self->classname,
+				vtos(self->s.origin));
 		return;
 	}
 
-	gi.soundindex ("misc/keytry.wav");
-	gi.soundindex ("misc/keyuse.wav");
+	gi.soundindex("misc/keytry.wav");
+	gi.soundindex("misc/keyuse.wav");
 
 	self->use = trigger_key_use;
 }
@@ -396,7 +422,8 @@ void trigger_counter_use(edict_t *self, edict_t *other, edict_t *activator)
 	multi_trigger (self);
 }
 
-void SP_trigger_counter (edict_t *self)
+void
+SP_trigger_counter(edict_t *self)
 {
 	if (!self)
 	{
@@ -404,34 +431,34 @@ void SP_trigger_counter (edict_t *self)
 	}
 
 	self->wait = -1;
+
 	if (!self->count)
+	{
 		self->count = 2;
+	}
 
 	self->use = trigger_counter_use;
 }
 
-
 /*
-==============================================================================
-
-trigger_always
-
-==============================================================================
-*/
-
-/*QUAKED trigger_always (.5 .5 .5) (-8 -8 -8) (8 8 8)
-This trigger will always fire.  It is activated by the world.
-*/
-void SP_trigger_always (edict_t *ent)
+ * QUAKED trigger_always (.5 .5 .5) (-8 -8 -8) (8 8 8)
+ * This trigger will always fire. It is activated by the world.
+ */
+void
+SP_trigger_always(edict_t *ent)
 {
 	if (!ent)
 	{
 		return;
 	}
 
-	// we must have some delay to make sure our use targets are present
+	/* we must have some delay to make
+	   sure our use targets are present */
 	if (ent->delay < 0.2)
+	{
 		ent->delay = 0.2;
+	}
+
 	G_UseTargets(ent, ent);
 }
 
@@ -599,30 +626,39 @@ void hurt_touch (edict_t *self, edict_t *other, const cplane_t *plane, const csu
 	T_Damage (other, self, self, vec3_origin, other->s.origin, vec3_origin, self->dmg, self->dmg, dflags, MOD_TRIGGER_HURT);
 }
 
-void SP_trigger_hurt (edict_t *self)
+void
+SP_trigger_hurt(edict_t *self)
 {
 	if (!self)
 	{
 		return;
 	}
 
-	InitTrigger (self);
+	InitTrigger(self);
 
-	self->noise_index = gi.soundindex ("world/electro.wav");
+	self->noise_index = gi.soundindex("world/electro.wav");
 	self->touch = hurt_touch;
 
 	if (!self->dmg)
+	{
 		self->dmg = 5;
+	}
 
 	if (self->spawnflags & 1)
+	{
 		self->solid = SOLID_NOT;
+	}
 	else
+	{
 		self->solid = SOLID_TRIGGER;
+	}
 
 	if (self->spawnflags & 2)
+	{
 		self->use = hurt_use;
+	}
 
-	gi.linkentity (self);
+	gi.linkentity(self);
 }
 
 
@@ -709,7 +745,8 @@ void trigger_monsterjump_touch (edict_t *self, edict_t *other, const cplane_t *p
 	other->velocity[2] = self->movedir[2];
 }
 
-void SP_trigger_monsterjump (edict_t *self)
+void
+SP_trigger_monsterjump(edict_t *self)
 {
 	if (!self)
 	{
@@ -717,12 +754,21 @@ void SP_trigger_monsterjump (edict_t *self)
 	}
 
 	if (!self->speed)
+	{
 		self->speed = 200;
+	}
+
 	if (!st.height)
+	{
 		st.height = 200;
+	}
+
 	if (self->s.angles[YAW] == 0)
+	{
 		self->s.angles[YAW] = 360;
-	InitTrigger (self);
+	}
+
+	InitTrigger(self);
 	self->touch = trigger_monsterjump_touch;
 	self->movedir[2] = st.height;
 }

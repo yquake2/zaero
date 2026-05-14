@@ -60,65 +60,68 @@ edict_t *medic_FindDeadMonster (edict_t *self)
 	return best;
 }
 
-void medic_idle (edict_t *self)
+void
+medic_idle(edict_t *self)
 {
-	edict_t	*ent;
+	edict_t *ent;
 
 	if (!self)
 	{
 		return;
 	}
 
-	gi.sound (self, CHAN_VOICE, sound_idle1, 1, ATTN_IDLE, 0);
+	gi.sound(self, CHAN_VOICE, sound_idle1, 1, ATTN_IDLE, 0);
 
 	ent = medic_FindDeadMonster(self);
+
 	if (ent)
 	{
 		self->enemy = ent;
 		self->enemy->owner = self;
 		self->monsterinfo.aiflags |= AI_MEDIC;
-		FoundTarget (self);
+		FoundTarget(self);
 	}
 }
 
-void medic_search (edict_t *self)
+void
+medic_search(edict_t *self)
 {
-	edict_t	*ent;
+	edict_t *ent;
 
 	if (!self)
 	{
 		return;
 	}
 
-	gi.sound (self, CHAN_VOICE, sound_search, 1, ATTN_IDLE, 0);
+	gi.sound(self, CHAN_VOICE, sound_search, 1, ATTN_IDLE, 0);
 
 	if (!self->oldenemy)
 	{
 		ent = medic_FindDeadMonster(self);
+
 		if (ent)
 		{
 			self->oldenemy = self->enemy;
 			self->enemy = ent;
 			self->enemy->owner = self;
 			self->monsterinfo.aiflags |= AI_MEDIC;
-			FoundTarget (self);
+			FoundTarget(self);
 		}
 	}
 }
 
-void medic_sight (edict_t *self, edict_t *other)
+void
+medic_sight(edict_t *self, edict_t *other /* unused */)
 {
 	if (!self)
 	{
 		return;
 	}
 
-	gi.sound (self, CHAN_VOICE, sound_sight, 1, ATTN_NORM, 0);
+	gi.sound(self, CHAN_VOICE, sound_sight, 1, ATTN_NORM, 0);
 }
 
-
-mframe_t medic_frames_stand [] =
-{
+mframe_t medic_frames_stand[] = {
 	{ai_stand, 0, medic_idle},
 	{ai_stand, 0, NULL},
 	{ai_stand, 0, NULL},
@@ -209,11 +212,11 @@ mframe_t medic_frames_stand [] =
 	{ai_stand, 0, NULL},
 	{ai_stand, 0, NULL},
 	{ai_stand, 0, NULL},
-
 };
 mmove_t medic_move_stand = {FRAME_wait1, FRAME_wait90, medic_frames_stand, NULL};
 
-void medic_stand (edict_t *self)
+void
+medic_stand(edict_t *self)
 {
 	if (!self)
 	{
@@ -223,25 +226,24 @@ void medic_stand (edict_t *self)
 	self->monsterinfo.currentmove = &medic_move_stand;
 }
 
-
-mframe_t medic_frames_walk [] =
-{
-	{ai_walk, 6.2,	NULL},
-	{ai_walk, 18.1,  NULL},
-	{ai_walk, 1,		NULL},
-	{ai_walk, 9,		NULL},
-	{ai_walk, 10,	NULL},
-	{ai_walk, 9,		NULL},
-	{ai_walk, 11,	NULL},
-	{ai_walk, 11.6,  NULL},
-	{ai_walk, 2,		NULL},
-	{ai_walk, 9.9,	NULL},
-	{ai_walk, 14,	NULL},
-	{ai_walk, 9.3,	NULL}
+mframe_t medic_frames_walk[] = {
+	{ai_walk, 6.2, NULL},
+	{ai_walk, 18.1, NULL},
+	{ai_walk, 1, NULL},
+	{ai_walk, 9, NULL},
+	{ai_walk, 10, NULL},
+	{ai_walk, 9, NULL},
+	{ai_walk, 11, NULL},
+	{ai_walk, 11.6, NULL},
+	{ai_walk, 2, NULL},
+	{ai_walk, 9.9, NULL},
+	{ai_walk, 14, NULL},
+	{ai_walk, 9.3, NULL}
 };
 mmove_t medic_move_walk = {FRAME_walk1, FRAME_walk12, medic_frames_walk, NULL};
 
-void medic_walk (edict_t *self)
+void
+medic_walk(edict_t *self)
 {
 	if (!self)
 	{
@@ -251,20 +253,18 @@ void medic_walk (edict_t *self)
 	self->monsterinfo.currentmove = &medic_move_walk;
 }
 
-
-mframe_t medic_frames_run [] =
-{
-	{ai_run, 18,		NULL},
-	{ai_run, 22.5,	NULL},
-	{ai_run, 25.4,	NULL},
-	{ai_run, 23.4,	NULL},
-	{ai_run, 24,		NULL},
-	{ai_run, 35.6,	NULL}
-
+mframe_t medic_frames_run[] = {
+	{ai_run, 18, NULL},
+	{ai_run, 22.5, NULL},
+	{ai_run, 25.4, NULL},
+	{ai_run, 23.4, NULL},
+	{ai_run, 24, NULL},
+	{ai_run, 35.6, NULL}
 };
 mmove_t medic_move_run = {FRAME_run1, FRAME_run6, medic_frames_run, NULL};
 
-void medic_run (edict_t *self)
+void
+medic_run(edict_t *self)
 {
 	if (!self)
 	{
@@ -273,29 +273,32 @@ void medic_run (edict_t *self)
 
 	if (!(self->monsterinfo.aiflags & AI_MEDIC))
 	{
-		edict_t	*ent;
+		edict_t *ent;
 
 		ent = medic_FindDeadMonster(self);
+
 		if (ent)
 		{
 			self->oldenemy = self->enemy;
 			self->enemy = ent;
 			self->enemy->owner = self;
 			self->monsterinfo.aiflags |= AI_MEDIC;
-			FoundTarget (self);
+			FoundTarget(self);
 			return;
 		}
 	}
 
 	if (self->monsterinfo.aiflags & AI_STAND_GROUND)
+	{
 		self->monsterinfo.currentmove = &medic_move_stand;
+	}
 	else
+	{
 		self->monsterinfo.currentmove = &medic_move_run;
+	}
 }
 
-
-mframe_t medic_frames_pain1 [] =
-{
+mframe_t medic_frames_pain1[] = {
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL},
@@ -307,8 +310,7 @@ mframe_t medic_frames_pain1 [] =
 };
 mmove_t medic_move_pain1 = {FRAME_paina1, FRAME_paina8, medic_frames_pain1, medic_run};
 
-mframe_t medic_frames_pain2 [] =
-{
+mframe_t medic_frames_pain2[] = {
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL},
@@ -357,13 +359,14 @@ void medic_pain (edict_t *self, edict_t *other, float kick, int damage)
 	}
 }
 
-void medic_fire_blaster (edict_t *self)
+void
+medic_fire_blaster(edict_t *self)
 {
-	vec3_t	start;
-	vec3_t	forward, right;
-	vec3_t	end;
-	vec3_t	dir;
-	int		effect;
+	vec3_t start;
+	vec3_t forward, right;
+	vec3_t end;
+	vec3_t dir;
+	int effect;
 
 	if (!self)
 	{
@@ -371,40 +374,49 @@ void medic_fire_blaster (edict_t *self)
 	}
 
 	if ((self->s.frame == FRAME_attack9) || (self->s.frame == FRAME_attack12))
+	{
 		effect = EF_BLASTER;
-	else if ((self->s.frame == FRAME_attack19) || (self->s.frame == FRAME_attack22) || (self->s.frame == FRAME_attack25) || (self->s.frame == FRAME_attack28))
+	}
+	else if ((self->s.frame == FRAME_attack19) ||
+			 (self->s.frame == FRAME_attack22) ||
+			 (self->s.frame == FRAME_attack25) ||
+			 (self->s.frame == FRAME_attack28))
+	{
 		effect = EF_HYPERBLASTER;
+	}
 	else
+	{
 		effect = 0;
+	}
 
-	AngleVectors (self->s.angles, forward, right, NULL);
-	G_ProjectSource (self->s.origin, monster_flash_offset[MZ2_MEDIC_BLASTER_1], forward, right, start);
+	AngleVectors(self->s.angles, forward, right, NULL);
+	G_ProjectSource(self->s.origin, monster_flash_offset[MZ2_MEDIC_BLASTER_1],
+			forward, right, start);
 
-	VectorCopy (self->enemy->s.origin, end);
+	VectorCopy(self->enemy->s.origin, end);
 	end[2] += self->enemy->viewheight;
-	VectorSubtract (end, start, dir);
+	VectorSubtract(end, start, dir);
 
-	monster_fire_blaster (self, start, dir, 2, 1000, MZ2_MEDIC_BLASTER_1, effect);
+	monster_fire_blaster(self, start, dir, 2, 1000, MZ2_MEDIC_BLASTER_1, effect);
 }
 
-
-void medic_dead (edict_t *self)
+void
+medic_dead(edict_t *self)
 {
 	if (!self)
 	{
 		return;
 	}
 
-	VectorSet (self->mins, -16, -16, -24);
-	VectorSet (self->maxs, 16, 16, -8);
+	VectorSet(self->mins, -16, -16, -24);
+	VectorSet(self->maxs, 16, 16, -8);
 	self->movetype = MOVETYPE_TOSS;
 	self->svflags |= SVF_DEADMONSTER;
 	self->nextthink = 0;
-	gi.linkentity (self);
+	gi.linkentity(self);
 }
 
-mframe_t medic_frames_death [] =
-{
+mframe_t medic_frames_death[] = {
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL},
@@ -475,8 +487,8 @@ void medic_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage
 	self->monsterinfo.currentmove = &medic_move_death;
 }
 
-
-void medic_duck_down (edict_t *self)
+void
+medic_duck_down(edict_t *self)
 {
 	if (!self)
 	{
@@ -484,15 +496,19 @@ void medic_duck_down (edict_t *self)
 	}
 
 	if (self->monsterinfo.aiflags & AI_DUCKED)
+	{
 		return;
+	}
+
 	self->monsterinfo.aiflags |= AI_DUCKED;
 	self->maxs[2] -= 32;
 	self->takedamage = DAMAGE_YES;
 	self->monsterinfo.pausetime = level.time + 1;
-	gi.linkentity (self);
+	gi.linkentity(self);
 }
 
-void medic_duck_hold (edict_t *self)
+void
+medic_duck_hold(edict_t *self)
 {
 	if (!self)
 	{
@@ -500,12 +516,17 @@ void medic_duck_hold (edict_t *self)
 	}
 
 	if (level.time >= self->monsterinfo.pausetime)
+	{
 		self->monsterinfo.aiflags &= ~AI_HOLD_FRAME;
+	}
 	else
+	{
 		self->monsterinfo.aiflags |= AI_HOLD_FRAME;
+	}
 }
 
-void medic_duck_up (edict_t *self)
+void
+medic_duck_up(edict_t *self)
 {
 	if (!self)
 	{
@@ -515,31 +536,31 @@ void medic_duck_up (edict_t *self)
 	self->monsterinfo.aiflags &= ~AI_DUCKED;
 	self->maxs[2] += 32;
 	self->takedamage = DAMAGE_AIM;
-	gi.linkentity (self);
+	gi.linkentity(self);
 }
 
-mframe_t medic_frames_duck [] =
-{
-	{ai_move, -1,	NULL},
-	{ai_move, -1,	NULL},
-	{ai_move, -1,	medic_duck_down},
-	{ai_move, -1,	medic_duck_hold},
-	{ai_move, -1,	NULL},
-	{ai_move, -1,	NULL},
-	{ai_move, -1,	medic_duck_up},
-	{ai_move, -1,	NULL},
-	{ai_move, -1,	NULL},
-	{ai_move, -1,	NULL},
-	{ai_move, -1,	NULL},
-	{ai_move, -1,	NULL},
-	{ai_move, -1,	NULL},
-	{ai_move, -1,	NULL},
-	{ai_move, -1,	NULL},
-	{ai_move, -1,	NULL}
+mframe_t medic_frames_duck[] = {
+	{ai_move, -1, NULL},
+	{ai_move, -1, NULL},
+	{ai_move, -1, medic_duck_down},
+	{ai_move, -1, medic_duck_hold},
+	{ai_move, -1, NULL},
+	{ai_move, -1, NULL},
+	{ai_move, -1, medic_duck_up},
+	{ai_move, -1, NULL},
+	{ai_move, -1, NULL},
+	{ai_move, -1, NULL},
+	{ai_move, -1, NULL},
+	{ai_move, -1, NULL},
+	{ai_move, -1, NULL},
+	{ai_move, -1, NULL},
+	{ai_move, -1, NULL},
+	{ai_move, -1, NULL}
 };
 mmove_t medic_move_duck = {FRAME_duck1, FRAME_duck16, medic_frames_duck, medic_run};
 
-void medic_dodge (edict_t *self, edict_t *attacker, float eta)
+void
+medic_dodge(edict_t *self, edict_t *attacker, float eta /* unused */)
 {
 	if (!self || !attacker)
 	{
@@ -547,7 +568,9 @@ void medic_dodge (edict_t *self, edict_t *attacker, float eta)
 	}
 
 	if (random() > 0.25)
+	{
 		return;
+	}
 
 	if (!self->enemy)
 	{
@@ -558,69 +581,70 @@ void medic_dodge (edict_t *self, edict_t *attacker, float eta)
 	self->monsterinfo.currentmove = &medic_move_duck;
 }
 
-mframe_t medic_frames_attackHyperBlaster [] =
-{
-	{ai_charge, 0,	NULL},
-	{ai_charge, 0,	NULL},
-	{ai_charge, 0,	NULL},
-	{ai_charge, 0,	NULL},
-	{ai_charge, 0,	medic_fire_blaster},
-	{ai_charge, 0,	medic_fire_blaster},
-	{ai_charge, 0,	medic_fire_blaster},
-	{ai_charge, 0,	medic_fire_blaster},
-	{ai_charge, 0,	medic_fire_blaster},
-	{ai_charge, 0,	medic_fire_blaster},
-	{ai_charge, 0,	medic_fire_blaster},
-	{ai_charge, 0,	medic_fire_blaster},
-	{ai_charge, 0,	medic_fire_blaster},
-	{ai_charge, 0,	medic_fire_blaster},
-	{ai_charge, 0,	medic_fire_blaster},
-	{ai_charge, 0,	medic_fire_blaster}
+mframe_t medic_frames_attackHyperBlaster[] = {
+	{ai_charge, 0, NULL},
+	{ai_charge, 0, NULL},
+	{ai_charge, 0, NULL},
+	{ai_charge, 0, NULL},
+	{ai_charge, 0, medic_fire_blaster},
+	{ai_charge, 0, medic_fire_blaster},
+	{ai_charge, 0, medic_fire_blaster},
+	{ai_charge, 0, medic_fire_blaster},
+	{ai_charge, 0, medic_fire_blaster},
+	{ai_charge, 0, medic_fire_blaster},
+	{ai_charge, 0, medic_fire_blaster},
+	{ai_charge, 0, medic_fire_blaster},
+	{ai_charge, 0, medic_fire_blaster},
+	{ai_charge, 0, medic_fire_blaster},
+	{ai_charge, 0, medic_fire_blaster},
+	{ai_charge, 0, medic_fire_blaster}
 };
 mmove_t medic_move_attackHyperBlaster = {FRAME_attack15, FRAME_attack30, medic_frames_attackHyperBlaster, medic_run};
 
-
-void medic_continue (edict_t *self)
+void
+medic_continue(edict_t *self)
 {
 	if (!self)
 	{
 		return;
 	}
 
-	if (visible (self, self->enemy) )
+	if (visible(self, self->enemy))
+	{
 		if (random() <= 0.95)
+		{
 			self->monsterinfo.currentmove = &medic_move_attackHyperBlaster;
+		}
+	}
 }
 
-
-mframe_t medic_frames_attackBlaster [] =
-{
-	{ai_charge, 0,	NULL},
-	{ai_charge, 5,	NULL},
-	{ai_charge, 5,	NULL},
-	{ai_charge, 3,	NULL},
-	{ai_charge, 2,	NULL},
-	{ai_charge, 0,	NULL},
-	{ai_charge, 0,	NULL},
-	{ai_charge, 0,	NULL},
-	{ai_charge, 0,	medic_fire_blaster},
-	{ai_charge, 0,	NULL},
-	{ai_charge, 0,	NULL},
-	{ai_charge, 0,	medic_fire_blaster},
-	{ai_charge, 0,	NULL},
-	{ai_charge, 0,	medic_continue}	// Change to medic_continue... Else, go to frame 32
+mframe_t medic_frames_attackBlaster[] = {
+	{ai_charge, 0, NULL},
+	{ai_charge, 5, NULL},
+	{ai_charge, 5, NULL},
+	{ai_charge, 3, NULL},
+	{ai_charge, 2, NULL},
+	{ai_charge, 0, NULL},
+	{ai_charge, 0, NULL},
+	{ai_charge, 0, NULL},
+	{ai_charge, 0, medic_fire_blaster},
+	{ai_charge, 0, NULL},
+	{ai_charge, 0, NULL},
+	{ai_charge, 0, medic_fire_blaster},
+	{ai_charge, 0, NULL},
+	{ai_charge, 0, medic_continue}
 };
 mmove_t medic_move_attackBlaster = {FRAME_attack1, FRAME_attack14, medic_frames_attackBlaster, medic_run};
 
-
-void medic_hook_launch (edict_t *self)
+void
+medic_hook_launch(edict_t *self)
 {
 	if (!self)
 	{
 		return;
 	}
 
-	gi.sound (self, CHAN_WEAPON, sound_hook_launch, 1, ATTN_NORM, 0);
+	gi.sound(self, CHAN_WEAPON, sound_hook_launch, 1, ATTN_NORM, 0);
 }
 
 void ED_CallSpawn (edict_t *ent);
@@ -724,52 +748,52 @@ void medic_cable_attack (edict_t *self)
 	gi.multicast (self->s.origin, MULTICAST_PVS);
 }
 
-void medic_hook_retract (edict_t *self)
+void
+medic_hook_retract(edict_t *self)
 {
 	if (!self)
 	{
 		return;
 	}
 
-	gi.sound (self, CHAN_WEAPON, sound_hook_retract, 1, ATTN_NORM, 0);
+	gi.sound(self, CHAN_WEAPON, sound_hook_retract, 1, ATTN_NORM, 0);
 	self->enemy->monsterinfo.aiflags &= ~AI_RESURRECTING;
 }
 
-mframe_t medic_frames_attackCable [] =
-{
-	{ai_move, 2,		NULL},
-	{ai_move, 3,		NULL},
-	{ai_move, 5,		NULL},
-	{ai_move, 4.4,	NULL},
-	{ai_charge, 4.7,	NULL},
-	{ai_charge, 5,	NULL},
-	{ai_charge, 6,	NULL},
-	{ai_charge, 4,	NULL},
-	{ai_charge, 0,	NULL},
-	{ai_move, 0,		medic_hook_launch},
-	{ai_move, 0,		medic_cable_attack},
-	{ai_move, 0,		medic_cable_attack},
-	{ai_move, 0,		medic_cable_attack},
-	{ai_move, 0,		medic_cable_attack},
-	{ai_move, 0,		medic_cable_attack},
-	{ai_move, 0,		medic_cable_attack},
-	{ai_move, 0,		medic_cable_attack},
-	{ai_move, 0,		medic_cable_attack},
-	{ai_move, 0,		medic_cable_attack},
-	{ai_move, -15,	medic_hook_retract},
-	{ai_move, -1.5,	NULL},
-	{ai_move, -1.2,	NULL},
-	{ai_move, -3,	NULL},
-	{ai_move, -2,	NULL},
-	{ai_move, 0.3,	NULL},
-	{ai_move, 0.7,	NULL},
-	{ai_move, 1.2,	NULL},
-	{ai_move, 1.3,	NULL}
+mframe_t medic_frames_attackCable[] = {
+	{ai_move, 2, NULL},
+	{ai_move, 3, NULL},
+	{ai_move, 5, NULL},
+	{ai_move, 4.4, NULL},
+	{ai_charge, 4.7, NULL},
+	{ai_charge, 5, NULL},
+	{ai_charge, 6, NULL},
+	{ai_charge, 4, NULL},
+	{ai_charge, 0, NULL},
+	{ai_move, 0, medic_hook_launch},
+	{ai_move, 0, medic_cable_attack},
+	{ai_move, 0, medic_cable_attack},
+	{ai_move, 0, medic_cable_attack},
+	{ai_move, 0, medic_cable_attack},
+	{ai_move, 0, medic_cable_attack},
+	{ai_move, 0, medic_cable_attack},
+	{ai_move, 0, medic_cable_attack},
+	{ai_move, 0, medic_cable_attack},
+	{ai_move, 0, medic_cable_attack},
+	{ai_move, -15, medic_hook_retract},
+	{ai_move, -1.5, NULL},
+	{ai_move, -1.2, NULL},
+	{ai_move, -3, NULL},
+	{ai_move, -2, NULL},
+	{ai_move, 0.3, NULL},
+	{ai_move, 0.7, NULL},
+	{ai_move, 1.2, NULL},
+	{ai_move, 1.3, NULL}
 };
 mmove_t medic_move_attackCable = {FRAME_attack33, FRAME_attack60, medic_frames_attackCable, medic_run};
 
-
-void medic_attack(edict_t *self)
+void
+medic_attack(edict_t *self)
 {
 	if (!self)
 	{
@@ -777,12 +801,17 @@ void medic_attack(edict_t *self)
 	}
 
 	if (self->monsterinfo.aiflags & AI_MEDIC)
+	{
 		self->monsterinfo.currentmove = &medic_move_attackCable;
+	}
 	else
+	{
 		self->monsterinfo.currentmove = &medic_move_attackBlaster;
+	}
 }
 
-qboolean medic_checkattack (edict_t *self)
+qboolean
+medic_checkattack(edict_t *self)
 {
 	if (!self)
 	{
@@ -795,13 +824,14 @@ qboolean medic_checkattack (edict_t *self)
 		return true;
 	}
 
-	return M_CheckAttack (self);
+	return M_CheckAttack(self);
 }
 
-
-/*QUAKED monster_medic (1 .5 0) (-16 -16 -24) (16 16 32) Ambush Trigger_Spawn Sight
-*/
-void SP_monster_medic (edict_t *self)
+/*
+ * QUAKED monster_medic (1 .5 0) (-16 -16 -24) (16 16 32) Ambush Trigger_Spawn Sight
+ */
+void
+SP_monster_medic(edict_t *self)
 {
 	if (!self)
 	{
@@ -810,28 +840,28 @@ void SP_monster_medic (edict_t *self)
 
 	if (deathmatch->value)
 	{
-		G_FreeEdict (self);
+		G_FreeEdict(self);
 		return;
 	}
 
-	sound_idle1 = gi.soundindex ("medic/idle.wav");
-	sound_pain1 = gi.soundindex ("medic/medpain1.wav");
-	sound_pain2 = gi.soundindex ("medic/medpain2.wav");
-	sound_die = gi.soundindex ("medic/meddeth1.wav");
-	sound_sight = gi.soundindex ("medic/medsght1.wav");
-	sound_search = gi.soundindex ("medic/medsrch1.wav");
-	sound_hook_launch = gi.soundindex ("medic/medatck2.wav");
-	sound_hook_hit = gi.soundindex ("medic/medatck3.wav");
-	sound_hook_heal = gi.soundindex ("medic/medatck4.wav");
-	sound_hook_retract = gi.soundindex ("medic/medatck5.wav");
+	sound_idle1 = gi.soundindex("medic/idle.wav");
+	sound_pain1 = gi.soundindex("medic/medpain1.wav");
+	sound_pain2 = gi.soundindex("medic/medpain2.wav");
+	sound_die = gi.soundindex("medic/meddeth1.wav");
+	sound_sight = gi.soundindex("medic/medsght1.wav");
+	sound_search = gi.soundindex("medic/medsrch1.wav");
+	sound_hook_launch = gi.soundindex("medic/medatck2.wav");
+	sound_hook_hit = gi.soundindex("medic/medatck3.wav");
+	sound_hook_heal = gi.soundindex("medic/medatck4.wav");
+	sound_hook_retract = gi.soundindex("medic/medatck5.wav");
 
-	gi.soundindex ("medic/medatck1.wav");
+	gi.soundindex("medic/medatck1.wav");
 
 	self->movetype = MOVETYPE_STEP;
 	self->solid = SOLID_BBOX;
-	self->s.modelindex = gi.modelindex ("models/monsters/medic/tris.md2");
-	VectorSet (self->mins, -24, -24, -24);
-	VectorSet (self->maxs, 24, 24, 32);
+	self->s.modelindex = gi.modelindex("models/monsters/medic/tris.md2");
+	VectorSet(self->mins, -24, -24, -24);
+	VectorSet(self->maxs, 24, 24, 32);
 
 	self->health = 300;
 	self->gib_health = -130;
@@ -851,11 +881,11 @@ void SP_monster_medic (edict_t *self)
 	self->monsterinfo.search = medic_search;
 	self->monsterinfo.checkattack = medic_checkattack;
 
-	gi.linkentity (self);
+	gi.linkentity(self);
 
 	self->monsterinfo.currentmove = &medic_move_stand;
 	self->monsterinfo.scale = MODEL_SCALE;
 
-	walkmonster_start (self);
+	walkmonster_start(self);
 }
 

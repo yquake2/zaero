@@ -28,7 +28,8 @@ void hover_sight (edict_t *self, edict_t *other)
 	gi.sound (self, CHAN_VOICE, sound_sight, 1, ATTN_NORM, 0);
 }
 
-void hover_search (edict_t *self)
+void
+hover_search(edict_t *self)
 {
 	if (!self)
 	{
@@ -36,9 +37,13 @@ void hover_search (edict_t *self)
 	}
 
 	if (random() < 0.5)
-		gi.sound (self, CHAN_VOICE, sound_search1, 1, ATTN_NORM, 0);
+	{
+		gi.sound(self, CHAN_VOICE, sound_search1, 1, ATTN_NORM, 0);
+	}
 	else
-		gi.sound (self, CHAN_VOICE, sound_search2, 1, ATTN_NORM, 0);
+	{
+		gi.sound(self, CHAN_VOICE, sound_search2, 1, ATTN_NORM, 0);
+	}
 }
 
 
@@ -85,255 +90,245 @@ mframe_t hover_frames_stand [] =
 };
 mmove_t	hover_move_stand = {FRAME_stand01, FRAME_stand30, hover_frames_stand, NULL};
 
-mframe_t hover_frames_stop1 [] =
-{
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL}
+mframe_t hover_frames_stop1[] = {
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL}
 };
 mmove_t hover_move_stop1 = {FRAME_stop101, FRAME_stop109, hover_frames_stop1, NULL};
 
-mframe_t hover_frames_stop2 [] =
-{
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL}
+mframe_t hover_frames_stop2[] = {
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL}
 };
 mmove_t hover_move_stop2 = {FRAME_stop201, FRAME_stop208, hover_frames_stop2, NULL};
 
-mframe_t hover_frames_takeoff [] =
-{
-	{ai_move,	0,	NULL},
-	{ai_move,	-2,	NULL},
-	{ai_move,	5,	NULL},
-	{ai_move,	-1,	NULL},
-	{ai_move,	1,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	-1,	NULL},
-	{ai_move,	-1,	NULL},
-	{ai_move,	-1,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	2,	NULL},
-	{ai_move,	2,	NULL},
-	{ai_move,	1,	NULL},
-	{ai_move,	1,	NULL},
-	{ai_move,	-6,	NULL},
-	{ai_move,	-9,	NULL},
-	{ai_move,	1,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	2,	NULL},
-	{ai_move,	2,	NULL},
-	{ai_move,	1,	NULL},
-	{ai_move,	1,	NULL},
-	{ai_move,	1,	NULL},
-	{ai_move,	2,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	2,	NULL},
-	{ai_move,	3,	NULL},
-	{ai_move,	2,	NULL},
-	{ai_move,	0,	NULL}
+mframe_t hover_frames_takeoff[] = {
+	{ai_move, 0, NULL},
+	{ai_move, -2, NULL},
+	{ai_move, 5, NULL},
+	{ai_move, -1, NULL},
+	{ai_move, 1, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, -1, NULL},
+	{ai_move, -1, NULL},
+	{ai_move, -1, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 2, NULL},
+	{ai_move, 2, NULL},
+	{ai_move, 1, NULL},
+	{ai_move, 1, NULL},
+	{ai_move, -6, NULL},
+	{ai_move, -9, NULL},
+	{ai_move, 1, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 2, NULL},
+	{ai_move, 2, NULL},
+	{ai_move, 1, NULL},
+	{ai_move, 1, NULL},
+	{ai_move, 1, NULL},
+	{ai_move, 2, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 2, NULL},
+	{ai_move, 3, NULL},
+	{ai_move, 2, NULL},
+	{ai_move, 0, NULL}
 };
 mmove_t hover_move_takeoff = {FRAME_takeof01, FRAME_takeof30, hover_frames_takeoff, NULL};
 
-mframe_t hover_frames_pain3 [] =
-{
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL}
+mframe_t hover_frames_pain3[] = {
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL}
 };
 mmove_t hover_move_pain3 = {FRAME_pain301, FRAME_pain309, hover_frames_pain3, hover_run};
 
-mframe_t hover_frames_pain2 [] =
-{
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL}
+mframe_t hover_frames_pain2[] = {
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL}
 };
 mmove_t hover_move_pain2 = {FRAME_pain201, FRAME_pain212, hover_frames_pain2, hover_run};
 
-mframe_t hover_frames_pain1 [] =
-{
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	2,	NULL},
-	{ai_move,	-8,	NULL},
-	{ai_move,	-4,	NULL},
-	{ai_move,	-6,	NULL},
-	{ai_move,	-4,	NULL},
-	{ai_move,	-3,	NULL},
-	{ai_move,	1,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	3,	NULL},
-	{ai_move,	1,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	2,	NULL},
-	{ai_move,	3,	NULL},
-	{ai_move,	2,	NULL},
-	{ai_move,	7,	NULL},
-	{ai_move,	1,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	2,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	5,	NULL},
-	{ai_move,	3,	NULL},
-	{ai_move,	4,	NULL}
+mframe_t hover_frames_pain1[] = {
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 2, NULL},
+	{ai_move, -8, NULL},
+	{ai_move, -4, NULL},
+	{ai_move, -6, NULL},
+	{ai_move, -4, NULL},
+	{ai_move, -3, NULL},
+	{ai_move, 1, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 3, NULL},
+	{ai_move, 1, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 2, NULL},
+	{ai_move, 3, NULL},
+	{ai_move, 2, NULL},
+	{ai_move, 7, NULL},
+	{ai_move, 1, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 2, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 5, NULL},
+	{ai_move, 3, NULL},
+	{ai_move, 4, NULL}
 };
 mmove_t hover_move_pain1 = {FRAME_pain101, FRAME_pain128, hover_frames_pain1, hover_run};
 
-mframe_t hover_frames_land [] =
-{
-	{ai_move,	0,	NULL}
+mframe_t hover_frames_land[] = {
+	{ai_move, 0, NULL}
 };
 mmove_t hover_move_land = {FRAME_land01, FRAME_land01, hover_frames_land, NULL};
 
-mframe_t hover_frames_forward [] =
-{
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL}
+mframe_t hover_frames_forward[] = {
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL}
 };
 mmove_t hover_move_forward = {FRAME_forwrd01, FRAME_forwrd35, hover_frames_forward, NULL};
 
-mframe_t hover_frames_walk [] =
-{
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL},
-	{ai_walk,	4,	NULL}
+mframe_t hover_frames_walk[] = {
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL},
+	{ai_walk, 4, NULL}
 };
 mmove_t hover_move_walk = {FRAME_forwrd01, FRAME_forwrd35, hover_frames_walk, NULL};
 
-mframe_t hover_frames_run [] =
-{
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL},
-	{ai_run,	10,	NULL}
+mframe_t hover_frames_run[] = {
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL},
+	{ai_run, 10, NULL}
 };
 mmove_t hover_move_run = {FRAME_forwrd01, FRAME_forwrd35, hover_frames_run, NULL};
 
@@ -353,84 +348,85 @@ mframe_t hover_frames_death1 [] =
 };
 mmove_t hover_move_death1 = {FRAME_death101, FRAME_death111, hover_frames_death1, hover_dead};
 
-mframe_t hover_frames_backward [] =
-{
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	0,	NULL}
+mframe_t hover_frames_backward[] = {
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL}
 };
 mmove_t hover_move_backward = {FRAME_backwd01, FRAME_backwd24, hover_frames_backward, NULL};
 
-mframe_t hover_frames_start_attack [] =
-{
-	{ai_charge,	1,	NULL},
-	{ai_charge,	1,	NULL},
-	{ai_charge,	1,	NULL}
+mframe_t hover_frames_start_attack[] = {
+	{ai_charge, 1, NULL},
+	{ai_charge, 1, NULL},
+	{ai_charge, 1, NULL}
 };
 mmove_t hover_move_start_attack = {FRAME_attak101, FRAME_attak103, hover_frames_start_attack, hover_attack};
 
-mframe_t hover_frames_attack1 [] =
-{
-	{ai_charge,	-10,	hover_fire_blaster},
-	{ai_charge,	-10,	hover_fire_blaster},
-	{ai_charge,	0,		hover_reattack},
+mframe_t hover_frames_attack1[] = {
+	{ai_charge, -10, hover_fire_blaster},
+	{ai_charge, -10, hover_fire_blaster},
+	{ai_charge, 0, hover_reattack},
 };
 mmove_t hover_move_attack1 = {FRAME_attak104, FRAME_attak106, hover_frames_attack1, NULL};
 
-
-mframe_t hover_frames_end_attack [] =
-{
-	{ai_charge,	1,	NULL},
-	{ai_charge,	1,	NULL}
+mframe_t hover_frames_end_attack[] = {
+	{ai_charge, 1, NULL},
+	{ai_charge, 1, NULL}
 };
 mmove_t hover_move_end_attack = {FRAME_attak107, FRAME_attak108, hover_frames_end_attack, hover_run};
 
-void hover_reattack (edict_t *self)
+void
+hover_reattack(edict_t *self)
 {
 	if (!self)
 	{
 		return;
 	}
 
-	if (self->enemy->health > 0 )
-		if (visible (self, self->enemy) )
+	if (self->enemy->health > 0)
+	{
+		if (visible(self, self->enemy))
+		{
 			if (random() <= 0.6)
 			{
 				self->monsterinfo.currentmove = &hover_move_attack1;
 				return;
 			}
+		}
+	}
+
 	self->monsterinfo.currentmove = &hover_move_end_attack;
 }
 
-
-void hover_fire_blaster (edict_t *self)
+void
+hover_fire_blaster(edict_t *self)
 {
-	vec3_t	start;
-	vec3_t	forward, right;
-	vec3_t	end;
-	vec3_t	dir;
-	int		effect;
+	vec3_t start;
+	vec3_t forward, right;
+	vec3_t end;
+	vec3_t dir;
+	int effect;
 
 	if (!self)
 	{
@@ -438,22 +434,27 @@ void hover_fire_blaster (edict_t *self)
 	}
 
 	if (self->s.frame == FRAME_attak104)
+	{
 		effect = EF_HYPERBLASTER;
+	}
 	else
+	{
 		effect = 0;
+	}
 
-	AngleVectors (self->s.angles, forward, right, NULL);
-	G_ProjectSource (self->s.origin, monster_flash_offset[MZ2_HOVER_BLASTER_1], forward, right, start);
+	AngleVectors(self->s.angles, forward, right, NULL);
+	G_ProjectSource(self->s.origin, monster_flash_offset[MZ2_HOVER_BLASTER_1],
+			forward, right, start);
 
-	VectorCopy (self->enemy->s.origin, end);
+	VectorCopy(self->enemy->s.origin, end);
 	end[2] += self->enemy->viewheight;
-	VectorSubtract (end, start, dir);
+	VectorSubtract(end, start, dir);
 
-	monster_fire_blaster (self, start, dir, 1, 1000, MZ2_HOVER_BLASTER_1, effect);
+	monster_fire_blaster(self, start, dir, 1, 1000, MZ2_HOVER_BLASTER_1, effect);
 }
 
-
-void hover_stand (edict_t *self)
+void
+hover_stand(edict_t *self)
 {
 	if (!self)
 	{
@@ -463,7 +464,8 @@ void hover_stand (edict_t *self)
 	self->monsterinfo.currentmove = &hover_move_stand;
 }
 
-void hover_run (edict_t *self)
+void
+hover_run(edict_t *self)
 {
 	if (!self)
 	{
@@ -471,12 +473,17 @@ void hover_run (edict_t *self)
 	}
 
 	if (self->monsterinfo.aiflags & AI_STAND_GROUND)
+	{
 		self->monsterinfo.currentmove = &hover_move_stand;
+	}
 	else
+	{
 		self->monsterinfo.currentmove = &hover_move_run;
+	}
 }
 
-void hover_walk (edict_t *self)
+void
+hover_walk(edict_t *self)
 {
 	if (!self)
 	{
@@ -486,7 +493,8 @@ void hover_walk (edict_t *self)
 	self->monsterinfo.currentmove = &hover_move_walk;
 }
 
-void hover_start_attack (edict_t *self)
+void
+hover_start_attack(edict_t *self)
 {
 	if (!self)
 	{
@@ -496,7 +504,8 @@ void hover_start_attack (edict_t *self)
 	self->monsterinfo.currentmove = &hover_move_start_attack;
 }
 
-void hover_attack(edict_t *self)
+void
+hover_attack(edict_t *self)
 {
 	if (!self)
 	{
@@ -560,20 +569,21 @@ void hover_deadthink (edict_t *self)
 	BecomeExplosion1(self);
 }
 
-void hover_dead (edict_t *self)
+void
+hover_dead(edict_t *self)
 {
 	if (!self)
 	{
 		return;
 	}
 
-	VectorSet (self->mins, -16, -16, -24);
-	VectorSet (self->maxs, 16, 16, -8);
+	VectorSet(self->mins, -16, -16, -24);
+	VectorSet(self->maxs, 16, 16, -8);
 	self->movetype = MOVETYPE_TOSS;
 	self->think = hover_deadthink;
 	self->nextthink = level.time + FRAMETIME;
 	self->timestamp = level.time + 15;
-	gi.linkentity (self);
+	gi.linkentity(self);
 }
 
 void hover_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)

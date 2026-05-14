@@ -29,7 +29,8 @@ mframe_t flipper_frames_stand [] =
 
 mmove_t	flipper_move_stand = {FRAME_flphor01, FRAME_flphor01, flipper_frames_stand, NULL};
 
-void flipper_stand (edict_t *self)
+void
+flipper_stand(edict_t *self)
 {
 	if (!self)
 	{
@@ -72,7 +73,8 @@ mframe_t flipper_frames_run [] =
 };
 mmove_t flipper_move_run_loop = {FRAME_flpver06, FRAME_flpver29, flipper_frames_run, NULL};
 
-void flipper_run_loop (edict_t *self)
+void
+flipper_run_loop(edict_t *self)
 {
 	if (!self)
 	{
@@ -82,8 +84,7 @@ void flipper_run_loop (edict_t *self)
 	self->monsterinfo.currentmove = &flipper_move_run_loop;
 }
 
-mframe_t flipper_frames_run_start [] =
-{
+mframe_t flipper_frames_run_start[] = {
 	{ai_run, 8, NULL},
 	{ai_run, 8, NULL},
 	{ai_run, 8, NULL},
@@ -93,7 +94,8 @@ mframe_t flipper_frames_run_start [] =
 };
 mmove_t flipper_move_run_start = {FRAME_flpver01, FRAME_flpver06, flipper_frames_run_start, flipper_run_loop};
 
-void flipper_run (edict_t *self)
+void
+flipper_run(edict_t *self)
 {
 	if (!self)
 	{
@@ -104,8 +106,7 @@ void flipper_run (edict_t *self)
 }
 
 /* Standard Swimming */
-mframe_t flipper_frames_walk [] =
-{
+mframe_t flipper_frames_walk[] = {
 	{ai_walk, 4, NULL},
 	{ai_walk, 4, NULL},
 	{ai_walk, 4, NULL},
@@ -133,7 +134,8 @@ mframe_t flipper_frames_walk [] =
 };
 mmove_t flipper_move_walk = {FRAME_flphor01, FRAME_flphor24, flipper_frames_walk, NULL};
 
-void flipper_walk (edict_t *self)
+void
+flipper_walk(edict_t *self)
 {
 	if (!self)
 	{
@@ -143,8 +145,7 @@ void flipper_walk (edict_t *self)
 	self->monsterinfo.currentmove = &flipper_move_walk;
 }
 
-mframe_t flipper_frames_start_run [] =
-{
+mframe_t flipper_frames_start_run[] = {
 	{ai_run, 8, NULL},
 	{ai_run, 8, NULL},
 	{ai_run, 8, NULL},
@@ -153,7 +154,8 @@ mframe_t flipper_frames_start_run [] =
 };
 mmove_t flipper_move_start_run = {FRAME_flphor01, FRAME_flphor05, flipper_frames_start_run, NULL};
 
-void flipper_start_run (edict_t *self)
+void
+flipper_start_run(edict_t *self)
 {
 	if (!self)
 	{
@@ -163,75 +165,75 @@ void flipper_start_run (edict_t *self)
 	self->monsterinfo.currentmove = &flipper_move_start_run;
 }
 
-mframe_t flipper_frames_pain2 [] =
-{
+mframe_t flipper_frames_pain2[] = {
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL},
-	{ai_move, 0,	NULL},
-	{ai_move, 0,	NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
 	{ai_move, 0, NULL}
 };
 mmove_t flipper_move_pain2 = {FRAME_flppn101, FRAME_flppn105, flipper_frames_pain2, flipper_run};
 
-mframe_t flipper_frames_pain1 [] =
-{
+mframe_t flipper_frames_pain1[] = {
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL},
-	{ai_move, 0,	NULL},
-	{ai_move, 0,	NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
 	{ai_move, 0, NULL}
 };
 mmove_t flipper_move_pain1 = {FRAME_flppn201, FRAME_flppn205, flipper_frames_pain1, flipper_run};
 
-void flipper_bite (edict_t *self)
+void
+flipper_bite(edict_t *self)
 {
-	vec3_t	aim;
+	vec3_t aim;
 
 	if (!self)
 	{
 		return;
 	}
 
-	VectorSet (aim, MELEE_DISTANCE, 0, 0);
-	fire_hit (self, aim, 5, 0);
+	VectorSet(aim, MELEE_DISTANCE, 0, 0);
+	fire_hit(self, aim, 5, 0);
 }
 
-void flipper_preattack (edict_t *self)
+void
+flipper_preattack(edict_t *self)
 {
 	if (!self)
 	{
 		return;
 	}
 
-	gi.sound (self, CHAN_WEAPON, sound_chomp, 1, ATTN_NORM, 0);
+	gi.sound(self, CHAN_WEAPON, sound_chomp, 1, ATTN_NORM, 0);
 }
 
-mframe_t flipper_frames_attack [] =
-{
-	{ai_charge, 0,	flipper_preattack},
-	{ai_charge, 0,	NULL},
-	{ai_charge, 0,	NULL},
-	{ai_charge, 0,	NULL},
-	{ai_charge, 0,	NULL},
-	{ai_charge, 0,	NULL},
-	{ai_charge, 0,	NULL},
-	{ai_charge, 0,	NULL},
-	{ai_charge, 0,	NULL},
-	{ai_charge, 0,	NULL},
-	{ai_charge, 0,	NULL},
-	{ai_charge, 0,	NULL},
-	{ai_charge, 0,	NULL},
-	{ai_charge, 0,	flipper_bite},
-	{ai_charge, 0,	NULL},
-	{ai_charge, 0,	NULL},
-	{ai_charge, 0,	NULL},
-	{ai_charge, 0,	NULL},
-	{ai_charge, 0,	flipper_bite},
-	{ai_charge, 0,	NULL}
+mframe_t flipper_frames_attack[] = {
+	{ai_charge, 0, flipper_preattack},
+	{ai_charge, 0, NULL},
+	{ai_charge, 0, NULL},
+	{ai_charge, 0, NULL},
+	{ai_charge, 0, NULL},
+	{ai_charge, 0, NULL},
+	{ai_charge, 0, NULL},
+	{ai_charge, 0, NULL},
+	{ai_charge, 0, NULL},
+	{ai_charge, 0, NULL},
+	{ai_charge, 0, NULL},
+	{ai_charge, 0, NULL},
+	{ai_charge, 0, NULL},
+	{ai_charge, 0, flipper_bite},
+	{ai_charge, 0, NULL},
+	{ai_charge, 0, NULL},
+	{ai_charge, 0, NULL},
+	{ai_charge, 0, NULL},
+	{ai_charge, 0, flipper_bite},
+	{ai_charge, 0, NULL}
 };
 mmove_t flipper_move_attack = {FRAME_flpbit01, FRAME_flpbit20, flipper_frames_attack, flipper_run};
 
-void flipper_melee(edict_t *self)
+void
+flipper_melee(edict_t *self)
 {
 	if (!self)
 	{
@@ -274,7 +276,8 @@ void flipper_pain (edict_t *self, edict_t *other, float kick, int damage)
 	}
 }
 
-void flipper_dead (edict_t *self)
+void
+flipper_dead(edict_t *self)
 {
 	vec3_t p;
 	trace_t tr;
@@ -297,83 +300,83 @@ void flipper_dead (edict_t *self)
 	self->movetype = MOVETYPE_TOSS;
 	self->svflags |= SVF_DEADMONSTER;
 	self->nextthink = 0;
-	gi.linkentity (self);
+	gi.linkentity(self);
 }
 
-mframe_t flipper_frames_death [] =
-{
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
+mframe_t flipper_frames_death[] = {
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
 
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
 
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
 
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
 
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
 
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL},
-	{ai_move, 0,	 NULL}
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 0, NULL}
 };
 mmove_t flipper_move_death = {FRAME_flpdth01, FRAME_flpdth56, flipper_frames_death, flipper_dead};
 
-void flipper_sight (edict_t *self, edict_t *other)
+void
+flipper_sight(edict_t *self, edict_t *other /* unused */)
 {
 	if (!self)
 	{
 		return;
 	}
 
-	gi.sound (self, CHAN_VOICE, sound_sight, 1, ATTN_NORM, 0);
+	gi.sound(self, CHAN_VOICE, sound_sight, 1, ATTN_NORM, 0);
 }
 
 void flipper_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
@@ -408,9 +411,11 @@ void flipper_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int dama
 	self->monsterinfo.currentmove = &flipper_move_death;
 }
 
-/*QUAKED monster_flipper (1 .5 0) (-16 -16 -24) (16 16 32) Ambush Trigger_Spawn Sight
-*/
-void SP_monster_flipper (edict_t *self)
+/*
+ * QUAKED monster_flipper (1 .5 0) (-16 -16 -24) (16 16 32) Ambush Trigger_Spawn Sight
+ */
+void
+SP_monster_flipper(edict_t *self)
 {
 	if (!self)
 	{
@@ -419,24 +424,24 @@ void SP_monster_flipper (edict_t *self)
 
 	if (deathmatch->value)
 	{
-		G_FreeEdict (self);
+		G_FreeEdict(self);
 		return;
 	}
 
-	sound_pain1		= gi.soundindex ("flipper/flppain1.wav");
-	sound_pain2		= gi.soundindex ("flipper/flppain2.wav");
-	sound_death		= gi.soundindex ("flipper/flpdeth1.wav");
-	sound_chomp		= gi.soundindex ("flipper/flpatck1.wav");
-	sound_attack	= gi.soundindex ("flipper/flpatck2.wav");
-	sound_idle		= gi.soundindex ("flipper/flpidle1.wav");
-	sound_search	= gi.soundindex ("flipper/flpsrch1.wav");
-	sound_sight		= gi.soundindex ("flipper/flpsght1.wav");
+	sound_pain1 = gi.soundindex("flipper/flppain1.wav");
+	sound_pain2 = gi.soundindex("flipper/flppain2.wav");
+	sound_death = gi.soundindex("flipper/flpdeth1.wav");
+	sound_chomp = gi.soundindex("flipper/flpatck1.wav");
+	sound_attack = gi.soundindex("flipper/flpatck2.wav");
+	sound_idle = gi.soundindex("flipper/flpidle1.wav");
+	sound_search = gi.soundindex("flipper/flpsrch1.wav");
+	sound_sight = gi.soundindex("flipper/flpsght1.wav");
 
 	self->movetype = MOVETYPE_STEP;
 	self->solid = SOLID_BBOX;
-	self->s.modelindex = gi.modelindex ("models/monsters/flipper/tris.md2");
-	VectorSet (self->mins, -16, -16, 0);
-	VectorSet (self->maxs, 16, 16, 32);
+	self->s.modelindex = gi.modelindex("models/monsters/flipper/tris.md2");
+	VectorSet(self->mins, -16, -16, 0);
+	VectorSet(self->maxs, 16, 16, 32);
 
 	self->health = 50;
 	self->gib_health = -30;
@@ -451,11 +456,11 @@ void SP_monster_flipper (edict_t *self)
 	self->monsterinfo.melee = flipper_melee;
 	self->monsterinfo.sight = flipper_sight;
 
-	gi.linkentity (self);
+	gi.linkentity(self);
 
 	self->monsterinfo.currentmove = &flipper_move_stand;
 	self->monsterinfo.scale = MODEL_SCALE;
 
-	swimmonster_start (self);
+	swimmonster_start(self);
 }
 

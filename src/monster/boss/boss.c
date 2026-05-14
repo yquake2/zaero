@@ -178,12 +178,12 @@ void zboss_standidle (edict_t *self)
 	if (random() < 0.8)
   {
 		gi.sound (self, CHAN_VOICE, sound_idle1, 1, ATTN_NORM, 0);
-  	self->monsterinfo.currentmove = &zboss_stand1;
+	self->monsterinfo.currentmove = &zboss_stand1;
   }
   else
   {
 		gi.sound (self, CHAN_VOICE, sound_idle2, 1, ATTN_NORM, 0);
-  	self->monsterinfo.currentmove = &zboss_stand2;
+	self->monsterinfo.currentmove = &zboss_stand2;
   }
 }
 

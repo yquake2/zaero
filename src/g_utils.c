@@ -135,17 +135,16 @@ edict_t *G_PickTarget (char *targetname)
 	return choice[randk() % num_choices];
 }
 
-
-
-void Think_Delay (edict_t *ent)
+void
+Think_Delay(edict_t *ent)
 {
 	if (!ent)
 	{
 		return;
 	}
 
-	G_UseTargets (ent, ent->activator);
-	G_FreeEdict (ent);
+	G_UseTargets(ent, ent->activator);
+	G_FreeEdict(ent);
 }
 
 /*
@@ -304,48 +303,56 @@ char	*vtos (vec3_t v)
 	return s;
 }
 
+vec3_t VEC_UP = {0, -1, 0};
+vec3_t MOVEDIR_UP = {0, 0, 1};
+vec3_t VEC_DOWN = {0, -2, 0};
+vec3_t MOVEDIR_DOWN = {0, 0, -1};
 
-vec3_t VEC_UP		= {0, -1, 0};
-vec3_t MOVEDIR_UP	= {0, 0, 1};
-vec3_t VEC_DOWN		= {0, -2, 0};
-vec3_t MOVEDIR_DOWN	= {0, 0, -1};
-
-void G_SetMovedir (vec3_t angles, vec3_t movedir)
+void
+G_SetMovedir(vec3_t angles, vec3_t movedir)
 {
-	if (VectorCompare (angles, VEC_UP))
+	if (VectorCompare(angles, VEC_UP))
 	{
-		VectorCopy (MOVEDIR_UP, movedir);
+		VectorCopy(MOVEDIR_UP, movedir);
 	}
-	else if (VectorCompare (angles, VEC_DOWN))
+	else if (VectorCompare(angles, VEC_DOWN))
 	{
-		VectorCopy (MOVEDIR_DOWN, movedir);
+		VectorCopy(MOVEDIR_DOWN, movedir);
 	}
 	else
 	{
-		AngleVectors (angles, movedir, NULL, NULL);
+		AngleVectors(angles, movedir, NULL, NULL);
 	}
 
-	VectorClear (angles);
+	VectorClear(angles);
 }
 
-
-float vectoyaw (vec3_t vec)
+float
+vectoyaw(vec3_t vec)
 {
-	float	yaw;
+	float yaw;
 
-	if (/*vec[YAW] == 0 &&*/ vec[PITCH] == 0)
+	if (vec[PITCH] == 0)
 	{
 		yaw = 0;
+
 		if (vec[YAW] > 0)
+		{
 			yaw = 90;
+		}
 		else if (vec[YAW] < 0)
+		{
 			yaw = -90;
+		}
 	}
 	else
 	{
-		yaw = (int) (atan2(vec[YAW], vec[PITCH]) * 180 / M_PI);
+		yaw = (int)(atan2(vec[YAW], vec[PITCH]) * 180 / M_PI);
+
 		if (yaw < 0)
+		{
 			yaw += 360;
+		}
 	}
 
 	return yaw;
@@ -549,24 +556,13 @@ void	G_TouchSolids (edict_t *ent)
 }
 
 /*
-==============================================================================
-
-Kill box
-
-==============================================================================
-*/
-
-/*
-=================
-KillBox
-
-Kills all entities that would touch the proposed new positioning
-of ent.  Ent should be unlinked before calling this!
-=================
-*/
-qboolean KillBox (edict_t *ent)
+ * Kills all entities that would touch the proposed new positioning
+ * of ent. Ent should be unlinked before calling this!
+ */
+qboolean
+KillBox(edict_t *ent)
 {
-	trace_t		tr;
+	trace_t tr;
 
 	if (!ent)
 	{
@@ -575,19 +571,26 @@ qboolean KillBox (edict_t *ent)
 
 	while (1)
 	{
-		tr = gi.trace (ent->s.origin, ent->mins, ent->maxs, ent->s.origin, NULL, MASK_PLAYERSOLID);
+		tr = gi.trace(ent->s.origin, ent->mins, ent->maxs, ent->s.origin,
+				NULL, MASK_PLAYERSOLID);
+
 		if (!tr.ent)
+		{
 			break;
+		}
 
-		// nail it
-		T_Damage (tr.ent, ent, ent, vec3_origin, ent->s.origin, vec3_origin, 100000, 0, DAMAGE_NO_PROTECTION, MOD_TELEFRAG);
+		/* nail it */
+		T_Damage(tr.ent, ent, ent, vec3_origin, ent->s.origin, vec3_origin,
+				100000, 0, DAMAGE_NO_PROTECTION, MOD_TELEFRAG);
 
-		// if we didn't kill it, fail
+		/* if we didn't kill it, fail */
 		if (tr.ent->solid)
+		{
 			return false;
+		}
 	}
 
-	return true;		// all clear
+	return true; /* all clear */
 }
 
 /*
