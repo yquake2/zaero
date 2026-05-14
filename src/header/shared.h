@@ -83,9 +83,7 @@ typedef unsigned char byte;
  #define PRINTF_ATTR(FMT, VARGS) __attribute__((format(printf, FMT , VARGS )))
 #endif
 
-/* */
 /* per-level limits */
-/* */
 #define MAX_CLIENTS 256             /* absolute limit */
 #define MAX_EDICTS 1024             /* must change protocol to increase more */
 #define MAX_LIGHTSTYLES 256
@@ -151,42 +149,44 @@ extern vec3_t vec3_origin;
 #define Q_ftol(f) (long)(f)
 
 #define DotProduct(x, y) (x[0] * y[0] + x[1] * y[1] + x[2] * y[2])
-#define VectorSubtract(a, b, c) (c[0] = a[0] - b[0], c[1] = a[1] - b[1], c[2] =	\
-									 a[2] - b[2])
-#define VectorAdd(a, b, c) (c[0] = a[0] + b[0], c[1] = a[1] + b[1], c[2] = \
-								a[2] + b[2])
+#define VectorSubtract(a, b, c)	\
+	(c[0] = a[0] - b[0], c[1] = a[1] - b[1], c[2] =	\
+	 a[2] - b[2])
+#define VectorAdd(a, b, c) \
+	(c[0] = a[0] + b[0], c[1] = a[1] + b[1], c[2] =	\
+	 a[2] + b[2])
 #define VectorCopy(a, b) (b[0] = a[0], b[1] = a[1], b[2] = a[2])
 #define VectorClear(a) (a[0] = a[1] = a[2] = 0)
 #define VectorNegate(a, b) (b[0] = -a[0], b[1] = -a[1], b[2] = -a[2])
 #define VectorSet(v, x, y, z) (v[0] = (x), v[1] = (y), v[2] = (z))
 
-void VectorMA(vec3_t veca, float scale, vec3_t vecb, vec3_t vecc);
+void VectorMA(const vec3_t veca, float scale, const vec3_t vecb, vec3_t vecc);
 
 /* just in case you do't want to use the macros */
-vec_t _DotProduct(vec3_t v1, vec3_t v2);
-void _VectorSubtract(vec3_t veca, vec3_t vecb, vec3_t out);
-void _VectorAdd(vec3_t veca, vec3_t vecb, vec3_t out);
-void _VectorCopy(vec3_t in, vec3_t out);
+vec_t _DotProduct(const vec3_t v1, const vec3_t v2);
+void _VectorSubtract(const vec3_t veca, const vec3_t vecb, vec3_t out);
+void _VectorAdd(const vec3_t veca, const vec3_t vecb, vec3_t out);
+void _VectorCopy(const vec3_t in, vec3_t out);
 
 void ClearBounds(vec3_t mins, vec3_t maxs);
-void AddPointToBounds(vec3_t v, vec3_t mins, vec3_t maxs);
-int VectorCompare(vec3_t v1, vec3_t v2);
-vec_t VectorLength(vec3_t v);
-void CrossProduct(vec3_t v1, vec3_t v2, vec3_t cross);
+void AddPointToBounds(const vec3_t v, vec3_t mins, vec3_t maxs);
+int VectorCompare(const vec3_t v1, const vec3_t v2);
+vec_t VectorLength(const vec3_t v);
+void CrossProduct(const vec3_t v1, const vec3_t v2, vec3_t cross);
 vec_t VectorNormalize(vec3_t v); /* returns vector length */
-vec_t VectorNormalize2(vec3_t v, vec3_t out);
+vec_t VectorNormalize2(const vec3_t v, vec3_t out);
 void VectorInverse(vec3_t v);
-void VectorScale(vec3_t in, vec_t scale, vec3_t out);
+void VectorScale(const vec3_t in, const vec_t scale, vec3_t out);
 int Q_log2(int val);
 
-void R_ConcatRotations(float in1[3][3], float in2[3][3], float out[3][3]);
-void R_ConcatTransforms(float in1[3][4], float in2[3][4], float out[3][4]);
+void R_ConcatRotations(const float in1[3][3], const float in2[3][3], float out[3][3]);
+void R_ConcatTransforms(const float in1[3][4], const float in2[3][4], float out[3][4]);
 
-void AngleVectors(vec3_t angles, vec3_t forward, vec3_t right, vec3_t up);
-void AngleVectors2(vec3_t value1, vec3_t angles);
-int BoxOnPlaneSide(vec3_t emins, vec3_t emaxs, struct cplane_s *plane);
+void AngleVectors(const vec3_t angles, vec3_t forward, vec3_t right, vec3_t up);
+void AngleVectors2(const vec3_t value1, vec3_t angles);
+int BoxOnPlaneSide(const vec3_t emins, const vec3_t emaxs, const struct cplane_s *plane);
 float anglemod(float a);
-float LerpAngle(float a2, float a1, float frac);
+float LerpAngle(float a1, float a2, float frac);
 
 #define BOX_ON_PLANE_SIDE(emins, emaxs, p) \
 	(((p)->type < 3) ? \
@@ -206,23 +206,25 @@ float LerpAngle(float a2, float a1, float frac);
 
 void ProjectPointOnPlane(vec3_t dst, const vec3_t p, const vec3_t normal);
 void PerpendicularVector(vec3_t dst, const vec3_t src);
-void RotatePointAroundVector(vec3_t dst, const vec3_t dir,
-		const vec3_t point, float degrees);
+void RotatePointAroundVector(vec3_t dst,
+		const vec3_t dir,
+		const vec3_t point,
+		float degrees);
 
 /* ============================================= */
 
-char *COM_SkipPath(char *pathname);
-void COM_StripExtension(char *in, char *out);
-void COM_FileBase(char *in, char *out);
+const char *COM_SkipPath(const char *pathname);
+void COM_StripExtension(const char *in, char *out);
+void COM_FileBase(const char *in, char *out);
 void COM_FilePath(const char *in, char *out);
 void COM_DefaultExtension(char *path, const char *extension);
 
-char *COM_Parse(char **data_p);
+const char *COM_Parse(char **data_p);
 
 /* data is an in/out parm, returns a parsed out token */
-void Com_sprintf(char *dest, int size, char *fmt, ...);
+void Com_sprintf(char *dest, int size, const char *fmt, ...);
 
-void Com_PageInMemory(byte *buffer, int size);
+void Com_PageInMemory(const byte *buffer, int size);
 
 /* ============================================= */
 
@@ -244,7 +246,7 @@ float BigFloat(float l);
 float LittleFloat(float l);
 
 void Swap_Init(void);
-char *va(char *format, ...);
+char *va(const char *format, ...)  PRINTF_ATTR(1, 2);
 
 /* ============================================= */
 
@@ -253,10 +255,11 @@ char *va(char *format, ...);
 #define MAX_INFO_VALUE 64
 #define MAX_INFO_STRING 512
 
-char *Info_ValueForKey(char *s, char *key);
-void Info_RemoveKey(char *s, char *key);
-void Info_SetValueForKey(char *s, char *key, char *value);
-qboolean Info_Validate(char *s);
+char *Info_ValueForKey(const char *s, const char *key);
+void Info_RemoveKey(char *s, const char *key);
+void Info_SetValueForKey(char *s, const char *key, const char *value);
+qboolean Info_Validate(const char *s);
+
 /* ============================================= */
 
 /* Random number generator */
@@ -276,8 +279,8 @@ void randk_seed(void);
 extern int curtime; /* time returned by last Sys_Milliseconds */
 
 int Sys_Milliseconds(void);
-void Sys_Mkdir(char *path);
-void Sys_Rmdir(char *path);
+void Sys_Mkdir(const char *path);
+void Sys_Rmdir(const char *path);
 char *strlwr(char *s);
 
 /* large block stack allocation routines */
@@ -294,13 +297,13 @@ int Hunk_End(void);
 #define SFF_SYSTEM 0x10
 
 /* pass in an attribute mask of things you wish to REJECT */
-char *Sys_FindFirst(char *path, unsigned musthave, unsigned canthave);
+char *Sys_FindFirst(const char *path, unsigned musthave, unsigned canthave);
 char *Sys_FindNext(unsigned musthave, unsigned canthave);
 void Sys_FindClose(void);
 
 /* this is only here so the functions in q_shared.c and q_shwin.c can link */
-void Sys_Error(char *error, ...);
-void Com_Printf(char *msg, ...);
+void Sys_Error(const char *error, ...);
+void Com_Printf(const char *msg, ...);
 
 /*
  * ==========================================================
@@ -414,7 +417,7 @@ typedef struct cplane_s
 	vec3_t normal;
 	float dist;
 	byte type; /* for fast side tests */
-	byte signbits; /* signx + (signy<<1) + (signz<<1) */
+	byte signbits; /* signx + (signy<<1) + (signz<<2) */
 	byte pad[2];
 } cplane_t;
 
@@ -1117,12 +1120,6 @@ typedef struct
 
 	short stats[MAX_STATS];     /* fast status bar updates */
 } player_state_t;
-
-#define VIDREF_GL 1
-#define VIDREF_SOFT 2
-#define VIDREF_OTHER 3
-
-extern int vidref_val;
 
 size_t verify_fread(void *, size_t, size_t, FILE *);
 size_t verify_fwrite(void *, size_t, size_t, FILE *);
