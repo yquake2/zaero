@@ -1,20 +1,29 @@
+/* =======================================================================
+ *
+ * Targets.
+ *
+ * =======================================================================
+ */
+
 #include "header/local.h"
 
-/*QUAKED target_temp_entity (1 0 0) (-8 -8 -8) (8 8 8)
-Fire an origin based temp entity event to the clients.
-"style"		type byte
-*/
-void Use_Target_Tent (edict_t *ent, edict_t *other, edict_t *activator)
+/* QUAKED target_temp_entity (1 0 0) (-8 -8 -8) (8 8 8)
+ * Fire an origin based temp entity event to the clients.
+ *
+ *  "style"	type byte
+ */
+void
+Use_Target_Tent (edict_t *ent, edict_t *other, edict_t *activator)
 {
 	if (!ent)
 	{
 		return;
 	}
 
-	gi.WriteByte (svc_temp_entity);
-	gi.WriteByte (ent->style);
-	gi.WritePosition (ent->s.origin);
-	gi.multicast (ent->s.origin, MULTICAST_PVS);
+	gi.WriteByte(svc_temp_entity);
+	gi.WriteByte(ent->style);
+	gi.WritePosition(ent->s.origin);
+	gi.multicast(ent->s.origin, MULTICAST_PVS);
 }
 
 void SP_target_temp_entity (edict_t *ent)
@@ -245,12 +254,12 @@ void use_target_secret (edict_t *ent, edict_t *other, edict_t *activator)
 		return;
 	}
 
-	gi.sound (ent, CHAN_VOICE, ent->noise_index, 1, ATTN_NORM, 0);
+	gi.sound(ent, CHAN_VOICE, ent->noise_index, 1, ATTN_NORM, 0);
 
 	level.found_secrets++;
 
 	G_UseTargets (ent, activator);
-	G_FreeEdict (ent);
+	G_FreeEdict(ent);
 }
 
 void SP_target_secret (edict_t *ent)
@@ -262,14 +271,14 @@ void SP_target_secret (edict_t *ent)
 
 	if (deathmatch->value)
 	{	// auto-remove for deathmatch
-		G_FreeEdict (ent);
+		G_FreeEdict(ent);
 		return;
 	}
 
 	ent->use = use_target_secret;
 	if (!st.noise)
 		st.noise = "misc/secret.wav";
-	ent->noise_index = gi.soundindex (st.noise);
+	ent->noise_index = gi.soundindex(st.noise);
 	ent->svflags = SVF_NOCLIENT;
 	level.total_secrets++;
 	// map bug hack
@@ -290,7 +299,7 @@ void use_target_goal (edict_t *ent, edict_t *other, edict_t *activator)
 		return;
 	}
 
-	gi.sound (ent, CHAN_VOICE, ent->noise_index, 1, ATTN_NORM, 0);
+	gi.sound(ent, CHAN_VOICE, ent->noise_index, 1, ATTN_NORM, 0);
 
 	level.found_goals++;
 
@@ -298,7 +307,7 @@ void use_target_goal (edict_t *ent, edict_t *other, edict_t *activator)
 		gi.configstring (CS_CDTRACK, "0");
 
 	G_UseTargets (ent, activator);
-	G_FreeEdict (ent);
+	G_FreeEdict(ent);
 }
 
 void
@@ -386,10 +395,10 @@ void target_explosion_explode (edict_t *self)
 	}
 	else
 	{
-		gi.WriteByte (svc_temp_entity);
-		gi.WriteByte (TE_EXPLOSION1);
-		gi.WritePosition (self->s.origin);
-		gi.multicast (self->s.origin, MULTICAST_PHS);
+		gi.WriteByte(svc_temp_entity);
+		gi.WriteByte(TE_EXPLOSION1);
+		gi.WritePosition(self->s.origin);
+		gi.multicast(self->s.origin, MULTICAST_PHS);
 	}
 
 	T_RadiusDamage (self, self->activator, self->dmg, self, self->dmg+40, MOD_EXPLOSIVE);
@@ -456,7 +465,7 @@ void use_target_changelevel (edict_t *self, edict_t *other, edict_t *activator)
 	// if noexit, do a ton of damage to other
 	if (deathmatch->value && !( (int)dmflags->value & DF_ALLOW_EXIT) && other != world)
 	{
-		T_Damage (other, self, self, vec3_origin, other->s.origin, vec3_origin, 10 * other->max_health, 1000, 0, MOD_EXIT);
+		T_Damage(other, self, self, vec3_origin, other->s.origin, vec3_origin, 10 * other->max_health, 1000, 0, MOD_EXIT);
 		return;
 	}
 
@@ -526,13 +535,13 @@ void use_target_splash (edict_t *self, edict_t *other, edict_t *activator)
 		return;
 	}
 
-	gi.WriteByte (svc_temp_entity);
-	gi.WriteByte (TE_SPLASH);
-	gi.WriteByte (self->count);
-	gi.WritePosition (self->s.origin);
-	gi.WriteDir (self->movedir);
-	gi.WriteByte (self->sounds);
-	gi.multicast (self->s.origin, MULTICAST_PVS);
+	gi.WriteByte(svc_temp_entity);
+	gi.WriteByte(TE_SPLASH);
+	gi.WriteByte(self->count);
+	gi.WritePosition(self->s.origin);
+	gi.WriteDir(self->movedir);
+	gi.WriteByte(self->sounds);
+	gi.multicast(self->s.origin, MULTICAST_PVS);
 
 	if (self->dmg)
 		T_RadiusDamage (self, activator, self->dmg, NULL, self->dmg+40, MOD_SPLASH);
@@ -585,14 +594,14 @@ void use_target_spawner (edict_t *self, edict_t *other, edict_t *activator)
 
 	ent = G_Spawn();
 	ent->classname = self->target;
-	VectorCopy (self->s.origin, ent->s.origin);
-	VectorCopy (self->s.angles, ent->s.angles);
+	VectorCopy(self->s.origin, ent->s.origin);
+	VectorCopy(self->s.angles, ent->s.angles);
 	ED_CallSpawn (ent);
 	gi.unlinkentity (ent);
 	MonsterKillBox (ent);
-	gi.linkentity (ent);
+	gi.linkentity(ent);
 	if (self->speed)
-		VectorCopy (self->movedir, ent->velocity);
+		VectorCopy(self->movedir, ent->velocity);
 	MonsterPlayerKillBox (ent);
 }
 
@@ -632,12 +641,12 @@ void use_target_blaster (edict_t *self, edict_t *other, edict_t *activator)
 
 	if(EMPNukeCheck(self, self->s.origin))
 	{
-		gi.sound (self, CHAN_AUTO, gi.soundindex("items/empnuke/emp_missfire.wav"), 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_AUTO, gi.soundindex("items/empnuke/emp_missfire.wav"), 1, ATTN_NORM, 0);
 		return;
 	}
 
 	fire_blaster (self, self->s.origin, self->movedir, self->dmg, self->speed, EF_BLASTER, MOD_TARGET_BLASTER);
-	gi.sound (self, CHAN_VOICE, self->noise_index, 1, ATTN_NORM, 0);
+	gi.sound(self, CHAN_VOICE, self->noise_index, 1, ATTN_NORM, 0);
 }
 
 void
@@ -679,7 +688,7 @@ void trigger_crosslevel_trigger_use (edict_t *self, edict_t *other, edict_t *act
 	}
 
 	game.serverflags |= self->spawnflags;
-	G_FreeEdict (self);
+	G_FreeEdict(self);
 }
 
 void
@@ -767,27 +776,27 @@ void target_laser_think (edict_t *self)
 
 	if (self->enemy)
 	{
-		VectorCopy (self->movedir, last_movedir);
-		VectorMA (self->enemy->absmin, 0.5, self->enemy->size, point);
-		VectorSubtract (point, self->s.origin, self->movedir);
-		VectorNormalize (self->movedir);
+		VectorCopy(self->movedir, last_movedir);
+		VectorMA(self->enemy->absmin, 0.5, self->enemy->size, point);
+		VectorSubtract(point, self->s.origin, self->movedir);
+		VectorNormalize(self->movedir);
 		if (!VectorCompare(self->movedir, last_movedir))
 			self->spawnflags |= 0x80000000;
 	}
 
 	ignore = self;
-	VectorCopy (self->s.origin, start);
-	VectorMA (start, 2048, self->movedir, end);
+	VectorCopy(self->s.origin, start);
+	VectorMA(start, 2048, self->movedir, end);
 	while(1)
 	{
-		tr = gi.trace (start, NULL, NULL, end, ignore, CONTENTS_SOLID|CONTENTS_MONSTER|CONTENTS_DEADMONSTER);
+		tr = gi.trace(start, NULL, NULL, end, ignore, CONTENTS_SOLID|CONTENTS_MONSTER|CONTENTS_DEADMONSTER);
 
 		if (!tr.ent)
 			break;
 
 		// hurt it if we can
 		if ((tr.ent->takedamage) && !(tr.ent->flags & FL_IMMUNE_LASER))
-			T_Damage (tr.ent, self, self->activator, self->movedir, tr.endpos, vec3_origin, self->dmg, 1, DAMAGE_ENERGY, MOD_TARGET_LASER);
+			T_Damage(tr.ent, self, self->activator, self->movedir, tr.endpos, vec3_origin, self->dmg, 1, DAMAGE_ENERGY, MOD_TARGET_LASER);
 
 		// if we hit something that's not a monster or player or is immune to lasers, we're done
 		if (!(tr.ent->svflags & SVF_MONSTER) && (!tr.ent->client))
@@ -795,22 +804,22 @@ void target_laser_think (edict_t *self)
 			if (self->spawnflags & 0x80000000)
 			{
 				self->spawnflags &= ~0x80000000;
-				gi.WriteByte (svc_temp_entity);
-				gi.WriteByte (TE_LASER_SPARKS);
-				gi.WriteByte (count);
-				gi.WritePosition (tr.endpos);
-				gi.WriteDir (tr.plane.normal);
-				gi.WriteByte (self->s.skinnum);
-				gi.multicast (tr.endpos, MULTICAST_PVS);
+				gi.WriteByte(svc_temp_entity);
+				gi.WriteByte(TE_LASER_SPARKS);
+				gi.WriteByte(count);
+				gi.WritePosition(tr.endpos);
+				gi.WriteDir(tr.plane.normal);
+				gi.WriteByte(self->s.skinnum);
+				gi.multicast(tr.endpos, MULTICAST_PVS);
 			}
 			break;
 		}
 
 		ignore = tr.ent;
-		VectorCopy (tr.endpos, start);
+		VectorCopy(tr.endpos, start);
 	}
 
-	VectorCopy (tr.endpos, self->s.old_origin);
+	VectorCopy(tr.endpos, self->s.old_origin);
 
 	self->nextthink = level.time + FRAMETIME;
 }
@@ -912,9 +921,9 @@ void target_laser_start (edict_t *self)
 	if (!self->dmg)
 		self->dmg = 1;
 
-	VectorSet (self->mins, -8, -8, -8);
-	VectorSet (self->maxs, 8, 8, 8);
-	gi.linkentity (self);
+	VectorSet(self->mins, -8, -8, -8);
+	VectorSet(self->maxs, 8, 8, 8);
+	gi.linkentity(self);
 
 	if (self->spawnflags & 1)
 		target_laser_on (self);
@@ -1004,7 +1013,7 @@ void target_lightramp_use (edict_t *self, edict_t *other, edict_t *activator)
 		if (!self->enemy)
 		{
 			gi.dprintf("%s target %s not found at %s\n", self->classname, self->target, vtos(self->s.origin));
-			G_FreeEdict (self);
+			G_FreeEdict(self);
 			return;
 		}
 	}
@@ -1023,20 +1032,20 @@ void SP_target_lightramp (edict_t *self)
 	if (!self->message || strlen(self->message) != 2 || self->message[0] < 'a' || self->message[0] > 'z' || self->message[1] < 'a' || self->message[1] > 'z' || self->message[0] == self->message[1])
 	{
 		gi.dprintf("target_lightramp has bad ramp (%s) at %s\n", self->message, vtos(self->s.origin));
-		G_FreeEdict (self);
+		G_FreeEdict(self);
 		return;
 	}
 
 	if (deathmatch->value)
 	{
-		G_FreeEdict (self);
+		G_FreeEdict(self);
 		return;
 	}
 
 	if (!self->target)
 	{
 		gi.dprintf("%s with no target at %s\n", self->classname, vtos(self->s.origin));
-		G_FreeEdict (self);
+		G_FreeEdict(self);
 		return;
 	}
 

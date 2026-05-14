@@ -1,48 +1,53 @@
-/*
-==============================================================================
-
-mutant
-
-==============================================================================
-*/
+/* =======================================================================
+ *
+ * Mutant.
+ *
+ * =======================================================================
+ */
 
 #include "../../header/local.h"
 #include "mutant.h"
 
+static int sound_swing;
+static int sound_hit;
+static int sound_hit2;
+static int sound_death;
+static int sound_idle;
+static int sound_pain1;
+static int sound_pain2;
+static int sound_sight;
+static int sound_search;
+static int sound_step1;
+static int sound_step2;
+static int sound_step3;
+static int sound_thud;
 
-static int	sound_swing;
-static int	sound_hit;
-static int	sound_hit2;
-static int	sound_death;
-static int	sound_idle;
-static int	sound_pain1;
-static int	sound_pain2;
-static int	sound_sight;
-static int	sound_search;
-static int	sound_step1;
-static int	sound_step2;
-static int	sound_step3;
-static int	sound_thud;
+void mutant_walk(edict_t *self);
 
-//
-// SOUNDS
-//
-
-void mutant_step (edict_t *self)
+void
+mutant_step(edict_t *self)
 {
+	int n;
+
 	if (!self)
 	{
 		return;
 	}
 
-	int		n;
 	n = (randk() + 1) % 3;
+
 	if (n == 0)
-		gi.sound (self, CHAN_VOICE, sound_step1, 1, ATTN_NORM, 0);
+	{
+		gi.sound(self, CHAN_VOICE, sound_step1, 1, ATTN_NORM, 0);
+	}
 	else if (n == 1)
-		gi.sound (self, CHAN_VOICE, sound_step2, 1, ATTN_NORM, 0);
+	{
+		gi.sound(self, CHAN_VOICE, sound_step2, 1, ATTN_NORM, 0);
+	}
 	else
-		gi.sound (self, CHAN_VOICE, sound_step3, 1, ATTN_NORM, 0);
+	{
+		gi.sound(self, CHAN_VOICE, sound_step3, 1, ATTN_NORM, 0);
+	}
 }
 
 void
@@ -136,7 +141,13 @@ mframe_t mutant_frames_stand[] = {
 
 	{ai_stand, 0, NULL}
 };
-mmove_t mutant_move_stand = {FRAME_stand101, FRAME_stand151, mutant_frames_stand, NULL};
+
+mmove_t mutant_move_stand = {
+	FRAME_stand101,
+	FRAME_stand151,
+	mutant_frames_stand,
+	NULL
+};
 
 void
 mutant_stand(edict_t *self)
@@ -178,7 +189,13 @@ mframe_t mutant_frames_idle[] = {
 	{ai_stand, 0, NULL},
 	{ai_stand, 0, NULL}
 };
-mmove_t mutant_move_idle = {FRAME_stand152, FRAME_stand164, mutant_frames_idle, mutant_stand};
+
+mmove_t mutant_move_idle = {
+	FRAME_stand152,
+	FRAME_stand164,
+	mutant_frames_idle,
+	mutant_stand
+};
 
 void
 mutant_idle(edict_t *self)
@@ -192,29 +209,27 @@ mutant_idle(edict_t *self)
 	gi.sound(self, CHAN_VOICE, sound_idle, 1, ATTN_IDLE, 0);
 }
 
-
-//
-// WALK
-//
-
-void mutant_walk (edict_t *self);
-
-mframe_t mutant_frames_walk [] =
-{
-	{ai_walk,	3,		NULL},
-	{ai_walk,	1,		NULL},
-	{ai_walk,	5,		NULL},
-	{ai_walk,	10,		NULL},
-	{ai_walk,	13,		NULL},
-	{ai_walk,	10,		NULL},
-	{ai_walk,	0,		NULL},
-	{ai_walk,	5,		NULL},
-	{ai_walk,	6,		NULL},
-	{ai_walk,	16,		NULL},
-	{ai_walk,	15,		NULL},
-	{ai_walk,	6,		NULL}
+mframe_t mutant_frames_walk[] = {
+	{ai_walk, 3, NULL},
+	{ai_walk, 1, NULL},
+	{ai_walk, 5, NULL},
+	{ai_walk, 10, NULL},
+	{ai_walk, 13, NULL},
+	{ai_walk, 10, NULL},
+	{ai_walk, 0, NULL},
+	{ai_walk, 5, NULL},
+	{ai_walk, 6, NULL},
+	{ai_walk, 16, NULL},
+	{ai_walk, 15, NULL},
+	{ai_walk, 6, NULL}
 };
-mmove_t mutant_move_walk = {FRAME_walk05, FRAME_walk16, mutant_frames_walk, NULL};
+
+mmove_t mutant_move_walk = {
+	FRAME_walk05,
+	FRAME_walk16,
+	mutant_frames_walk,
+	NULL
+};
 
 void
 mutant_walk_loop(edict_t *self)
@@ -233,7 +248,13 @@ mframe_t mutant_frames_start_walk[] = {
 	{ai_walk, -2, NULL},
 	{ai_walk, 1, NULL}
 };
-mmove_t mutant_move_start_walk = {FRAME_walk01, FRAME_walk04, mutant_frames_start_walk, mutant_walk_loop};
+
+mmove_t mutant_move_start_walk = {
+	FRAME_walk01,
+	FRAME_walk04,
+	mutant_frames_start_walk,
+	mutant_walk_loop
+};
 
 void
 mutant_walk(edict_t *self)
@@ -254,7 +275,13 @@ mframe_t mutant_frames_run[] = {
 	{ai_run, 17, NULL},
 	{ai_run, 10, NULL}
 };
-mmove_t mutant_move_run = {FRAME_run03, FRAME_run08, mutant_frames_run, NULL};
+
+mmove_t mutant_move_run = {
+	FRAME_run03,
+	FRAME_run08,
+	mutant_frames_run,
+	NULL
+};
 
 void
 mutant_run(edict_t *self)
@@ -274,55 +301,67 @@ mutant_run(edict_t *self)
 	}
 }
 
-
-//
-// MELEE
-//
-
-void mutant_hit_left (edict_t *self)
+void
+mutant_hit_left(edict_t *self)
 {
+	vec3_t aim;
+
 	if (!self)
 	{
 		return;
 	}
 
-	vec3_t	aim;
+	VectorSet(aim, MELEE_DISTANCE, self->mins[0], 8);
 
-	VectorSet (aim, MELEE_DISTANCE, self->mins[0], 8);
-	if (fire_hit (self, aim, (10 + (randk() %5)), 100))
-		gi.sound (self, CHAN_WEAPON, sound_hit, 1, ATTN_NORM, 0);
+	if (fire_hit(self, aim, (10 + (randk() % 5)), 100))
+	{
+		gi.sound(self, CHAN_WEAPON, sound_hit, 1, ATTN_NORM, 0);
+	}
 	else
-		gi.sound (self, CHAN_WEAPON, sound_swing, 1, ATTN_NORM, 0);
+	{
+		gi.sound(self, CHAN_WEAPON, sound_swing, 1, ATTN_NORM, 0);
+	}
 }
 
-void mutant_hit_right (edict_t *self)
+void
+mutant_hit_right(edict_t *self)
 {
+	vec3_t aim;
+
 	if (!self)
 	{
 		return;
 	}
 
-	vec3_t	aim;
+	VectorSet(aim, MELEE_DISTANCE, self->maxs[0], 8);
 
-	VectorSet (aim, MELEE_DISTANCE, self->maxs[0], 8);
-	if (fire_hit (self, aim, (10 + (randk() %5)), 100))
-		gi.sound (self, CHAN_WEAPON, sound_hit2, 1, ATTN_NORM, 0);
+	if (fire_hit(self, aim, (10 + (randk() % 5)), 100))
+	{
+		gi.sound(self, CHAN_WEAPON, sound_hit2, 1, ATTN_NORM, 0);
+	}
 	else
-		gi.sound (self, CHAN_WEAPON, sound_swing, 1, ATTN_NORM, 0);
+	{
+		gi.sound(self, CHAN_WEAPON, sound_swing, 1, ATTN_NORM, 0);
+	}
 }
 
-void mutant_check_refire (edict_t *self)
+void
+mutant_check_refire(edict_t *self)
 {
 	if (!self)
 	{
 		return;
 	}
 
-	if (!self->enemy || !self->enemy->inuse || self->enemy->health <= 0)
+	if (!self->enemy || !self->enemy->inuse || (self->enemy->health <= 0))
+	{
 		return;
+	}
 
-	if ( ((skill->value == SKILL_HARDPLUS) && (random() < 0.5)) || (ai_range(self, self->enemy) == RANGE_MELEE) )
+	if (((skill->value == SKILL_HARDPLUS) && (random() < 0.5)) || (ai_range(self, self->enemy) == RANGE_MELEE))
+	{
 		self->monsterinfo.nextframe = FRAME_attack09;
+	}
 }
 
 mframe_t mutant_frames_attack[] = {
@@ -334,7 +373,13 @@ mframe_t mutant_frames_attack[] = {
 	{ai_charge, 0, mutant_hit_right},
 	{ai_charge, 0, mutant_check_refire}
 };
-mmove_t mutant_move_attack = {FRAME_attack09, FRAME_attack15, mutant_frames_attack, mutant_run};
+
+mmove_t mutant_move_attack = {
+	FRAME_attack09,
+	FRAME_attack15,
+	mutant_frames_attack,
+	mutant_run
+};
 
 void
 mutant_melee(edict_t *self)
@@ -346,13 +391,9 @@ mutant_melee(edict_t *self)
 
 	self->monsterinfo.currentmove = &mutant_move_attack;
 }
-
-
-//
-// ATTACK
-//
-
-void mutant_jump_touch (edict_t *self, edict_t *other, const cplane_t *plane, const csurface_t *surf)
+void
+mutant_jump_touch(edict_t *self, edict_t *other,
+		const cplane_t *plane /* unused */, const csurface_t *surf /* unused */)
 {
 	if (!self || !other)
 	{
@@ -369,25 +410,27 @@ void mutant_jump_touch (edict_t *self, edict_t *other, const cplane_t *plane, co
 	{
 		if (VectorLength(self->velocity) > 400)
 		{
-			vec3_t	point;
-			vec3_t	normal;
-			int		damage;
+			vec3_t point;
+			vec3_t normal;
+			int damage;
 
-			VectorCopy (self->velocity, normal);
+			VectorCopy(self->velocity, normal);
 			VectorNormalize(normal);
-			VectorMA (self->s.origin, self->maxs[0], normal, point);
+			VectorMA(self->s.origin, self->maxs[0], normal, point);
 			damage = 40 + 10 * random();
-			T_Damage (other, self, self, self->velocity, point, normal, damage, damage, 0, MOD_UNKNOWN);
+			T_Damage(other, self, self, self->velocity, point,
+					normal, damage, damage, 0, MOD_UNKNOWN);
 		}
 	}
 
-	if (!M_CheckBottom (self))
+	if (!M_CheckBottom(self))
 	{
 		if (self->groundentity)
 		{
 			self->monsterinfo.nextframe = FRAME_attack02;
 			self->touch = NULL;
 		}
+
 		return;
 	}
 
@@ -451,7 +494,13 @@ mframe_t mutant_frames_jump[] = {
 	{ai_charge, 3, NULL},
 	{ai_charge, 0, NULL}
 };
-mmove_t mutant_move_jump = {FRAME_attack01, FRAME_attack08, mutant_frames_jump, mutant_run};
+
+mmove_t mutant_move_jump = {
+	FRAME_attack01,
+	FRAME_attack08,
+	mutant_frames_jump,
+	mutant_run
+};
 
 void
 mutant_jump(edict_t *self)
@@ -464,20 +513,19 @@ mutant_jump(edict_t *self)
 	self->monsterinfo.currentmove = &mutant_move_jump;
 }
 
-
-//
-// CHECKATTACK
-//
-
-qboolean mutant_check_melee (edict_t *self)
+qboolean
+mutant_check_melee(edict_t *self)
 {
 	if (!self)
 	{
 		return false;
 	}
 
-	if (ai_range (self, self->enemy) == RANGE_MELEE)
+	if (ai_range(self, self->enemy) == RANGE_MELEE)
+	{
 		return true;
+	}
+
 	return false;
 }
 
@@ -523,15 +571,18 @@ mutant_check_jump(edict_t *self)
 	return true;
 }
 
-qboolean mutant_checkattack (edict_t *self)
+qboolean
+mutant_checkattack(edict_t *self)
 {
 	if (!self)
 	{
 		return false;
 	}
 
-	if (!self->enemy || self->enemy->health <= 0)
+	if (!self->enemy || (self->enemy->health <= 0))
+	{
 		return false;
+	}
 
 	if (mutant_check_melee(self))
 	{
@@ -542,7 +593,6 @@ qboolean mutant_checkattack (edict_t *self)
 	if (mutant_check_jump(self))
 	{
 		self->monsterinfo.attack_state = AS_MISSILE;
-		// FIXME play a jump sound here
 		return true;
 	}
 
@@ -556,64 +606,94 @@ mframe_t mutant_frames_pain1[] = {
 	{ai_move, 2, NULL},
 	{ai_move, 5, NULL}
 };
-mmove_t mutant_move_pain1 = {FRAME_pain101, FRAME_pain105, mutant_frames_pain1, mutant_run};
 
-mframe_t mutant_frames_pain2 [] =
-{
-	{ai_move,	-24,NULL},
-	{ai_move,	11,	NULL},
-	{ai_move,	5,	NULL},
-	{ai_move,	-2,	NULL},
-	{ai_move,	6,	NULL},
-	{ai_move,	4,	NULL}
+mmove_t mutant_move_pain1 = {
+	FRAME_pain101,
+	FRAME_pain105,
+	mutant_frames_pain1,
+	mutant_run
 };
-mmove_t mutant_move_pain2 = {FRAME_pain201, FRAME_pain206, mutant_frames_pain2, mutant_run};
 
-mframe_t mutant_frames_pain3 [] =
-{
-	{ai_move,	-22,NULL},
-	{ai_move,	3,	NULL},
-	{ai_move,	3,	NULL},
-	{ai_move,	2,	NULL},
-	{ai_move,	1,	NULL},
-	{ai_move,	1,	NULL},
-	{ai_move,	6,	NULL},
-	{ai_move,	3,	NULL},
-	{ai_move,	2,	NULL},
-	{ai_move,	0,	NULL},
-	{ai_move,	1,	NULL}
+mframe_t mutant_frames_pain2[] = {
+	{ai_move, -24, NULL},
+	{ai_move, 11, NULL},
+	{ai_move, 5, NULL},
+	{ai_move, -2, NULL},
+	{ai_move, 6, NULL},
+	{ai_move, 4, NULL}
 };
-mmove_t mutant_move_pain3 = {FRAME_pain301, FRAME_pain311, mutant_frames_pain3, mutant_run};
 
-void mutant_pain (edict_t *self, edict_t *other, float kick, int damage)
+mmove_t mutant_move_pain2 = {
+	FRAME_pain201,
+	FRAME_pain206,
+	mutant_frames_pain2,
+	mutant_run
+};
+
+mframe_t mutant_frames_pain3[] = {
+	{ai_move, -22, NULL},
+	{ai_move, 3, NULL},
+	{ai_move, 3, NULL},
+	{ai_move, 2, NULL},
+	{ai_move, 1, NULL},
+	{ai_move, 1, NULL},
+	{ai_move, 6, NULL},
+	{ai_move, 3, NULL},
+	{ai_move, 2, NULL},
+	{ai_move, 0, NULL},
+	{ai_move, 1, NULL}
+};
+
+mmove_t mutant_move_pain3 = {
+	FRAME_pain301,
+	FRAME_pain311,
+	mutant_frames_pain3,
+	mutant_run
+};
+
+void
+mutant_pain(edict_t *self, edict_t *other /* unused */,
+		float kick /* unused */, int damage /* unused */)
 {
-	float	r;
+	float r;
+
+	if (!self)
+	{
+		return;
+	}
 
 	if (self->health < (self->max_health / 2))
+	{
 		self->s.skinnum = 1;
+	}
 
 	if (level.time < self->pain_debounce_time)
+	{
 		return;
+	}
 
 	self->pain_debounce_time = level.time + 3;
 
 	if (skill->value == SKILL_HARDPLUS)
-		return;		// no pain anims in nightmare
+	{
+		return; /* no pain anims in nightmare */
+	}
 
 	r = random();
+
 	if (r < 0.33)
 	{
-		gi.sound (self, CHAN_VOICE, sound_pain1, 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_VOICE, sound_pain1, 1, ATTN_NORM, 0);
 		self->monsterinfo.currentmove = &mutant_move_pain1;
 	}
 	else if (r < 0.66)
 	{
-		gi.sound (self, CHAN_VOICE, sound_pain2, 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_VOICE, sound_pain2, 1, ATTN_NORM, 0);
 		self->monsterinfo.currentmove = &mutant_move_pain2;
 	}
 	else
 	{
-		gi.sound (self, CHAN_VOICE, sound_pain1, 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_VOICE, sound_pain1, 1, ATTN_NORM, 0);
 		self->monsterinfo.currentmove = &mutant_move_pain3;
 	}
 }
@@ -646,7 +726,13 @@ mframe_t mutant_frames_death1[] = {
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL}
 };
-mmove_t mutant_move_death1 = {FRAME_death101, FRAME_death109, mutant_frames_death1, mutant_dead};
+
+mmove_t mutant_move_death1 = {
+	FRAME_death101,
+	FRAME_death109,
+	mutant_frames_death1,
+	mutant_dead
+};
 
 mframe_t mutant_frames_death2[] = {
 	{ai_move, 0, NULL},
@@ -660,11 +746,20 @@ mframe_t mutant_frames_death2[] = {
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL}
 };
-mmove_t mutant_move_death2 = {FRAME_death201, FRAME_death210, mutant_frames_death2, mutant_dead};
 
-void mutant_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
+mmove_t mutant_move_death2 = {
+	FRAME_death201,
+	FRAME_death210,
+	mutant_frames_death2,
+	mutant_dead
+};
+
+void
+mutant_die(edict_t *self, edict_t *inflictor /* unused */,
+		edict_t *attacker /* unused */, int damage,
+		const vec3_t point /* unused */)
 {
-	int		n;
+	int n;
 
 	if (!self)
 	{
@@ -673,28 +768,41 @@ void mutant_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damag
 
 	if (self->health <= self->gib_health)
 	{
-		gi.sound (self, CHAN_VOICE, gi.soundindex ("misc/udeath.wav"), 1, ATTN_NORM, 0);
-		for (n= 0; n < 2; n++)
-			ThrowGib (self, "models/objects/gibs/bone/tris.md2", damage, GIB_ORGANIC);
-		for (n= 0; n < 4; n++)
-			ThrowGib (self, "models/objects/gibs/sm_meat/tris.md2", damage, GIB_ORGANIC);
-		ThrowHead (self, "models/objects/gibs/head2/tris.md2", damage, GIB_ORGANIC);
+		gi.sound(self, CHAN_VOICE, gi.soundindex("misc/udeath.wav"), 1, ATTN_NORM, 0);
+
+		for (n = 0; n < 2; n++)
+		{
+			ThrowGib(self, "models/objects/gibs/bone/tris.md2", damage, GIB_ORGANIC);
+		}
+
+		for (n = 0; n < 4; n++)
+		{
+			ThrowGib(self, "models/objects/gibs/sm_meat/tris.md2", damage, GIB_ORGANIC);
+		}
+
+		ThrowHead(self, "models/objects/gibs/head2/tris.md2", damage, GIB_ORGANIC);
 		self->deadflag = DEAD_DEAD;
 		return;
 	}
 
 	if (self->deadflag == DEAD_DEAD)
+	{
 		return;
+	}
 
-	gi.sound (self, CHAN_VOICE, sound_death, 1, ATTN_NORM, 0);
+	gi.sound(self, CHAN_VOICE, sound_death, 1, ATTN_NORM, 0);
 	self->deadflag = DEAD_DEAD;
 	self->takedamage = DAMAGE_YES;
 	self->s.skinnum = 1;
 
 	if (random() < 0.5)
+	{
 		self->monsterinfo.currentmove = &mutant_move_death1;
+	}
 	else
+	{
 		self->monsterinfo.currentmove = &mutant_move_death2;
+	}
 }
 
 /*
@@ -759,4 +867,3 @@ SP_monster_mutant(edict_t *self)
 	self->monsterinfo.scale = MODEL_SCALE;
 	walkmonster_start(self);
 }
-

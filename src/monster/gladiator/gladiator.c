@@ -72,7 +72,13 @@ mframe_t gladiator_frames_stand[] = {
 	{ai_stand, 0, NULL},
 	{ai_stand, 0, NULL}
 };
-mmove_t gladiator_move_stand = {FRAME_stand1, FRAME_stand7, gladiator_frames_stand, NULL};
+
+mmove_t gladiator_move_stand = {
+	FRAME_stand1,
+	FRAME_stand7,
+	gladiator_frames_stand,
+	NULL
+};
 
 void
 gladiator_stand(edict_t *self)
@@ -103,7 +109,13 @@ mframe_t gladiator_frames_walk[] = {
 	{ai_walk, 1, NULL},
 	{ai_walk, 8, NULL}
 };
-mmove_t gladiator_move_walk = {FRAME_walk1, FRAME_walk16, gladiator_frames_walk, NULL};
+
+mmove_t gladiator_move_walk = {
+	FRAME_walk1,
+	FRAME_walk16,
+	gladiator_frames_walk,
+	NULL
+};
 
 void
 gladiator_walk(edict_t *self)
@@ -124,7 +136,13 @@ mframe_t gladiator_frames_run[] = {
 	{ai_run, 12, NULL},
 	{ai_run, 13, NULL}
 };
-mmove_t gladiator_move_run = {FRAME_run1, FRAME_run6, gladiator_frames_run, NULL};
+
+mmove_t gladiator_move_run = {
+	FRAME_run1,
+	FRAME_run6,
+	gladiator_frames_run,
+	NULL
+};
 
 void
 gladiator_run(edict_t *self)
@@ -144,21 +162,26 @@ gladiator_run(edict_t *self)
 	}
 }
 
-
-void GaldiatorMelee (edict_t *self)
+void
+GaldiatorMelee(edict_t *self)
 {
-	vec3_t	aim;
+	vec3_t aim;
 
 	if (!self)
 	{
 		return;
 	}
 
-	VectorSet (aim, MELEE_DISTANCE, self->mins[0], -4);
-	if (fire_hit (self, aim, (20 + (randk() %5)), 300))
-		gi.sound (self, CHAN_AUTO, sound_cleaver_hit, 1, ATTN_NORM, 0);
+	VectorSet(aim, MELEE_DISTANCE, self->mins[0], -4);
+
+	if (fire_hit(self, aim, (20 + (randk() % 5)), 300))
+	{
+		gi.sound(self, CHAN_AUTO, sound_cleaver_hit, 1, ATTN_NORM, 0);
+	}
 	else
-		gi.sound (self, CHAN_AUTO, sound_cleaver_miss, 1, ATTN_NORM, 0);
+	{
+		gi.sound(self, CHAN_AUTO, sound_cleaver_miss, 1, ATTN_NORM, 0);
+	}
 }
 
 mframe_t gladiator_frames_attack_melee[] = {
@@ -180,7 +203,13 @@ mframe_t gladiator_frames_attack_melee[] = {
 	{ai_charge, 0, NULL},
 	{ai_charge, 0, NULL}
 };
-mmove_t gladiator_move_attack_melee = {FRAME_melee1, FRAME_melee17, gladiator_frames_attack_melee, gladiator_run};
+
+mmove_t gladiator_move_attack_melee = {
+	FRAME_melee1,
+	FRAME_melee17,
+	gladiator_frames_attack_melee,
+	gladiator_run
+};
 
 void
 gladiator_melee(edict_t *self)
@@ -227,7 +256,13 @@ mframe_t gladiator_frames_attack_gun[] = {
 	{ai_charge, 0, NULL},
 	{ai_charge, 0, NULL}
 };
-mmove_t gladiator_move_attack_gun = {FRAME_attack1, FRAME_attack9, gladiator_frames_attack_gun, gladiator_run};
+
+mmove_t gladiator_move_attack_gun = {
+	FRAME_attack1,
+	FRAME_attack9,
+	gladiator_frames_attack_gun,
+	gladiator_run
+};
 
 void
 gladiator_attack(edict_t *self)
@@ -270,7 +305,13 @@ mframe_t gladiator_frames_pain[] = {
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL}
 };
-mmove_t gladiator_move_pain = {FRAME_pain1, FRAME_pain6, gladiator_frames_pain, gladiator_run};
+
+mmove_t gladiator_move_pain = {
+	FRAME_pain1,
+	FRAME_pain6,
+	gladiator_frames_pain,
+	gladiator_run
+};
 
 mframe_t gladiator_frames_pain_air[] = {
 	{ai_move, 0, NULL},
@@ -281,9 +322,17 @@ mframe_t gladiator_frames_pain_air[] = {
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL}
 };
-mmove_t gladiator_move_pain_air = {FRAME_painup1, FRAME_painup7, gladiator_frames_pain_air, gladiator_run};
 
-void gladiator_pain (edict_t *self, edict_t *other, float kick, int damage)
+mmove_t gladiator_move_pain_air = {
+	FRAME_painup1,
+	FRAME_painup7,
+	gladiator_frames_pain_air,
+	gladiator_run
+};
+
+void
+gladiator_pain(edict_t *self, edict_t *other /* unused */,
+		float kick /* unused */, int damage)
 {
 	if (!self)
 	{
@@ -291,30 +340,45 @@ void gladiator_pain (edict_t *self, edict_t *other, float kick, int damage)
 	}
 
 	if (self->health < (self->max_health / 2))
+	{
 		self->s.skinnum = 1;
+	}
 
 	if (level.time < self->pain_debounce_time)
 	{
-		if ((self->velocity[2] > 100) && (self->monsterinfo.currentmove == &gladiator_move_pain))
+		if ((self->velocity[2] > 100) &&
+			(self->monsterinfo.currentmove == &gladiator_move_pain))
+		{
 			self->monsterinfo.currentmove = &gladiator_move_pain_air;
+		}
+
 		return;
 	}
 
 	self->pain_debounce_time = level.time + 3;
 
 	if (random() < 0.5)
-		gi.sound (self, CHAN_VOICE, sound_pain1, 1, ATTN_NORM, 0);
+	{
+		gi.sound(self, CHAN_VOICE, sound_pain1, 1, ATTN_NORM, 0);
+	}
 	else
-		gi.sound (self, CHAN_VOICE, sound_pain2, 1, ATTN_NORM, 0);
+	{
+		gi.sound(self, CHAN_VOICE, sound_pain2, 1, ATTN_NORM, 0);
+	}
 
 	if (skill->value == SKILL_HARDPLUS)
-		return;		// no pain anims in nightmare
+	{
+		return; /* no pain anims in nightmare */
+	}
 
 	if (self->velocity[2] > 100)
+	{
 		self->monsterinfo.currentmove = &gladiator_move_pain_air;
+	}
 	else
+	{
 		self->monsterinfo.currentmove = &gladiator_move_pain;
-
+	}
 }
 
 void
@@ -357,35 +421,57 @@ mframe_t gladiator_frames_death[] = {
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL}
 };
-mmove_t gladiator_move_death = {FRAME_death1, FRAME_death22, gladiator_frames_death, gladiator_dead};
 
-void gladiator_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
+mmove_t gladiator_move_death = {
+	FRAME_death1,
+	FRAME_death22,
+	gladiator_frames_death,
+	gladiator_dead
+};
+
+void
+gladiator_die(edict_t *self, edict_t *inflictor /* unused */,
+		edict_t *attacker /* unused */, int damage /*unused */,
+		const vec3_t point)
 {
-	int		n;
+	int n;
 
 	if (!self)
 	{
 		return;
 	}
 
-	// check for gib
+	/* check for gib */
 	if (self->health <= self->gib_health)
 	{
-		gi.sound (self, CHAN_VOICE, gi.soundindex ("misc/udeath.wav"), 1, ATTN_NORM, 0);
-		for (n= 0; n < 2; n++)
-			ThrowGib (self, "models/objects/gibs/bone/tris.md2", damage, GIB_ORGANIC);
-		for (n= 0; n < 4; n++)
-			ThrowGib (self, "models/objects/gibs/sm_meat/tris.md2", damage, GIB_ORGANIC);
-		ThrowHead (self, "models/objects/gibs/head2/tris.md2", damage, GIB_ORGANIC);
+		gi.sound(self, CHAN_VOICE, gi.soundindex(
+						"misc/udeath.wav"), 1, ATTN_NORM, 0);
+
+		for (n = 0; n < 2; n++)
+		{
+			ThrowGib(self, "models/objects/gibs/bone/tris.md2",
+					damage, GIB_ORGANIC);
+		}
+
+		for (n = 0; n < 4; n++)
+		{
+			ThrowGib(self, "models/objects/gibs/sm_meat/tris.md2",
+					damage, GIB_ORGANIC);
+		}
+
+		ThrowHead(self, "models/objects/gibs/head2/tris.md2",
+				damage, GIB_ORGANIC);
 		self->deadflag = DEAD_DEAD;
 		return;
 	}
 
 	if (self->deadflag == DEAD_DEAD)
+	{
 		return;
+	}
 
-	// regular death
-	gi.sound (self, CHAN_VOICE, sound_die, 1, ATTN_NORM, 0);
+	/* regular death */
+	gi.sound(self, CHAN_VOICE, sound_die, 1, ATTN_NORM, 0);
 	self->deadflag = DEAD_DEAD;
 	self->takedamage = DAMAGE_YES;
 
@@ -449,4 +535,3 @@ SP_monster_gladiator(edict_t *self)
 
 	walkmonster_start(self);
 }
-

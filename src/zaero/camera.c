@@ -34,9 +34,9 @@ void zCam_TrackEntity(struct edict_s *player, struct edict_s *track, qboolean pl
 		e->s.modelindex2 = player->s.modelindex2;
 		VectorCopy(player->mins, e->mins);
 		VectorCopy(player->maxs, e->maxs);
-		VectorCopy (player->s.origin, e->s.origin);
-		VectorCopy (player->s.angles, e->s.angles);
-		VectorCopy (player->s.old_origin, e->s.old_origin);
+		VectorCopy(player->s.origin, e->s.origin);
+		VectorCopy(player->s.angles, e->s.angles);
+		VectorCopy(player->s.old_origin, e->s.old_origin);
 		e->s.frame = player->s.frame;
 		e->s.effects = player->s.effects;
 		player->svflags |= SVF_NOCLIENT; // so that no one can see our real model

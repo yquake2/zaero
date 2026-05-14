@@ -47,8 +47,8 @@ qboolean SpawnZ(gitem_t *item, edict_t *spot)
 	ent = G_Spawn();
 
 	ent->classname = item->classname;
-	VectorSet (ent->mins, -15, -15, -15);
-	VectorSet (ent->maxs, 15, 15, 15);
+	VectorSet(ent->mins, -15, -15, -15);
+	VectorSet(ent->maxs, 15, 15, 15);
 	ent->solid = SOLID_TRIGGER;
 	ent->movetype = MOVETYPE_BOUNCE;
 	ED_CallSpawn(ent);
@@ -63,7 +63,7 @@ qboolean SpawnZ(gitem_t *item, edict_t *spot)
 		angles[1] = ang;
 		angles[2] = 0;
 
-		AngleVectors (angles, forward, NULL, NULL);
+		AngleVectors(angles, forward, NULL, NULL);
 		VectorMA(start, 128, forward, end);
 
 		tr = gi.trace(start, ent->mins, ent->maxs, end, NULL, MASK_SHOT);

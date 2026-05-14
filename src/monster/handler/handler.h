@@ -28,6 +28,6 @@
 #define FRAME_attack1Sep	    122
 #define FRAME_attack1End	    128
 
-#define MODEL_SCALE	1.000
+#define MODEL_SCALE 1.000000
 
 #endif

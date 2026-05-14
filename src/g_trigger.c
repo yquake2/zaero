@@ -1,3 +1,10 @@
+/* =======================================================================
+ *
+ * Trigger.
+ *
+ * =======================================================================
+ */
+
 #include "header/local.h"
 
 
@@ -132,7 +139,7 @@ void trigger_enable (edict_t *self, edict_t *other, edict_t *activator)
 
 	self->solid = SOLID_TRIGGER;
 	self->use = Use_Multi;
-	gi.linkentity (self);
+	gi.linkentity(self);
 }
 
 void
@@ -284,11 +291,11 @@ void trigger_key_use (edict_t *self, edict_t *other, edict_t *activator)
 			return;
 		self->touch_debounce_time = level.time + 5.0;
 		gi.centerprintf (activator, "You need the %s", self->item->pickup_name);
-		gi.sound (activator, CHAN_AUTO, gi.soundindex ("misc/keytry.wav"), 1, ATTN_NORM, 0);
+		gi.sound(activator, CHAN_AUTO, gi.soundindex("misc/keytry.wav"), 1, ATTN_NORM, 0);
 		return;
 	}
 
-	gi.sound (activator, CHAN_AUTO, gi.soundindex ("misc/keyuse.wav"), 1, ATTN_NORM, 0);
+	gi.sound(activator, CHAN_AUTO, gi.soundindex("misc/keyuse.wav"), 1, ATTN_NORM, 0);
 	if (coop->value)
 	{
 		int		player;
@@ -408,7 +415,7 @@ void trigger_counter_use(edict_t *self, edict_t *other, edict_t *activator)
 		if (! (self->spawnflags & 1))
 		{
 			gi.centerprintf(activator, "%i more to go...", self->count);
-			gi.sound (activator, CHAN_AUTO, gi.soundindex ("misc/talk1.wav"), 1, ATTN_NORM, 0);
+			gi.sound(activator, CHAN_AUTO, gi.soundindex("misc/talk1.wav"), 1, ATTN_NORM, 0);
 		}
 		return;
 	}
@@ -416,7 +423,7 @@ void trigger_counter_use(edict_t *self, edict_t *other, edict_t *activator)
 	if (! (self->spawnflags & 1))
 	{
 		gi.centerprintf(activator, "Sequence completed!");
-		gi.sound (activator, CHAN_AUTO, gi.soundindex ("misc/talk1.wav"), 1, ATTN_NORM, 0);
+		gi.sound(activator, CHAN_AUTO, gi.soundindex("misc/talk1.wav"), 1, ATTN_NORM, 0);
 	}
 	self->activator = activator;
 	multi_trigger (self);
@@ -496,26 +503,26 @@ void trigger_push_touch (edict_t *self, edict_t *other, const cplane_t *plane, c
 
 	if (strcmp(other->classname, "grenade") == 0)
 	{
-		VectorScale (self->movedir, self->speed * 10, other->velocity);
+		VectorScale(self->movedir, self->speed * 10, other->velocity);
 	}
 	else if (other->health > 0)
 	{
-		VectorScale (self->movedir, self->speed * 10, other->velocity);
+		VectorScale(self->movedir, self->speed * 10, other->velocity);
 
 		if (other->client)
 		{
 			// don't take falling damage immediately from this
-			VectorCopy (other->velocity, other->client->oldvelocity);
+			VectorCopy(other->velocity, other->client->oldvelocity);
 			if (other->fly_sound_debounce_time < level.time)
 			{
 				other->fly_sound_debounce_time = level.time + 1.5;
 				if (!(self->spawnflags & NO_SOUND))
-					gi.sound (other, CHAN_AUTO, windsound, 1, ATTN_NORM, 0);
+					gi.sound(other, CHAN_AUTO, windsound, 1, ATTN_NORM, 0);
 			}
 		}
 	}
 	if (self->spawnflags & PUSH_ONCE)
-		G_FreeEdict (self);
+		G_FreeEdict(self);
 }
 
 void trigger_push_use(edict_t *self, edict_t *other, edict_t *activator)
@@ -543,7 +550,7 @@ void SP_trigger_push (edict_t *self)
 	}
 
 	InitTrigger (self);
-	windsound = gi.soundindex ("misc/windfly.wav");
+	windsound = gi.soundindex("misc/windfly.wav");
 	self->touch = trigger_push_touch;
 	if (!self->speed)
 		self->speed = 1000;
@@ -551,7 +558,7 @@ void SP_trigger_push (edict_t *self)
 	if (self->targetname)
 		self->use = trigger_push_use;
 
-	gi.linkentity (self);
+	gi.linkentity(self);
 }
 
 
@@ -586,7 +593,7 @@ void hurt_use (edict_t *self, edict_t *other, edict_t *activator)
 		self->solid = SOLID_TRIGGER;
 	else
 		self->solid = SOLID_NOT;
-	gi.linkentity (self);
+	gi.linkentity(self);
 
 	if (!(self->spawnflags & 2))
 		self->use = NULL;
@@ -616,14 +623,14 @@ void hurt_touch (edict_t *self, edict_t *other, const cplane_t *plane, const csu
 	if (!(self->spawnflags & 4))
 	{
 		if ((level.framenum % 10) == 0)
-			gi.sound (other, CHAN_AUTO, self->noise_index, 1, ATTN_NORM, 0);
+			gi.sound(other, CHAN_AUTO, self->noise_index, 1, ATTN_NORM, 0);
 	}
 
 	if (self->spawnflags & 8)
 		dflags = DAMAGE_NO_PROTECTION;
 	else
 		dflags = 0;
-	T_Damage (other, self, self, vec3_origin, other->s.origin, vec3_origin, self->dmg, self->dmg, dflags, MOD_TRIGGER_HURT);
+	T_Damage(other, self, self, vec3_origin, other->s.origin, vec3_origin, self->dmg, self->dmg, dflags, MOD_TRIGGER_HURT);
 }
 
 void
@@ -772,4 +779,3 @@ SP_trigger_monsterjump(edict_t *self)
 	self->touch = trigger_monsterjump_touch;
 	self->movedir[2] = st.height;
 }
-

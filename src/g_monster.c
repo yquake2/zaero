@@ -1,14 +1,13 @@
+/* =======================================================================
+ *
+ * Monster utility functions.
+ *
+ * =======================================================================
+ */
+
 #include "header/local.h"
 
-//
-// monster weapons
-//
-
-//FIXME mosnters should call these with a totally accurate direction
-// and we can mess it up based on skill.  Spread should be for normal
-// and we can tighten or loosen based on skill.  We could muck with
-// the damages too, but I'm not sure that's such a good idea.
-void monster_fire_bullet (edict_t *self, vec3_t start, vec3_t dir, int damage, int kick, int hspread, int vspread, int flashtype)
+void monster_fire_bullet(edict_t *self, vec3_t start, vec3_t dir, int damage, int kick, int hspread, int vspread, int flashtype)
 {
 	if (!self)
 	{
@@ -18,10 +17,10 @@ void monster_fire_bullet (edict_t *self, vec3_t start, vec3_t dir, int damage, i
 	ANIM_AIM(self, dir);
 	fire_bullet (self, start, dir, damage, kick, hspread, vspread, MOD_UNKNOWN);
 
-	gi.WriteByte (svc_muzzleflash2);
+	gi.WriteByte(svc_muzzleflash2);
 	gi.WriteShort (self - g_edicts);
-	gi.WriteByte (flashtype);
-	gi.multicast (start, MULTICAST_PVS);
+	gi.WriteByte(flashtype);
+	gi.multicast(start, MULTICAST_PVS);
 }
 
 void monster_fire_shotgun (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick, int hspread, int vspread, int count, int flashtype)
@@ -34,10 +33,10 @@ void monster_fire_shotgun (edict_t *self, vec3_t start, vec3_t aimdir, int damag
 	ANIM_AIM(self, aimdir);
 	fire_shotgun (self, start, aimdir, damage, kick, hspread, vspread, count, MOD_UNKNOWN);
 
-	gi.WriteByte (svc_muzzleflash2);
+	gi.WriteByte(svc_muzzleflash2);
 	gi.WriteShort (self - g_edicts);
-	gi.WriteByte (flashtype);
-	gi.multicast (start, MULTICAST_PVS);
+	gi.WriteByte(flashtype);
+	gi.multicast(start, MULTICAST_PVS);
 }
 
 void monster_fire_blaster (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, int flashtype, int effect)
@@ -49,17 +48,17 @@ void monster_fire_blaster (edict_t *self, vec3_t start, vec3_t dir, int damage, 
 
 	if (EMPNukeCheck(self, start))
 	{
-		gi.sound (self, CHAN_AUTO, gi.soundindex("items/empnuke/emp_missfire.wav"), 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_AUTO, gi.soundindex("items/empnuke/emp_missfire.wav"), 1, ATTN_NORM, 0);
 		return;
 	}
 
 	ANIM_AIM(self, dir);
 	fire_blaster (self, start, dir, damage, speed, effect, false);
 
-	gi.WriteByte (svc_muzzleflash2);
+	gi.WriteByte(svc_muzzleflash2);
 	gi.WriteShort (self - g_edicts);
-	gi.WriteByte (flashtype);
-	gi.multicast (start, MULTICAST_PVS);
+	gi.WriteByte(flashtype);
+	gi.multicast(start, MULTICAST_PVS);
 }
 
 void monster_fire_grenade (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, int flashtype)
@@ -72,10 +71,10 @@ void monster_fire_grenade (edict_t *self, vec3_t start, vec3_t aimdir, int damag
 	ANIM_AIM(self, aimdir);
 	fire_grenade (self, start, aimdir, damage, speed, 2.5, damage+40);
 
-	gi.WriteByte (svc_muzzleflash2);
+	gi.WriteByte(svc_muzzleflash2);
 	gi.WriteShort (self - g_edicts);
-	gi.WriteByte (flashtype);
-	gi.multicast (start, MULTICAST_PVS);
+	gi.WriteByte(flashtype);
+	gi.multicast(start, MULTICAST_PVS);
 }
 
 void monster_fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, int flashtype)
@@ -87,17 +86,17 @@ void monster_fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, i
 
 	if (EMPNukeCheck(self, start))
 	{
-		gi.sound (self, CHAN_AUTO, gi.soundindex("items/empnuke/emp_missfire.wav"), 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_AUTO, gi.soundindex("items/empnuke/emp_missfire.wav"), 1, ATTN_NORM, 0);
 		return;
 	}
 
 	ANIM_AIM(self, dir);
 	fire_rocket (self, start, dir, damage, speed, damage+20, damage);
 
-	gi.WriteByte (svc_muzzleflash2);
+	gi.WriteByte(svc_muzzleflash2);
 	gi.WriteShort (self - g_edicts);
-	gi.WriteByte (flashtype);
-	gi.multicast (start, MULTICAST_PVS);
+	gi.WriteByte(flashtype);
+	gi.multicast(start, MULTICAST_PVS);
 }
 
 void monster_fire_railgun (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick, int flashtype)
@@ -109,17 +108,17 @@ void monster_fire_railgun (edict_t *self, vec3_t start, vec3_t aimdir, int damag
 
 	if (EMPNukeCheck(self, start))
 	{
-		gi.sound (self, CHAN_AUTO, gi.soundindex("items/empnuke/emp_missfire.wav"), 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_AUTO, gi.soundindex("items/empnuke/emp_missfire.wav"), 1, ATTN_NORM, 0);
 		return;
 	}
 
 	ANIM_AIM(self, aimdir);
 	fire_rail (self, start, aimdir, damage, kick);
 
-	gi.WriteByte (svc_muzzleflash2);
+	gi.WriteByte(svc_muzzleflash2);
 	gi.WriteShort (self - g_edicts);
-	gi.WriteByte (flashtype);
-	gi.multicast (start, MULTICAST_PVS);
+	gi.WriteByte(flashtype);
+	gi.multicast(start, MULTICAST_PVS);
 }
 
 void monster_fire_bfg (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, int kick, float damage_radius, int flashtype)
@@ -131,17 +130,17 @@ void monster_fire_bfg (edict_t *self, vec3_t start, vec3_t aimdir, int damage, i
 
 	if (EMPNukeCheck(self, start))
 	{
-		gi.sound (self, CHAN_AUTO, gi.soundindex("items/empnuke/emp_missfire.wav"), 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_AUTO, gi.soundindex("items/empnuke/emp_missfire.wav"), 1, ATTN_NORM, 0);
 		return;
 	}
 
 	ANIM_AIM(self, aimdir);
 	fire_bfg (self, start, aimdir, damage, speed, damage_radius);
 
-	gi.WriteByte (svc_muzzleflash2);
+	gi.WriteByte(svc_muzzleflash2);
 	gi.WriteShort (self - g_edicts);
-	gi.WriteByte (flashtype);
-	gi.multicast (start, MULTICAST_PVS);
+	gi.WriteByte(flashtype);
+	gi.multicast(start, MULTICAST_PVS);
 }
 
 /* Monster utility functions */
@@ -235,7 +234,7 @@ void M_CheckGround (edict_t *ent)
 	point[1] = ent->s.origin[1];
 	point[2] = ent->s.origin[2] - 0.25;
 
-	trace = gi.trace (ent->s.origin, ent->mins, ent->maxs, point, ent, MASK_MONSTERSOLID);
+	trace = gi.trace(ent->s.origin, ent->mins, ent->maxs, point, ent, MASK_MONSTERSOLID);
 
 	// check steepness
 	if ( trace.plane.normal[2] < 0.7 && !trace.startsolid)
@@ -246,7 +245,7 @@ void M_CheckGround (edict_t *ent)
 
 	if (!trace.startsolid && !trace.allsolid)
 	{
-		VectorCopy (trace.endpos, ent->s.origin);
+		VectorCopy(trace.endpos, ent->s.origin);
 		ent->groundentity = trace.ent;
 		ent->groundentity_linkcount = trace.ent->linkcount;
 		ent->velocity[2] = 0;
@@ -433,17 +432,17 @@ void M_droptofloor (edict_t *ent)
 	}
 
 	ent->s.origin[2] += 1;
-	VectorCopy (ent->s.origin, end);
+	VectorCopy(ent->s.origin, end);
 	end[2] -= 256;
 
-	trace = gi.trace (ent->s.origin, ent->mins, ent->maxs, end, ent, MASK_MONSTERSOLID);
+	trace = gi.trace(ent->s.origin, ent->mins, ent->maxs, end, ent, MASK_MONSTERSOLID);
 
 	if (trace.fraction == 1 || trace.allsolid)
 		return;
 
-	VectorCopy (trace.endpos, ent->s.origin);
+	VectorCopy(trace.endpos, ent->s.origin);
 
-	gi.linkentity (ent);
+	gi.linkentity(ent);
 	M_CheckGround (ent);
 	M_CatagorizePosition (ent);
 }
@@ -620,7 +619,7 @@ void monster_triggered_spawn (edict_t *self)
 	self->movetype = MOVETYPE_STEP;
 	self->svflags &= ~SVF_NOCLIENT;
 	self->air_finished = level.time + 12;
-	gi.linkentity (self);
+	gi.linkentity(self);
 
 	monster_start_go (self);
 
@@ -715,7 +714,7 @@ qboolean monster_start (edict_t *self)
 
 	if (deathmatch->value)
 	{
-		G_FreeEdict (self);
+		G_FreeEdict(self);
 		return false;
 	}
 
@@ -748,7 +747,7 @@ qboolean monster_start (edict_t *self)
 
 	if (!self->monsterinfo.checkattack)
 		self->monsterinfo.checkattack = M_CheckAttack;
-	VectorCopy (self->s.origin, self->s.old_origin);
+	VectorCopy(self->s.origin, self->s.old_origin);
 
 	if (st.item)
 	{

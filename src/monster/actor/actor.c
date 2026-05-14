@@ -245,7 +245,7 @@ void actor_pain (edict_t *self, edict_t *other, float kick, int damage)
 		vec3_t	v;
 		char	*name;
 
-		VectorSubtract (other->s.origin, self->s.origin, v);
+		VectorSubtract(other->s.origin, self->s.origin, v);
 		self->ideal_yaw = vectoyaw (v);
 		if (random() < 0.5)
 			self->monsterinfo.currentmove = &actor_move_flipoff;
@@ -276,28 +276,28 @@ void actorMachineGun (edict_t *self)
 		return;
 	}
 
-	AngleVectors (self->s.angles, forward, right, NULL);
-	G_ProjectSource (self->s.origin, monster_flash_offset[MZ2_ACTOR_MACHINEGUN_1], forward, right, start);
+	AngleVectors(self->s.angles, forward, right, NULL);
+	G_ProjectSource(self->s.origin, monster_flash_offset[MZ2_ACTOR_MACHINEGUN_1], forward, right, start);
 	if (self->enemy)
 	{
 		if (self->enemy->health > 0)
 		{
-			VectorMA (self->enemy->s.origin, -0.2, self->enemy->velocity, target);
+			VectorMA(self->enemy->s.origin, -0.2, self->enemy->velocity, target);
 			target[2] += self->enemy->viewheight;
 		}
 		else
 		{
-			VectorCopy (self->enemy->absmin, target);
+			VectorCopy(self->enemy->absmin, target);
 			target[2] += (self->enemy->size[2] / 2);
 		}
-		VectorSubtract (target, start, forward);
-		VectorNormalize (forward);
+		VectorSubtract(target, start, forward);
+		VectorNormalize(forward);
 	}
 	else
 	{
-		AngleVectors (self->s.angles, forward, NULL, NULL);
+		AngleVectors(self->s.angles, forward, NULL, NULL);
 	}
-	monster_fire_bullet (self, start, forward, 3, 4, DEFAULT_BULLET_HSPREAD, DEFAULT_BULLET_VSPREAD, MZ2_ACTOR_MACHINEGUN_1);
+	monster_fire_bullet(self, start, forward, 3, 4, DEFAULT_BULLET_HSPREAD, DEFAULT_BULLET_VSPREAD, MZ2_ACTOR_MACHINEGUN_1);
 }
 
 
@@ -308,12 +308,12 @@ void actor_dead (edict_t *self)
 		return;
 	}
 
-	VectorSet (self->mins, -16, -16, -24);
-	VectorSet (self->maxs, 16, 16, -8);
+	VectorSet(self->mins, -16, -16, -24);
+	VectorSet(self->maxs, 16, 16, -8);
 	self->movetype = MOVETYPE_TOSS;
 	self->svflags |= SVF_DEADMONSTER;
 	self->nextthink = 0;
-	gi.linkentity (self);
+	gi.linkentity(self);
 }
 
 mframe_t actor_frames_death1 [] =
@@ -359,10 +359,10 @@ void actor_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage
 	if (self->health <= -80)
 	{
 		for (n= 0; n < 2; n++)
-			ThrowGib (self, "models/objects/gibs/bone/tris.md2", damage, GIB_ORGANIC);
+			ThrowGib(self, "models/objects/gibs/bone/tris.md2", damage, GIB_ORGANIC);
 		for (n= 0; n < 4; n++)
-			ThrowGib (self, "models/objects/gibs/sm_meat/tris.md2", damage, GIB_ORGANIC);
-		ThrowHead (self, "models/objects/gibs/head2/tris.md2", damage, GIB_ORGANIC);
+			ThrowGib(self, "models/objects/gibs/sm_meat/tris.md2", damage, GIB_ORGANIC);
+		ThrowHead(self, "models/objects/gibs/head2/tris.md2", damage, GIB_ORGANIC);
 		self->deadflag = DEAD_DEAD;
 		return;
 	}
@@ -440,7 +440,7 @@ void actor_use (edict_t *self, edict_t *other, edict_t *activator)
 		return;
 	}
 
-	VectorSubtract (self->goalentity->s.origin, self->s.origin, v);
+	VectorSubtract(self->goalentity->s.origin, self->s.origin, v);
 	self->ideal_yaw = self->s.angles[YAW] = vectoyaw(v);
 	self->monsterinfo.walk (self);
 	self->target = NULL;
@@ -459,29 +459,29 @@ void SP_misc_actor (edict_t *self)
 
 	if (deathmatch->value)
 	{
-		G_FreeEdict (self);
+		G_FreeEdict(self);
 		return;
 	}
 
 	if (!self->targetname)
 	{
 		gi.dprintf("untargeted %s at %s\n", self->classname, vtos(self->s.origin));
-		G_FreeEdict (self);
+		G_FreeEdict(self);
 		return;
 	}
 
 	if (!self->target)
 	{
 		gi.dprintf("%s with no target at %s\n", self->classname, vtos(self->s.origin));
-		G_FreeEdict (self);
+		G_FreeEdict(self);
 		return;
 	}
 
 	self->movetype = MOVETYPE_STEP;
 	self->solid = SOLID_BBOX;
 	self->s.modelindex = gi.modelindex("players/male/tris.md2");
-	VectorSet (self->mins, -16, -16, -24);
-	VectorSet (self->maxs, 16, 16, 32);
+	VectorSet(self->mins, -16, -16, -24);
+	VectorSet(self->maxs, 16, 16, 32);
 
 	if (!self->health)
 		self->health = 100;
@@ -499,7 +499,7 @@ void SP_misc_actor (edict_t *self)
 
 	self->monsterinfo.aiflags |= AI_GOOD_GUY;
 
-	gi.linkentity (self);
+	gi.linkentity(self);
 
 	self->monsterinfo.currentmove = &actor_move_stand;
 	self->monsterinfo.scale = MODEL_SCALE;
@@ -615,7 +615,7 @@ void target_actor_touch (edict_t *self, edict_t *other, const cplane_t *plane, c
 	}
 	else if (other->movetarget == other->goalentity)
 	{
-		VectorSubtract (other->movetarget->s.origin, other->s.origin, v);
+		VectorSubtract(other->movetarget->s.origin, other->s.origin, v);
 		other->ideal_yaw = vectoyaw (v);
 	}
 }
@@ -632,8 +632,8 @@ void SP_target_actor (edict_t *self)
 
 	self->solid = SOLID_TRIGGER;
 	self->touch = target_actor_touch;
-	VectorSet (self->mins, -8, -8, -8);
-	VectorSet (self->maxs, 8, 8, 8);
+	VectorSet(self->mins, -8, -8, -8);
+	VectorSet(self->maxs, 8, 8, 8);
 	self->svflags = SVF_NOCLIENT;
 
 	if (self->spawnflags & 1)
@@ -648,5 +648,5 @@ void SP_target_actor (edict_t *self)
 		self->movedir[2] = st.height;
 	}
 
-	gi.linkentity (self);
+	gi.linkentity(self);
 }

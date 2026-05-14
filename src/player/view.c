@@ -43,15 +43,11 @@ SV_CalcRoll(vec3_t angles, vec3_t velocity)
 	return side * sign;
 }
 
-
 /*
-===============
-P_DamageFeedback
-
-Handles color blends and view kicks
-===============
-*/
-void P_DamageFeedback (edict_t *player)
+ * Handles color blends and view kicks
+ */
+void
+P_DamageFeedback (edict_t *player)
 {
 	gclient_t	*client;
 	float	side;
@@ -70,7 +66,7 @@ void P_DamageFeedback (edict_t *player)
 	// death/gib sound is now aggregated and played here
 	if (player->sounds)
 	{
-		gi.sound (player, CHAN_VOICE, player->sounds, 1, ATTN_NORM, 0);
+		gi.sound(player, CHAN_VOICE, player->sounds, 1, ATTN_NORM, 0);
 		player->sounds = 0;
 	}
 
@@ -137,7 +133,7 @@ void P_DamageFeedback (edict_t *player)
 			l = 75;
 		else
 			l = 100;
-		gi.sound (player, CHAN_VOICE, gi.soundindex(va("*pain%i_%i.wav", l, r)), 1, ATTN_NORM, 0);
+		gi.sound(player, CHAN_VOICE, gi.soundindex(va("*pain%i_%i.wav", l, r)), 1, ATTN_NORM, 0);
 	}
 
 	// the total alpha of the blend is always proportional to count
@@ -151,14 +147,14 @@ void P_DamageFeedback (edict_t *player)
 
 	// the color of the blend will vary based on how much was absorbed
 	// by different armors
-	VectorClear (v);
+	VectorClear(v);
 	if (client->damage_parmor)
-		VectorMA (v, (float)client->damage_parmor/realcount, power_color, v);
+		VectorMA(v, (float)client->damage_parmor/realcount, power_color, v);
 	if (client->damage_armor)
-		VectorMA (v, (float)client->damage_armor/realcount,  acolor, v);
+		VectorMA(v, (float)client->damage_armor/realcount,  acolor, v);
 	if (client->damage_blood)
-		VectorMA (v, (float)client->damage_blood/realcount,  bcolor, v);
-	VectorCopy (v, client->damage_blend);
+		VectorMA(v, (float)client->damage_blood/realcount,  bcolor, v);
+	VectorCopy(v, client->damage_blend);
 
 
 	//
@@ -174,8 +170,8 @@ void P_DamageFeedback (edict_t *player)
 		if (kick > 50)
 			kick = 50;
 
-		VectorSubtract (client->damage_from, player->s.origin, v);
-		VectorNormalize (v);
+		VectorSubtract(client->damage_from, player->s.origin, v);
+		VectorNormalize(v);
 
 		side = DotProduct (v, right);
 		client->v_dmg_roll = kick*side*0.3;
@@ -235,7 +231,7 @@ void SV_CalcViewOffset (edict_t *ent)
 	// if dead, fix the angle and don't add any kick
 	if (ent->deadflag)
 	{
-		VectorClear (angles);
+		VectorClear(angles);
 
 		ent->client->ps.viewangles[ROLL] = 40;
 		ent->client->ps.viewangles[PITCH] = -15;
@@ -245,7 +241,7 @@ void SV_CalcViewOffset (edict_t *ent)
 	{
 		// add angles based on weapon kick
 
-		VectorCopy (ent->client->kick_angles, angles);
+		VectorCopy(ent->client->kick_angles, angles);
 
 		// add angles based on damage kick
 
@@ -292,7 +288,7 @@ void SV_CalcViewOffset (edict_t *ent)
 
 	// base origin
 
-	VectorClear (v);
+	VectorClear(v);
 
 	// add view height
 
@@ -315,7 +311,7 @@ void SV_CalcViewOffset (edict_t *ent)
 
 	// add kick offset
 
-	VectorAdd (v, ent->client->kick_origin, v);
+	VectorAdd(v, ent->client->kick_origin, v);
 
 	// absolutely bound offsets
 	// so the view can never be outside the player box
@@ -331,7 +327,7 @@ void SV_CalcViewOffset (edict_t *ent)
 			vec3_t f;
 
 			VectorAdd(ent->client->zCameraTrack->client->ps.viewoffset, v, v);
-			AngleVectors (ent->client->zCameraTrack->s.angles, f, NULL, NULL);
+			AngleVectors(ent->client->zCameraTrack->s.angles, f, NULL, NULL);
 			VectorMA(v, 10, f, v);
 		}
 		else if (Q_stricmp(ent->client->zCameraTrack->classname, "misc_securitycamera") == 0)
@@ -344,14 +340,14 @@ void SV_CalcViewOffset (edict_t *ent)
 			ent->client->ps.viewangles[YAW] += framepercent * 15;
 		}
 		else
-			VectorCopy (ent->client->zCameraTrack->s.angles, ent->client->ps.viewangles);
+			VectorCopy(ent->client->zCameraTrack->s.angles, ent->client->ps.viewangles);
 
 		for(i = 0; i < 3; i++)
 		{
 			ent->client->ps.pmove.origin[i] = v[i] * 8;
 		}
 
-		VectorSet (ent->client->ps.viewoffset, 0, 0, 0);
+		VectorSet(ent->client->ps.viewoffset, 0, 0, 0);
 		// make our "double" do what we're doing
 		if (ent->client->zCameraLocalEntity)
 		{
@@ -378,7 +374,7 @@ void SV_CalcViewOffset (edict_t *ent)
 		else if (v[2] > 30)
 			v[2] = 30;
 
-		VectorCopy (v, ent->client->ps.viewoffset);
+		VectorCopy(v, ent->client->ps.viewoffset);
 	}
 }
 
@@ -437,7 +433,7 @@ void SV_CalcGunOffset (edict_t *ent)
 	}
 
 	// gun height
-	VectorClear (ent->client->ps.gunoffset);
+	VectorClear(ent->client->ps.gunoffset);
 
 	// gun_x / gun_y / gun_z are development tools
 	for (i=0 ; i<3 ; i++)
@@ -490,7 +486,7 @@ void SV_CalcBlend (edict_t *ent)
 	ent->client->ps.blend[2] = ent->client->ps.blend[3] = 0;
 
 	// add for contents
-	VectorAdd (ent->s.origin, ent->client->ps.viewoffset, vieworg);
+	VectorAdd(ent->s.origin, ent->client->ps.viewoffset, vieworg);
 	contents = gi.pointcontents (vieworg);
 	if (contents & (CONTENTS_LAVA|CONTENTS_SLIME|CONTENTS_WATER) )
 		ent->client->ps.rdflags |= RDF_UNDERWATER;
@@ -717,11 +713,11 @@ void P_WorldEffects (void)
 	{
 		PlayerNoise(current_player, current_player->s.origin, PNOISE_SELF);
 		if (current_player->watertype & CONTENTS_LAVA)
-			gi.sound (current_player, CHAN_BODY, gi.soundindex("player/lava_in.wav"), 1, ATTN_NORM, 0);
+			gi.sound(current_player, CHAN_BODY, gi.soundindex("player/lava_in.wav"), 1, ATTN_NORM, 0);
 		else if (current_player->watertype & CONTENTS_SLIME)
-			gi.sound (current_player, CHAN_BODY, gi.soundindex("player/watr_in.wav"), 1, ATTN_NORM, 0);
+			gi.sound(current_player, CHAN_BODY, gi.soundindex("player/watr_in.wav"), 1, ATTN_NORM, 0);
 		else if (current_player->watertype & CONTENTS_WATER)
-			gi.sound (current_player, CHAN_BODY, gi.soundindex("player/watr_in.wav"), 1, ATTN_NORM, 0);
+			gi.sound(current_player, CHAN_BODY, gi.soundindex("player/watr_in.wav"), 1, ATTN_NORM, 0);
 		current_player->flags |= FL_INWATER;
 
 		// clear damage_debounce, so the pain sound will play immediately
@@ -734,7 +730,7 @@ void P_WorldEffects (void)
 	if (old_waterlevel && ! waterlevel)
 	{
 		PlayerNoise(current_player, current_player->s.origin, PNOISE_SELF);
-		gi.sound (current_player, CHAN_BODY, gi.soundindex("player/watr_out.wav"), 1, ATTN_NORM, 0);
+		gi.sound(current_player, CHAN_BODY, gi.soundindex("player/watr_out.wav"), 1, ATTN_NORM, 0);
 		current_player->flags &= ~FL_INWATER;
 	}
 
@@ -743,7 +739,7 @@ void P_WorldEffects (void)
 	//
 	if (old_waterlevel != 3 && waterlevel == 3)
 	{
-		gi.sound (current_player, CHAN_BODY, gi.soundindex("player/watr_un.wav"), 1, ATTN_NORM, 0);
+		gi.sound(current_player, CHAN_BODY, gi.soundindex("player/watr_un.wav"), 1, ATTN_NORM, 0);
 	}
 
 	//
@@ -753,12 +749,12 @@ void P_WorldEffects (void)
 	{
 		if (current_player->air_finished < level.time)
 		{	// gasp for air
-			gi.sound (current_player, CHAN_VOICE, gi.soundindex("player/gasp1.wav"), 1, ATTN_NORM, 0);
+			gi.sound(current_player, CHAN_VOICE, gi.soundindex("player/gasp1.wav"), 1, ATTN_NORM, 0);
 			PlayerNoise(current_player, current_player->s.origin, PNOISE_SELF);
 		}
 		else  if (current_player->air_finished < level.time + 11)
 		{	// just break surface
-			gi.sound (current_player, CHAN_VOICE, gi.soundindex("player/gasp2.wav"), 1, ATTN_NORM, 0);
+			gi.sound(current_player, CHAN_VOICE, gi.soundindex("player/gasp2.wav"), 1, ATTN_NORM, 0);
 		}
 	}
 
@@ -775,9 +771,9 @@ void P_WorldEffects (void)
 			if (((int)(current_client->breather_framenum - level.framenum) % 25) == 0)
 			{
 				if (!current_client->breather_sound)
-					gi.sound (current_player, CHAN_AUTO, gi.soundindex("player/u_breath1.wav"), 1, ATTN_NORM, 0);
+					gi.sound(current_player, CHAN_AUTO, gi.soundindex("player/u_breath1.wav"), 1, ATTN_NORM, 0);
 				else
-					gi.sound (current_player, CHAN_AUTO, gi.soundindex("player/u_breath2.wav"), 1, ATTN_NORM, 0);
+					gi.sound(current_player, CHAN_AUTO, gi.soundindex("player/u_breath2.wav"), 1, ATTN_NORM, 0);
 				current_client->breather_sound ^= 1;
 				PlayerNoise(current_player, current_player->s.origin, PNOISE_SELF);
 				//FIXME: release a bubble?
@@ -799,15 +795,15 @@ void P_WorldEffects (void)
 
 				// play a gurp sound instead of a normal pain sound
 				if (current_player->health <= current_player->dmg)
-					gi.sound (current_player, CHAN_VOICE, gi.soundindex("player/drown1.wav"), 1, ATTN_NORM, 0);
+					gi.sound(current_player, CHAN_VOICE, gi.soundindex("player/drown1.wav"), 1, ATTN_NORM, 0);
 				else if (randk()&1)
-					gi.sound (current_player, CHAN_VOICE, gi.soundindex("*gurp1.wav"), 1, ATTN_NORM, 0);
+					gi.sound(current_player, CHAN_VOICE, gi.soundindex("*gurp1.wav"), 1, ATTN_NORM, 0);
 				else
-					gi.sound (current_player, CHAN_VOICE, gi.soundindex("*gurp2.wav"), 1, ATTN_NORM, 0);
+					gi.sound(current_player, CHAN_VOICE, gi.soundindex("*gurp2.wav"), 1, ATTN_NORM, 0);
 
 				current_player->pain_debounce_time = level.time;
 
-				T_Damage (current_player, world, world, vec3_origin, current_player->s.origin, vec3_origin, current_player->dmg, 0, DAMAGE_NO_ARMOR, MOD_WATER);
+				T_Damage(current_player, world, world, vec3_origin, current_player->s.origin, vec3_origin, current_player->dmg, 0, DAMAGE_NO_ARMOR, MOD_WATER);
 			}
 		}
 	}
@@ -830,23 +826,23 @@ void P_WorldEffects (void)
 				&& !(current_player->flags & FL_GODMODE))
 			{
 				if (randk()&1)
-					gi.sound (current_player, CHAN_VOICE, gi.soundindex("player/burn1.wav"), 1, ATTN_NORM, 0);
+					gi.sound(current_player, CHAN_VOICE, gi.soundindex("player/burn1.wav"), 1, ATTN_NORM, 0);
 				else
-					gi.sound (current_player, CHAN_VOICE, gi.soundindex("player/burn2.wav"), 1, ATTN_NORM, 0);
+					gi.sound(current_player, CHAN_VOICE, gi.soundindex("player/burn2.wav"), 1, ATTN_NORM, 0);
 				current_player->pain_debounce_time = level.time + 1;
 			}
 
 			if (envirosuit)	// take 1/3 damage with envirosuit
-				T_Damage (current_player, world, world, vec3_origin, current_player->s.origin, vec3_origin, 1*waterlevel, 0, 0, MOD_LAVA);
+				T_Damage(current_player, world, world, vec3_origin, current_player->s.origin, vec3_origin, 1*waterlevel, 0, 0, MOD_LAVA);
 			else
-				T_Damage (current_player, world, world, vec3_origin, current_player->s.origin, vec3_origin, 3*waterlevel, 0, 0, MOD_LAVA);
+				T_Damage(current_player, world, world, vec3_origin, current_player->s.origin, vec3_origin, 3*waterlevel, 0, 0, MOD_LAVA);
 		}
 
 		if (current_player->watertype & CONTENTS_SLIME)
 		{
 			if (!envirosuit)
 			{	// no damage from slime with envirosuit
-				T_Damage (current_player, world, world, vec3_origin, current_player->s.origin, vec3_origin, 1*waterlevel, 0, 0, MOD_SLIME);
+				T_Damage(current_player, world, world, vec3_origin, current_player->s.origin, vec3_origin, 1*waterlevel, 0, 0, MOD_SLIME);
 			}
 		}
 	}
@@ -911,9 +907,9 @@ void G_SetClientEffects (edict_t *ent)
 
 	if(ent->client->zCameraLocalEntity)
 	{
-		VectorCopy (ent->s.origin, ent->client->zCameraLocalEntity->s.origin);
-		VectorCopy (ent->s.angles, ent->client->zCameraLocalEntity->s.angles);
-		VectorCopy (ent->s.old_origin, ent->client->zCameraLocalEntity->s.old_origin);
+		VectorCopy(ent->s.origin, ent->client->zCameraLocalEntity->s.origin);
+		VectorCopy(ent->s.angles, ent->client->zCameraLocalEntity->s.angles);
+		VectorCopy(ent->s.old_origin, ent->client->zCameraLocalEntity->s.old_origin);
 
 		ent->client->zCameraLocalEntity->s.effects = ent->s.effects;
 	}
@@ -970,7 +966,7 @@ G_SetClientSound(edict_t *ent)
 	if (ent->client->resp.helpchanged && ent->client->resp.helpchanged <= 3 && !(level.framenum&63) )
 	{
 		ent->client->resp.helpchanged++;
-		gi.sound (ent, CHAN_VOICE, gi.soundindex ("misc/pc_up.wav"), 1, ATTN_STATIC, 0);
+		gi.sound(ent, CHAN_VOICE, gi.soundindex("misc/pc_up.wav"), 1, ATTN_STATIC, 0);
 	}
 
 	if (ent->client->pers.weapon)
@@ -1156,7 +1152,7 @@ void ClientEndServerFrame (edict_t *ent)
 		return;
 	}
 
-	AngleVectors (ent->client->v_angle, forward, right, up);
+	AngleVectors(ent->client->v_angle, forward, right, up);
 
 	// burn from lava, etc
 	P_WorldEffects ();
@@ -1231,12 +1227,12 @@ void ClientEndServerFrame (edict_t *ent)
 
 	G_SetClientFrame (ent);
 
-	VectorCopy (ent->velocity, ent->client->oldvelocity);
-	VectorCopy (ent->client->ps.viewangles, ent->client->oldviewangles);
+	VectorCopy(ent->velocity, ent->client->oldvelocity);
+	VectorCopy(ent->client->ps.viewangles, ent->client->oldviewangles);
 
 	// clear weapon kicks
-	VectorClear (ent->client->kick_origin);
-	VectorClear (ent->client->kick_angles);
+	VectorClear(ent->client->kick_origin);
+	VectorClear(ent->client->kick_angles);
 
 	// if the scoreboard is up, update it
 	if (ent->client->showscores && !(level.framenum & 31) )
@@ -1261,4 +1257,3 @@ void ClientEndServerFrame (edict_t *ent)
 		}
 	}
 }
-

@@ -1,16 +1,14 @@
+/* =======================================================================
+ *
+ * HUD, deathmatch scoreboard, help computer and intermission stuff.
+ *
+ * =======================================================================
+ */
+
 #include "../header/local.h"
 
-
-
-/*
-======================================================================
-
-INTERMISSION
-
-======================================================================
-*/
-
-void MoveClientToIntermission (edict_t *ent)
+void
+MoveClientToIntermission (edict_t *ent)
 {
 	if (!ent)
 	{
@@ -19,11 +17,11 @@ void MoveClientToIntermission (edict_t *ent)
 
 	if (deathmatch->value || coop->value)
 		ent->client->showscores = true;
-	VectorCopy (level.intermission_origin, ent->s.origin);
+	VectorCopy(level.intermission_origin, ent->s.origin);
 	ent->client->ps.pmove.origin[0] = level.intermission_origin[0]*8;
 	ent->client->ps.pmove.origin[1] = level.intermission_origin[1]*8;
 	ent->client->ps.pmove.origin[2] = level.intermission_origin[2]*8;
-	VectorCopy (level.intermission_angle, ent->client->ps.viewangles);
+	VectorCopy(level.intermission_angle, ent->client->ps.viewangles);
 	ent->client->ps.pmove.pm_type = PM_FREEZE;
 	ent->client->ps.gunindex = 0;
 	ent->client->ps.blend[3] = 0;
@@ -138,8 +136,8 @@ BeginIntermission(const edict_t *targ)
 		}
 	}
 
-	VectorCopy (ent->s.origin, level.intermission_origin);
-	VectorCopy (ent->s.angles, level.intermission_angle);
+	VectorCopy(ent->s.origin, level.intermission_origin);
+	VectorCopy(ent->s.angles, level.intermission_angle);
 
 	// move all clients to the intermission point
 	for (i=0 ; i<maxclients->value ; i++)
@@ -246,7 +244,7 @@ void DeathmatchScoreboardMessage (edict_t *ent, edict_t *killer)
 		stringlength += j;
 	}
 
-	gi.WriteByte (svc_layout);
+	gi.WriteByte(svc_layout);
 	gi.WriteString (string);
 }
 
@@ -345,7 +343,7 @@ void HelpComputer (edict_t *ent)
 		level.found_goals, level.total_goals,
 		level.found_secrets, level.total_secrets);
 
-	gi.WriteByte (svc_layout);
+	gi.WriteByte(svc_layout);
 	gi.WriteString (string);
 	gi.unicast (ent, true);
 }
@@ -608,4 +606,3 @@ void G_SetStats (edict_t *ent)
 		ent->client->ps.stats[STAT_CAMERA_ICON] = 0;
 
 }
-

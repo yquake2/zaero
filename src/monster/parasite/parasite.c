@@ -101,7 +101,13 @@ mframe_t parasite_frames_start_fidget[] = {
 	{ai_stand, 0, NULL},
 	{ai_stand, 0, NULL}
 };
-mmove_t parasite_move_start_fidget = {FRAME_stand18, FRAME_stand21, parasite_frames_start_fidget, parasite_do_fidget};
+
+mmove_t parasite_move_start_fidget = {
+	FRAME_stand18,
+	FRAME_stand21,
+	parasite_frames_start_fidget,
+	parasite_do_fidget
+};
 
 mframe_t parasite_frames_fidget[] = {
 	{ai_stand, 0, parasite_scratch},
@@ -111,7 +117,13 @@ mframe_t parasite_frames_fidget[] = {
 	{ai_stand, 0, NULL},
 	{ai_stand, 0, NULL}
 };
-mmove_t parasite_move_fidget = {FRAME_stand22, FRAME_stand27, parasite_frames_fidget, parasite_refidget};
+
+mmove_t parasite_move_fidget = {
+	FRAME_stand22,
+	FRAME_stand27,
+	parasite_frames_fidget,
+	parasite_refidget
+};
 
 mframe_t parasite_frames_end_fidget[] = {
 	{ai_stand, 0, parasite_scratch},
@@ -123,7 +135,13 @@ mframe_t parasite_frames_end_fidget[] = {
 	{ai_stand, 0, NULL},
 	{ai_stand, 0, NULL}
 };
-mmove_t parasite_move_end_fidget = {FRAME_stand28, FRAME_stand35, parasite_frames_end_fidget, parasite_stand};
+
+mmove_t parasite_move_end_fidget = {
+	FRAME_stand28,
+	FRAME_stand35,
+	parasite_frames_end_fidget,
+	parasite_stand
+};
 
 void
 parasite_end_fidget(edict_t *self)
@@ -195,7 +213,13 @@ mframe_t parasite_frames_stand[] = {
 	{ai_stand, 0, NULL},
 	{ai_stand, 0, parasite_tap}
 };
-mmove_t	parasite_move_stand = {FRAME_stand01, FRAME_stand17, parasite_frames_stand, parasite_stand};
+
+mmove_t parasite_move_stand = {
+	FRAME_stand01,
+	FRAME_stand17,
+	parasite_frames_stand,
+	parasite_stand
+};
 
 void
 parasite_stand(edict_t *self)
@@ -217,13 +241,25 @@ mframe_t parasite_frames_run[] = {
 	{ai_run, 28, NULL},
 	{ai_run, 25, NULL}
 };
-mmove_t parasite_move_run = {FRAME_run03, FRAME_run09, parasite_frames_run, NULL};
+
+mmove_t parasite_move_run = {
+	FRAME_run03,
+	FRAME_run09,
+	parasite_frames_run,
+	NULL
+};
 
 mframe_t parasite_frames_start_run[] = {
 	{ai_run, 0, NULL},
 	{ai_run, 30, NULL},
 };
-mmove_t parasite_move_start_run = {FRAME_run01, FRAME_run02, parasite_frames_start_run, parasite_run};
+
+mmove_t parasite_move_start_run = {
+	FRAME_run01,
+	FRAME_run02,
+	parasite_frames_start_run,
+	parasite_run
+};
 
 mframe_t parasite_frames_stop_run[] = {
 	{ai_run, 20, NULL},
@@ -233,7 +269,13 @@ mframe_t parasite_frames_stop_run[] = {
 	{ai_run, 0, NULL},
 	{ai_run, 0, NULL}
 };
-mmove_t parasite_move_stop_run = {FRAME_run10, FRAME_run15, parasite_frames_stop_run, NULL};
+
+mmove_t parasite_move_stop_run = {
+	FRAME_run10,
+	FRAME_run15,
+	parasite_frames_stop_run,
+	NULL
+};
 
 void
 parasite_start_run(edict_t *self)
@@ -280,13 +322,25 @@ mframe_t parasite_frames_walk[] = {
 	{ai_walk, 28, NULL},
 	{ai_walk, 25, NULL}
 };
-mmove_t parasite_move_walk = {FRAME_run03, FRAME_run09, parasite_frames_walk, parasite_walk};
+
+mmove_t parasite_move_walk = {
+	FRAME_run03,
+	FRAME_run09,
+	parasite_frames_walk,
+	parasite_walk
+};
 
 mframe_t parasite_frames_start_walk[] = {
 	{ai_walk, 0, NULL},
 	{ai_walk, 30, parasite_walk}
 };
-mmove_t parasite_move_start_walk = {FRAME_run01, FRAME_run02, parasite_frames_start_walk, NULL};
+
+mmove_t parasite_move_start_walk = {
+	FRAME_run01,
+	FRAME_run02,
+	parasite_frames_start_walk,
+	NULL
+};
 
 mframe_t parasite_frames_stop_walk[] = {
 	{ai_walk, 20, NULL},
@@ -296,7 +350,13 @@ mframe_t parasite_frames_stop_walk[] = {
 	{ai_walk, 0, NULL},
 	{ai_walk, 0, NULL}
 };
-mmove_t parasite_move_stop_walk = {FRAME_run10, FRAME_run15, parasite_frames_stop_walk, NULL};
+
+mmove_t parasite_move_stop_walk = {
+	FRAME_run10,
+	FRAME_run15,
+	parasite_frames_stop_walk,
+	NULL
+};
 
 void
 parasite_start_walk(edict_t *self)
@@ -333,9 +393,17 @@ mframe_t parasite_frames_pain1[] = {
 	{ai_move, -7, NULL},
 	{ai_move, 0, NULL}
 };
-mmove_t parasite_move_pain1 = {FRAME_pain101, FRAME_pain111, parasite_frames_pain1, parasite_start_run};
 
-void parasite_pain (edict_t *self, edict_t *other, float kick, int damage)
+mmove_t parasite_move_pain1 = {
+	FRAME_pain101,
+	FRAME_pain111,
+	parasite_frames_pain1,
+	parasite_start_run
+};
+
+void
+parasite_pain(edict_t *self, edict_t *other /* unused */,
+		float kick /* unused */, int damage /* unused */)
 {
 	if (!self)
 	{
@@ -343,20 +411,30 @@ void parasite_pain (edict_t *self, edict_t *other, float kick, int damage)
 	}
 
 	if (self->health < (self->max_health / 2))
+	{
 		self->s.skinnum = 1;
+	}
 
 	if (level.time < self->pain_debounce_time)
+	{
 		return;
+	}
 
 	self->pain_debounce_time = level.time + 3;
 
 	if (skill->value == SKILL_HARDPLUS)
-		return;		// no pain anims in nightmare
+	{
+		return; /* no pain anims in nightmare */
+	}
 
 	if (random() < 0.5)
-		gi.sound (self, CHAN_VOICE, sound_pain1, 1, ATTN_NORM, 0);
+	{
+		gi.sound(self, CHAN_VOICE, sound_pain1, 1, ATTN_NORM, 0);
+	}
 	else
-		gi.sound (self, CHAN_VOICE, sound_pain2, 1, ATTN_NORM, 0);
+	{
+		gi.sound(self, CHAN_VOICE, sound_pain2, 1, ATTN_NORM, 0);
+	}
 
 	self->monsterinfo.currentmove = &parasite_move_pain1;
 }
@@ -479,7 +557,13 @@ mframe_t parasite_frames_drain[] = {
 	{ai_charge, -3, NULL},
 	{ai_charge, 0, NULL}
 };
-mmove_t parasite_move_drain = {FRAME_drain01, FRAME_drain18, parasite_frames_drain, parasite_start_run};
+
+mmove_t parasite_move_drain = {
+	FRAME_drain01,
+	FRAME_drain18,
+	parasite_frames_drain,
+	parasite_start_run
+};
 
 mframe_t parasite_frames_break[] = {
 	{ai_charge, 0, NULL},
@@ -515,7 +599,13 @@ mframe_t parasite_frames_break[] = {
 	{ai_charge, -5, NULL},
 	{ai_charge, 1, NULL}
 };
-mmove_t parasite_move_break = {FRAME_break01, FRAME_break32, parasite_frames_break, parasite_start_run};
+
+mmove_t parasite_move_break = {
+	FRAME_break01,
+	FRAME_break32,
+	parasite_frames_break,
+	parasite_start_run
+};
 
 
 void
@@ -554,35 +644,53 @@ mframe_t parasite_frames_death[] = {
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL}
 };
-mmove_t parasite_move_death = {FRAME_death101, FRAME_death107, parasite_frames_death, parasite_dead};
 
-void parasite_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
+mmove_t parasite_move_death = {
+	FRAME_death101,
+	FRAME_death107,
+	parasite_frames_death,
+	parasite_dead
+};
+
+void
+parasite_die(edict_t *self, edict_t *inflictor /* unused */,
+		edict_t *attacker /* unused */, int damage,
+		const vec3_t point /* unused */)
 {
-	int		n;
+	int n;
 
 	if (!self)
 	{
 		return;
 	}
 
-	// check for gib
+	/* check for gib */
 	if (self->health <= self->gib_health)
 	{
-		gi.sound (self, CHAN_VOICE, gi.soundindex ("misc/udeath.wav"), 1, ATTN_NORM, 0);
-		for (n= 0; n < 2; n++)
-			ThrowGib (self, "models/objects/gibs/bone/tris.md2", damage, GIB_ORGANIC);
-		for (n= 0; n < 4; n++)
-			ThrowGib (self, "models/objects/gibs/sm_meat/tris.md2", damage, GIB_ORGANIC);
-		ThrowHead (self, "models/objects/gibs/head2/tris.md2", damage, GIB_ORGANIC);
+		gi.sound(self, CHAN_VOICE, gi.soundindex("misc/udeath.wav"), 1, ATTN_NORM, 0);
+
+		for (n = 0; n < 2; n++)
+		{
+			ThrowGib(self, "models/objects/gibs/bone/tris.md2", damage, GIB_ORGANIC);
+		}
+
+		for (n = 0; n < 4; n++)
+		{
+			ThrowGib(self, "models/objects/gibs/sm_meat/tris.md2", damage, GIB_ORGANIC);
+		}
+
+		ThrowHead(self, "models/objects/gibs/head2/tris.md2", damage, GIB_ORGANIC);
 		self->deadflag = DEAD_DEAD;
 		return;
 	}
 
 	if (self->deadflag == DEAD_DEAD)
+	{
 		return;
+	}
 
-	// regular death
-	gi.sound (self, CHAN_VOICE, sound_die, 1, ATTN_NORM, 0);
+	/* regular death */
+	gi.sound(self, CHAN_VOICE, sound_die, 1, ATTN_NORM, 0);
 	self->deadflag = DEAD_DEAD;
 	self->takedamage = DAMAGE_YES;
 	self->monsterinfo.currentmove = &parasite_move_death;
@@ -645,4 +753,3 @@ SP_monster_parasite(edict_t *self)
 
 	walkmonster_start(self);
 }
-

@@ -1,7 +1,11 @@
-// g_turret.c
+/* =======================================================================
+ *
+ * Turrets aka big cannons with a driver.
+ *
+ * =======================================================================
+ */
 
 #include "header/local.h"
-
 
 void AnglesNormalize(vec3_t vec)
 {
@@ -86,14 +90,14 @@ void turret_breach_fire (edict_t *self)
 		return;
 	}
 
-	AngleVectors (self->s.angles, f, r, u);
-	VectorMA (self->s.origin, self->move_origin[0], f, start);
-	VectorMA (start, self->move_origin[1], r, start);
-	VectorMA (start, self->move_origin[2], u, start);
+	AngleVectors(self->s.angles, f, r, u);
+	VectorMA(self->s.origin, self->move_origin[0], f, start);
+	VectorMA(start, self->move_origin[1], r, start);
+	VectorMA(start, self->move_origin[2], u, start);
 
 	if(EMPNukeCheck(self, start))
 	{
-		gi.sound (self, CHAN_AUTO, gi.soundindex("items/empnuke/emp_missfire.wav"), 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_AUTO, gi.soundindex("items/empnuke/emp_missfire.wav"), 1, ATTN_NORM, 0);
 		return;
 	}
 
@@ -443,10 +447,10 @@ void turret_driver_think (edict_t *self)
 	}
 
 	// let the turret know where we want it to aim
-	VectorCopy (self->enemy->s.origin, target);
+	VectorCopy(self->enemy->s.origin, target);
 	target[2] += self->enemy->viewheight;
-	VectorSubtract (target, self->target_ent->s.origin, dir);
-	vectoangles (dir, self->target_ent->move_angles);
+	VectorSubtract(target, self->target_ent->s.origin, dir);
+	vectoangles(dir, self->target_ent->move_angles);
 
 	// decide if we should shoot
 	if (level.time < self->monsterinfo.attack_finished)
@@ -477,15 +481,15 @@ void turret_driver_link (edict_t *self)
 	self->target_ent = G_PickTarget (self->target);
 	self->target_ent->owner = self;
 	self->target_ent->teammaster->owner = self;
-	VectorCopy (self->target_ent->s.angles, self->s.angles);
+	VectorCopy(self->target_ent->s.angles, self->s.angles);
 
 	vec[0] = self->target_ent->s.origin[0] - self->s.origin[0];
 	vec[1] = self->target_ent->s.origin[1] - self->s.origin[1];
 	vec[2] = 0;
 	self->move_origin[0] = VectorLength(vec);
 
-	VectorSubtract (self->s.origin, self->target_ent->s.origin, vec);
-	vectoangles (vec, vec);
+	VectorSubtract(self->s.origin, self->target_ent->s.origin, vec);
+	vectoangles(vec, vec);
 	AnglesNormalize(vec);
 	self->move_origin[1] = vec[1];
 
@@ -508,15 +512,15 @@ void SP_turret_driver (edict_t *self)
 
 	if (deathmatch->value)
 	{
-		G_FreeEdict (self);
+		G_FreeEdict(self);
 		return;
 	}
 
 	self->movetype = MOVETYPE_PUSH;
 	self->solid = SOLID_BBOX;
 	self->s.modelindex = gi.modelindex("models/monsters/infantry/tris.md2");
-	VectorSet (self->mins, -16, -16, -24);
-	VectorSet (self->maxs, 16, 16, 32);
+	VectorSet(self->mins, -16, -16, -24);
+	VectorSet(self->maxs, 16, 16, 32);
 
 	self->health = 100;
 	self->gib_health = 0;
@@ -538,7 +542,7 @@ void SP_turret_driver (edict_t *self)
 	self->takedamage = DAMAGE_AIM;
 	self->use = monster_use;
 	self->clipmask = MASK_MONSTERSOLID;
-	VectorCopy (self->s.origin, self->s.old_origin);
+	VectorCopy(self->s.origin, self->s.old_origin);
 	self->monsterinfo.aiflags |= AI_STAND_GROUND|AI_DUCKED;
 
 	if (st.item)
@@ -551,6 +555,5 @@ void SP_turret_driver (edict_t *self)
 	self->think = turret_driver_link;
 	self->nextthink = level.time + FRAMETIME;
 
-	gi.linkentity (self);
+	gi.linkentity(self);
 }
-

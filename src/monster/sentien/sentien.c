@@ -592,7 +592,7 @@ void sentien_fire_bullet (edict_t *self, vec3_t start, vec3_t dir, int damage)
 
 	if(EMPNukeCheck(self, self->s.origin))
 	{
-		gi.sound (self, CHAN_AUTO, gi.soundindex("items/empnuke/emp_missfire.wav"), 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_AUTO, gi.soundindex("items/empnuke/emp_missfire.wav"), 1, ATTN_NORM, 0);
 		return;
 	}
 
@@ -631,24 +631,24 @@ void sentien_do_blast(edict_t *self)
 
 	idx = self->s.frame - FRAME_blastStart + 1;
 
-	AngleVectors (self->s.angles, forward, right, NULL);
+	AngleVectors(self->s.angles, forward, right, NULL);
 
-	G_ProjectSource (self->s.origin, sentien_flash_offset[0],
+	G_ProjectSource(self->s.origin, sentien_flash_offset[0],
 		forward, right, start);
 
-	VectorCopy (self->enemy->s.origin, end);
+	VectorCopy(self->enemy->s.origin, end);
 	end[2] += self->enemy->viewheight;
-	VectorSubtract (end, start, aim);
+	VectorSubtract(end, start, aim);
 
 	//need to compare aim with facing to make sure we are not
 	//aiming too far sideways and correct if we are.
 
-	G_ProjectSource (self->s.origin, sentien_flash_offset[idx],
+	G_ProjectSource(self->s.origin, sentien_flash_offset[idx],
 		forward, right, start);
 
 	if(EMPNukeCheck(self, start))
 	{
-		gi.sound (self, CHAN_AUTO, gi.soundindex("items/empnuke/emp_missfire.wav"), 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_AUTO, gi.soundindex("items/empnuke/emp_missfire.wav"), 1, ATTN_NORM, 0);
 		return;
 	}
 
@@ -757,7 +757,7 @@ void sentien_do_laser(edict_t *self)
 
 	if(EMPNukeCheck(self, self->s.origin))
 	{
-		gi.sound (self, CHAN_AUTO, gi.soundindex("items/empnuke/emp_missfire.wav"), 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_AUTO, gi.soundindex("items/empnuke/emp_missfire.wav"), 1, ATTN_NORM, 0);
 		return;
 	}
 
@@ -778,13 +778,13 @@ void sentien_do_laser(edict_t *self)
 
 	if(self->s.frame == FRAME_laserStart)
 	{
-		VectorCopy (self->enemy->s.origin, end);
+		VectorCopy(self->enemy->s.origin, end);
 		end[2] += self->enemy->viewheight * 66/100;
 
 		r = crandom() * 20;
-		VectorMA (end, r, right, end);
+		VectorMA(end, r, right, end);
 
-		VectorSubtract (end, start, aim);
+		VectorSubtract(end, start, aim);
 		VectorNormalize(aim);
 		ANIM_AIM(self, aim);
 
@@ -815,7 +815,7 @@ void sentien_attack(edict_t *self)
 	//sentien_run(self); // to test walking
 	//return;
 
-	VectorSubtract (self->enemy->s.origin, self->s.origin, vec);
+	VectorSubtract(self->enemy->s.origin, self->s.origin, vec);
 	range = VectorLength (vec);
 
 	r = random();
@@ -1121,8 +1121,8 @@ mmove_t   sentien_move_death2 = {FRAME_die2Start, FRAME_die2End,
 vec3_t sentien_death_offset [] =
 {
    // right, forward
-   // VectorSet (self->mins, -50, 6, -16);
-   // VectorSet (self->maxs, -12, 44, 0);
+   // VectorSet(self->mins, -50, 6, -16);
+   // VectorSet(self->maxs, -12, 44, 0);
 	{6, -50, 0},
     {44, -12, 0},
 };
@@ -1140,17 +1140,17 @@ void sentien_dead(edict_t *self)
 		return;
 	}
 
-	AngleVectors (self->s.angles, forward, right, NULL);
-	G_ProjectSource (self->s.origin, sentien_death_offset[0],
+	AngleVectors(self->s.angles, forward, right, NULL);
+	G_ProjectSource(self->s.origin, sentien_death_offset[0],
 		forward, right, point);
-	VectorSubtract (point, self->s.origin, start);
+	VectorSubtract(point, self->s.origin, start);
 
-	G_ProjectSource (self->s.origin, sentien_death_offset[1],
+	G_ProjectSource(self->s.origin, sentien_death_offset[1],
 		forward, right, point);
-	VectorSubtract (point, self->s.origin, end);
+	VectorSubtract(point, self->s.origin, end);
 
-	VectorSet (self->mins, MIN(start[0], end[0]), MIN(start[1], end[1]), -16);
-	VectorSet (self->maxs, MAX(start[0], end[0]), MAX(start[1], end[1]), 0);
+	VectorSet(self->mins, MIN(start[0], end[0]), MIN(start[1], end[1]), -16);
+	VectorSet(self->maxs, MAX(start[0], end[0]), MAX(start[1], end[1]), 0);
 
 	self->movetype = MOVETYPE_TOSS;
 	self->svflags |= SVF_DEADMONSTER;
@@ -1172,13 +1172,13 @@ void sentien_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int dama
 	//gib code to go here
 	if (self->health <= self->gib_health)
 	{
-		gi.sound (self, CHAN_VOICE, gi.soundindex ("misc/udeath.wav"), 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_VOICE, gi.soundindex("misc/udeath.wav"), 1, ATTN_NORM, 0);
 		for (n= 0; n < 1 /*4*/; n++)
-			ThrowGib (self, "models/objects/gibs/sm_meat/tris.md2", damage, GIB_ORGANIC);
+			ThrowGib(self, "models/objects/gibs/sm_meat/tris.md2", damage, GIB_ORGANIC);
 		for (n= 0; n < 4; n++)
-			ThrowGib (self, "models/objects/gibs/sm_metal/tris.md2", damage, GIB_METALLIC);
-		ThrowGib (self, "models/objects/gibs/chest/tris.md2", damage, GIB_ORGANIC);
-		ThrowHead (self, "models/objects/gibs/gear/tris.md2", damage, GIB_METALLIC);
+			ThrowGib(self, "models/objects/gibs/sm_metal/tris.md2", damage, GIB_METALLIC);
+		ThrowGib(self, "models/objects/gibs/chest/tris.md2", damage, GIB_ORGANIC);
+		ThrowHead(self, "models/objects/gibs/gear/tris.md2", damage, GIB_METALLIC);
 		self->deadflag = DEAD_DEAD;
 		return;
 	}
@@ -1231,7 +1231,7 @@ void create_sentien_laser(edict_t *self)
 
 	G_SetMovedir(self->laser->s.angles, self->laser->movedir);
 
-	gi.linkentity (self->laser);
+	gi.linkentity(self->laser);
 	target_laser_off(self->laser);
 }
 
@@ -1261,9 +1261,9 @@ void SP_monster_sentien(edict_t *self)
 	SP_monster_sentien_precache();
 
 	self->mass = 500;
-	self->s.modelindex = gi.modelindex ("models/monsters/sentien/tris.md2");
-	VectorSet (self->mins, -32, -32, -16);
-	VectorSet (self->maxs, 32, 32, 72);
+	self->s.modelindex = gi.modelindex("models/monsters/sentien/tris.md2");
+	VectorSet(self->mins, -32, -32, -16);
+	VectorSet(self->maxs, 32, 32, 72);
 	self->movetype = MOVETYPE_STEP;
 	self->solid = SOLID_BBOX;
 	self->health = 900;

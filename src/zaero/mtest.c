@@ -53,7 +53,7 @@ void Weapon_LineDraw_Fire (edict_t *ent)
 		return;
 	}
 
-	AngleVectors (ent->client->v_angle, forward, right, NULL);
+	AngleVectors(ent->client->v_angle, forward, right, NULL);
 
 	VectorSet(offset, 0, 7,  ent->viewheight - 8);
 	P_ProjectSource (ent, offset, forward, right, start);
@@ -73,8 +73,8 @@ void Weapon_LineDraw_Fire (edict_t *ent)
 		beam->s.renderfx |= RF_BEAM|RF_TRANSLUCENT;
 		beam->s.modelindex = 1;			// must be non-zero
 
-		VectorSet (beam->mins, -8, -8, -8);
-		VectorSet (beam->maxs, 8, 8, 8);
+		VectorSet(beam->mins, -8, -8, -8);
+		VectorSet(beam->maxs, 8, 8, 8);
 
 		beam->s.frame = 2;
 		beam->s.skinnum = 0xf3f3f1f1;
@@ -87,10 +87,10 @@ void Weapon_LineDraw_Fire (edict_t *ent)
 		beam = ent->client->lineDraw;
 	}
 
-	VectorCopy (start, beam->s.origin);
-	VectorMA (start, lineSize, forward, beam->s.old_origin);
+	VectorCopy(start, beam->s.origin);
+	VectorMA(start, lineSize, forward, beam->s.old_origin);
 
-	gi.linkentity (beam);
+	gi.linkentity(beam);
 	ent->client->ps.gunframe++;
 }
 
@@ -551,26 +551,26 @@ void Drop_TestItem (edict_t *ent, const gitem_t *item)
 	{
 		trace_t	trace;
 
-		AngleVectors (ent->client->v_angle, forward, right, NULL);
+		AngleVectors(ent->client->v_angle, forward, right, NULL);
 		VectorSet(offset, 24, 0, -16);
-		G_ProjectSource (ent->s.origin, offset, forward, right, testItemDroped->s.origin);
-		trace = gi.trace (ent->s.origin, testItemDroped->mins, testItemDroped->maxs,
+		G_ProjectSource(ent->s.origin, offset, forward, right, testItemDroped->s.origin);
+		trace = gi.trace(ent->s.origin, testItemDroped->mins, testItemDroped->maxs,
 		testItemDroped->s.origin, ent, CONTENTS_SOLID);
-		VectorCopy (trace.endpos, testItemDroped->s.origin);
+		VectorCopy(trace.endpos, testItemDroped->s.origin);
 	}
 	else
 	{
-		AngleVectors (ent->s.angles, forward, right, NULL);
-		VectorCopy (ent->s.origin, testItemDroped->s.origin);
+		AngleVectors(ent->s.angles, forward, right, NULL);
+		VectorCopy(ent->s.origin, testItemDroped->s.origin);
 	}
 
-	VectorScale (forward, 100, testItemDroped->velocity);
+	VectorScale(forward, 100, testItemDroped->velocity);
 	testItemDroped->velocity[2] = 300;
 
 	testItemDroped->think = testitem_think;
 	testItemDroped->nextthink = level.time + 1;
 
-	gi.linkentity (testItemDroped);
+	gi.linkentity(testItemDroped);
 
 	ent->client->pers.inventory[ITEM_INDEX(item)]--;
 	ValidateSelectedItem (ent);

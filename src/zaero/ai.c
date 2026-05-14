@@ -117,10 +117,10 @@ int zFindRoamYaw(edict_t *self, float distcheck)
 		}
 	}
 
-	AngleVectors (self->s.angles, forward, NULL, NULL);
-	VectorMA (self->s.origin, distcheck, forward, end);
+	AngleVectors(self->s.angles, forward, NULL, NULL);
+	VectorMA(self->s.origin, distcheck, forward, end);
 
-	tr = gi.trace (self->s.origin, self->mins, self->maxs, end, self, MASK_SOLID);
+	tr = gi.trace(self->s.origin, self->mins, self->maxs, end, self, MASK_SOLID);
 
 	if (tr.fraction < 1.0)
 	{
@@ -143,10 +143,10 @@ int zFindRoamYaw(edict_t *self, float distcheck)
 				self->ideal_yaw = self->ideal_yaw + (random() * dir);
 
 				angles[YAW] = anglemod (self->ideal_yaw);
-				AngleVectors (angles, forward, NULL, NULL);
-				VectorMA (self->s.origin, distcheck, forward, end);
+				AngleVectors(angles, forward, NULL, NULL);
+				VectorMA(self->s.origin, distcheck, forward, end);
 
-				tr = gi.trace (self->s.origin, self->mins, self->maxs, end, self, MASK_SOLID);
+				tr = gi.trace(self->s.origin, self->mins, self->maxs, end, self, MASK_SOLID);
 				maxtrys--;
 			}
 		}

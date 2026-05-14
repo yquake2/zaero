@@ -1,3 +1,10 @@
+/* =======================================================================
+ *
+ * Main header file for the game module.
+ *
+ * =======================================================================
+ */
+
 #ifndef ZAERO_LOCAL_H
 #define ZAERO_LOCAL_H
 
@@ -899,7 +906,7 @@ void SpawnEntities(const char *mapname, char *entities, const char *spawnpoint);
 //
 void fire_bb(edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, float timer, float damage_radius);
 void fire_flare(edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius, int radius_damage);
-
+qboolean thruBarrier(edict_t *targ, edict_t *inflictor);
 
 //
 // z_ai.c

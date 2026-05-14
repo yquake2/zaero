@@ -147,7 +147,7 @@ static const functionList_t functionList[] = {
 };
 
 /*
- * Prtotypes for forward
+ * Prototypes for forward
  * declaration for all game
  * mmove_t functions.
  */
@@ -1381,3 +1381,4 @@ ReadLevel(const char *filename)
 		}
 	}
 }
+

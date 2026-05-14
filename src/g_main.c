@@ -1,20 +1,27 @@
+/*
+ * =======================================================================
+ *
+ * Jump in into the game.so and support functions.
+ *
+ * =======================================================================
+ */
 
 #include "header/local.h"
 
-game_locals_t	game;
-level_locals_t	level;
-game_import_t	gi;
-game_export_t	globals;
-spawn_temp_t	st;
+game_locals_t game;
+level_locals_t level;
+game_import_t gi;
+game_export_t globals;
+spawn_temp_t st;
 
-int	sm_meat_index;
-int	snd_fry;
+int sm_meat_index;
+int snd_fry;
 int meansOfDeath;
 
-edict_t		*g_edicts;
+edict_t *g_edicts;
 
-cvar_t	*deathmatch;
-cvar_t	*coop;
+cvar_t *deathmatch;
+cvar_t *coop;
 cvar_t	*dmflags;
 cvar_t	*zdmflags;
 cvar_t	*skill;
@@ -319,7 +326,7 @@ void G_RunFrame (void)
 
     if(!(ent->flags & FL_DONTSETOLDORIGIN))
     {
-		  VectorCopy (ent->s.origin, ent->s.old_origin);
+		  VectorCopy(ent->s.origin, ent->s.old_origin);
     }
 
 		// if the ground entity moved, make sure we are still on it
@@ -347,3 +354,4 @@ void G_RunFrame (void)
 	// build the playerstate_t structures for all players
 	ClientEndServerFrames ();
 }
+

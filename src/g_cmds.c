@@ -1,3 +1,10 @@
+/* =======================================================================
+ *
+ * Game command processing.
+ *
+ * =======================================================================
+ */
+
 #include "header/local.h"
 #include "monster/misc/player.h"
 
@@ -704,7 +711,7 @@ void Cmd_Inven_f (edict_t *ent)
 
 	cl->showinventory = true;
 
-	gi.WriteByte (svc_inventory);
+	gi.WriteByte(svc_inventory);
 	for (i = 0; i < itemlist_len; i++)
 	{
 		const gitem_t *it = &itemlist[i];
@@ -1790,3 +1797,4 @@ void ClientCommand (edict_t *ent)
 	else	// anything that doesn't match a command will be a chat
 		Cmd_Say_f (ent, false, true);
 }
+

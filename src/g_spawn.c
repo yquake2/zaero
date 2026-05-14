@@ -13,7 +13,6 @@ typedef struct
 	void (*spawn)(edict_t *ent);
 } spawn_t;
 
-
 void SP_item_health (edict_t *self);
 void SP_item_health_small (edict_t *self);
 void SP_item_health_large (edict_t *self);
@@ -635,7 +634,7 @@ void SpawnEntities (const char *mapname, char *entities, const char *spawnpoint)
 			{
 				if ( (ent->spawnflags & SPAWNFLAG_NOT_DEATHMATCH) || (ent->spawnflags2 & SPAWNFLAG2_NOT_SINGLE) )
 				{
-					G_FreeEdict (ent);
+					G_FreeEdict(ent);
 					inhibit++;
 					continue;
 				}
@@ -675,7 +674,7 @@ void SpawnEntities (const char *mapname, char *entities, const char *spawnpoint)
 					(((skill->value == SKILL_HARD) || (skill->value == SKILL_HARDPLUS)) && (ent->spawnflags & SPAWNFLAG_NOT_HARD))
 					)
 					{
-						G_FreeEdict (ent);
+						G_FreeEdict(ent);
 						inhibit++;
 						continue;
 					}
@@ -925,71 +924,71 @@ void SP_worldspawn (edict_t *ent)
 	else
 		gi.cvar_set("sv_gravity", st.gravity);
 
-	snd_fry = gi.soundindex ("player/fry.wav");	// standing in lava / slime
+	snd_fry = gi.soundindex("player/fry.wav");	// standing in lava / slime
 
 	PrecacheItem (FindItem ("Blaster"));
 
-	gi.soundindex ("player/lava1.wav");
-	gi.soundindex ("player/lava2.wav");
+	gi.soundindex("player/lava1.wav");
+	gi.soundindex("player/lava2.wav");
 
-	gi.soundindex ("misc/pc_up.wav");
-	gi.soundindex ("misc/talk1.wav");
+	gi.soundindex("misc/pc_up.wav");
+	gi.soundindex("misc/talk1.wav");
 
-	gi.soundindex ("misc/udeath.wav");
+	gi.soundindex("misc/udeath.wav");
 
 	// gibs
-	gi.soundindex ("items/respawn1.wav");
+	gi.soundindex("items/respawn1.wav");
 
 	// sexed sounds
-	gi.soundindex ("*death1.wav");
-	gi.soundindex ("*death2.wav");
-	gi.soundindex ("*death3.wav");
-	gi.soundindex ("*death4.wav");
-	gi.soundindex ("*fall1.wav");
-	gi.soundindex ("*fall2.wav");
-	gi.soundindex ("*gurp1.wav");		// drowning damage
-	gi.soundindex ("*gurp2.wav");
-	gi.soundindex ("*jump1.wav");		// player jump
-	gi.soundindex ("*pain25_1.wav");
-	gi.soundindex ("*pain25_2.wav");
-	gi.soundindex ("*pain50_1.wav");
-	gi.soundindex ("*pain50_2.wav");
-	gi.soundindex ("*pain75_1.wav");
-	gi.soundindex ("*pain75_2.wav");
-	gi.soundindex ("*pain100_1.wav");
-	gi.soundindex ("*pain100_2.wav");
+	gi.soundindex("*death1.wav");
+	gi.soundindex("*death2.wav");
+	gi.soundindex("*death3.wav");
+	gi.soundindex("*death4.wav");
+	gi.soundindex("*fall1.wav");
+	gi.soundindex("*fall2.wav");
+	gi.soundindex("*gurp1.wav");		// drowning damage
+	gi.soundindex("*gurp2.wav");
+	gi.soundindex("*jump1.wav");		// player jump
+	gi.soundindex("*pain25_1.wav");
+	gi.soundindex("*pain25_2.wav");
+	gi.soundindex("*pain50_1.wav");
+	gi.soundindex("*pain50_2.wav");
+	gi.soundindex("*pain75_1.wav");
+	gi.soundindex("*pain75_2.wav");
+	gi.soundindex("*pain100_1.wav");
+	gi.soundindex("*pain100_2.wav");
 
 	//-------------------
 
-	gi.soundindex ("player/gasp1.wav");		// gasping for air
-	gi.soundindex ("player/gasp2.wav");		// head breaking surface, not gasping
+	gi.soundindex("player/gasp1.wav");		// gasping for air
+	gi.soundindex("player/gasp2.wav");		// head breaking surface, not gasping
 
-	gi.soundindex ("player/watr_in.wav");	// feet hitting water
-	gi.soundindex ("player/watr_out.wav");	// feet leaving water
+	gi.soundindex("player/watr_in.wav");	// feet hitting water
+	gi.soundindex("player/watr_out.wav");	// feet leaving water
 
-	gi.soundindex ("player/watr_un.wav");	// head going underwater
+	gi.soundindex("player/watr_un.wav");	// head going underwater
 
-	gi.soundindex ("player/u_breath1.wav");
-	gi.soundindex ("player/u_breath2.wav");
+	gi.soundindex("player/u_breath1.wav");
+	gi.soundindex("player/u_breath2.wav");
 
-	gi.soundindex ("items/pkup.wav");		// bonus item pickup
-	gi.soundindex ("world/land.wav");		// landing thud
-	gi.soundindex ("misc/h2ohit1.wav");		// landing splash
+	gi.soundindex("items/pkup.wav");		// bonus item pickup
+	gi.soundindex("world/land.wav");		// landing thud
+	gi.soundindex("misc/h2ohit1.wav");		// landing splash
 
-	gi.soundindex ("items/damage.wav");
-	gi.soundindex ("items/protect.wav");
-	gi.soundindex ("items/protect4.wav");
-	gi.soundindex ("weapons/noammo.wav");
+	gi.soundindex("items/damage.wav");
+	gi.soundindex("items/protect.wav");
+	gi.soundindex("items/protect4.wav");
+	gi.soundindex("weapons/noammo.wav");
 
-	gi.soundindex ("infantry/inflies1.wav");
+	gi.soundindex("infantry/inflies1.wav");
 
-	sm_meat_index = gi.modelindex ("models/objects/gibs/sm_meat/tris.md2");
-	gi.modelindex ("models/objects/gibs/arm/tris.md2");
-	gi.modelindex ("models/objects/gibs/bone/tris.md2");
-	gi.modelindex ("models/objects/gibs/bone2/tris.md2");
-	gi.modelindex ("models/objects/gibs/chest/tris.md2");
-	gi.modelindex ("models/objects/gibs/skull/tris.md2");
-	gi.modelindex ("models/objects/gibs/head2/tris.md2");
+	sm_meat_index = gi.modelindex("models/objects/gibs/sm_meat/tris.md2");
+	gi.modelindex("models/objects/gibs/arm/tris.md2");
+	gi.modelindex("models/objects/gibs/bone/tris.md2");
+	gi.modelindex("models/objects/gibs/bone2/tris.md2");
+	gi.modelindex("models/objects/gibs/chest/tris.md2");
+	gi.modelindex("models/objects/gibs/skull/tris.md2");
+	gi.modelindex("models/objects/gibs/head2/tris.md2");
 
 	//
 	// Setup light animation tables. 'a' is total darkness, 'z' is doublebright.

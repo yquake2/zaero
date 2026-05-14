@@ -1,4 +1,9 @@
-// g_utils.c -- misc utility functions for game module
+/* =======================================================================
+ *
+ * Misc. utility functions for the game logic.
+ *
+ * =======================================================================
+ */
 
 #include "header/local.h"
 
@@ -199,9 +204,9 @@ void G_UseTargets (edict_t *ent, edict_t *activator)
 	{
 		gi.centerprintf (activator, "%s", ent->message);
 		if (ent->noise_index)
-			gi.sound (activator, CHAN_AUTO, ent->noise_index, 1, ATTN_NORM, 0);
+			gi.sound(activator, CHAN_AUTO, ent->noise_index, 1, ATTN_NORM, 0);
 		else
-			gi.sound (activator, CHAN_AUTO, gi.soundindex ("misc/talk1.wav"), 1, ATTN_NORM, 0);
+			gi.sound(activator, CHAN_AUTO, gi.soundindex("misc/talk1.wav"), 1, ATTN_NORM, 0);
 	}
 
 	//
@@ -212,7 +217,7 @@ void G_UseTargets (edict_t *ent, edict_t *activator)
 		t = NULL;
 		while ((t = G_Find (t, FOFS(targetname), ent->killtarget)))
 		{
-			G_FreeEdict (t);
+			G_FreeEdict(t);
 			if (!ent->inuse)
 			{
 				gi.dprintf("entity was removed while using killtargets\n");
@@ -462,7 +467,7 @@ G_FreeEdict
 Marks the edict as free
 =================
 */
-void G_FreeEdict (edict_t *ed)
+void G_FreeEdict(edict_t *ed)
 {
 	if (!ed)
 	{
@@ -612,14 +617,14 @@ qboolean MonsterKillBox (edict_t *ent)
 
 	while (1)
 	{
-		tr = gi.trace (ent->s.origin, ent->mins, ent->maxs, ent->s.origin, NULL, MASK_PLAYERSOLID);
+		tr = gi.trace(ent->s.origin, ent->mins, ent->maxs, ent->s.origin, NULL, MASK_PLAYERSOLID);
 		if (!tr.ent)
 			break;
 
 		if(!((ent->svflags & SVF_MONSTER) && tr.ent->client && tr.ent->health))
 		{
 			// nail it
-			T_Damage (tr.ent, ent, ent, vec3_origin, ent->s.origin, vec3_origin, 100000, 0, DAMAGE_NO_PROTECTION, MOD_TELEFRAG);
+			T_Damage(tr.ent, ent, ent, vec3_origin, ent->s.origin, vec3_origin, 100000, 0, DAMAGE_NO_PROTECTION, MOD_TELEFRAG);
 		}
 
 		// if we didn't kill it, fail
@@ -649,20 +654,20 @@ qboolean MonsterPlayerKillBox (edict_t *ent)
 
 	while (1)
 	{
-		tr = gi.trace (ent->s.origin, ent->mins, ent->maxs, ent->s.origin, ent, MASK_PLAYERSOLID);
+		tr = gi.trace(ent->s.origin, ent->mins, ent->maxs, ent->s.origin, ent, MASK_PLAYERSOLID);
 		if (!tr.ent)
 			break;
 
 		if((ent->svflags & SVF_MONSTER) && tr.ent->client && tr.ent->health)
 		{
 			// nail myself
-			T_Damage (ent, ent, ent, vec3_origin, ent->s.origin, vec3_origin, 100000, 0, DAMAGE_NO_PROTECTION, MOD_TELEFRAG);
+			T_Damage(ent, ent, ent, vec3_origin, ent->s.origin, vec3_origin, 100000, 0, DAMAGE_NO_PROTECTION, MOD_TELEFRAG);
 			return true;
 		}
 		else
 		{
 			// nail it
-			T_Damage (tr.ent, ent, ent, vec3_origin, ent->s.origin, vec3_origin, 100000, 0, DAMAGE_NO_PROTECTION, MOD_TELEFRAG);
+			T_Damage(tr.ent, ent, ent, vec3_origin, ent->s.origin, vec3_origin, 100000, 0, DAMAGE_NO_PROTECTION, MOD_TELEFRAG);
 		}
 
 		// if we didn't kill it, fail
@@ -670,6 +675,5 @@ qboolean MonsterPlayerKillBox (edict_t *ent)
 		return false;
 	}
 
-	return true;		// all clear
+	return true; /* all clear */
 }
-

@@ -1,38 +1,38 @@
-/*
-==============================================================================
-
-Makron -- Final Boss
-
-==============================================================================
-*/
+/* =======================================================================
+ *
+ * Final boss, stage 2 (makron).
+ *
+ * =======================================================================
+ */
 
 #include "../../header/local.h"
 #include "boss32.h"
 
-void MakronRailgun (edict_t *self);
-void MakronSaveloc (edict_t *self);
-void MakronHyperblaster (edict_t *self);
-void makron_step_left (edict_t *self);
-void makron_step_right (edict_t *self);
-void makronBFG (edict_t *self);
-void makron_dead (edict_t *self);
+void MakronRailgun(edict_t *self);
+void MakronSaveloc(edict_t *self);
+void MakronHyperblaster(edict_t *self);
+void makron_step_left(edict_t *self);
+void makron_step_right(edict_t *self);
+void makronBFG(edict_t *self);
+void makron_dead(edict_t *self);
 
-static int	sound_pain4;
-static int	sound_pain5;
-static int	sound_pain6;
-static int	sound_death;
-static int	sound_step_left;
-static int	sound_step_right;
-static int	sound_attack_bfg;
-static int	sound_brainsplorch;
-static int	sound_prerailgun;
-static int	sound_popup;
-static int	sound_taunt1;
-static int	sound_taunt2;
-static int	sound_taunt3;
-static int	sound_hit;
+static int sound_pain4;
+static int sound_pain5;
+static int sound_pain6;
+static int sound_death;
+static int sound_step_left;
+static int sound_step_right;
+static int sound_attack_bfg;
+static int sound_brainsplorch;
+static int sound_prerailgun;
+static int sound_popup;
+static int sound_taunt1;
+static int sound_taunt2;
+static int sound_taunt3;
+static int sound_hit;
 
-void makron_taunt (edict_t *self)
+void
+makron_taunt(edict_t *self)
 {
 	float r;
 
@@ -41,13 +41,20 @@ void makron_taunt (edict_t *self)
 		return;
 	}
 
-	r=random();
+	r = random();
+
 	if (r <= 0.3)
-		gi.sound (self, CHAN_AUTO, sound_taunt1, 1, ATTN_NONE, 0);
+	{
+		gi.sound(self, CHAN_AUTO, sound_taunt1, 1, ATTN_NONE, 0);
+	}
 	else if (r <= 0.6)
-		gi.sound (self, CHAN_AUTO, sound_taunt2, 1, ATTN_NONE, 0);
+	{
+		gi.sound(self, CHAN_AUTO, sound_taunt2, 1, ATTN_NONE, 0);
+	}
 	else
-		gi.sound (self, CHAN_AUTO, sound_taunt3, 1, ATTN_NONE, 0);
+	{
+		gi.sound(self, CHAN_AUTO, sound_taunt3, 1, ATTN_NONE, 0);
+	}
 }
 
 /* stand */
@@ -113,7 +120,13 @@ mframe_t makron_frames_stand[] = {
 	{ai_stand, 0, NULL},
 	{ai_stand, 0, NULL} /* 60 */
 };
-mmove_t	makron_move_stand = {FRAME_stand201, FRAME_stand260, makron_frames_stand, NULL};
+
+mmove_t makron_move_stand = {
+	FRAME_stand201,
+	FRAME_stand260,
+	makron_frames_stand,
+	NULL
+};
 
 void
 makron_stand(edict_t *self)
@@ -138,66 +151,78 @@ mframe_t makron_frames_run[] = {
 	{ai_run, 6, NULL},
 	{ai_run, 12, NULL}
 };
-mmove_t	makron_move_run = {FRAME_walk204, FRAME_walk213, makron_frames_run, NULL};
 
-void makron_hit (edict_t *self)
+mmove_t makron_move_run = {
+	FRAME_walk204,
+	FRAME_walk213,
+	makron_frames_run,
+	NULL
+};
+
+void
+makron_hit(edict_t *self)
 {
 	if (!self)
 	{
 		return;
 	}
 
-	gi.sound (self, CHAN_AUTO, sound_hit, 1, ATTN_NONE,0);
+	gi.sound(self, CHAN_AUTO, sound_hit, 1, ATTN_NONE, 0);
 }
 
-void makron_popup (edict_t *self)
+void
+makron_popup(edict_t *self)
 {
 	if (!self)
 	{
 		return;
 	}
 
-	gi.sound (self, CHAN_BODY, sound_popup, 1, ATTN_NONE,0);
+	gi.sound(self, CHAN_BODY, sound_popup, 1, ATTN_NONE, 0);
 }
 
-void makron_step_left (edict_t *self)
+void
+makron_step_left(edict_t *self)
 {
 	if (!self)
 	{
 		return;
 	}
 
-	gi.sound (self, CHAN_BODY, sound_step_left, 1, ATTN_NORM,0);
+	gi.sound(self, CHAN_BODY, sound_step_left, 1, ATTN_NORM, 0);
 }
 
-void makron_step_right (edict_t *self)
+void
+makron_step_right(edict_t *self)
 {
 	if (!self)
 	{
 		return;
 	}
 
-	gi.sound (self, CHAN_BODY, sound_step_right, 1, ATTN_NORM,0);
+	gi.sound(self, CHAN_BODY, sound_step_right, 1, ATTN_NORM, 0);
 }
 
-void makron_brainsplorch (edict_t *self)
+void
+makron_brainsplorch(edict_t *self)
 {
 	if (!self)
 	{
 		return;
 	}
 
-	gi.sound (self, CHAN_VOICE, sound_brainsplorch, 1, ATTN_NORM,0);
+	gi.sound(self, CHAN_VOICE, sound_brainsplorch, 1, ATTN_NORM, 0);
 }
 
-void makron_prerailgun (edict_t *self)
+void
+makron_prerailgun(edict_t *self)
 {
 	if (!self)
 	{
 		return;
 	}
 
-	gi.sound (self, CHAN_WEAPON, sound_prerailgun, 1, ATTN_NORM,0);
+	gi.sound(self, CHAN_WEAPON, sound_prerailgun, 1, ATTN_NORM, 0);
 }
 
 mframe_t makron_frames_walk[] = {
@@ -212,7 +237,13 @@ mframe_t makron_frames_walk[] = {
 	{ai_walk, 6, NULL},
 	{ai_walk, 12, NULL}
 };
-mmove_t	makron_move_walk = {FRAME_walk204, FRAME_walk213, makron_frames_run, NULL};
+
+mmove_t makron_move_walk = {
+	FRAME_walk204,
+	FRAME_walk213,
+	makron_frames_run,
+	NULL
+};
 
 void
 makron_walk(edict_t *self)
@@ -272,7 +303,13 @@ mframe_t makron_frames_pain6[] = {
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL}
 };
-mmove_t makron_move_pain6 = {FRAME_pain601, FRAME_pain627, makron_frames_pain6, makron_run};
+
+mmove_t makron_move_pain6 = {
+	FRAME_pain601,
+	FRAME_pain627,
+	makron_frames_pain6,
+	makron_run
+};
 
 mframe_t makron_frames_pain5[] = {
 	{ai_move, 0, NULL},
@@ -280,7 +317,13 @@ mframe_t makron_frames_pain5[] = {
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL}
 };
-mmove_t makron_move_pain5 = {FRAME_pain501, FRAME_pain504, makron_frames_pain5, makron_run};
+
+mmove_t makron_move_pain5 = {
+	FRAME_pain501,
+	FRAME_pain504,
+	makron_frames_pain5,
+	makron_run
+};
 
 mframe_t makron_frames_pain4[] = {
 	{ai_move, 0, NULL},
@@ -288,7 +331,13 @@ mframe_t makron_frames_pain4[] = {
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL}
 };
-mmove_t makron_move_pain4 = {FRAME_pain401, FRAME_pain404, makron_frames_pain4, makron_run};
+
+mmove_t makron_move_pain4 = {
+	FRAME_pain401,
+	FRAME_pain404,
+	makron_frames_pain4,
+	makron_run
+};
 
 mframe_t makron_frames_death2[] = {
 	{ai_move, -15, NULL},
@@ -387,7 +436,13 @@ mframe_t makron_frames_death2[] = {
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL} /* 95 */
 };
-mmove_t makron_move_death2 = {FRAME_death201, FRAME_death295, makron_frames_death2, makron_dead};
+
+mmove_t makron_move_death2 = {
+	FRAME_death201,
+	FRAME_death295,
+	makron_frames_death2,
+	makron_dead
+};
 
 mframe_t makron_frames_death3[] = {
 	{ai_move, 0, NULL},
@@ -411,7 +466,13 @@ mframe_t makron_frames_death3[] = {
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL}
 };
-mmove_t makron_move_death3 = {FRAME_death301, FRAME_death320, makron_frames_death3, NULL};
+
+mmove_t makron_move_death3 = {
+	FRAME_death301,
+	FRAME_death320,
+	makron_frames_death3,
+	NULL
+};
 
 mframe_t makron_frames_sight[] = {
 	{ai_move, 0, NULL},
@@ -428,35 +489,43 @@ mframe_t makron_frames_sight[] = {
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL}
 };
-mmove_t makron_move_sight= {FRAME_active01, FRAME_active13, makron_frames_sight, makron_run};
 
-void makronBFG (edict_t *self)
+mmove_t makron_move_sight = {
+	FRAME_active01,
+	FRAME_active13,
+	makron_frames_sight,
+	makron_run
+};
+
+void
+makronBFG(edict_t *self)
 {
-	vec3_t	forward, right;
-	vec3_t	start;
-	vec3_t	dir;
-	vec3_t	vec;
+	vec3_t forward, right;
+	vec3_t start;
+	vec3_t dir;
+	vec3_t vec;
 
 	if (!self)
 	{
 		return;
 	}
 
-	AngleVectors (self->s.angles, forward, right, NULL);
-	G_ProjectSource (self->s.origin, monster_flash_offset[MZ2_MAKRON_BFG], forward, right, start);
+	AngleVectors(self->s.angles, forward, right, NULL);
+	G_ProjectSource(self->s.origin, monster_flash_offset[MZ2_MAKRON_BFG],
+			forward, right, start);
 
-  if(EMPNukeCheck(self, start))
-  {
-		gi.sound (self, CHAN_AUTO, gi.soundindex("items/empnuke/emp_missfire.wav"), 1, ATTN_NORM, 0);
-    return;
-  }
+	if(EMPNukeCheck(self, start))
+	{
+		gi.sound(self, CHAN_AUTO, gi.soundindex("items/empnuke/emp_missfire.wav"), 1, ATTN_NORM, 0);
+    		return;
+  	}
 
-	VectorCopy (self->enemy->s.origin, vec);
+	VectorCopy(self->enemy->s.origin, vec);
 	vec[2] += self->enemy->viewheight;
-	VectorSubtract (vec, start, dir);
-	VectorNormalize (dir);
-	gi.sound (self, CHAN_VOICE, sound_attack_bfg, 1, ATTN_NORM, 0);
-	monster_fire_bfg (self, start, dir, 50, 300, 100, 300, MZ2_MAKRON_BFG);
+	VectorSubtract(vec, start, dir);
+	VectorNormalize(dir);
+	gi.sound(self, CHAN_VOICE, sound_attack_bfg, 1, ATTN_NORM, 0);
+	monster_fire_bfg(self, start, dir, 50, 300, 100, 300, MZ2_MAKRON_BFG);
 }
 
 mframe_t makron_frames_attack3[] = {
@@ -469,7 +538,13 @@ mframe_t makron_frames_attack3[] = {
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL}
 };
-mmove_t makron_move_attack3 = {FRAME_attak301, FRAME_attak308, makron_frames_attack3, makron_run};
+
+mmove_t makron_move_attack3 = {
+	FRAME_attak301,
+	FRAME_attak308,
+	makron_frames_attack3,
+	makron_run
+};
 
 mframe_t makron_frames_attack4[] = {
 	{ai_charge, 0, NULL},
@@ -499,7 +574,13 @@ mframe_t makron_frames_attack4[] = {
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL}
 };
-mmove_t makron_move_attack4 = {FRAME_attak401, FRAME_attak426, makron_frames_attack4, makron_run};
+
+mmove_t makron_move_attack4 = {
+	FRAME_attak401,
+	FRAME_attak426,
+	makron_frames_attack4,
+	makron_run
+};
 
 mframe_t makron_frames_attack5[] = {
 	{ai_charge, 0, makron_prerailgun},
@@ -519,7 +600,13 @@ mframe_t makron_frames_attack5[] = {
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL}
 };
-mmove_t makron_move_attack5 = {FRAME_attak501, FRAME_attak516, makron_frames_attack5, makron_run};
+
+mmove_t makron_move_attack5 = {
+	FRAME_attak501,
+	FRAME_attak516,
+	makron_frames_attack5,
+	makron_run
+};
 
 void
 MakronSaveloc(edict_t *self)
@@ -606,39 +693,50 @@ MakronHyperblaster(edict_t *self)
 			MZ2_MAKRON_BLASTER_1, EF_BLASTER);
 }
 
-
-void makron_pain (edict_t *self, edict_t *other, float kick, int damage)
+void
+makron_pain(edict_t *self, edict_t *other /* unused */,
+		float kick /* unused */, int damage)
 {
 	if (!self)
 	{
 		return;
 	}
 
-
 	if (self->health < (self->max_health / 2))
-			self->s.skinnum = 1;
+	{
+		self->s.skinnum = 1;
+	}
 
 	if (level.time < self->pain_debounce_time)
-			return;
+	{
+		return;
+	}
 
-	// Lessen the chance of him going into his pain frames
-	if (damage <=25)
-		if (random()<0.2)
+	/* Lessen the chance of him
+	   going into his pain frames */
+	if (damage <= 25)
+	{
+		if (random() < 0.2)
+		{
 			return;
+		}
+	}
 
 	self->pain_debounce_time = level.time + 3;
-	if (skill->value == SKILL_HARDPLUS)
-		return;		// no pain anims in nightmare
 
+	if (skill->value == SKILL_HARDPLUS)
+	{
+		return; /* no pain anims in nightmare */
+	}
 
 	if (damage <= 40)
 	{
-		gi.sound (self, CHAN_VOICE, sound_pain4, 1, ATTN_NONE,0);
+		gi.sound(self, CHAN_VOICE, sound_pain4, 1, ATTN_NONE, 0);
 		self->monsterinfo.currentmove = &makron_move_pain4;
 	}
 	else if (damage <= 110)
 	{
-		gi.sound (self, CHAN_VOICE, sound_pain5, 1, ATTN_NONE,0);
+		gi.sound(self, CHAN_VOICE, sound_pain5, 1, ATTN_NONE, 0);
 		self->monsterinfo.currentmove = &makron_move_pain5;
 	}
 	else
@@ -647,13 +745,15 @@ void makron_pain (edict_t *self, edict_t *other, float kick, int damage)
 		{
 			if (random() <= 0.45)
 			{
-				gi.sound (self, CHAN_VOICE, sound_pain6, 1, ATTN_NONE,0);
+				gi.sound(self, CHAN_VOICE, sound_pain6, 1, ATTN_NONE, 0);
 				self->monsterinfo.currentmove = &makron_move_pain6;
 			}
-			else
+		}
+		else
+		{
 			if (random() <= 0.35)
 			{
-				gi.sound (self, CHAN_VOICE, sound_pain6, 1, ATTN_NONE,0);
+				gi.sound(self, CHAN_VOICE, sound_pain6, 1, ATTN_NONE, 0);
 				self->monsterinfo.currentmove = &makron_move_pain6;
 			}
 		}
@@ -736,7 +836,9 @@ makron_torso_origin(edict_t *self, edict_t *torso)
 	VectorCopy (tr.endpos, torso->s.origin);
 }
 
-void makron_torso_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
+void
+makron_torso_die(edict_t *self, edict_t *inflictor /* unused */, edict_t *attacker /* unused */,
+		int damage /* unused */, const vec3_t point /* unused */)
 {
 	int n;
 
@@ -759,7 +861,8 @@ void makron_torso_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int
 	G_FreeEdict(self);
 }
 
-void makron_torso (edict_t *self)
+void
+makron_torso(edict_t *self)
 {
 	edict_t *torso;
 
@@ -769,6 +872,11 @@ void makron_torso (edict_t *self)
 	}
 
 	torso = G_Spawn();
+
+	if (!torso)
+	{
+		return;
+	}
 
 	VectorCopy(self->s.angles, torso->s.angles);
 	VectorSet(torso->mins, -24, -24, 0);
@@ -811,10 +919,11 @@ makron_dead(edict_t *self)
 	gi.linkentity(self);
 }
 
-
-void makron_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
+void
+makron_die(edict_t *self, edict_t *inflictor /* unused */, edict_t *attacker /* unused */,
+		int damage /* unused */, const vec3_t point /* unused */)
 {
-	int		n;
+	int n;
 
 	if (!self)
 	{
@@ -822,44 +931,58 @@ void makron_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damag
 	}
 
 	self->s.sound = 0;
-	// check for gib
+
+	/* check for gib */
 	if (self->health <= self->gib_health)
 	{
-		gi.sound (self, CHAN_VOICE, gi.soundindex ("misc/udeath.wav"), 1, ATTN_NORM, 0);
-		for (n= 0; n < 1 /*4*/; n++)
-			ThrowGib (self, "models/objects/gibs/sm_meat/tris.md2", damage, GIB_ORGANIC);
-		for (n= 0; n < 4; n++)
-			ThrowGib (self, "models/objects/gibs/sm_metal/tris.md2", damage, GIB_METALLIC);
-		ThrowHead (self, "models/objects/gibs/gear/tris.md2", damage, GIB_METALLIC);
+		gi.sound(self, CHAN_VOICE, gi.soundindex("misc/udeath.wav"), 1, ATTN_NORM, 0);
+
+		for (n = 0; n < 1 /*4*/; n++)
+		{
+			ThrowGib(self, "models/objects/gibs/sm_meat/tris.md2",
+					damage, GIB_ORGANIC);
+		}
+
+		for (n = 0; n < 4; n++)
+		{
+			ThrowGib(self, "models/objects/gibs/sm_metal/tris.md2",
+					damage, GIB_METALLIC);
+		}
+
+		ThrowHead(self, "models/objects/gibs/gear/tris.md2",
+				damage, GIB_METALLIC);
 		self->deadflag = DEAD_DEAD;
 		return;
 	}
 
 	if (self->deadflag == DEAD_DEAD)
+	{
 		return;
+	}
 
-	// regular death
-	gi.sound (self, CHAN_VOICE, sound_death, 1, ATTN_NONE, 0);
+	/* regular death */
+	gi.sound(self, CHAN_VOICE, sound_death, 1, ATTN_NONE, 0);
 	self->deadflag = DEAD_DEAD;
 	self->takedamage = DAMAGE_YES;
 
-	makron_torso (self);
+	makron_torso(self);
 
 	/* lower bbox since the torso is gone */
 	self->maxs[2] = 64;
-	gi.linkentity (self);
+	gi.linkentity(self);
 
 	self->monsterinfo.currentmove = &makron_move_death2;
 }
 
-qboolean Makron_CheckAttack (edict_t *self)
+qboolean
+Makron_CheckAttack(edict_t *self)
 {
-	vec3_t	spot1, spot2;
-	vec3_t	temp;
-	float	chance;
-	trace_t	tr;
-	int			enemy_range;
-	float		enemy_yaw;
+	vec3_t spot1, spot2;
+	vec3_t temp;
+	float chance;
+	trace_t tr;
+	int enemy_range;
+	float enemy_yaw;
 
 	if (!self)
 	{
@@ -868,45 +991,59 @@ qboolean Makron_CheckAttack (edict_t *self)
 
 	if (self->enemy->health > 0)
 	{
-	// see if any entities are in the way of the shot
-		VectorCopy (self->s.origin, spot1);
+		/* see if any entities are in the way of the shot */
+		VectorCopy(self->s.origin, spot1);
 		spot1[2] += self->viewheight;
-		VectorCopy (self->enemy->s.origin, spot2);
+		VectorCopy(self->enemy->s.origin, spot2);
 		spot2[2] += self->enemy->viewheight;
 
-		tr = gi.trace (spot1, NULL, NULL, spot2, self, CONTENTS_SOLID|CONTENTS_MONSTER|CONTENTS_SLIME|CONTENTS_LAVA);
+		tr = gi.trace(spot1, NULL, NULL, spot2, self,
+				CONTENTS_SOLID | CONTENTS_MONSTER | CONTENTS_SLIME |
+				CONTENTS_LAVA);
 
-		// do we have a clear shot?
+		/* do we have a clear shot? */
 		if (tr.ent != self->enemy)
+		{
 			return false;
+		}
 	}
 
 	enemy_range = ai_range(self, self->enemy);
-	VectorSubtract (self->enemy->s.origin, self->s.origin, temp);
+	VectorSubtract(self->enemy->s.origin, self->s.origin, temp);
 	enemy_yaw = vectoyaw(temp);
 
 	self->ideal_yaw = enemy_yaw;
 
-
-	// melee attack
+	/* melee attack */
 	if (enemy_range == RANGE_MELEE)
 	{
 		if (self->monsterinfo.melee)
+		{
 			self->monsterinfo.attack_state = AS_MELEE;
+		}
 		else
+		{
 			self->monsterinfo.attack_state = AS_MISSILE;
+		}
+
 		return true;
 	}
 
-	// missile attack
+	/* missile attack */
 	if (!self->monsterinfo.attack)
+	{
 		return false;
+	}
 
 	if (level.time < self->monsterinfo.attack_finished)
+	{
 		return false;
+	}
 
 	if (enemy_range == RANGE_FAR)
+	{
 		return false;
+	}
 
 	if (self->monsterinfo.aiflags & AI_STAND_GROUND)
 	{
@@ -929,19 +1066,23 @@ qboolean Makron_CheckAttack (edict_t *self)
 		return false;
 	}
 
-	if (random () < chance)
+	if (random() < chance)
 	{
 		self->monsterinfo.attack_state = AS_MISSILE;
-		self->monsterinfo.attack_finished = level.time + 2*random();
+		self->monsterinfo.attack_finished = level.time + 2 * random();
 		return true;
 	}
 
 	if (self->flags & FL_FLY)
 	{
 		if (random() < 0.3)
+		{
 			self->monsterinfo.attack_state = AS_SLIDING;
+		}
 		else
+		{
 			self->monsterinfo.attack_state = AS_STRAIGHT;
+		}
 	}
 
 	return false;

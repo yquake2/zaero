@@ -1,3 +1,11 @@
+/*
+ * =======================================================================
+ *
+ * Item handling and item definitions.
+ *
+ * =======================================================================
+ */
+
 #include "header/local.h"
 
 
@@ -136,7 +144,7 @@ void DoRespawn (edict_t *ent)
 
 	ent->svflags &= ~SVF_NOCLIENT;
 	ent->solid = SOLID_TRIGGER;
-	gi.linkentity (ent);
+	gi.linkentity(ent);
 
 	// send an effect
 	ent->s.event = EV_ITEM_RESPAWN;
@@ -1172,7 +1180,7 @@ void Touch_Item (edict_t *ent, edict_t *other, const cplane_t *plane, const csur
 		if (ent->flags & FL_RESPAWN)
 			ent->flags &= ~FL_RESPAWN;
 		else
-			G_FreeEdict (ent);
+			G_FreeEdict(ent);
 	}
 }
 
@@ -1227,8 +1235,8 @@ Drop_Item(edict_t *ent, const gitem_t *item)
 	dropped->spawnflags = DROPPED_ITEM;
 	dropped->s.effects = item->world_model_flags;
 	dropped->s.renderfx = RF_GLOW;
-	VectorSet (dropped->mins, -15, -15, -15);
-	VectorSet (dropped->maxs, 15, 15, 15);
+	VectorSet(dropped->mins, -15, -15, -15);
+	VectorSet(dropped->maxs, 15, 15, 15);
 	gi.setmodel (dropped, dropped->item->world_model);
 	dropped->solid = SOLID_TRIGGER;
 	dropped->movetype = MOVETYPE_TOSS;
@@ -1239,26 +1247,26 @@ Drop_Item(edict_t *ent, const gitem_t *item)
 	{
 		trace_t	trace;
 
-		AngleVectors (ent->client->v_angle, forward, right, NULL);
+		AngleVectors(ent->client->v_angle, forward, right, NULL);
 		VectorSet(offset, 24, 0, -16);
-		G_ProjectSource (ent->s.origin, offset, forward, right, dropped->s.origin);
-		trace = gi.trace (ent->s.origin, dropped->mins, dropped->maxs,
+		G_ProjectSource(ent->s.origin, offset, forward, right, dropped->s.origin);
+		trace = gi.trace(ent->s.origin, dropped->mins, dropped->maxs,
 			dropped->s.origin, ent, CONTENTS_SOLID);
-		VectorCopy (trace.endpos, dropped->s.origin);
+		VectorCopy(trace.endpos, dropped->s.origin);
 	}
 	else
 	{
-		AngleVectors (ent->s.angles, forward, right, NULL);
-		VectorCopy (ent->s.origin, dropped->s.origin);
+		AngleVectors(ent->s.angles, forward, right, NULL);
+		VectorCopy(ent->s.origin, dropped->s.origin);
 	}
 
-	VectorScale (forward, 100, dropped->velocity);
+	VectorScale(forward, 100, dropped->velocity);
 	dropped->velocity[2] = 300;
 
 	dropped->think = drop_make_touchable;
 	dropped->nextthink = level.time + 1;
 
-	gi.linkentity (dropped);
+	gi.linkentity(dropped);
 
 	return dropped;
 }
@@ -1285,7 +1293,7 @@ Use_Item(edict_t *ent, edict_t *other, edict_t *activator)
 		ent->touch = Touch_Item;
 	}
 
-	gi.linkentity (ent);
+	gi.linkentity(ent);
 }
 
 //======================================================================
@@ -1307,9 +1315,9 @@ void droptofloor (edict_t *ent)
 	}
 
 	v = tv(-15,-15,-15);
-	VectorCopy (v, ent->mins);
+	VectorCopy(v, ent->mins);
 	v = tv(15,15,15);
-	VectorCopy (v, ent->maxs);
+	VectorCopy(v, ent->maxs);
 
 	if (ent->model)
 		gi.setmodel (ent, ent->model);
@@ -1320,17 +1328,17 @@ void droptofloor (edict_t *ent)
 	ent->touch = Touch_Item;
 
 	v = tv(0,0,-128);
-	VectorAdd (ent->s.origin, v, dest);
+	VectorAdd(ent->s.origin, v, dest);
 
-	tr = gi.trace (ent->s.origin, ent->mins, ent->maxs, dest, ent, MASK_SOLID);
+	tr = gi.trace(ent->s.origin, ent->mins, ent->maxs, dest, ent, MASK_SOLID);
 	if (tr.startsolid)
 	{
 		gi.dprintf ("droptofloor: %s startsolid at %s\n", ent->classname, vtos(ent->s.origin));
-		G_FreeEdict (ent);
+		G_FreeEdict(ent);
 		return;
 	}
 
-	VectorCopy (tr.endpos, ent->s.origin);
+	VectorCopy(tr.endpos, ent->s.origin);
 
 	if (ent->team)
 	{
@@ -1507,7 +1515,7 @@ SpawnItem(edict_t *ent, gitem_t *item)
 		{
 			if (item->pickup == Pickup_Armor || item->pickup == Pickup_PowerArmor)
 			{
-				G_FreeEdict (ent);
+				G_FreeEdict(ent);
 				return;
 			}
 		}
@@ -1515,7 +1523,7 @@ SpawnItem(edict_t *ent, gitem_t *item)
 		{
 			if (item->pickup == Pickup_Powerup)
 			{
-				G_FreeEdict (ent);
+				G_FreeEdict(ent);
 				return;
 			}
 		}
@@ -1523,7 +1531,7 @@ SpawnItem(edict_t *ent, gitem_t *item)
 		{
 			if (item->pickup == Pickup_Health || item->pickup == Pickup_Adrenaline || item->pickup == Pickup_AncientHead)
 			{
-				G_FreeEdict (ent);
+				G_FreeEdict(ent);
 				return;
 			}
 		}
@@ -1531,7 +1539,7 @@ SpawnItem(edict_t *ent, gitem_t *item)
 		{
 			if ( (item->flags == IT_AMMO) || (strcmp(ent->classname, "weapon_bfg") == 0) )
 			{
-				G_FreeEdict (ent);
+				G_FreeEdict(ent);
 				return;
 			}
 		}
@@ -2895,7 +2903,7 @@ void SP_item_health (edict_t *self)
 
 	if ( deathmatch->value && ((int)dmflags->value & DF_NO_HEALTH) )
 	{
-		G_FreeEdict (self);
+		G_FreeEdict(self);
 		return;
 	}
 
@@ -2963,7 +2971,7 @@ void SP_item_health_mega (edict_t *self)
 
 	if ( deathmatch->value && ((int)dmflags->value & DF_NO_HEALTH) )
 	{
-		G_FreeEdict (self);
+		G_FreeEdict(self);
 		return;
 	}
 
@@ -3001,7 +3009,7 @@ void SetItemNames (void)
 
 	jacket_armor_index = ITEM_INDEX(FindItem("Jacket Armor"));
 	combat_armor_index = ITEM_INDEX(FindItem("Combat Armor"));
-	body_armor_index   = ITEM_INDEX(FindItem("Body Armor"));
+	body_armor_index = ITEM_INDEX(FindItem("Body Armor"));
 	power_screen_index = ITEM_INDEX(FindItem("Power Screen"));
 	power_shield_index = ITEM_INDEX(FindItem("Power Shield"));
 }

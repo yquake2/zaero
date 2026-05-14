@@ -374,7 +374,7 @@ void handler_attack (edict_t *self)
 		return;
 	}
 
-	gi.sound (self, CHAN_VOICE, sound_attack, 1, ATTN_NORM, 0);
+	gi.sound(self, CHAN_VOICE, sound_attack, 1, ATTN_NORM, 0);
 
 	self->monsterinfo.currentmove = &handler_move_attack1;
 
@@ -394,12 +394,12 @@ void handler_dead (edict_t *self)
 		return;
 	}
 
-	VectorSet (self->mins, -16, -16, -24);
-	VectorSet (self->maxs, 16, 16, -8);
+	VectorSet(self->mins, -16, -16, -24);
+	VectorSet(self->maxs, 16, 16, -8);
 	self->movetype = MOVETYPE_TOSS;
 	self->svflags |= SVF_DEADMONSTER;
 	self->nextthink = 0;
-	gi.linkentity (self);
+	gi.linkentity(self);
 }
 
 
@@ -442,14 +442,14 @@ void SP_monster_handler (edict_t *self)
 
 	if (deathmatch->value)
 	{
-		G_FreeEdict (self);
+		G_FreeEdict(self);
 		return;
 	}
 
 	SP_monster_handler_precache();
 
-	self->s.modelindex = gi.modelindex ("models/monsters/guard/handler/tris.md2");
-	self->s.modelindex2 = gi.modelindex ("models/monsters/guard/hound/tris.md2");
+	self->s.modelindex = gi.modelindex("models/monsters/guard/handler/tris.md2");
+	self->s.modelindex2 = gi.modelindex("models/monsters/guard/hound/tris.md2");
 
 	/*
 		Handler
@@ -463,8 +463,8 @@ void SP_monster_handler (edict_t *self)
 		Z = -24  to 8
 	*/
 
-	VectorSet (self->mins, -32, -32, -24);
-	VectorSet (self->maxs, 32, 32, 32);
+	VectorSet(self->mins, -32, -32, -24);
+	VectorSet(self->maxs, 32, 32, 32);
 	self->movetype = MOVETYPE_STEP;
 	self->solid = SOLID_BBOX;
 
@@ -483,7 +483,7 @@ void SP_monster_handler (edict_t *self)
 	self->monsterinfo.sight = handler_sight;
 	self->monsterinfo.idle = NULL;
 
-	gi.linkentity (self);
+	gi.linkentity(self);
 
 	self->monsterinfo.currentmove = &handler_stand1;
 	self->monsterinfo.scale = MODEL_SCALE;

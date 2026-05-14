@@ -1,26 +1,20 @@
-/*
-==============================================================================
-
-boss3
-
-==============================================================================
-*/
-
 #include "../../header/local.h"
 #include "boss32.h"
 
-void Use_Boss3 (edict_t *ent, edict_t *other, edict_t *activator)
+void
+Use_Boss3(edict_t *ent, edict_t *other /* unused */,
+		edict_t *activator /* unused */)
 {
 	if (!ent)
 	{
 		return;
 	}
 
-	gi.WriteByte (svc_temp_entity);
-	gi.WriteByte (TE_BOSSTPORT);
-	gi.WritePosition (ent->s.origin);
-	gi.multicast (ent->s.origin, MULTICAST_PVS);
-	G_FreeEdict (ent);
+	gi.WriteByte(svc_temp_entity);
+	gi.WriteByte(TE_BOSSTPORT);
+	gi.WritePosition(ent->s.origin);
+	gi.multicast(ent->s.origin, MULTICAST_PVS);
+	G_FreeEdict(ent);
 }
 
 void
@@ -78,4 +72,3 @@ SP_monster_boss3_stand(edict_t *self)
 	self->nextthink = level.time + FRAMETIME;
 	gi.linkentity(self);
 }
-

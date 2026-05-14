@@ -205,15 +205,15 @@ void monster_autocannon_fire(edict_t *self)
 	}
 
 	// fire straight ahead
-	AngleVectors (self->s.angles, forward, right, NULL);
+	AngleVectors(self->s.angles, forward, right, NULL);
 	if (self->onFloor)
 		VectorNegate(right, right);
 	VectorMA(self->s.origin, 24, forward, start);
-	G_ProjectSource (self->s.origin, fireOffset[self->style], forward, right, start);
+	G_ProjectSource(self->s.origin, fireOffset[self->style], forward, right, start);
 
 	if(EMPNukeCheck(self, start))
 	{
-		gi.sound (self, CHAN_AUTO, gi.soundindex("items/empnuke/emp_missfire.wav"), 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_AUTO, gi.soundindex("items/empnuke/emp_missfire.wav"), 1, ATTN_NORM, 0);
 		return;
 	}
 
@@ -223,25 +223,25 @@ void monster_autocannon_fire(edict_t *self)
 	case 1:
 	default:
 		fire_bullet(self, start, forward, AC_BULLET_DMG, AC_BULLET_KICK, DEFAULT_BULLET_HSPREAD, DEFAULT_BULLET_VSPREAD, MOD_AUTOCANNON);
-		gi.WriteByte (svc_muzzleflash);
+		gi.WriteByte(svc_muzzleflash);
 		gi.WriteShort (self - g_edicts);
-		gi.WriteByte (MZ_CHAINGUN2);
-		gi.multicast (self->s.origin, MULTICAST_PVS);
+		gi.WriteByte(MZ_CHAINGUN2);
+		gi.multicast(self->s.origin, MULTICAST_PVS);
 		break;
 	case 2:
 		fire_rocket(self, start, forward, AC_ROCKET_DMG, AC_ROCKET_SPEED, AC_ROCKET_RADIUS_DMG, AC_ROCKET_DMG_RADIUS);
-		gi.WriteByte (svc_muzzleflash);
+		gi.WriteByte(svc_muzzleflash);
 		gi.WriteShort (self - g_edicts);
-		gi.WriteByte (MZ_ROCKET);
-		gi.multicast (self->s.origin, MULTICAST_PVS);
+		gi.WriteByte(MZ_ROCKET);
+		gi.multicast(self->s.origin, MULTICAST_PVS);
 		break;
 	case 3:
 	case 4:
 		fire_blaster (self, start, forward, AC_BLASTER_DMG, AC_BLASTER_SPEED, EF_HYPERBLASTER, true);
-		gi.WriteByte (svc_muzzleflash);
+		gi.WriteByte(svc_muzzleflash);
 		gi.WriteShort (self - g_edicts);
-		gi.WriteByte (MZ_HYPERBLASTER);
-		gi.multicast (self->s.origin, MULTICAST_PVS);
+		gi.WriteByte(MZ_HYPERBLASTER);
+		gi.multicast(self->s.origin, MULTICAST_PVS);
 		break;
 	}
 }
@@ -321,7 +321,7 @@ qboolean autocannonInfront (edict_t *self, edict_t *other)
 	}
 
 	// what's the yaw distance between the 2?
-	VectorSubtract (other->s.origin, self->s.origin, vec);
+	VectorSubtract(other->s.origin, self->s.origin, vec);
 	vectoangles(vec, angle);
 	dot = angle[YAW] - self->s.angles[YAW];
 
@@ -638,24 +638,24 @@ void monster_autocannon_explode (edict_t *ent)
 
 	T_RadiusDamage(ent, ent, AC_EXPLODE_DMG, ent->enemy, AC_EXPLODE_RADIUS, MOD_TRIPBOMB);
 
-	VectorMA (ent->s.origin, -0.02, ent->velocity, origin);
-	gi.WriteByte (svc_temp_entity);
+	VectorMA(ent->s.origin, -0.02, ent->velocity, origin);
+	gi.WriteByte(svc_temp_entity);
 	if (ent->waterlevel)
 	{
 		if (ent->groundentity)
-			gi.WriteByte (TE_GRENADE_EXPLOSION_WATER);
+			gi.WriteByte(TE_GRENADE_EXPLOSION_WATER);
 		else
-			gi.WriteByte (TE_ROCKET_EXPLOSION_WATER);
+			gi.WriteByte(TE_ROCKET_EXPLOSION_WATER);
 	}
 	else
 	{
 		if (ent->groundentity)
-			gi.WriteByte (TE_GRENADE_EXPLOSION);
+			gi.WriteByte(TE_GRENADE_EXPLOSION);
 		else
-			gi.WriteByte (TE_ROCKET_EXPLOSION);
+			gi.WriteByte(TE_ROCKET_EXPLOSION);
 	}
-	gi.WritePosition (origin);
-	gi.multicast (ent->s.origin, MULTICAST_PHS);
+	gi.WritePosition(origin);
+	gi.multicast(ent->s.origin, MULTICAST_PHS);
 
 	// set the pain skin
 	ent->chain->chain->s.skinnum = 1; // pain

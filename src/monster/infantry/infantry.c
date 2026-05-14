@@ -47,7 +47,13 @@ mframe_t infantry_frames_stand[] = {
 	{ai_stand, 0, NULL},
 	{ai_stand, 0, NULL}
 };
-mmove_t infantry_move_stand = {FRAME_stand50, FRAME_stand71, infantry_frames_stand, NULL};
+
+mmove_t infantry_move_stand = {
+	FRAME_stand50,
+	FRAME_stand71,
+	infantry_frames_stand,
+	NULL
+};
 
 void
 infantry_stand(edict_t *self)
@@ -111,7 +117,13 @@ mframe_t infantry_frames_fidget[] = {
 	{ai_stand, -3, NULL},
 	{ai_stand, -2, NULL}
 };
-mmove_t infantry_move_fidget = {FRAME_stand01, FRAME_stand49, infantry_frames_fidget, infantry_stand};
+
+mmove_t infantry_move_fidget = {
+	FRAME_stand01,
+	FRAME_stand49,
+	infantry_frames_fidget,
+	infantry_stand
+};
 
 void
 infantry_fidget(edict_t *self)
@@ -139,7 +151,13 @@ mframe_t infantry_frames_walk[] = {
 	{ai_walk, 4, NULL},
 	{ai_walk, 5, NULL}
 };
-mmove_t infantry_move_walk = {FRAME_walk03, FRAME_walk14, infantry_frames_walk, NULL};
+
+mmove_t infantry_move_walk = {
+	FRAME_walk03,
+	FRAME_walk14,
+	infantry_frames_walk,
+	NULL
+};
 
 void
 infantry_walk(edict_t *self)
@@ -162,7 +180,13 @@ mframe_t infantry_frames_run[] = {
 	{ai_run, 2, NULL},
 	{ai_run, 6, NULL}
 };
-mmove_t infantry_move_run = {FRAME_run01, FRAME_run08, infantry_frames_run, NULL};
+
+mmove_t infantry_move_run = {
+	FRAME_run01,
+	FRAME_run08,
+	infantry_frames_run,
+	NULL
+};
 
 void
 infantry_run(edict_t *self)
@@ -194,7 +218,13 @@ mframe_t infantry_frames_pain1[] = {
 	{ai_move, 6, NULL},
 	{ai_move, 2, NULL}
 };
-mmove_t infantry_move_pain1 = {FRAME_pain101, FRAME_pain110, infantry_frames_pain1, infantry_run};
+
+mmove_t infantry_move_pain1 = {
+	FRAME_pain101,
+	FRAME_pain110,
+	infantry_frames_pain1,
+	infantry_run
+};
 
 mframe_t infantry_frames_pain2[] = {
 	{ai_move, -3, NULL},
@@ -208,11 +238,19 @@ mframe_t infantry_frames_pain2[] = {
 	{ai_move, 5, NULL},
 	{ai_move, 2, NULL}
 };
-mmove_t infantry_move_pain2 = {FRAME_pain201, FRAME_pain210, infantry_frames_pain2, infantry_run};
 
-void infantry_pain (edict_t *self, edict_t *other, float kick, int damage)
+mmove_t infantry_move_pain2 = {
+	FRAME_pain201,
+	FRAME_pain210,
+	infantry_frames_pain2,
+	infantry_run
+};
+
+void
+infantry_pain(edict_t *self, edict_t *other /* unused */,
+		float kick /* unused */, int damage)
 {
-	int		n;
+	int n;
 
 	if (!self)
 	{
@@ -220,26 +258,33 @@ void infantry_pain (edict_t *self, edict_t *other, float kick, int damage)
 	}
 
 	if (self->health < (self->max_health / 2))
+	{
 		self->s.skinnum = 1;
+	}
 
 	if (level.time < self->pain_debounce_time)
+	{
 		return;
+	}
 
 	self->pain_debounce_time = level.time + 3;
 
 	if (skill->value == SKILL_HARDPLUS)
-		return;		// no pain anims in nightmare
+	{
+		return; /* no pain anims in nightmare */
+	}
 
 	n = randk() % 2;
+
 	if (n == 0)
 	{
 		self->monsterinfo.currentmove = &infantry_move_pain1;
-		gi.sound (self, CHAN_VOICE, sound_pain1, 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_VOICE, sound_pain1, 1, ATTN_NORM, 0);
 	}
 	else
 	{
 		self->monsterinfo.currentmove = &infantry_move_pain2;
-		gi.sound (self, CHAN_VOICE, sound_pain2, 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_VOICE, sound_pain2, 1, ATTN_NORM, 0);
 	}
 }
 
@@ -258,12 +303,13 @@ vec3_t aimangles[] = {
 	{90.0, 35.0, 0.0}
 };
 
-void InfantryMachineGun (edict_t *self)
+void
+InfantryMachineGun(edict_t *self)
 {
-	vec3_t	start, target;
-	vec3_t	forward, right;
-	vec3_t	vec;
-	int		flash_number;
+	vec3_t start, target;
+	vec3_t forward, right;
+	vec3_t vec;
+	int flash_number;
 
 	if (!self)
 	{
@@ -273,39 +319,42 @@ void InfantryMachineGun (edict_t *self)
 	if (self->s.frame == FRAME_attak111)
 	{
 		flash_number = MZ2_INFANTRY_MACHINEGUN_1;
-		AngleVectors (self->s.angles, forward, right, NULL);
-		G_ProjectSource (self->s.origin, monster_flash_offset[flash_number], forward, right, start);
+		AngleVectors(self->s.angles, forward, right, NULL);
+		G_ProjectSource(self->s.origin, monster_flash_offset[flash_number],
+				forward, right, start);
 
 		if (self->enemy)
 		{
-			VectorMA (self->enemy->s.origin, -0.2, self->enemy->velocity, target);
+			VectorMA(self->enemy->s.origin, -0.2, self->enemy->velocity, target);
 			target[2] += self->enemy->viewheight;
-			VectorSubtract (target, start, forward);
-			VectorNormalize (forward);
+			VectorSubtract(target, start, forward);
+			VectorNormalize(forward);
 		}
 		else
 		{
-			AngleVectors (self->s.angles, forward, right, NULL);
+			AngleVectors(self->s.angles, forward, right, NULL);
 		}
 	}
 	else
 	{
 		flash_number = MZ2_INFANTRY_MACHINEGUN_2 + (self->s.frame - FRAME_death211);
 
-		AngleVectors (self->s.angles, forward, right, NULL);
-		G_ProjectSource (self->s.origin, monster_flash_offset[flash_number], forward, right, start);
+		AngleVectors(self->s.angles, forward, right, NULL);
+		G_ProjectSource(self->s.origin, monster_flash_offset[flash_number],
+				forward, right, start);
 
-		VectorSubtract (self->s.angles, aimangles[flash_number-MZ2_INFANTRY_MACHINEGUN_2], vec);
-		AngleVectors (vec, forward, NULL, NULL);
+		VectorSubtract(self->s.angles, aimangles[flash_number - MZ2_INFANTRY_MACHINEGUN_2], vec);
+		AngleVectors(vec, forward, NULL, NULL);
 	}
 
 	if(EMPNukeCheck(self, start))
 	{
-		gi.sound (self, CHAN_AUTO, gi.soundindex("items/empnuke/emp_missfire.wav"), 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_AUTO, gi.soundindex("items/empnuke/emp_missfire.wav"), 1, ATTN_NORM, 0);
 		return;
 	}
 
-	monster_fire_bullet (self, start, forward, 3, 4, DEFAULT_BULLET_HSPREAD, DEFAULT_BULLET_VSPREAD, flash_number);
+	monster_fire_bullet(self, start, forward, 3, 4, DEFAULT_BULLET_HSPREAD,
+			DEFAULT_BULLET_VSPREAD, flash_number);
 }
 
 void
@@ -358,7 +407,13 @@ mframe_t infantry_frames_death1[] = {
 	{ai_move, -3, NULL},
 	{ai_move, -3, NULL}
 };
-mmove_t infantry_move_death1 = {FRAME_death101, FRAME_death120, infantry_frames_death1, infantry_dead};
+
+mmove_t infantry_move_death1 = {
+	FRAME_death101,
+	FRAME_death120,
+	infantry_frames_death1,
+	infantry_dead
+};
 
 /* Off with his head */
 mframe_t infantry_frames_death2[] = {
@@ -388,7 +443,13 @@ mframe_t infantry_frames_death2[] = {
 	{ai_move, 4, NULL},
 	{ai_move, 0, NULL}
 };
-mmove_t infantry_move_death2 = {FRAME_death201, FRAME_death225, infantry_frames_death2, infantry_dead};
+
+mmove_t infantry_move_death2 = {
+	FRAME_death201,
+	FRAME_death225,
+	infantry_frames_death2,
+	infantry_dead
+};
 
 mframe_t infantry_frames_death3[] = {
 	{ai_move, 0, NULL},
@@ -401,54 +462,72 @@ mframe_t infantry_frames_death3[] = {
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL}
 };
-mmove_t infantry_move_death3 = {FRAME_death301, FRAME_death309, infantry_frames_death3, infantry_dead};
 
+mmove_t infantry_move_death3 = {
+	FRAME_death301,
+	FRAME_death309,
+	infantry_frames_death3,
+	infantry_dead
+};
 
-void infantry_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
+void
+infantry_die(edict_t *self, edict_t *inflictor /* unused */,
+		edict_t *attacker /* unused */, int damage,
+		const vec3_t point /* unused */)
 {
-	int		n;
+	int n;
 
 	if (!self)
 	{
 		return;
 	}
 
-	// check for gib
+	/* check for gib */
 	if (self->health <= self->gib_health)
 	{
-		gi.sound (self, CHAN_VOICE, gi.soundindex ("misc/udeath.wav"), 1, ATTN_NORM, 0);
-		for (n= 0; n < 2; n++)
-			ThrowGib (self, "models/objects/gibs/bone/tris.md2", damage, GIB_ORGANIC);
-		for (n= 0; n < 4; n++)
-			ThrowGib (self, "models/objects/gibs/sm_meat/tris.md2", damage, GIB_ORGANIC);
-		ThrowHead (self, "models/objects/gibs/head2/tris.md2", damage, GIB_ORGANIC);
+		gi.sound(self, CHAN_VOICE, gi.soundindex("misc/udeath.wav"), 1, ATTN_NORM, 0);
+
+		for (n = 0; n < 2; n++)
+		{
+			ThrowGib(self, "models/objects/gibs/bone/tris.md2", damage, GIB_ORGANIC);
+		}
+
+		for (n = 0; n < 4; n++)
+		{
+			ThrowGib(self, "models/objects/gibs/sm_meat/tris.md2", damage, GIB_ORGANIC);
+		}
+
+		ThrowHead(self, "models/objects/gibs/head2/tris.md2", damage, GIB_ORGANIC);
 		self->deadflag = DEAD_DEAD;
 		return;
 	}
 
 	if (self->deadflag == DEAD_DEAD)
+	{
 		return;
+	}
 
-	// regular death
+	/* regular death */
 	self->deadflag = DEAD_DEAD;
 	self->takedamage = DAMAGE_YES;
 	self->s.skinnum = 1; /* switch to bloody skin */
 
 	n = randk() % 3;
+
 	if (n == 0)
 	{
 		self->monsterinfo.currentmove = &infantry_move_death1;
-		gi.sound (self, CHAN_VOICE, sound_die2, 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_VOICE, sound_die2, 1, ATTN_NORM, 0);
 	}
 	else if (n == 1)
 	{
 		self->monsterinfo.currentmove = &infantry_move_death2;
-		gi.sound (self, CHAN_VOICE, sound_die1, 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_VOICE, sound_die1, 1, ATTN_NORM, 0);
 	}
 	else
 	{
 		self->monsterinfo.currentmove = &infantry_move_death3;
-		gi.sound (self, CHAN_VOICE, sound_die2, 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_VOICE, sound_die2, 1, ATTN_NORM, 0);
 	}
 }
 
@@ -511,7 +590,13 @@ mframe_t infantry_frames_duck[] = {
 	{ai_move, 4, infantry_duck_up},
 	{ai_move, 0, NULL}
 };
-mmove_t infantry_move_duck = {FRAME_duck01, FRAME_duck05, infantry_frames_duck, infantry_run};
+
+mmove_t infantry_move_duck = {
+	FRAME_duck01,
+	FRAME_duck05,
+	infantry_frames_duck,
+	infantry_run
+};
 
 void
 infantry_dodge(edict_t *self, edict_t *attacker, float eta /* unused */)
@@ -535,17 +620,17 @@ infantry_dodge(edict_t *self, edict_t *attacker, float eta /* unused */)
 	self->monsterinfo.currentmove = &infantry_move_duck;
 }
 
-
-void infantry_cock_gun (edict_t *self)
+void
+infantry_cock_gun(edict_t *self)
 {
-	int		n;
+	int n;
 
 	if (!self)
 	{
 		return;
 	}
 
-	gi.sound (self, CHAN_WEAPON, sound_weapon_cock, 1, ATTN_NORM, 0);
+	gi.sound(self, CHAN_WEAPON, sound_weapon_cock, 1, ATTN_NORM, 0);
 	n = (randk() & 15) + 3 + 7;
 	self->monsterinfo.pausetime = level.time + n * FRAMETIME;
 }
@@ -570,8 +655,7 @@ infantry_fire(edict_t *self)
 	}
 }
 
-mframe_t infantry_frames_attack1 [] =
-{
+mframe_t infantry_frames_attack1[] = {
 	{ai_charge, 4,  NULL},
 	{ai_charge, -1, NULL},
 	{ai_charge, -1, NULL},
@@ -588,7 +672,13 @@ mframe_t infantry_frames_attack1 [] =
 	{ai_charge, -2, NULL},
 	{ai_charge, -3, NULL}
 };
-mmove_t infantry_move_attack1 = {FRAME_attak101, FRAME_attak115, infantry_frames_attack1, infantry_run};
+
+mmove_t infantry_move_attack1 = {
+	FRAME_attak101,
+	FRAME_attak115,
+	infantry_frames_attack1,
+	infantry_run
+};
 
 void
 infantry_swing(edict_t *self)
@@ -601,18 +691,22 @@ infantry_swing(edict_t *self)
 	gi.sound(self, CHAN_WEAPON, sound_punch_swing, 1, ATTN_NORM, 0);
 }
 
-void infantry_smack (edict_t *self)
+void
+infantry_smack(edict_t *self)
 {
-	vec3_t	aim;
+	vec3_t aim;
 
 	if (!self)
 	{
 		return;
 	}
 
-	VectorSet (aim, MELEE_DISTANCE, 0, 0);
-	if (fire_hit (self, aim, (5 + (randk() % 5)), 50))
-		gi.sound (self, CHAN_WEAPON, sound_punch_hit, 1, ATTN_NORM, 0);
+	VectorSet(aim, MELEE_DISTANCE, 0, 0);
+
+	if (fire_hit(self, aim, (5 + (randk() % 5)), 50))
+	{
+		gi.sound(self, CHAN_WEAPON, sound_punch_hit, 1, ATTN_NORM, 0);
+	}
 }
 
 mframe_t infantry_frames_attack2[] = {
@@ -625,19 +719,30 @@ mframe_t infantry_frames_attack2[] = {
 	{ai_charge, 6, NULL},
 	{ai_charge, 3, NULL},
 };
-mmove_t infantry_move_attack2 = {FRAME_attak201, FRAME_attak208, infantry_frames_attack2, infantry_run};
 
-void infantry_attack(edict_t *self)
+mmove_t infantry_move_attack2 = {
+	FRAME_attak201,
+	FRAME_attak208,
+	infantry_frames_attack2,
+	infantry_run
+};
+
+void
+infantry_attack(edict_t *self)
 {
 	if (!self)
 	{
 		return;
 	}
 
-	if (ai_range (self, self->enemy) == RANGE_MELEE)
+	if (ai_range(self, self->enemy) == RANGE_MELEE)
+	{
 		self->monsterinfo.currentmove = &infantry_move_attack2;
+	}
 	else
+	{
 		self->monsterinfo.currentmove = &infantry_move_attack1;
+	}
 }
 
 /*
@@ -701,7 +806,6 @@ SP_monster_infantry(edict_t *self)
 	walkmonster_start(self);
 }
 
-
 void handler_ConvertToInfantry(edict_t *self)
 {
 	if (!self)
@@ -710,8 +814,8 @@ void handler_ConvertToInfantry(edict_t *self)
 	}
 
 	self->s.modelindex = gi.modelindex("models/monsters/infantry/tris.md2");
-	VectorSet (self->mins, -16, -16, -24);
-	VectorSet (self->maxs, 16, 16, 32);
+	VectorSet(self->mins, -16, -16, -24);
+	VectorSet(self->maxs, 16, 16, 32);
 	self->pain = infantry_pain;
 	self->die = infantry_die;
 

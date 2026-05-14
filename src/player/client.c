@@ -1,3 +1,10 @@
+/* =======================================================================
+ *
+ * Interface between client <-> game and client calculations.
+ *
+ * =======================================================================
+ */
+
 #include "../header/local.h"
 #include "../monster/misc/player.h"
 
@@ -118,7 +125,7 @@ void SP_info_player_coop(edict_t *self)
 
 	if (!coop->value)
 	{
-		G_FreeEdict (self);
+		G_FreeEdict(self);
 		return;
 	}
 
@@ -548,11 +555,11 @@ void LookAtKiller (edict_t *self, edict_t *inflictor, edict_t *attacker)
 
 	if (attacker != world && attacker != self)
 	{
-		VectorSubtract (attacker->s.origin, self->s.origin, dir);
+		VectorSubtract(attacker->s.origin, self->s.origin, dir);
 	}
 	else if (inflictor != world && inflictor != self)
 	{
-		VectorSubtract (inflictor->s.origin, self->s.origin, dir);
+		VectorSubtract(inflictor->s.origin, self->s.origin, dir);
 	}
 	else
 	{
@@ -586,7 +593,7 @@ void player_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damag
 		stopCamera(self);
 	}
 
-	VectorClear (self->avelocity);
+	VectorClear(self->avelocity);
 
 	self->takedamage = DAMAGE_YES;
 	self->movetype = MOVETYPE_TOSS;
@@ -626,9 +633,9 @@ void player_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damag
 
 	if (self->health < -40)
 	{	// gib (play sound at end of server frame)
-		self->sounds = gi.soundindex ("misc/udeath.wav");
+		self->sounds = gi.soundindex("misc/udeath.wav");
 		for (n= 0; n < 4; n++)
-			ThrowGib (self, "models/objects/gibs/sm_meat/tris.md2", damage, GIB_ORGANIC);
+			ThrowGib(self, "models/objects/gibs/sm_meat/tris.md2", damage, GIB_ORGANIC);
 		ThrowClientHead (self, damage);
 
 		self->takedamage = DAMAGE_NO;
@@ -671,7 +678,7 @@ void player_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damag
 
 	self->deadflag = DEAD_DEAD;
 
-	gi.linkentity (self);
+	gi.linkentity(self);
 }
 
 //=======================================================================
@@ -1151,9 +1158,9 @@ body_die(edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const
 
 	if (self->health < -40)
 	{
-		gi.sound (self, CHAN_BODY, gi.soundindex ("misc/udeath.wav"), 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_BODY, gi.soundindex("misc/udeath.wav"), 1, ATTN_NORM, 0);
 		for (n= 0; n < 4; n++)
-			ThrowGib (self, "models/objects/gibs/sm_meat/tris.md2", damage, GIB_ORGANIC);
+			ThrowGib(self, "models/objects/gibs/sm_meat/tris.md2", damage, GIB_ORGANIC);
 		self->s.origin[2] -= 48;
 		ThrowClientHead (self, damage);
 		self->takedamage = DAMAGE_NO;
@@ -1447,10 +1454,10 @@ void ClientBeginDeathmatch (edict_t *ent)
 	PutClientInServer (ent);
 
 	// send effect
-	gi.WriteByte (svc_muzzleflash);
+	gi.WriteByte(svc_muzzleflash);
 	gi.WriteShort (ent-g_edicts);
-	gi.WriteByte (MZ_LOGIN);
-	gi.multicast (ent->s.origin, MULTICAST_PVS);
+	gi.WriteByte(MZ_LOGIN);
+	gi.multicast(ent->s.origin, MULTICAST_PVS);
 
 	gi.bprintf (PRINT_HIGH, "%s entered the game\n", ent->client->pers.netname);
 
@@ -1522,10 +1529,10 @@ void ClientBegin (edict_t *ent)
 		// send effect if in a multiplayer game
 		if (game.maxclients > 1)
 		{
-			gi.WriteByte (svc_muzzleflash);
+			gi.WriteByte(svc_muzzleflash);
 			gi.WriteShort (ent-g_edicts);
-			gi.WriteByte (MZ_LOGIN);
-			gi.multicast (ent->s.origin, MULTICAST_PVS);
+			gi.WriteByte(MZ_LOGIN);
+			gi.multicast(ent->s.origin, MULTICAST_PVS);
 
 			gi.bprintf (PRINT_HIGH, "%s entered the game\n", ent->client->pers.netname);
 		}
@@ -1836,8 +1843,8 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 		ent->velocity[i] = pm.s.velocity[i]*0.125;
 	}
 
-	VectorCopy (pm.mins, ent->mins);
-	VectorCopy (pm.maxs, ent->maxs);
+	VectorCopy(pm.mins, ent->mins);
+	VectorCopy(pm.maxs, ent->maxs);
 
 	client->resp.cmd_angles[0] = SHORT2ANGLE(ucmd->angles[0]);
 	client->resp.cmd_angles[1] = SHORT2ANGLE(ucmd->angles[1]);
@@ -1864,12 +1871,12 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 	}
 	else
 	{
-		VectorCopy (pm.viewangles, client->v_angle);
-		VectorCopy (pm.viewangles, client->ps.viewangles);
+		VectorCopy(pm.viewangles, client->v_angle);
+		VectorCopy(pm.viewangles, client->ps.viewangles);
 	}
 
 
-	gi.linkentity (ent);
+	gi.linkentity(ent);
 
 	if (ent->movetype != MOVETYPE_NOCLIP)
 		G_TouchTriggers (ent);
@@ -1973,4 +1980,3 @@ void ClientBeginServerFrame (edict_t *ent)
 
 	client->latched_buttons = 0;
 }
-

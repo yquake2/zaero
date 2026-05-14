@@ -1,5 +1,9 @@
-#ifndef ZAERO_GAME_H
-#define ZAERO_GAME_H
+/* =======================================================================
+ *
+ * Here are the client, server and game are tied together.
+ *
+ * =======================================================================
+ */
 
 /*
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -10,6 +14,9 @@
  *
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
+
+#ifndef ZAERO_GAME_H
+#define ZAERO_GAME_H
 
 #define GAME_API_VERSION 3
 
@@ -43,7 +50,7 @@ typedef struct gclient_s gclient_t;
 
 struct gclient_s
 {
-	player_state_t ps;      /* communicated by server to clients */
+	player_state_t ps; /* communicated by server to clients */
 	int ping;
 	/* the game dll can add anything it wants
 	   after this point in the structure */
@@ -56,14 +63,14 @@ struct edict_s
 	qboolean inuse;
 	int linkcount;
 
-	link_t area;                    /* linked to a division node or leaf */
+	link_t area; /* linked to a division node or leaf */
 
-	int num_clusters;               /* if -1, use headnode instead */
+	int num_clusters; /* if -1, use headnode instead */
 	int clusternums[MAX_ENT_CLUSTERS];
-	int headnode;                   /* unused if num_clusters != -1 */
+	int headnode;  /* unused if num_clusters != -1 */
 	int areanum, areanum2;
 
-	int svflags;                    /* SVF_NOCLIENT, SVF_DEADMONSTER, SVF_MONSTER, etc */
+	int svflags; /* SVF_NOCLIENT, SVF_DEADMONSTER, SVF_MONSTER, etc */
 	vec3_t mins, maxs;
 	vec3_t absmin, absmax, size;
 	solid_t solid;
@@ -209,7 +216,7 @@ typedef struct
 	   The size will be fixed when ge->Init() is called */
 	struct edict_s *edicts;
 	int edict_size;
-	int num_edicts;             /* current number, <= max_edicts */
+	int num_edicts; /* current number, <= max_edicts */
 	int max_edicts;
 } game_export_t;
 

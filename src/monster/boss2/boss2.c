@@ -31,110 +31,122 @@ boss2_search(edict_t *self)
 	}
 }
 
-void boss2_run (edict_t *self);
-void boss2_stand (edict_t *self);
-void boss2_dead (edict_t *self);
-void boss2_attack (edict_t *self);
-void boss2_attack_mg (edict_t *self);
-void boss2_reattack_mg (edict_t *self);
-void boss2_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point);
+void boss2_run(edict_t *self);
+void boss2_stand(edict_t *self);
+void boss2_dead(edict_t *self);
+void boss2_attack(edict_t *self);
+void boss2_attack_mg(edict_t *self);
+void boss2_reattack_mg(edict_t *self);
+void boss2_die(edict_t *self, edict_t *inflictor, edict_t *attacker,
+		int damage, const vec3_t point);
 
-void Boss2Rocket (edict_t *self)
+void
+Boss2Rocket(edict_t *self)
 {
-	vec3_t	forward, right;
-	vec3_t	start;
-	vec3_t	dir;
-	vec3_t	vec;
+	vec3_t forward, right;
+	vec3_t start;
+	vec3_t dir;
+	vec3_t vec;
 
 	if (!self)
 	{
 		return;
 	}
 
-	AngleVectors (self->s.angles, forward, right, NULL);
+	AngleVectors(self->s.angles, forward, right, NULL);
 
-	G_ProjectSource (self->s.origin, monster_flash_offset[MZ2_BOSS2_ROCKET_1], forward, right, start);
-	VectorCopy (self->enemy->s.origin, vec);
+	G_ProjectSource(self->s.origin, monster_flash_offset[MZ2_BOSS2_ROCKET_1],
+			forward, right, start);
+	VectorCopy(self->enemy->s.origin, vec);
 	vec[2] += self->enemy->viewheight;
-	VectorSubtract (vec, start, dir);
-	VectorNormalize (dir);
-	monster_fire_rocket (self, start, dir, 50, 500, MZ2_BOSS2_ROCKET_1);
+	VectorSubtract(vec, start, dir);
+	VectorNormalize(dir);
+	monster_fire_rocket(self, start, dir, 50, 500, MZ2_BOSS2_ROCKET_1);
 
-	G_ProjectSource (self->s.origin, monster_flash_offset[MZ2_BOSS2_ROCKET_2], forward, right, start);
-	VectorCopy (self->enemy->s.origin, vec);
+	G_ProjectSource(self->s.origin, monster_flash_offset[MZ2_BOSS2_ROCKET_2],
+			forward, right, start);
+	VectorCopy(self->enemy->s.origin, vec);
 	vec[2] += self->enemy->viewheight;
-	VectorSubtract (vec, start, dir);
-	VectorNormalize (dir);
-	monster_fire_rocket (self, start, dir, 50, 500, MZ2_BOSS2_ROCKET_2);
+	VectorSubtract(vec, start, dir);
+	VectorNormalize(dir);
+	monster_fire_rocket(self, start, dir, 50, 500, MZ2_BOSS2_ROCKET_2);
 
-	G_ProjectSource (self->s.origin, monster_flash_offset[MZ2_BOSS2_ROCKET_3], forward, right, start);
-	VectorCopy (self->enemy->s.origin, vec);
+	G_ProjectSource(self->s.origin, monster_flash_offset[MZ2_BOSS2_ROCKET_3],
+			forward, right, start);
+	VectorCopy(self->enemy->s.origin, vec);
 	vec[2] += self->enemy->viewheight;
-	VectorSubtract (vec, start, dir);
-	VectorNormalize (dir);
-	monster_fire_rocket (self, start, dir, 50, 500, MZ2_BOSS2_ROCKET_3);
+	VectorSubtract(vec, start, dir);
+	VectorNormalize(dir);
+	monster_fire_rocket(self, start, dir, 50, 500, MZ2_BOSS2_ROCKET_3);
 
-	G_ProjectSource (self->s.origin, monster_flash_offset[MZ2_BOSS2_ROCKET_4], forward, right, start);
-	VectorCopy (self->enemy->s.origin, vec);
+	G_ProjectSource(self->s.origin, monster_flash_offset[MZ2_BOSS2_ROCKET_4],
+			forward, right, start);
+	VectorCopy(self->enemy->s.origin, vec);
 	vec[2] += self->enemy->viewheight;
-	VectorSubtract (vec, start, dir);
-	VectorNormalize (dir);
-	monster_fire_rocket (self, start, dir, 50, 500, MZ2_BOSS2_ROCKET_4);
+	VectorSubtract(vec, start, dir);
+	VectorNormalize(dir);
+	monster_fire_rocket(self, start, dir, 50, 500, MZ2_BOSS2_ROCKET_4);
 }
 
-void boss2_firebullet_right (edict_t *self)
+void
+boss2_firebullet_right(edict_t *self)
 {
-	vec3_t	forward, right, target;
-	vec3_t	start;
+	vec3_t forward, right, target;
+	vec3_t start;
 
 	if (!self)
 	{
 		return;
 	}
 
-	AngleVectors (self->s.angles, forward, right, NULL);
-	G_ProjectSource (self->s.origin, monster_flash_offset[MZ2_BOSS2_MACHINEGUN_R1], forward, right, start);
+	AngleVectors(self->s.angles, forward, right, NULL);
+	G_ProjectSource(self->s.origin, monster_flash_offset[MZ2_BOSS2_MACHINEGUN_R1],
+			forward, right, start);
 
-	VectorMA (self->enemy->s.origin, -0.2, self->enemy->velocity, target);
+	VectorMA(self->enemy->s.origin, -0.2, self->enemy->velocity, target);
 	target[2] += self->enemy->viewheight;
-	VectorSubtract (target, start, forward);
-	VectorNormalize (forward);
+	VectorSubtract(target, start, forward);
+	VectorNormalize(forward);
 
 	if(EMPNukeCheck(self, start))
 	{
-		gi.sound (self, CHAN_AUTO, gi.soundindex("items/empnuke/emp_missfire.wav"), 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_AUTO, gi.soundindex("items/empnuke/emp_missfire.wav"), 1, ATTN_NORM, 0);
 		return;
 	}
 
-	monster_fire_bullet (self, start, forward, 6, 4, DEFAULT_BULLET_HSPREAD, DEFAULT_BULLET_VSPREAD, MZ2_BOSS2_MACHINEGUN_R1);
+	monster_fire_bullet(self, start, forward, 6, 4, DEFAULT_BULLET_HSPREAD,
+			DEFAULT_BULLET_VSPREAD, MZ2_BOSS2_MACHINEGUN_R1);
 }
 
-void boss2_firebullet_left (edict_t *self)
+void
+boss2_firebullet_left(edict_t *self)
 {
-	vec3_t	forward, right, target;
-	vec3_t	start;
+	vec3_t forward, right, target;
+	vec3_t start;
 
 	if (!self)
 	{
 		return;
 	}
 
-	AngleVectors (self->s.angles, forward, right, NULL);
-	G_ProjectSource (self->s.origin, monster_flash_offset[MZ2_BOSS2_MACHINEGUN_L1], forward, right, start);
+	AngleVectors(self->s.angles, forward, right, NULL);
+	G_ProjectSource(self->s.origin, monster_flash_offset[MZ2_BOSS2_MACHINEGUN_L1],
+			forward, right, start);
 
-	VectorMA (self->enemy->s.origin, -0.2, self->enemy->velocity, target);
+	VectorMA(self->enemy->s.origin, -0.2, self->enemy->velocity, target);
 
 	target[2] += self->enemy->viewheight;
-	VectorSubtract (target, start, forward);
-	VectorNormalize (forward);
+	VectorSubtract(target, start, forward);
+	VectorNormalize(forward);
 
 	if(EMPNukeCheck(self, start))
 	{
-		gi.sound (self, CHAN_AUTO, gi.soundindex("items/empnuke/emp_missfire.wav"), 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_AUTO, gi.soundindex("items/empnuke/emp_missfire.wav"), 1, ATTN_NORM, 0);
 		return;
 	}
 
-	monster_fire_bullet (self, start, forward, 6, 4, DEFAULT_BULLET_HSPREAD, DEFAULT_BULLET_VSPREAD, MZ2_BOSS2_MACHINEGUN_L1);
+	monster_fire_bullet(self, start, forward, 6, 4, DEFAULT_BULLET_HSPREAD,
+			DEFAULT_BULLET_VSPREAD, MZ2_BOSS2_MACHINEGUN_L1);
 }
 
 void
@@ -172,7 +184,13 @@ mframe_t boss2_frames_stand[] = {
 	{ai_stand, 0, NULL},
 	{ai_stand, 0, NULL}
 };
-mmove_t	boss2_move_stand = {FRAME_stand30, FRAME_stand50, boss2_frames_stand, NULL};
+
+mmove_t boss2_move_stand = {
+	FRAME_stand30,
+	FRAME_stand50,
+	boss2_frames_stand,
+	NULL
+};
 
 mframe_t boss2_frames_fidget[] = {
 	{ai_stand, 0, NULL},
@@ -206,7 +224,13 @@ mframe_t boss2_frames_fidget[] = {
 	{ai_stand, 0, NULL},
 	{ai_stand, 0, NULL}
 };
-mmove_t boss2_move_fidget = {FRAME_stand1, FRAME_stand30, boss2_frames_fidget, NULL};
+
+mmove_t boss2_move_fidget = {
+	FRAME_stand1,
+	FRAME_stand30,
+	boss2_frames_fidget,
+	NULL
+};
 
 mframe_t boss2_frames_walk[] = {
 	{ai_walk, 8, NULL},
@@ -230,7 +254,13 @@ mframe_t boss2_frames_walk[] = {
 	{ai_walk, 8, NULL},
 	{ai_walk, 8, NULL}
 };
-mmove_t boss2_move_walk = {FRAME_walk1, FRAME_walk20, boss2_frames_walk, NULL};
+
+mmove_t boss2_move_walk = {
+	FRAME_walk1,
+	FRAME_walk20,
+	boss2_frames_walk,
+	NULL
+};
 
 mframe_t boss2_frames_run[] = {
 	{ai_run, 8, NULL},
@@ -254,7 +284,13 @@ mframe_t boss2_frames_run[] = {
 	{ai_run, 8, NULL},
 	{ai_run, 8, NULL}
 };
-mmove_t boss2_move_run = {FRAME_walk1, FRAME_walk20, boss2_frames_run, NULL};
+
+mmove_t boss2_move_run = {
+	FRAME_walk1,
+	FRAME_walk20,
+	boss2_frames_run,
+	NULL
+};
 
 mframe_t boss2_frames_attack_pre_mg[] = {
 	{ai_charge, 1, NULL},
@@ -267,7 +303,13 @@ mframe_t boss2_frames_attack_pre_mg[] = {
 	{ai_charge, 1, NULL},
 	{ai_charge, 1, boss2_attack_mg}
 };
-mmove_t boss2_move_attack_pre_mg = {FRAME_attack1, FRAME_attack9, boss2_frames_attack_pre_mg, NULL};
+
+mmove_t boss2_move_attack_pre_mg = {
+	FRAME_attack1,
+	FRAME_attack9,
+	boss2_frames_attack_pre_mg,
+	NULL
+};
 
 mframe_t boss2_frames_attack_mg[] = {
 	{ai_charge, 1, Boss2MachineGun},
@@ -277,7 +319,13 @@ mframe_t boss2_frames_attack_mg[] = {
 	{ai_charge, 1, Boss2MachineGun},
 	{ai_charge, 1, boss2_reattack_mg}
 };
-mmove_t boss2_move_attack_mg = {FRAME_attack10, FRAME_attack15, boss2_frames_attack_mg, NULL};
+
+mmove_t boss2_move_attack_mg = {
+	FRAME_attack10,
+	FRAME_attack15,
+	boss2_frames_attack_mg,
+	NULL
+};
 
 mframe_t boss2_frames_attack_post_mg[] = {
 	{ai_charge, 1, NULL},
@@ -285,7 +333,13 @@ mframe_t boss2_frames_attack_post_mg[] = {
 	{ai_charge, 1, NULL},
 	{ai_charge, 1, NULL}
 };
-mmove_t boss2_move_attack_post_mg = {FRAME_attack16, FRAME_attack19, boss2_frames_attack_post_mg, boss2_run};
+
+mmove_t boss2_move_attack_post_mg = {
+	FRAME_attack16,
+	FRAME_attack19,
+	boss2_frames_attack_post_mg,
+	boss2_run
+};
 
 mframe_t boss2_frames_attack_rocket[] = {
 	{ai_charge, 1, NULL},
@@ -310,7 +364,13 @@ mframe_t boss2_frames_attack_rocket[] = {
 	{ai_charge, 1, NULL},
 	{ai_charge, 1, NULL}
 };
-mmove_t boss2_move_attack_rocket = {FRAME_attack20, FRAME_attack40, boss2_frames_attack_rocket, boss2_run};
+
+mmove_t boss2_move_attack_rocket = {
+	FRAME_attack20,
+	FRAME_attack40,
+	boss2_frames_attack_rocket,
+	boss2_run
+};
 
 mframe_t boss2_frames_pain_heavy[] = {
 	{ai_move, 0, NULL},
@@ -332,7 +392,13 @@ mframe_t boss2_frames_pain_heavy[] = {
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL}
 };
-mmove_t boss2_move_pain_heavy = {FRAME_pain2, FRAME_pain19, boss2_frames_pain_heavy, boss2_run};
+
+mmove_t boss2_move_pain_heavy = {
+	FRAME_pain2,
+	FRAME_pain19,
+	boss2_frames_pain_heavy,
+	boss2_run
+};
 
 mframe_t boss2_frames_pain_light[] = {
 	{ai_move, 0, NULL},
@@ -340,7 +406,13 @@ mframe_t boss2_frames_pain_light[] = {
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL}
 };
-mmove_t boss2_move_pain_light = {FRAME_pain20, FRAME_pain23, boss2_frames_pain_light, boss2_run};
+
+mmove_t boss2_move_pain_light = {
+	FRAME_pain20,
+	FRAME_pain23,
+	boss2_frames_pain_light,
+	boss2_run
+};
 
 mframe_t boss2_frames_death[] = {
 	{ai_move, 0, NULL},
@@ -393,7 +465,13 @@ mframe_t boss2_frames_death[] = {
 	{ai_move, 0, NULL},
 	{ai_move, 0, BossExplode}
 };
-mmove_t boss2_move_death = {FRAME_death2, FRAME_death50, boss2_frames_death, boss2_dead};
+
+mmove_t boss2_move_death = {
+	FRAME_death2,
+	FRAME_death50,
+	boss2_frames_death,
+	boss2_dead
+};
 
 void
 boss2_stand(edict_t *self)
@@ -502,8 +580,9 @@ boss2_reattack_mg(edict_t *self)
 	}
 }
 
-
-void boss2_pain (edict_t *self, edict_t *other, float kick, int damage)
+void
+boss2_pain(edict_t *self, edict_t *other /* unused */,
+		float kick /* unused */, int damage)
 {
 	if (!self)
 	{
@@ -511,26 +590,30 @@ void boss2_pain (edict_t *self, edict_t *other, float kick, int damage)
 	}
 
 	if (self->health < (self->max_health / 2))
+	{
 		self->s.skinnum = 1;
+	}
 
 	if (level.time < self->pain_debounce_time)
+	{
 		return;
+	}
 
 	self->pain_debounce_time = level.time + 3;
-	// American wanted these at no attenuation
+
 	if (damage < 10)
 	{
-		gi.sound (self, CHAN_VOICE, sound_pain3, 1, ATTN_NONE, 0);
+		gi.sound(self, CHAN_VOICE, sound_pain3, 1, ATTN_NONE, 0);
 		self->monsterinfo.currentmove = &boss2_move_pain_light;
 	}
 	else if (damage < 30)
 	{
-		gi.sound (self, CHAN_VOICE, sound_pain1, 1, ATTN_NONE, 0);
+		gi.sound(self, CHAN_VOICE, sound_pain1, 1, ATTN_NONE, 0);
 		self->monsterinfo.currentmove = &boss2_move_pain_light;
 	}
 	else
 	{
-		gi.sound (self, CHAN_VOICE, sound_pain2, 1, ATTN_NONE, 0);
+		gi.sound(self, CHAN_VOICE, sound_pain2, 1, ATTN_NONE, 0);
 		self->monsterinfo.currentmove = &boss2_move_pain_heavy;
 	}
 }
@@ -551,28 +634,31 @@ boss2_dead(edict_t *self)
 	gi.linkentity(self);
 }
 
-void boss2_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
+void
+boss2_die(edict_t *self, edict_t *inflictor /* unused */, edict_t *attacker /* unused */,
+		int damage /* unused */, const vec3_t point /* unused */)
 {
 	if (!self)
 	{
 		return;
 	}
 
-	gi.sound (self, CHAN_VOICE, sound_death, 1, ATTN_NONE, 0);
+	gi.sound(self, CHAN_VOICE, sound_death, 1, ATTN_NONE, 0);
 	self->deadflag = DEAD_DEAD;
 	self->takedamage = DAMAGE_NO;
 	self->count = 0;
 	self->monsterinfo.currentmove = &boss2_move_death;
 }
 
-qboolean Boss2_CheckAttack (edict_t *self)
+qboolean
+Boss2_CheckAttack(edict_t *self)
 {
-	vec3_t	spot1, spot2;
-	vec3_t	temp;
-	float	chance;
-	trace_t	tr;
-	int			enemy_range;
-	float		enemy_yaw;
+	vec3_t spot1, spot2;
+	vec3_t temp;
+	float chance;
+	trace_t tr;
+	int enemy_range;
+	float enemy_yaw;
 
 	if (!self)
 	{
@@ -581,45 +667,59 @@ qboolean Boss2_CheckAttack (edict_t *self)
 
 	if (self->enemy->health > 0)
 	{
-		// see if any entities are in the way of the shot
-		VectorCopy (self->s.origin, spot1);
+		/* see if any entities are in the way of the shot */
+		VectorCopy(self->s.origin, spot1);
 		spot1[2] += self->viewheight;
-		VectorCopy (self->enemy->s.origin, spot2);
+		VectorCopy(self->enemy->s.origin, spot2);
 		spot2[2] += self->enemy->viewheight;
 
-		tr = gi.trace (spot1, NULL, NULL, spot2, self, CONTENTS_SOLID|CONTENTS_MONSTER|CONTENTS_SLIME|CONTENTS_LAVA);
+		tr = gi.trace( spot1, NULL, NULL, spot2, self,
+				CONTENTS_SOLID | CONTENTS_MONSTER | CONTENTS_SLIME |
+				CONTENTS_LAVA);
 
-		// do we have a clear shot?
+		/* do we have a clear shot? */
 		if (tr.ent != self->enemy)
+		{
 			return false;
+		}
 	}
 
 	enemy_range = ai_range(self, self->enemy);
-	VectorSubtract (self->enemy->s.origin, self->s.origin, temp);
+	VectorSubtract(self->enemy->s.origin, self->s.origin, temp);
 	enemy_yaw = vectoyaw(temp);
 
 	self->ideal_yaw = enemy_yaw;
 
-
-	// melee attack
+	/* melee attack */
 	if (enemy_range == RANGE_MELEE)
 	{
 		if (self->monsterinfo.melee)
+		{
 			self->monsterinfo.attack_state = AS_MELEE;
+		}
 		else
+		{
 			self->monsterinfo.attack_state = AS_MISSILE;
+		}
+
 		return true;
 	}
 
-	// missile attack
+	/* missile attack */
 	if (!self->monsterinfo.attack)
+	{
 		return false;
+	}
 
 	if (level.time < self->monsterinfo.attack_finished)
+	{
 		return false;
+	}
 
 	if (enemy_range == RANGE_FAR)
+	{
 		return false;
+	}
 
 	if (self->monsterinfo.aiflags & AI_STAND_GROUND)
 	{
@@ -642,19 +742,23 @@ qboolean Boss2_CheckAttack (edict_t *self)
 		return false;
 	}
 
-	if (random () < chance)
+	if (random() < chance)
 	{
 		self->monsterinfo.attack_state = AS_MISSILE;
-		self->monsterinfo.attack_finished = level.time + 2*random();
+		self->monsterinfo.attack_finished = level.time + 2 * random();
 		return true;
 	}
 
 	if (self->flags & FL_FLY)
 	{
 		if (random() < 0.3)
+		{
 			self->monsterinfo.attack_state = AS_SLIDING;
+		}
 		else
+		{
 			self->monsterinfo.attack_state = AS_STRAIGHT;
+		}
 	}
 
 	return false;
@@ -713,4 +817,3 @@ SP_monster_boss2(edict_t *self)
 
 	flymonster_start(self);
 }
-

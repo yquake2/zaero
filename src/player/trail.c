@@ -1,23 +1,22 @@
+/* =======================================================================
+ *
+ * The player trail, used by monsters to locate the player.
+ *
+ * =======================================================================
+ */
+
 #include "../header/local.h"
 
-
 /*
-==============================================================================
+ * This is a circular list containing the a list of points of where
+ * the player has been recently.  It is used by monsters for pursuit.
+ *
+ * .origin		the spot
+ * .owner		forward link
+ * .aiment		backward link
+ */
 
-PLAYER TRAIL
-
-==============================================================================
-
-This is a circular list containing the a list of points of where
-the player has been recently.  It is used by monsters for pursuit.
-
-.origin		the spot
-.owner		forward link
-.aiment		backward link
-*/
-
-
-#define	TRAIL_LENGTH	8
+#define TRAIL_LENGTH 8
 
 edict_t		*trail[TRAIL_LENGTH];
 int			trail_head;
@@ -153,4 +152,3 @@ PlayerTrail_LastSpot(void)
 {
 	return trail[PREV(trail_head)];
 }
-

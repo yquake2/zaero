@@ -1342,4 +1342,3 @@ Info_SetValueForKey(char *s, const char *key, const char *value)
 
 	*s = 0;
 }
-

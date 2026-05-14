@@ -99,13 +99,8 @@ CanDamage(edict_t *targ, edict_t *inflictor)
 	return false;
 }
 
-
-/*
-============
-Killed
-============
-*/
-void Killed (edict_t *targ, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
+void
+Killed (edict_t *targ, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
 	if (!targ || !inflictor || !attacker)
 	{
@@ -255,9 +250,9 @@ CheckPowerArmor(edict_t *ent, const vec3_t point, const vec3_t normal,
 		vec3_t		forward;
 
 		// only works if damage point is in front
-		AngleVectors (ent->s.angles, forward, NULL, NULL);
-		VectorSubtract (point, ent->s.origin, vec);
-		VectorNormalize (vec);
+		AngleVectors(ent->s.angles, forward, NULL, NULL);
+		VectorSubtract(point, ent->s.origin, vec);
+		VectorNormalize(vec);
 		dot = DotProduct (vec, forward);
 		if (dot <= 0.3)
 			return 0;
@@ -640,7 +635,7 @@ T_Damage(edict_t *targ, edict_t *inflictor, edict_t *attacker, vec3_t dir,
 		client->damage_armor += asave;
 		client->damage_blood += take;
 		client->damage_knockback += knockback;
-		VectorCopy (point, client->damage_from);
+		VectorCopy(point, client->damage_from);
 	}
 }
 
@@ -671,18 +666,18 @@ T_RadiusDamage(edict_t *inflictor, edict_t *attacker, float damage, const edict_
 		if (!ent->takedamage)
 			continue;
 
-		VectorAdd (ent->mins, ent->maxs, v);
-		VectorMA (ent->s.origin, 0.5, v, v);
-		VectorSubtract (inflictor->s.origin, v, v);
+		VectorAdd(ent->mins, ent->maxs, v);
+		VectorMA(ent->s.origin, 0.5, v, v);
+		VectorSubtract(inflictor->s.origin, v, v);
 		points = damage - 0.5 * VectorLength (v);
 		if (ent == attacker)
 			points = points * 0.5;
 		if (points > 0)
 		{
-			if (CanDamage (ent, inflictor))
+			if (CanDamage(ent, inflictor))
 			{
-				VectorSubtract (ent->s.origin, inflictor->s.origin, dir);
-				T_Damage (ent, inflictor, attacker, dir, inflictor->s.origin, vec3_origin, (int)points, (int)points, DAMAGE_RADIUS, mod);
+				VectorSubtract(ent->s.origin, inflictor->s.origin, dir);
+				T_Damage(ent, inflictor, attacker, dir, inflictor->s.origin, vec3_origin, (int)points, (int)points, DAMAGE_RADIUS, mod);
 			}
 		}
 	}
@@ -714,18 +709,19 @@ void T_RadiusDamagePosition (vec3_t origin, edict_t *inflictor, edict_t *attacke
 		if (!ent->takedamage)
 			continue;
 
-		VectorAdd (ent->mins, ent->maxs, v);
-		VectorMA (ent->s.origin, 0.5, v, v);
-		VectorSubtract (origin, v, v);
+		VectorAdd(ent->mins, ent->maxs, v);
+		VectorMA(ent->s.origin, 0.5, v, v);
+		VectorSubtract(origin, v, v);
 		points = damage - 0.5 * VectorLength (v);
 		if (ent == attacker)
 			points = points * 0.5;
 		if (points > 0)
 		{
-			if (CanDamage (ent, inflictor))
+			if (CanDamage(ent, inflictor))
 			{
-				VectorSubtract (ent->s.origin, origin, dir);
-				T_Damage (ent, inflictor, attacker, dir, origin, vec3_origin, (int)points, (int)points, DAMAGE_RADIUS, mod);
+				VectorSubtract(ent->s.origin, origin, dir);
+				T_Damage(ent, inflictor, attacker, dir, origin, vec3_origin, (int)points, (int)points, DAMAGE_RADIUS,
+						mod);
 			}
 		}
 	}
