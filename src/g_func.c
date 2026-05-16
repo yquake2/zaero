@@ -1026,7 +1026,7 @@ void SP_func_rotating (edict_t *ent)
 	if (ent->spawnflags & 128)
 		ent->s.effects |= EF_ANIM_ALLFAST;
 
-	gi.setmodel (ent, ent->model);
+	gi.setmodel(ent, ent->model);
 
 	ent->moveinfo.state = STATE_STOPPED;
 	ent->moveinfo.current_speed = 0;
@@ -1180,7 +1180,7 @@ void SP_func_button (edict_t *ent)
 	G_SetMovedir (ent->s.angles, ent->movedir);
 	ent->movetype = MOVETYPE_STOP;
 	ent->solid = SOLID_BSP;
-	gi.setmodel (ent, ent->model);
+	gi.setmodel(ent, ent->model);
 
 	if (ent->sounds != 1)
 		ent->moveinfo.sound_start = gi.soundindex("switches/butn2.wav");
@@ -1392,7 +1392,7 @@ void door_go_up (edict_t *self, edict_t *activator)
 	else if (strcmp(self->classname, "func_door_rotating") == 0)
 		AngleMove_Calc (self, door_hit_top);
 
-	G_UseTargets (self, activator);
+	G_UseTargets(self, activator);
 	door_use_areaportals (self, true);
 }
 
@@ -1704,7 +1704,7 @@ void SP_func_door (edict_t *ent)
 	G_SetMovedir (ent->s.angles, ent->movedir);
 	ent->movetype = MOVETYPE_PUSH;
 	ent->solid = SOLID_BSP;
-	gi.setmodel (ent, ent->model);
+	gi.setmodel(ent, ent->model);
 
 	ent->blocked = door_blocked;
 	ent->use = door_use;
@@ -1851,7 +1851,7 @@ void SP_func_door_rotating (edict_t *ent)
 
 	ent->movetype = MOVETYPE_PUSH;
 	ent->solid = SOLID_BSP;
-	gi.setmodel (ent, ent->model);
+	gi.setmodel(ent, ent->model);
 
 	ent->blocked = door_blocked;
 	ent->use = door_use;
@@ -1949,7 +1949,7 @@ void SP_func_water (edict_t *self)
 	G_SetMovedir (self->s.angles, self->movedir);
 	self->movetype = MOVETYPE_PUSH;
 	self->solid = SOLID_BSP;
-	gi.setmodel (self, self->model);
+	gi.setmodel(self, self->model);
 
 	switch (self->sounds)
 	{
@@ -2310,7 +2310,7 @@ void SP_func_train (edict_t *self)
 			self->dmg = 100;
 	}
 	self->solid = SOLID_BSP;
-	gi.setmodel (self, self->model);
+	gi.setmodel(self, self->model);
 
 	if (st.noise)
 		self->moveinfo.sound_middle = gi.soundindex  (st.noise);
@@ -2504,7 +2504,7 @@ void func_timer_think (edict_t *self)
 
 	self->target = self->targets[randk() % self->numTargets];
 
-	G_UseTargets (self, self->activator);
+	G_UseTargets(self, self->activator);
 	self->nextthink = level.time + self->wait + crandom() * self->random;
 	self->target = NULL;
 }

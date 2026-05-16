@@ -331,7 +331,7 @@ void ED_CallSpawn (edict_t *ent)
 			continue;
 		if (!strcmp(item->classname, ent->classname))
 		{	// found it
-			SpawnItem (ent, item);
+			SpawnItem(ent, item);
 			return;
 		}
 	}
@@ -926,7 +926,7 @@ void SP_worldspawn (edict_t *ent)
 
 	snd_fry = gi.soundindex("player/fry.wav");	// standing in lava / slime
 
-	PrecacheItem (FindItem("Blaster"));
+	PrecacheItem(FindItem("Blaster"));
 
 	gi.soundindex("player/lava1.wav");
 	gi.soundindex("player/lava2.wav");

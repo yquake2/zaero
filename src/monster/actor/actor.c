@@ -252,7 +252,7 @@ void actor_pain (edict_t *self, edict_t *other, float kick, int damage)
 		else
 			self->monsterinfo.currentmove = &actor_move_taunt;
 		name = actor_names[(self - g_edicts)%MAX_ACTOR_NAMES];
-		gi.cprintf (other, PRINT_CHAT, "%s: %s!\n", name, messages[randk()%3]);
+		gi.cprintf(other, PRINT_CHAT, "%s: %s!\n", name, messages[randk()%3]);
 		return;
 	}
 
@@ -553,7 +553,7 @@ void target_actor_touch (edict_t *self, edict_t *other, const cplane_t *plane, c
 			ent = &g_edicts[n];
 			if (!ent->inuse)
 				continue;
-			gi.cprintf (ent, PRINT_CHAT, "%s: %s\n", actor_names[(other - g_edicts)%MAX_ACTOR_NAMES], self->message);
+			gi.cprintf(ent, PRINT_CHAT, "%s: %s\n", actor_names[(other - g_edicts)%MAX_ACTOR_NAMES], self->message);
 		}
 	}
 
@@ -599,7 +599,7 @@ void target_actor_touch (edict_t *self, edict_t *other, const cplane_t *plane, c
 
 		savetarget = self->target;
 		self->target = self->pathtarget;
-		G_UseTargets (self, other);
+		G_UseTargets(self, other);
 		self->target = savetarget;
 	}
 

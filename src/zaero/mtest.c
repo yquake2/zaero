@@ -359,7 +359,7 @@ void Cmd_TestItem (edict_t *ent)
 		{
 			animUpto++;
 
-			gi.cprintf (ent, PRINT_HIGH, "Animation %d set\n", animUpto);
+			gi.cprintf(ent, PRINT_HIGH, "Animation %d set\n", animUpto);
 		}
 	}
 	else if (Q_stricmp (cmd, "animprev") == 0)
@@ -368,7 +368,7 @@ void Cmd_TestItem (edict_t *ent)
 		{
 			animUpto--;
 
-			gi.cprintf (ent, PRINT_HIGH, "Animation %d set\n", animUpto);
+			gi.cprintf(ent, PRINT_HIGH, "Animation %d set\n", animUpto);
 		}
 	}
 	else if (Q_stricmp (cmd, "animspeed") == 0)
@@ -377,7 +377,7 @@ void Cmd_TestItem (edict_t *ent)
 
 		if(as < 1.0)
 		{
-			gi.cprintf (ent, PRINT_HIGH, "AnimSpeed must be greater than or equal to 1\n");
+			gi.cprintf(ent, PRINT_HIGH, "AnimSpeed must be greater than or equal to 1\n");
 			return;
 		}
 
@@ -388,7 +388,7 @@ void Cmd_TestItem (edict_t *ent)
 		if(testItemDroped)
 		{
 			testitemOriginMove = true;
-			gi.cprintf (ent, PRINT_HIGH, "testitem move start\n");
+			gi.cprintf(ent, PRINT_HIGH, "testitem move start\n");
 		}
 	}
 	else if (Q_stricmp (cmd, "moveend") == 0)
@@ -396,7 +396,7 @@ void Cmd_TestItem (edict_t *ent)
 		if(testItemDroped)
 		{
 			testitemOriginMove = false;
-			gi.cprintf (ent, PRINT_HIGH, "testitem move end\n");
+			gi.cprintf(ent, PRINT_HIGH, "testitem move end\n");
 		}
 	}
 	else if (Q_stricmp (cmd, "rotatestart") == 0)
@@ -404,7 +404,7 @@ void Cmd_TestItem (edict_t *ent)
 		if(testItemDroped)
 		{
 			testItemDroped->s.effects = EF_ROTATE;
-			gi.cprintf (ent, PRINT_HIGH, "Rotate On\n");
+			gi.cprintf(ent, PRINT_HIGH, "Rotate On\n");
 		}
 	}
 	else if (Q_stricmp (cmd, "rotateend") == 0)
@@ -412,12 +412,12 @@ void Cmd_TestItem (edict_t *ent)
 		if(testItemDroped)
 		{
 			testItemDroped->s.effects = 0;
-			gi.cprintf (ent, PRINT_HIGH, "Rotate Off\n");
+			gi.cprintf(ent, PRINT_HIGH, "Rotate Off\n");
 		}
 	}
 	else
 	{
-		gi.cprintf (ent, PRINT_HIGH, "Bad testitem command\n");
+		gi.cprintf(ent, PRINT_HIGH, "Bad testitem command\n");
 	}
 }
 
@@ -540,7 +540,7 @@ void Drop_TestItem (edict_t *ent, const gitem_t *item)
 	testItemDroped->s.renderfx = RF_GLOW;
 	VectorCopy(testItem_Size[0], testItemDroped->mins);
 	VectorCopy(testItem_Size[1], testItemDroped->maxs);
-	gi.setmodel (testItemDroped, testItemDroped->item->world_model);
+	gi.setmodel(testItemDroped, testItemDroped->item->world_model);
 	testItemDroped->s.skinnum = 0;
 	testItemDroped->solid = SOLID_TRIGGER;
 	testItemDroped->movetype = MOVETYPE_TOSS;
@@ -573,7 +573,7 @@ void Drop_TestItem (edict_t *ent, const gitem_t *item)
 	gi.linkentity(testItemDroped);
 
 	ent->client->pers.inventory[ITEM_INDEX(item)]--;
-	ValidateSelectedItem (ent);
+	ValidateSelectedItem(ent);
 }
 
 #endif

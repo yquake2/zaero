@@ -10,7 +10,7 @@
 
 void	Svcmd_Test_f (void)
 {
-	gi.cprintf (NULL, PRINT_HIGH, "Svcmd_Test_f()\n");
+	gi.cprintf(NULL, PRINT_HIGH, "Svcmd_Test_f()\n");
 }
 
 /*
@@ -30,6 +30,6 @@ void	ServerCommand (void)
 	if (Q_stricmp (cmd, "test") == 0)
 		Svcmd_Test_f ();
 	else
-		gi.cprintf (NULL, PRINT_HIGH, "Unknown server command \"%s\"\n", cmd);
+		gi.cprintf(NULL, PRINT_HIGH, "Unknown server command \"%s\"\n", cmd);
 }
 

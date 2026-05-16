@@ -20,7 +20,7 @@ void InitTrigger (edict_t *self)
 
 	self->solid = SOLID_TRIGGER;
 	self->movetype = MOVETYPE_NONE;
-	gi.setmodel (self, self->model);
+	gi.setmodel(self, self->model);
 	self->svflags = SVF_NOCLIENT;
 }
 
@@ -243,7 +243,7 @@ void trigger_relay_use (edict_t *self, edict_t *other, edict_t *activator)
 		return;
 	}
 
-	G_UseTargets (self, activator);
+	G_UseTargets(self, activator);
 }
 
 void
@@ -340,7 +340,7 @@ void trigger_key_use (edict_t *self, edict_t *other, edict_t *activator)
 		activator->client->pers.inventory[index]--;
 	}
 
-	G_UseTargets (self, activator);
+	G_UseTargets(self, activator);
 
 	self->use = NULL;
 }

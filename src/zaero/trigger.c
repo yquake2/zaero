@@ -159,7 +159,7 @@ void trigger_laser_think (edict_t *self)
 	else
 	{
 		// trigger
-		G_UseTargets (self, tr.ent);
+		G_UseTargets(self, tr.ent);
 
 		if (self->spawnflags & TRIGGER_MULTIPLE)
 		{

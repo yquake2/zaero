@@ -210,7 +210,7 @@ void Cmd_Give_f (edict_t *ent)
 
 	if (deathmatch->value && !sv_cheats->value)
 	{
-		gi.cprintf (ent, PRINT_HIGH, "You must run the server with '+set cheats 1' to enable this command.\n");
+		gi.cprintf(ent, PRINT_HIGH, "You must run the server with '+set cheats 1' to enable this command.\n");
 		return;
 	}
 
@@ -285,8 +285,8 @@ void Cmd_Give_f (edict_t *ent)
 		it = FindItem("Visor");
 		it_ent = G_Spawn();
 		it_ent->classname = it->classname;
-		SpawnItem (it_ent, it);
-		Touch_Item (it_ent, ent, NULL, NULL);
+		SpawnItem(it_ent, it);
+		Touch_Item(it_ent, ent, NULL, NULL);
 		if (it_ent->inuse)
 			G_FreeEdict(it_ent);
 
@@ -299,8 +299,8 @@ void Cmd_Give_f (edict_t *ent)
 		it = FindItem("Power Shield");
 		it_ent = G_Spawn();
 		it_ent->classname = it->classname;
-		SpawnItem (it_ent, it);
-		Touch_Item (it_ent, ent, NULL, NULL);
+		SpawnItem(it_ent, it);
+		Touch_Item(it_ent, ent, NULL, NULL);
 		if (it_ent->inuse)
 			G_FreeEdict(it_ent);
 
@@ -367,8 +367,8 @@ void Cmd_Give_f (edict_t *ent)
 	{
 		it_ent = G_Spawn();
 		it_ent->classname = it->classname;
-		SpawnItem (it_ent, it);
-		Touch_Item (it_ent, ent, NULL, NULL);
+		SpawnItem(it_ent, it);
+		Touch_Item(it_ent, ent, NULL, NULL);
 		if (it_ent->inuse)
 			G_FreeEdict(it_ent);
 	}
@@ -505,18 +505,18 @@ qboolean tryUse(edict_t *ent, char *s)
 
 	if (!it)
 	{
-		gi.cprintf (ent, PRINT_HIGH, "unknown item: %s\n", s);
+		gi.cprintf(ent, PRINT_HIGH, "unknown item: %s\n", s);
 		return false;
 	}
 	if (!it->use)
 	{
-		gi.cprintf (ent, PRINT_HIGH, "Item is not usable.\n");
+		gi.cprintf(ent, PRINT_HIGH, "Item is not usable.\n");
 		return false;
 	}
 	index = ITEM_INDEX(it);
 	if (!ent->client->pers.inventory[index])
 	{
-		gi.cprintf (ent, PRINT_HIGH, "Out of item: %s\n", s);
+		gi.cprintf(ent, PRINT_HIGH, "Out of item: %s\n", s);
 		return false;
 	}
 	it->use (ent, it);
@@ -562,7 +562,7 @@ void altSelect(edict_t *ent, int num)
 	// within range?
 	if (num < 1 || num > 10)
 	{
-		gi.cprintf (ent, PRINT_HIGH, "Invalid weapon index: %i\n", num);
+		gi.cprintf(ent, PRINT_HIGH, "Invalid weapon index: %i\n", num);
 		return;
 	}
 
@@ -623,18 +623,18 @@ void Cmd_Use_f (edict_t *ent)
 	it = FindItem(s);
 	if (!it)
 	{
-		gi.cprintf (ent, PRINT_HIGH, "unknown item: %s\n", s);
+		gi.cprintf(ent, PRINT_HIGH, "unknown item: %s\n", s);
 		return;
 	}
 	if (!it->use)
 	{
-		gi.cprintf (ent, PRINT_HIGH, "Item is not usable.\n");
+		gi.cprintf(ent, PRINT_HIGH, "Item is not usable.\n");
 		return;
 	}
 	index = ITEM_INDEX(it);
 	if (!ent->client->pers.inventory[index])
 	{
-		gi.cprintf (ent, PRINT_HIGH, "Out of item: %s\n", s);
+		gi.cprintf(ent, PRINT_HIGH, "Out of item: %s\n", s);
 		return;
 	}
 
@@ -743,18 +743,18 @@ void Cmd_InvUse_f (edict_t *ent)
 		return;
 	}
 
-	ValidateSelectedItem (ent->client);
+	ValidateSelectedItem(ent->client);
 
 	if (ent->client->pers.selected_item == -1)
 	{
-		gi.cprintf (ent, PRINT_HIGH, "No item to use.\n");
+		gi.cprintf(ent, PRINT_HIGH, "No item to use.\n");
 		return;
 	}
 
 	it = &itemlist[ent->client->pers.selected_item];
 	if (!it->use)
 	{
-		gi.cprintf (ent, PRINT_HIGH, "Item is not usable.\n");
+		gi.cprintf(ent, PRINT_HIGH, "Item is not usable.\n");
 		return;
 	}
 	it->use (ent, it);
@@ -943,18 +943,18 @@ void Cmd_InvDrop_f (edict_t *ent)
 		return;
 	}
 
-	ValidateSelectedItem (ent->client);
+	ValidateSelectedItem(ent->client);
 
 	if (ent->client->pers.selected_item == -1)
 	{
-		gi.cprintf (ent, PRINT_HIGH, "No item to drop.\n");
+		gi.cprintf(ent, PRINT_HIGH, "No item to drop.\n");
 		return;
 	}
 
 	it = &itemlist[ent->client->pers.selected_item];
 	if (!it->drop)
 	{
-		gi.cprintf (ent, PRINT_HIGH, "Item is not dropable.\n");
+		gi.cprintf(ent, PRINT_HIGH, "Item is not dropable.\n");
 		return;
 	}
 	it->drop (ent, it);
@@ -1067,7 +1067,7 @@ void Cmd_Players_f (edict_t *ent)
 		strcat (large, small);
 	}
 
-	gi.cprintf (ent, PRINT_HIGH, "%s\n%i players\n", large, count);
+	gi.cprintf(ent, PRINT_HIGH, "%s\n%i players\n", large, count);
 }
 
 void
@@ -1761,7 +1761,7 @@ void ClientCommand (edict_t *ent)
 
     if(ls <= 0.0)
     {
-      gi.cprintf (ent, PRINT_HIGH, "LineSize must be greater than 0\n");
+      gi.cprintf(ent, PRINT_HIGH, "LineSize must be greater than 0\n");
       return;
     }
 

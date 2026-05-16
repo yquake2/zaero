@@ -196,7 +196,7 @@ ThrowGib(edict_t *self, const char *gibname, int damage, gibtype_t type)
 	gib->s.origin[1] = origin[1] + crandom() * size[1];
 	gib->s.origin[2] = origin[2] + crandom() * size[2];
 
-	gi.setmodel (gib, gibname);
+	gi.setmodel(gib, gibname);
 	gib->solid = SOLID_NOT;
 	gib->s.effects |= EF_GIB;
 	gib->flags |= FL_NO_KNOCKBACK;
@@ -245,7 +245,7 @@ ThrowHead(edict_t *self, const char *gibname, int damage, gibtype_t type)
 	VectorClear(self->maxs);
 
 	self->s.modelindex2 = 0;
-	gi.setmodel (self, gibname);
+	gi.setmodel(self, gibname);
 	self->solid = SOLID_NOT;
 	self->s.effects |= EF_GIB;
 	self->s.effects &= ~EF_FLIES;
@@ -303,7 +303,7 @@ void ThrowClientHead (edict_t *self, int damage)
 
 	self->s.origin[2] += 32;
 	self->s.frame = 0;
-	gi.setmodel (self, gibname);
+	gi.setmodel(self, gibname);
 	VectorSet(self->mins, -16, -16, 0);
 	VectorSet(self->maxs, 16, 16, 16);
 
@@ -367,7 +367,7 @@ void ThrowDebris (edict_t *self, char *modelname, float speed, vec3_t origin)
 
 	chunk = G_Spawn();
 	VectorCopy(origin, chunk->s.origin);
-	gi.setmodel (chunk, modelname);
+	gi.setmodel(chunk, modelname);
 	v[0] = 100 * crandom();
 	v[1] = 100 * crandom();
 	v[2] = 100 + 100 * crandom();
@@ -448,7 +448,7 @@ void path_corner_touch (edict_t *self, edict_t *other, const cplane_t *plane, co
 
 		savetarget = self->target;
 		self->target = self->pathtarget;
-		G_UseTargets (self, other);
+		G_UseTargets(self, other);
 		self->target = savetarget;
 	}
 
@@ -575,7 +575,7 @@ void point_combat_touch (edict_t *self, edict_t *other, const cplane_t *plane, c
 			activator = other->activator;
 		else
 			activator = other;
-		G_UseTargets (self, activator);
+		G_UseTargets(self, activator);
 		self->target = savetarget;
 	}
 }
@@ -1009,7 +1009,7 @@ void func_explosive_explode (edict_t *self, edict_t *inflictor, edict_t *attacke
 		ThrowDebris (self, "models/objects/debris2/tris.md2", 2, chunkorigin);
 	}
 
-	G_UseTargets (self, attacker);
+	G_UseTargets(self, attacker);
 
 	if (self->dmg)
 		BecomeExplosion1 (self);
@@ -1790,7 +1790,7 @@ void misc_viper_bomb_touch (edict_t *self, edict_t *other, const cplane_t *plane
 		return;
 	}
 
-	G_UseTargets (self, self->activator);
+	G_UseTargets(self, self->activator);
 
 	self->s.origin[2] = self->absmin[2] + 1;
 	T_RadiusDamage (self, self, self->dmg, self, self->dmg+40, MOD_BOMB);
@@ -2034,7 +2034,7 @@ void SP_misc_gib_arm (edict_t *ent)
 		return;
 	}
 
-	gi.setmodel (ent, "models/objects/gibs/arm/tris.md2");
+	gi.setmodel(ent, "models/objects/gibs/arm/tris.md2");
 	ent->solid = SOLID_NOT;
 	ent->s.effects |= EF_GIB;
 	ent->takedamage = DAMAGE_YES;
@@ -2060,7 +2060,7 @@ void SP_misc_gib_leg (edict_t *ent)
 		return;
 	}
 
-	gi.setmodel (ent, "models/objects/gibs/leg/tris.md2");
+	gi.setmodel(ent, "models/objects/gibs/leg/tris.md2");
 	ent->solid = SOLID_NOT;
 	ent->s.effects |= EF_GIB;
 	ent->takedamage = DAMAGE_YES;
@@ -2086,7 +2086,7 @@ void SP_misc_gib_head (edict_t *ent)
 		return;
 	}
 
-	gi.setmodel (ent, "models/objects/gibs/head/tris.md2");
+	gi.setmodel(ent, "models/objects/gibs/head/tris.md2");
 	ent->solid = SOLID_NOT;
 	ent->s.effects |= EF_GIB;
 	ent->takedamage = DAMAGE_YES;
@@ -2518,7 +2518,7 @@ void SP_misc_teleporter (edict_t *ent)
 		return;
 	}
 
-	gi.setmodel (ent, "models/objects/dmspot/tris.md2");
+	gi.setmodel(ent, "models/objects/dmspot/tris.md2");
 	ent->s.skinnum = 1;
 	ent->s.effects = EF_TELEPORTER;
 	ent->s.sound = gi.soundindex("world/amb10.wav");

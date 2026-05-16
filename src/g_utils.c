@@ -168,7 +168,7 @@ match (string)self.target and call their .use function
 
 ==============================
 */
-void G_UseTargets (edict_t *ent, edict_t *activator)
+void G_UseTargets(edict_t *ent, edict_t *activator)
 {
 	edict_t		*t;
 

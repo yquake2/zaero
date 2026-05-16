@@ -258,7 +258,7 @@ void use_target_secret (edict_t *ent, edict_t *other, edict_t *activator)
 
 	level.found_secrets++;
 
-	G_UseTargets (ent, activator);
+	G_UseTargets(ent, activator);
 	G_FreeEdict(ent);
 }
 
@@ -306,7 +306,7 @@ void use_target_goal (edict_t *ent, edict_t *other, edict_t *activator)
 	if (level.found_goals == level.total_goals)
 		gi.configstring (CS_CDTRACK, "0");
 
-	G_UseTargets (ent, activator);
+	G_UseTargets(ent, activator);
 	G_FreeEdict(ent);
 }
 
@@ -405,7 +405,7 @@ void target_explosion_explode (edict_t *self)
 
 	save = self->delay;
 	self->delay = 0;
-	G_UseTargets (self, self->activator);
+	G_UseTargets(self, self->activator);
 	self->delay = save;
 }
 
