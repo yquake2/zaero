@@ -1145,6 +1145,9 @@ SelectSpawnPoint(const edict_t *ent, vec3_t origin, vec3_t angles)
 	VectorClear(origin);
 	VectorClear(angles);
 
+	VectorClear(origin);
+	VectorClear(angles);
+
 	if (!ent)
 	{
 		return;
