@@ -308,7 +308,6 @@ InfantryMachineGun(edict_t *self)
 {
 	vec3_t start, target;
 	vec3_t forward, right;
-	vec3_t vec;
 	int flash_number;
 
 	if (!self)
@@ -337,6 +336,8 @@ InfantryMachineGun(edict_t *self)
 	}
 	else
 	{
+		vec3_t vec;
+
 		flash_number = MZ2_INFANTRY_MACHINEGUN_2 + (self->s.frame - FRAME_death211);
 
 		AngleVectors(self->s.angles, forward, right, NULL);

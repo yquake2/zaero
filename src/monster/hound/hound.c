@@ -588,8 +588,6 @@ mmove_t hound_move_death = {FRAME_die1Start, FRAME_die1End, hound_frames_death, 
 
 void hound_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
-	int		n;
-
 	if (!self)
 	{
 		return;
@@ -598,18 +596,28 @@ void hound_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage
 	// check for gib
 	if (self->health <= self->gib_health)
 	{
+		int n;
+
 		gi.sound(self, CHAN_VOICE, gi.soundindex("misc/udeath.wav"), 1, ATTN_NORM, 0);
-		for (n= 0; n < 2; n++)
+		for (n =  0; n < 2; n++)
+		{
 			ThrowGib(self, "models/objects/gibs/bone/tris.md2", damage, GIB_ORGANIC);
-		for (n= 0; n < 4; n++)
+		}
+
+		for (n = 0; n < 4; n++)
+		{
 			ThrowGib(self, "models/objects/gibs/sm_meat/tris.md2", damage, GIB_ORGANIC);
+		}
+
 		ThrowHead(self, "models/objects/gibs/head2/tris.md2", damage, GIB_ORGANIC);
 		self->deadflag = DEAD_DEAD;
 		return;
 	}
 
 	if (self->deadflag == DEAD_DEAD)
+	{
 		return;
+	}
 
 	// regular death
 	gi.sound(self, CHAN_VOICE, sound_die, 1, ATTN_NORM, 0);
@@ -625,7 +633,8 @@ End Death Stuff
 ===
 */
 
-void SP_monster_hound_precache(void)
+void
+SP_monster_hound_precache(void)
 {
 	sound_pain1 = gi.soundindex("monsters/hound/hpain1.wav");
 	sound_pain2 = gi.soundindex("monsters/hound/hpain2.wav");
@@ -639,9 +648,11 @@ void SP_monster_hound_precache(void)
 }
 
 
-/*QUAKED monster_hound (1 .5 0) (-16 -16 -24) (16 16 32) Ambush Trigger_Spawn Sight
-*/
-void SP_monster_hound (edict_t *self)
+/*
+ * QUAKED monster_hound (1 .5 0) (-16 -16 -24) (16 16 32) Ambush Trigger_Spawn Sight
+ */
+void
+SP_monster_hound(edict_t *self)
 {
 	if (!self)
 	{
@@ -700,10 +711,11 @@ void SP_monster_hound (edict_t *self)
 	walkmonster_start (self);
 }
 
-
 void monster_think (edict_t *self);
 qboolean monster_start (edict_t *self);
-void hound_createHound(edict_t *self, float healthPercent)
+
+void
+hound_createHound(edict_t *self, float healthPercent)
 {
 	edict_t *hound;
 
@@ -760,5 +772,3 @@ void hound_createHound(edict_t *self, float healthPercent)
 	// move the fucker now!!!
 	ai_move (hound, 20);
 }
-
-

@@ -759,8 +759,6 @@ mutant_die(edict_t *self, edict_t *inflictor /* unused */,
 		edict_t *attacker /* unused */, int damage,
 		const vec3_t point /* unused */)
 {
-	int n;
-
 	if (!self)
 	{
 		return;
@@ -768,6 +766,8 @@ mutant_die(edict_t *self, edict_t *inflictor /* unused */,
 
 	if (self->health <= self->gib_health)
 	{
+		int n;
+
 		gi.sound(self, CHAN_VOICE, gi.soundindex("misc/udeath.wav"), 1, ATTN_NORM, 0);
 
 		for (n = 0; n < 2; n++)

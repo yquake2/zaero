@@ -577,8 +577,10 @@ extern	cvar_t	*password;
 extern	cvar_t	*g_select_empty;
 extern	cvar_t	*dedicated;
 
-extern	cvar_t	*sv_gravity;
-extern	cvar_t	*sv_maxvelocity;
+extern cvar_t *filterban;
+
+extern cvar_t *sv_gravity;
+extern cvar_t *sv_maxvelocity;
 
 extern	cvar_t	*gun_x, *gun_y, *gun_z;
 extern	cvar_t	*sv_rollspeed;
@@ -836,7 +838,7 @@ void player_die(edict_t *self, edict_t *inflictor, edict_t *attacker,
 
 /* g_svcmds.c */
 void ServerCommand(void);
-qboolean SV_FilterPacket(char *from);
+qboolean SV_FilterPacket(const char *from);
 
 /* p_view.c */
 void ClientEndServerFrame(edict_t *ent);

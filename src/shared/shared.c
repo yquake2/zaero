@@ -1075,10 +1075,9 @@ Com_sprintf(char *dest, int size, const char *fmt, ...)
 	len = vsnprintf(bigbuffer, 0x10000, fmt, argptr);
 	va_end(argptr);
 
-	if ((len >= size) || (len == size))
+	if (len >= size)
 	{
 		Com_Printf("Com_sprintf: overflow\n");
-		len = size - 1;
 	}
 
 	bigbuffer[size - 1] = '\0';

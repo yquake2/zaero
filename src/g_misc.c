@@ -122,20 +122,22 @@ gib_think(edict_t *self)
 
 void gib_touch (edict_t *self, edict_t *other, const cplane_t *plane, const csurface_t *surf)
 {
-	vec3_t	normal_angles, right;
-
 	if (!self)
 	{
 		return;
 	}
 
 	if (!self->groundentity)
+	{
 		return;
+	}
 
 	self->touch = NULL;
 
 	if (plane)
 	{
+		vec3_t normal_angles, right;
+
 		gi.sound(self, CHAN_VOICE, gi.soundindex("misc/fhit3.wav"), 1, ATTN_NORM, 0);
 
 		vectoangles(plane->normal, normal_angles);
@@ -2158,7 +2160,7 @@ static void
 _target_string_apply(edict_t *tm, const char *str)
 {
 	edict_t *e;
-	size_t l, n;
+	size_t l;
 
 	l = str ? strlen(str) : 0;
 
@@ -2166,6 +2168,8 @@ _target_string_apply(edict_t *tm, const char *str)
 	{
 		if (e->count > 0)
 		{
+			int n;
+
 			n = e->count - 1;
 			e->s.frame = _target_character_getframe((n < l) ? str[n] : ' ');
 		}

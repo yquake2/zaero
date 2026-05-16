@@ -295,8 +295,6 @@ void M_CatagorizePosition (edict_t *ent)
 void
 M_WorldEffects(edict_t *ent)
 {
-	int dmg;
-
 	if (!ent)
 	{
 		return;
@@ -315,6 +313,8 @@ M_WorldEffects(edict_t *ent)
 				/* drown! */
 				if (ent->pain_debounce_time < level.time)
 				{
+					int dmg;
+
 					dmg = 2 + 2 * floor(level.time - ent->air_finished);
 
 					if (dmg > 15)
@@ -339,6 +339,8 @@ M_WorldEffects(edict_t *ent)
 				/* suffocate! */
 				if (ent->pain_debounce_time < level.time)
 				{
+					int dmg;
+
 					dmg = 2 + 2 * floor(level.time - ent->air_finished);
 
 					if (dmg > 15)
@@ -766,8 +768,6 @@ qboolean monster_start (edict_t *self)
 void
 monster_start_go(edict_t *self)
 {
-	vec3_t v;
-
 	if (!self)
 	{
 		return;
@@ -850,6 +850,8 @@ monster_start_go(edict_t *self)
 		}
 		else if (strcmp(self->movetarget->classname, "path_corner") == 0)
 		{
+			vec3_t v;
+
 			VectorSubtract(self->goalentity->s.origin, self->s.origin, v);
 			self->ideal_yaw = self->s.angles[YAW] = vectoyaw(v);
 			self->monsterinfo.walk(self);

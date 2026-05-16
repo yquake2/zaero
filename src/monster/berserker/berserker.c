@@ -267,13 +267,6 @@ mmove_t berserk_move_attack_club = {
 	berserk_run
 };
 
-void
-berserk_strike(edict_t *self)
-{
-	/* Unused, but removal is
-	   very PITA. Let it be... */
-}
-
 mframe_t berserk_frames_attack_strike[] = {
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL},
@@ -282,7 +275,7 @@ mframe_t berserk_frames_attack_strike[] = {
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL},
-	{ai_move, 0, berserk_strike},
+	{ai_move, 0, NULL},
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL},
 	{ai_move, 0, NULL},
@@ -458,8 +451,6 @@ void
 berserk_die(edict_t *self, edict_t *inflictor /* unsued */, edict_t *attacker /* unused */,
 		int damage, const vec3_t point /* unused */)
 {
-	int n;
-
 	if (!self)
 	{
 		return;
@@ -467,6 +458,8 @@ berserk_die(edict_t *self, edict_t *inflictor /* unsued */, edict_t *attacker /*
 
 	if (self->health <= self->gib_health)
 	{
+		int n;
+
 		gi.sound(self, CHAN_VOICE, gi.soundindex( "misc/udeath.wav"), 1, ATTN_NORM, 0);
 
 		for (n = 0; n < 2; n++)

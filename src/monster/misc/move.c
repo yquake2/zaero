@@ -107,10 +107,8 @@ realcheck:
 qboolean
 SV_movestep(edict_t *ent, vec3_t move, qboolean relink)
 {
-	float dz;
 	vec3_t oldorg, neworg, end;
 	trace_t trace;
-	int i;
 	float stepsize;
 	vec3_t test;
 	int contents;
@@ -127,6 +125,8 @@ SV_movestep(edict_t *ent, vec3_t move, qboolean relink)
 	/* flying monsters don't step up */
 	if (ent->flags & (FL_SWIM | FL_FLY))
 	{
+		int i;
+
 		/* try one move with vertical motion, then one without */
 		for (i = 0; i < 2; i++)
 		{
@@ -134,6 +134,8 @@ SV_movestep(edict_t *ent, vec3_t move, qboolean relink)
 
 			if ((i == 0) && ent->enemy)
 			{
+				float dz;
+
 				if (!ent->goalentity)
 				{
 					ent->goalentity = ent->enemy;
@@ -427,7 +429,6 @@ qboolean
 SV_StepDirection(edict_t *ent, float yaw, float dist)
 {
 	vec3_t move, oldorigin;
-	float delta;
 
 	if (!ent)
 	{
@@ -446,6 +447,8 @@ SV_StepDirection(edict_t *ent, float yaw, float dist)
 
 	if (SV_movestep(ent, move, false))
 	{
+		float delta;
+
 		delta = ent->s.angles[YAW] - ent->ideal_yaw;
 
 		if ((delta > 45) && (delta < 315))
@@ -694,7 +697,6 @@ qboolean M_MoveAwayFromFlare(edict_t *self, float dist)
 	edict_t *e = NULL;
 	edict_t *goal = NULL;
 	vec3_t delta;
-	vec3_t forward;
 
 	if (!self)
 	{
@@ -716,6 +718,8 @@ qboolean M_MoveAwayFromFlare(edict_t *self, float dist)
 	self->goalentity = goal;
 	if (e == NULL)
 	{
+		vec3_t forward;
+
 		// just move forward
 		AngleVectors(self->s.angles, forward, NULL, NULL);
 		VectorMA(self->s.origin, 128, forward, goal->s.origin);

@@ -559,8 +559,6 @@ void sentien_blast_attack(edict_t *self)
 
 void sentien_post_blast_attack(edict_t *self)
 {
-	float refire = 0.25;
-
 	if (!self)
 	{
 		return;
@@ -569,18 +567,30 @@ void sentien_post_blast_attack(edict_t *self)
 	if (visible(self, self->enemy) &&
 		infront(self, self->enemy))
 	{
+		float refire = 0.25;
+
 		if(skill->value == SKILL_MEDIUM)
+		{
 			refire = 0.40;
+		}
 		else if(skill->value == SKILL_HARD)
+		{
 			refire = 0.60;
+		}
 		else if(skill->value >= SKILL_HARDPLUS)
+		{
 			refire = 0.75;
+		}
 
 		if (random() > refire)
+		{
 			self->monsterinfo.currentmove = &sentien_move_post_blast_attack;
+		}
 	}
 	else
+	{
 		self->monsterinfo.currentmove = &sentien_move_post_blast_attack;
+	}
 }
 
 void sentien_fire_bullet (edict_t *self, vec3_t start, vec3_t dir, int damage)
@@ -750,9 +760,7 @@ vec3_t sentien_laser_offset [] =
 
 void sentien_do_laser(edict_t *self)
 {
-	vec3_t start, end, forward, right, up;
-	vec3_t   aim, ang;
-	float      r;
+	vec3_t start, end, forward, right, up, ang;
 	int idx;
 
 	if(EMPNukeCheck(self, self->s.origin))
@@ -778,6 +786,9 @@ void sentien_do_laser(edict_t *self)
 
 	if(self->s.frame == FRAME_laserStart)
 	{
+		vec3_t aim;
+		float r;
+
 		VectorCopy(self->enemy->s.origin, end);
 		end[2] += self->enemy->viewheight * 66/100;
 

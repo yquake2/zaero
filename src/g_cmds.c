@@ -1543,7 +1543,7 @@ Cmd_CycleWeap_f(edict_t *ent)
 }
 
 static gitem_t *
-preferred_weapon(edict_t *ent)
+preferred_weapon(const edict_t *ent)
 {
 	const gclient_t *cl;
 	gitem_t *noammo_fallback;

@@ -22,31 +22,33 @@ edict_t *g_edicts;
 
 cvar_t *deathmatch;
 cvar_t *coop;
-cvar_t	*dmflags;
-cvar_t	*zdmflags;
-cvar_t	*skill;
-cvar_t	*fraglimit;
-cvar_t	*timelimit;
-cvar_t	*password;
-cvar_t	*maxclients;
-cvar_t	*maxentities;
-cvar_t	*g_select_empty;
-cvar_t	*dedicated;
+cvar_t *dmflags;
+cvar_t *zdmflags;
+cvar_t *skill;
+cvar_t *fraglimit;
+cvar_t *timelimit;
+cvar_t *password;
+cvar_t *maxclients;
+cvar_t *maxentities;
+cvar_t *g_select_empty;
+cvar_t *dedicated;
 
-cvar_t	*sv_maxvelocity;
-cvar_t	*sv_gravity;
+cvar_t *filterban;
 
-cvar_t	*sv_rollspeed;
-cvar_t	*sv_rollangle;
-cvar_t	*gun_x;
-cvar_t	*gun_y;
-cvar_t	*gun_z;
+cvar_t *sv_maxvelocity;
+cvar_t *sv_gravity;
 
-cvar_t	*run_pitch;
-cvar_t	*run_roll;
-cvar_t	*bob_up;
-cvar_t	*bob_pitch;
-cvar_t	*bob_roll;
+cvar_t *sv_rollspeed;
+cvar_t *sv_rollangle;
+cvar_t *gun_x;
+cvar_t *gun_y;
+cvar_t *gun_z;
+
+cvar_t *run_pitch;
+cvar_t *run_roll;
+cvar_t *bob_up;
+cvar_t *bob_pitch;
+cvar_t *bob_roll;
 
 cvar_t  *gamedir;
 
@@ -148,19 +150,22 @@ ClientEndServerFrames
 */
 void ClientEndServerFrames (void)
 {
-	int		i;
-	edict_t	*ent;
+	int i;
 
 	// calc the player views now that all pushing
 	// and damage has been added
-	for (i=0 ; i<maxclients->value ; i++)
+	for (i = 0 ; i < maxclients->value ; i++)
 	{
+		edict_t *ent;
+
 		ent = g_edicts + 1 + i;
 		if (!ent->inuse || !ent->client)
+		{
 			continue;
+		}
+
 		ClientEndServerFrame (ent);
 	}
-
 }
 
 /*
@@ -170,7 +175,8 @@ EndDMLevel
 The timelimit or fraglimit has been exceeded
 =================
 */
-void EndDMLevel (void)
+void
+EndDMLevel(void)
 {
 	edict_t		*ent;
 
@@ -213,14 +219,15 @@ CheckDMRules
 void
 CheckDMRules(void)
 {
-	int i;
-	const gclient_t *cl;
-
 	if (level.intermissiontime)
+	{
 		return;
+	}
 
 	if (!deathmatch->value)
+	{
 		return;
+	}
 
 	if (timelimit->value)
 	{
@@ -234,8 +241,12 @@ CheckDMRules(void)
 
 	if (fraglimit->value)
 	{
-		for (i=0 ; i<maxclients->value ; i++)
+		int i;
+
+		for (i = 0 ; i < maxclients->value; i++)
 		{
+			const gclient_t *cl;
+
 			cl = game.clients + i;
 			if (!g_edicts[i+1].inuse)
 				continue;

@@ -165,7 +165,8 @@ zSchoolMonsters
 Roaming schooling ai.
 ==============
 */
-int zSchoolMonsters(edict_t *self, float dist, int runStyle, float *currentSpeed)
+static int
+zSchoolMonsters(edict_t *self, int runStyle, float *currentSpeed)
 {
 	int maxInsight;
 	int newRunStyle;
@@ -194,24 +195,24 @@ int zSchoolMonsters(edict_t *self, float dist, int runStyle, float *currentSpeed
 
 		while(list)
 		{
-			float dist;
+			float dist_len;
 
 			// Gather data on those you see
 			totalSpeed += list->speed;
 			totalBearing += anglemod(list->s.angles[YAW]);
 
 			VectorSubtract(self->s.origin, list->s.origin, vec);
-			dist = VectorLength(vec);
+			dist_len = VectorLength(vec);
 
-			if(dist < distanceToNearest)
+			if (dist_len < distanceToNearest)
 			{
-				distanceToNearest = dist;
+				distanceToNearest = dist_len;
 				nearestEntity = list;
 			}
 
-			if(dist > distanceToLeader)
+			if (dist_len > distanceToLeader)
 			{
-				distanceToLeader = dist;
+				distanceToLeader = dist_len;
 			}
 
 			list = list->zSchoolChain;
@@ -348,7 +349,7 @@ void ai_schoolStand (edict_t *self, float dist)
 	else
 	{
 		// run schooling routines
-		switch(zSchoolMonsters(self, dist, 0, &speed))
+		switch(zSchoolMonsters(self, 0, &speed))
 		{
 			case 1:
 				self->monsterinfo.walk (self);
@@ -398,7 +399,7 @@ void ai_schoolRun (edict_t *self, float dist)
 	else
 	{
 		// run schooling routines
-		switch(zSchoolMonsters(self, dist, 2, &speed))
+		switch(zSchoolMonsters(self, 2, &speed))
 		{
 			case 0:
 				self->monsterinfo.stand (self);
@@ -447,7 +448,7 @@ void ai_schoolWalk (edict_t *self, float dist)
 	else
 	{
 		// run schooling routines
-		switch(zSchoolMonsters(self, dist, 1, &speed))
+		switch(zSchoolMonsters(self, 1, &speed))
 		{
 			case 0:
 				self->monsterinfo.stand (self);

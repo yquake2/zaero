@@ -382,8 +382,6 @@ fire_shotgun(edict_t *self, vec3_t start, vec3_t aimdir, int damage,
 void
 blaster_touch(edict_t *self, edict_t *other, const cplane_t *plane, const csurface_t *surf)
 {
-	int mod;
-
 	if (!self || !other)
 	{
 		return;
@@ -407,6 +405,8 @@ blaster_touch(edict_t *self, edict_t *other, const cplane_t *plane, const csurfa
 
 	if (other->takedamage)
 	{
+		int mod;
+
 		if (self->spawnflags & 1)
 		{
 			mod = MOD_HYPERBLASTER;
@@ -732,7 +732,6 @@ void
 rocket_touch(edict_t *ent, edict_t *other, const cplane_t *plane, const csurface_t *surf)
 {
 	vec3_t origin;
-	int n;
 
 	if (!ent || !other)
 	{
@@ -771,6 +770,8 @@ rocket_touch(edict_t *ent, edict_t *other, const cplane_t *plane, const csurface
 			if ((surf) && !(surf->flags &
 				(SURF_WARP | SURF_TRANS33 | SURF_TRANS66 | SURF_FLOWING)))
 			{
+				int n;
+
 				n = randk() % 5;
 
 				while (n--)
@@ -920,9 +921,6 @@ void
 bfg_explode(edict_t *self)
 {
 	edict_t *ent;
-	float points;
-	vec3_t v;
-	float dist;
 
 	if (!self)
 	{
@@ -936,6 +934,9 @@ bfg_explode(edict_t *self)
 
 		while ((ent = findradius(ent, self->s.origin, self->dmg_radius)) != NULL)
 		{
+			float points, dist;
+			vec3_t v;
+
 			if (!ent->takedamage)
 			{
 				continue;

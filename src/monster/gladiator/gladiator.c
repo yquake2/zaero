@@ -267,9 +267,6 @@ mmove_t gladiator_move_attack_gun = {
 void
 gladiator_attack(edict_t *self)
 {
-	float range;
-	vec3_t v;
-
 	if (!self)
 	{
 		return;
@@ -281,6 +278,9 @@ gladiator_attack(edict_t *self)
 	*/
 	if (!(self->monsterinfo.aiflags & AI_STAND_GROUND))
 	{
+		float range;
+		vec3_t v;
+
 		VectorSubtract(self->s.origin, self->enemy->s.origin, v);
 		range = VectorLength(v);
 
@@ -434,8 +434,6 @@ gladiator_die(edict_t *self, edict_t *inflictor /* unused */,
 		edict_t *attacker /* unused */, int damage /*unused */,
 		const vec3_t point)
 {
-	int n;
-
 	if (!self)
 	{
 		return;
@@ -444,6 +442,8 @@ gladiator_die(edict_t *self, edict_t *inflictor /* unused */,
 	/* check for gib */
 	if (self->health <= self->gib_health)
 	{
+		int n;
+
 		gi.sound(self, CHAN_VOICE, gi.soundindex(
 						"misc/udeath.wav"), 1, ATTN_NORM, 0);
 

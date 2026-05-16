@@ -279,11 +279,6 @@ void
 ClientObituary(edict_t *self, edict_t *inflictor /* unused */,
 		edict_t *attacker)
 {
-	int mod;
-	char *message;
-	char *message2;
-	qboolean ff;
-
 	if (!self || !attacker)
 	{
 		return;
@@ -310,6 +305,10 @@ ClientObituary(edict_t *self, edict_t *inflictor /* unused */,
 
 	if (deathmatch->value || coop->value)
 	{
+		char *message, *message2;
+		qboolean ff;
+		int mod;
+
 		ff = meansOfDeath & MOD_FRIENDLY_FIRE;
 		mod = meansOfDeath & ~MOD_FRIENDLY_FIRE;
 		message = NULL;
@@ -672,8 +671,6 @@ void
 player_die(edict_t *self, edict_t *inflictor, edict_t *attacker,
 		int damage, const vec3_t point /* unused */)
 {
-	int n;
-
 	if (!self || !inflictor || !attacker)
 	{
 		return;
@@ -728,6 +725,8 @@ player_die(edict_t *self, edict_t *inflictor, edict_t *attacker,
 
 	if (self->health < -40)
 	{
+		int n;
+
 		/* gib (sound played at end of server frame) */
 		self->sounds = gi.soundindex("misc/udeath.wav");
 
@@ -746,10 +745,6 @@ player_die(edict_t *self, edict_t *inflictor, edict_t *attacker,
 		/* normal death */
 		if (!self->deadflag)
 		{
-			static int i;
-
-			i = (i + 1) % 3;
-
 			/* start a death animation */
 			self->client->anim_priority = ANIM_DEATH;
 
@@ -760,7 +755,11 @@ player_die(edict_t *self, edict_t *inflictor, edict_t *attacker,
 			}
 			else
 			{
-				switch (i)
+				int group;
+
+				group = randk() % 3;
+
+				switch (group)
 				{
 					case 0:
 						self->s.frame = FRAME_death101 - 1;
@@ -971,7 +970,7 @@ SelectRandomDeathmatchSpawnPoint(void)
 	edict_t *spot, *spot1, *spot2;
 	int count = 0;
 	int selection;
-	float range, range1, range2;
+	float range1, range2;
 
 	spot = NULL;
 	range1 = range2 = 99999;
@@ -980,6 +979,8 @@ SelectRandomDeathmatchSpawnPoint(void)
 	while ((spot = G_Find(spot, FOFS(classname),
 					"info_player_deathmatch")) != NULL)
 	{
+		float range;
+
 		count++;
 		range = PlayersRangeFromSpot(spot);
 
@@ -1031,7 +1032,7 @@ edict_t *
 SelectFarthestDeathmatchSpawnPoint(void)
 {
 	edict_t *bestspot;
-	float bestdistance, bestplayerdistance;
+	float bestdistance;
 	edict_t *spot;
 
 	spot = NULL;
@@ -1041,6 +1042,8 @@ SelectFarthestDeathmatchSpawnPoint(void)
 	while ((spot = G_Find(spot, FOFS(classname),
 					"info_player_deathmatch")) != NULL)
 	{
+		float bestplayerdistance;
+
 		bestplayerdistance = PlayersRangeFromSpot(spot);
 
 		if (bestplayerdistance > bestdistance)
@@ -1266,8 +1269,6 @@ body_die(edict_t *self, edict_t *inflictor /* unused */,
 		edict_t *attacker /* unused */, int damage,
 		const vec3_t point /* unused */)
 {
-	int n;
-
 	if (!self)
 	{
 		return;
@@ -1275,6 +1276,8 @@ body_die(edict_t *self, edict_t *inflictor /* unused */,
 
 	if (self->health < -40)
 	{
+		int n;
+
 		gi.sound(self, CHAN_BODY, gi.soundindex("misc/udeath.wav"),
 				1, ATTN_NORM, 0);
 
@@ -1593,8 +1596,6 @@ ClientBeginDeathmatch(edict_t *ent)
 void
 ClientBegin(edict_t *ent)
 {
-	int i, hc, ghc;
-
 	if (!ent)
 	{
 		return;
@@ -1612,6 +1613,8 @@ ClientBegin(edict_t *ent)
 	   just take it, otherwise spawn one from scratch */
 	if (ent->inuse == true)
 	{
+		int i;
+
 		/* the client has cleared the client side viewangles upon
 		   connecting to the server, which is different than the
 		   state when the game is saved, so we need to compensate
@@ -1624,6 +1627,8 @@ ClientBegin(edict_t *ent)
 	}
 	else
 	{
+		int hc, ghc;
+
 		/* a spawn point will completely reinitialize the entity
 		   except for the persistant data that was initialized at
 		   ClientConnect() time */
@@ -1748,7 +1753,6 @@ qboolean
 ClientConnect(edict_t *ent, char *userinfo)
 {
 	const char *value;
-	int hc, ghc;
 
 	if (!ent || !userinfo)
 	{
@@ -1758,7 +1762,13 @@ ClientConnect(edict_t *ent, char *userinfo)
 	/* check to see if they are on the banned IP list */
 	value = Info_ValueForKey(userinfo, "ip");
 
-	// check for a password
+	if (SV_FilterPacket(value))
+	{
+		Info_SetValueForKey(userinfo, "rejmsg", "Banned.");
+		return false;
+	}
+
+	/* check for a password */
 	value = Info_ValueForKey(userinfo, "password");
 	if (strcmp(password->string, value) != 0)
 	{
@@ -1772,6 +1782,8 @@ ClientConnect(edict_t *ent, char *userinfo)
 	   just take it, otherwise spawn one from scratch */
 	if (ent->inuse == false)
 	{
+		int hc, ghc;
+
 		/* clear the respawning variables */
 		// avoid redundant help icon flashing on level transitions
 		hc = ent->client->resp.helpchanged;
@@ -1898,7 +1910,6 @@ void
 ClientThink(edict_t *ent, usercmd_t *ucmd)
 {
 	gclient_t *client;
-	edict_t *other;
 	int i, j;
 	pmove_t pm;
 
@@ -1936,13 +1947,21 @@ ClientThink(edict_t *ent, usercmd_t *ucmd)
 	memset (&pm, 0, sizeof(pm));
 
 	if (ent->movetype == MOVETYPE_NOCLIP)
+	{
 		client->ps.pmove.pm_type = PM_SPECTATOR;
+	}
 	else if (ent->s.modelindex != 255)
+	{
 		client->ps.pmove.pm_type = PM_GIB;
+	}
 	else if (ent->deadflag)
+	{
 		client->ps.pmove.pm_type = PM_DEAD;
+	}
 	else
+	{
 		client->ps.pmove.pm_type = PM_NORMAL;
+	}
 
 	client->ps.pmove.gravity = sv_gravity->value;
 	pm.s = client->ps.pmove;
@@ -2021,6 +2040,8 @@ ClientThink(edict_t *ent, usercmd_t *ucmd)
 	/* touch other objects */
 	for (i = 0; i < pm.numtouch; i++)
 	{
+		edict_t *other;
+
 		other = pm.touchents[i];
 
 		for (j = 0; j < i; j++)

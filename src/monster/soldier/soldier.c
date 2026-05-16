@@ -516,11 +516,9 @@ void
 soldier_fire(edict_t *self, int flash_number)
 {
 	vec3_t start;
-	vec3_t forward, right, up;
+	vec3_t forward, right;
 	vec3_t aim;
-	vec3_t dir;
 	vec3_t end;
-	float r, u;
 	int flash_index;
 
 	if (!self)
@@ -551,6 +549,9 @@ soldier_fire(edict_t *self, int flash_number)
 	}
 	else
 	{
+		vec3_t dir, up;
+		float r, u;
+
 		VectorCopy(self->enemy->s.origin, end);
 		end[2] += self->enemy->viewheight;
 		VectorSubtract(end, start, aim);

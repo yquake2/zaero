@@ -218,7 +218,6 @@ extern void ai_schoolCharge ( edict_t * self , float dist ) ;
 extern void ai_schoolWalk ( edict_t * self , float dist ) ;
 extern void ai_schoolRun ( edict_t * self , float dist ) ;
 extern void ai_schoolStand ( edict_t * self , float dist ) ;
-extern int zSchoolMonsters ( edict_t * self , float dist , int runStyle , float * currentSpeed ) ;
 extern int zFindRoamYaw ( edict_t * self , float distcheck ) ;
 extern int zSchoolAllVisiable ( edict_t * self ) ;
 extern void zCreateRaduisList ( edict_t * self ) ;
@@ -785,7 +784,6 @@ extern void berserk_die ( edict_t * self , edict_t * inflictor , edict_t * attac
 extern void berserk_dead ( edict_t * self ) ;
 extern void berserk_pain ( edict_t * self , edict_t * other , float kick , int damage ) ;
 extern void berserk_melee ( edict_t * self ) ;
-extern void berserk_strike ( edict_t * self ) ;
 extern void berserk_attack_club ( edict_t * self ) ;
 extern void berserk_swing ( edict_t * self ) ;
 extern void berserk_attack_spike ( edict_t * self ) ;
@@ -923,7 +921,6 @@ extern void Use_Target_Speaker ( edict_t * ent , edict_t * other , edict_t * act
 extern void SP_target_temp_entity ( edict_t * ent ) ;
 extern void Use_Target_Tent ( edict_t * ent , edict_t * other , edict_t * activator ) ;
 extern void ServerCommand ( void ) ;
-extern void Svcmd_Test_f ( void ) ;
 extern void SP_worldspawn ( edict_t * ent ) ;
 extern void SpawnEntities ( const char * mapname , char * entities , const char * spawnpoint ) ;
 extern void G_FindTeams ( void ) ;

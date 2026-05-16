@@ -617,8 +617,7 @@ void zboss_reloadRockets(edict_t *self)
 	self->monsterinfo.currentmove = &zboss_move_attack1b;
 }
 
-
-static vec3_t	rocketoffset[]	=
+static const vec3_t rocketoffsets[] =
 {
 	{-5, -50, 33},
 	{-5, -39, 27},
@@ -645,7 +644,7 @@ void FireFlare(edict_t *self)
 
 	AngleVectors(self->s.angles, forward, right, NULL);
 
-	G_ProjectSource(self->s.origin, rocketoffset[offset], forward, right, start);
+	G_ProjectSource(self->s.origin, rocketoffsets[offset], forward, right, start);
 
 	if(self->monsterinfo.aiflags & AI_ONESHOTTARGET)
 	{
@@ -686,7 +685,7 @@ void FireRocket(edict_t *self)
 
 	AngleVectors(self->s.angles, forward, right, NULL);
 
-	G_ProjectSource(self->s.origin, rocketoffset[offset], forward, right, start);
+	G_ProjectSource(self->s.origin, rocketoffsets[offset], forward, right, start);
 
 	if(self->monsterinfo.aiflags & AI_ONESHOTTARGET)
 	{
@@ -791,7 +790,8 @@ mframe_t zboss_frames_attack2b [] =
 };
 mmove_t zboss_move_attack2b = {FRAME_attack2bStart, FRAME_attack2bEnd, zboss_frames_attack2b, zboss_reelInGraaple2 };
 
-void HookDragThink (edict_t *self)
+void
+HookDragThink(edict_t *self)
 {
 	vec3_t	dir, vec;
 	float	speed;
@@ -814,7 +814,6 @@ void HookDragThink (edict_t *self)
 	G_ProjectSource(self->owner->s.origin, hookoffset, forward, right, vec);
 
 	VectorSubtract(vec, self->s.origin, dir);
-	speed = VectorLength (dir);
 	VectorNormalize(dir);
 
 	speed = 1000;
@@ -1147,18 +1146,6 @@ void fire_plasmaCannon (edict_t *self, vec3_t start, vec3_t aimdir, int damage, 
 	gi.linkentity(plasmaball);
 }
 
-
-static vec3_t cannonoffset[]	=
-{
-	{-19, -44, 30},
-	{-14, -33, 32},
-	{-4 , -45, 32},
-	{-2 , -34, 32},
-	{  7, -49, 32},
-	{  6, -36, 34},
-	{  6, -36, 34},
-};
-
 void FireCannon(edict_t *self)
 {
 	vec3_t	forward, right;
@@ -1166,6 +1153,17 @@ void FireCannon(edict_t *self)
 	vec3_t	dir;
 	vec3_t	vec;
 	float distance;
+
+	static const vec3_t cannonoffset[] =
+	{
+		{-19, -44, 30},
+		{-14, -33, 32},
+		{-4 , -45, 32},
+		{-2 , -34, 32},
+		{  7, -49, 32},
+		{  6, -36, 34},
+		{  6, -36, 34},
+	};
 
 	if (!self)
 	{
@@ -1578,7 +1576,7 @@ void FireDeadRocket7(edict_t *self)
 {
 	vec3_t	forward, right, up;
 	vec3_t	start;
-	vec3_t	rocketoffset	= {17, -27, 30};
+	vec3_t rocketoffset = {17, -27, 30};
 
 	if (!self)
 	{
@@ -1791,8 +1789,6 @@ mmove_t zboss_move_death2 = {FRAME_die2Start, FRAME_die2End, zboss_frames_death2
 
 void zboss_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
-	int		n;
-
 	if (!self)
 	{
 		return;
@@ -1806,14 +1802,22 @@ void zboss_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage
 
 	if (self->health <= self->gib_health)
 	{
+		int n;
+
 		self->s.modelindex2 = 0;
 		self->s.modelindex3 = 0;
 
 		gi.sound(self, CHAN_VOICE, gi.soundindex("misc/udeath.wav"), 1, ATTN_NORM, 0);
-		for (n= 0; n < 2; n++)
+		for (n = 0; n < 2; n++)
+		{
 			ThrowGib(self, "models/objects/gibs/bone/tris.md2", damage, GIB_ORGANIC);
+		}
+
 		for (n= 0; n < 4; n++)
+		{
 			ThrowGib(self, "models/objects/gibs/sm_meat/tris.md2", damage, GIB_ORGANIC);
+		}
+
 		ThrowHead(self, "models/objects/gibs/head2/tris.md2", damage, GIB_ORGANIC);
 		self->deadflag = DEAD_DEAD;
 		return;

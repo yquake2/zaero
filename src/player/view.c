@@ -50,13 +50,8 @@ void
 P_DamageFeedback(edict_t *player)
 {
 	gclient_t *client;
-	float side;
 	float realcount, count, kick;
 	vec3_t v;
-	int r, l;
-	static vec3_t power_color = {0.0, 1.0, 0.0};
-	static vec3_t acolor = {1.0, 1.0, 1.0};
-	static vec3_t bcolor = {1.0, 0.0, 0.0};
 
 	if (!player)
 	{
@@ -98,8 +93,6 @@ P_DamageFeedback(edict_t *player)
 	/* start a pain animation if still in the player model */
 	if ((client->anim_priority < ANIM_PAIN) && (player->s.modelindex == 255))
 	{
-		static int i;
-
 		client->anim_priority = ANIM_PAIN;
 
 		if (client->ps.pmove.pm_flags & PMF_DUCKED)
@@ -109,6 +102,8 @@ P_DamageFeedback(edict_t *player)
 		}
 		else
 		{
+			static int i;
+
 			i = (i + 1) % 3;
 
 			switch (i)
@@ -142,6 +137,8 @@ P_DamageFeedback(edict_t *player)
 		(client->invincible_framenum <= level.framenum) &&
 		player->health > 0)
 	{
+		int r, l;
+
 		r = 1 + (randk() & 1);
 		player->pain_debounce_time = level.time + 0.7;
 
@@ -191,16 +188,22 @@ P_DamageFeedback(edict_t *player)
 
 	if (client->damage_parmor)
 	{
+		static vec3_t power_color = {0.0, 1.0, 0.0};
+
 		VectorMA(v, (float)client->damage_parmor / realcount, power_color, v);
 	}
 
 	if (client->damage_armor)
 	{
+		static vec3_t acolor = {1.0, 1.0, 1.0};
+
 		VectorMA(v, (float)client->damage_armor / realcount, acolor, v);
 	}
 
 	if (client->damage_blood)
 	{
+		static vec3_t bcolor = {1.0, 0.0, 0.0};
+
 		VectorMA(v, (float)client->damage_blood / realcount, bcolor, v);
 	}
 
@@ -211,6 +214,8 @@ P_DamageFeedback(edict_t *player)
 
 	if (kick && (player->health > 0)) /* kick of 0 means no view adjust at all */
 	{
+		float side;
+
 		kick = kick * 100 / player->health;
 
 		if (kick < count * 0.5)
@@ -259,7 +264,6 @@ SV_CalcViewOffset(edict_t *ent)
 	float *angles;
 	float bob;
 	float ratio;
-	float delta;
 	vec3_t v;
 
 	if (!ent)
@@ -281,6 +285,8 @@ SV_CalcViewOffset(edict_t *ent)
 	}
 	else
 	{
+		float delta;
+
 		/* add angles based on weapon kick */
 		VectorCopy(ent->client->kick_angles, angles);
 
@@ -451,7 +457,6 @@ void
 SV_CalcGunOffset(edict_t *ent)
 {
 	int i;
-	float delta;
 
 	if (!ent)
 	{
@@ -476,17 +481,34 @@ SV_CalcGunOffset(edict_t *ent)
 		// gun angles from delta movement
 		for (i=0 ; i<3 ; i++)
 		{
+			float delta;
+
 			delta = ent->client->oldviewangles[i] - ent->client->ps.viewangles[i];
 			if (delta > 180)
+			{
 				delta -= 360;
+			}
+
 			if (delta < -180)
+			{
 				delta += 360;
+			}
+
 			if (delta > 45)
+			{
 				delta = 45;
+			}
+
 			if (delta < -45)
+			{
 				delta = -45;
+			}
+
 			if (i == YAW)
-				ent->client->ps.gunangles[ROLL] += 0.1*delta;
+			{
+				ent->client->ps.gunangles[ROLL] += 0.1 * delta;
+			}
+
 			ent->client->ps.gunangles[i] += 0.2 * delta;
 		}
 	}
@@ -688,8 +710,6 @@ void
 P_FallingDamage(edict_t *ent)
 {
 	float delta;
-	int damage;
-	vec3_t dir;
 
 	if (!ent)
 	{
@@ -761,6 +781,9 @@ P_FallingDamage(edict_t *ent)
 
 	if (delta > 30)
 	{
+		int damage;
+		vec3_t dir;
+
 		if (ent->health > 0)
 		{
 			if (delta >= 55)
@@ -1006,7 +1029,6 @@ P_WorldEffects(void)
 void
 G_SetClientEffects(edict_t *ent)
 {
-	int pa_type;
 	int remaining;
 
 	if (!ent)
@@ -1024,6 +1046,8 @@ G_SetClientEffects(edict_t *ent)
 
 	if (ent->powerarmor_time > level.time)
 	{
+		int pa_type;
+
 		pa_type = PowerArmorType(ent);
 
 		if (pa_type == POWER_ARMOR_SCREEN)

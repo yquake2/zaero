@@ -59,8 +59,8 @@ MoveClientToIntermission(edict_t *ent)
 void
 BeginIntermission(const edict_t *targ)
 {
-	int i, n;
-	edict_t *ent, *client;
+	int i;
+	edict_t *ent;
 
 	if (!targ)
 	{
@@ -77,6 +77,8 @@ BeginIntermission(const edict_t *targ)
 	/* respawn any dead clients */
 	for (i = 0; i < maxclients->value; i++)
 	{
+		edict_t *client;
+
 		client = g_edicts + 1 + i;
 
 		if (!client->inuse)
@@ -102,6 +104,9 @@ BeginIntermission(const edict_t *targ)
 		{
 			for (i = 0; i < maxclients->value; i++)
 			{
+				edict_t *client;
+				int n;
+
 				client = g_edicts + 1 + i;
 
 				if (!client->inuse)
@@ -168,6 +173,8 @@ BeginIntermission(const edict_t *targ)
 	/* move all clients to the intermission point */
 	for (i = 0; i < maxclients->value; i++)
 	{
+		edict_t *client;
+
 		client = g_edicts + 1 + i;
 
 		if (!client->inuse)
@@ -185,12 +192,10 @@ DeathmatchScoreboardMessage(const edict_t *ent, const edict_t *killer /* can be 
 	char entry[1024];
 	char string[1400];
 	int stringlength;
-	int i, j, k;
+	int i;
 	int sorted[MAX_CLIENTS];
 	int sortedscores[MAX_CLIENTS];
 	int score, total;
-	int x, y;
-	gclient_t *cl;
 	const edict_t *cl_ent;
 	char *tag;
 
@@ -204,6 +209,8 @@ DeathmatchScoreboardMessage(const edict_t *ent, const edict_t *killer /* can be 
 
 	for (i = 0; i < game.maxclients; i++)
 	{
+		int j, k;
+
 		cl_ent = g_edicts + 1 + i;
 
 		if (!cl_ent->inuse)
@@ -244,6 +251,9 @@ DeathmatchScoreboardMessage(const edict_t *ent, const edict_t *killer /* can be 
 
 	for (i = 0; i < total; i++)
 	{
+		gclient_t *cl;
+		int x, y, j;
+
 		cl = &game.clients[sorted[i]];
 		cl_ent = g_edicts + 1 + sorted[i];
 
