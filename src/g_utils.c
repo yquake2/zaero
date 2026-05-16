@@ -29,7 +29,7 @@ NULL will be returned if the end of the list is reached.
 
 =============
 */
-edict_t *G_Find (edict_t *from, int fieldofs, const char *match)
+edict_t *G_Find(edict_t *from, int fieldofs, const char *match)
 {
 	char	*s;
 
@@ -123,7 +123,7 @@ edict_t *G_PickTarget (char *targetname)
 
 	while(1)
 	{
-		ent = G_Find (ent, FOFS(targetname), targetname);
+		ent = G_Find(ent, FOFS(targetname), targetname);
 		if (!ent)
 			break;
 		choice[num_choices++] = ent;
@@ -215,7 +215,7 @@ void G_UseTargets (edict_t *ent, edict_t *activator)
 	if (ent->killtarget)
 	{
 		t = NULL;
-		while ((t = G_Find (t, FOFS(targetname), ent->killtarget)))
+		while ((t = G_Find(t, FOFS(targetname), ent->killtarget)))
 		{
 			G_FreeEdict(t);
 			if (!ent->inuse)
@@ -232,7 +232,7 @@ void G_UseTargets (edict_t *ent, edict_t *activator)
 	if (ent->target)
 	{
 		t = NULL;
-		while ((t = G_Find (t, FOFS(targetname), ent->target)))
+		while ((t = G_Find(t, FOFS(targetname), ent->target)))
 		{
 			// doors fire area portals in a specific way
 			if (!Q_stricmp(t->classname, "func_areaportal") &&

@@ -707,7 +707,7 @@ void FireRocket(edict_t *self)
 	fire_rocket (self, start, dir, 70, 500, 70+20, 70);
 
 	gi.WriteByte(svc_muzzleflash2);
-	gi.WriteShort (self - g_edicts);
+	gi.WriteShort(self - g_edicts);
 	gi.WriteByte(MZ2_BOSS2_ROCKET_1);
 	gi.multicast(start, MULTICAST_PVS);
 }
@@ -828,7 +828,7 @@ void HookDragThink (edict_t *self)
 
 	gi.WriteByte(svc_temp_entity);
 	gi.WriteByte(TE_MEDIC_CABLE_ATTACK);
-	gi.WriteShort (self - g_edicts);
+	gi.WriteShort(self - g_edicts);
 	gi.WritePosition(self->s.origin);
 	gi.WritePosition(vec);
 	gi.multicast(self->s.origin, MULTICAST_PVS);
@@ -887,7 +887,7 @@ void HookThink(edict_t *self)
 
 	gi.WriteByte(svc_temp_entity);
 	gi.WriteByte(TE_MEDIC_CABLE_ATTACK);
-	gi.WriteShort (self - g_edicts);
+	gi.WriteShort(self - g_edicts);
 	gi.WritePosition(self->s.origin);
 	gi.WritePosition(vec);
 	gi.multicast(self->s.origin, MULTICAST_PVS);
@@ -1450,7 +1450,7 @@ void FireDeadRocket1(edict_t *self)
 	fire_rocket (self, start, forward, 70, 500, 70+20, 70);
 
 	gi.WriteByte(svc_muzzleflash2);
-	gi.WriteShort (self - g_edicts);
+	gi.WriteShort(self - g_edicts);
 	gi.WriteByte(MZ2_BOSS2_ROCKET_1);
 	gi.multicast(start, MULTICAST_PVS);
 }
@@ -1474,7 +1474,7 @@ void FireDeadRocket2(edict_t *self)
 	fire_rocket (self, start, forward, 70, 500, 70+20, 70);
 
 	gi.WriteByte(svc_muzzleflash2);
-	gi.WriteShort (self - g_edicts);
+	gi.WriteShort(self - g_edicts);
 	gi.WriteByte(MZ2_BOSS2_ROCKET_1);
 	gi.multicast(start, MULTICAST_PVS);
 }
@@ -1497,7 +1497,7 @@ void FireDeadRocket3(edict_t *self)
 	fire_rocket (self, start, up, 70, 500, 70+20, 70);
 
 	gi.WriteByte(svc_muzzleflash2);
-	gi.WriteShort (self - g_edicts);
+	gi.WriteShort(self - g_edicts);
 	gi.WriteByte(MZ2_BOSS2_ROCKET_1);
 	gi.multicast(start, MULTICAST_PVS);
 }
@@ -1520,7 +1520,7 @@ void FireDeadRocket4(edict_t *self)
 	fire_rocket (self, start, up, 70, 500, 70+20, 70);
 
 	gi.WriteByte(svc_muzzleflash2);
-	gi.WriteShort (self - g_edicts);
+	gi.WriteShort(self - g_edicts);
 	gi.WriteByte(MZ2_BOSS2_ROCKET_1);
 	gi.multicast(start, MULTICAST_PVS);
 }
@@ -1544,7 +1544,7 @@ void FireDeadRocket5(edict_t *self)
 	fire_rocket (self, start, forward, 70, 500, 70+20, 70);
 
 	gi.WriteByte(svc_muzzleflash2);
-	gi.WriteShort (self - g_edicts);
+	gi.WriteShort(self - g_edicts);
 	gi.WriteByte(MZ2_BOSS2_ROCKET_1);
 	gi.multicast(start, MULTICAST_PVS);
 }
@@ -1569,7 +1569,7 @@ void FireDeadRocket6(edict_t *self)
 	fire_rocket (self, start, forward, 70, 500, 70+20, 70);
 
 	gi.WriteByte(svc_muzzleflash2);
-	gi.WriteShort (self - g_edicts);
+	gi.WriteShort(self - g_edicts);
 	gi.WriteByte(MZ2_BOSS2_ROCKET_1);
 	gi.multicast(start, MULTICAST_PVS);
 }
@@ -1594,7 +1594,7 @@ void FireDeadRocket7(edict_t *self)
 	fire_rocket (self, start, forward, 70, 500, 70+20, 70);
 
 	gi.WriteByte(svc_muzzleflash2);
-	gi.WriteShort (self - g_edicts);
+	gi.WriteShort(self - g_edicts);
 	gi.WriteByte(MZ2_BOSS2_ROCKET_1);
 	gi.multicast(start, MULTICAST_PVS);
 }
@@ -1617,7 +1617,7 @@ void FireDeadCannon1(edict_t *self)
 	fire_plasmaCannon (self, start, forward, 90, 700, 2.5, 90+40, 700);
 
 	gi.WriteByte(svc_muzzleflash2);
-	gi.WriteShort (self - g_edicts);
+	gi.WriteShort(self - g_edicts);
 	gi.WriteByte(MZ2_GUNNER_GRENADE_1);
 	gi.multicast(start, MULTICAST_PVS);
 }
@@ -1640,7 +1640,7 @@ void FireDeadCannon2(edict_t *self)
 	fire_plasmaCannon (self, start, forward, 90, 700, 2.5, 90+40, 700);
 
 	gi.WriteByte(svc_muzzleflash2);
-	gi.WriteShort (self - g_edicts);
+	gi.WriteShort(self - g_edicts);
 	gi.WriteByte(MZ2_GUNNER_GRENADE_1);
 	gi.multicast(start, MULTICAST_PVS);
 }
@@ -1663,7 +1663,7 @@ void FireDeadCannon3(edict_t *self)
 	fire_plasmaCannon (self, start, forward, 90, 700, 2.5, 90+40, 700);
 
 	gi.WriteByte(svc_muzzleflash2);
-	gi.WriteShort (self - g_edicts);
+	gi.WriteShort(self - g_edicts);
 	gi.WriteByte(MZ2_GUNNER_GRENADE_1);
 	gi.multicast(start, MULTICAST_PVS);
 }
@@ -1953,7 +1953,7 @@ void trigger_zboss (edict_t *self, edict_t *other, edict_t *activator)
 
 	edict_t	*boss = NULL;
 
-	while ((boss = G_Find (boss, FOFS(targetname), self->target)) != NULL)
+	while ((boss = G_Find(boss, FOFS(targetname), self->target)) != NULL)
 	{
 		if(boss->health > 0)
 		{

@@ -18,7 +18,7 @@ void monster_fire_bullet(edict_t *self, vec3_t start, vec3_t dir, int damage, in
 	fire_bullet (self, start, dir, damage, kick, hspread, vspread, MOD_UNKNOWN);
 
 	gi.WriteByte(svc_muzzleflash2);
-	gi.WriteShort (self - g_edicts);
+	gi.WriteShort(self - g_edicts);
 	gi.WriteByte(flashtype);
 	gi.multicast(start, MULTICAST_PVS);
 }
@@ -34,7 +34,7 @@ void monster_fire_shotgun (edict_t *self, vec3_t start, vec3_t aimdir, int damag
 	fire_shotgun (self, start, aimdir, damage, kick, hspread, vspread, count, MOD_UNKNOWN);
 
 	gi.WriteByte(svc_muzzleflash2);
-	gi.WriteShort (self - g_edicts);
+	gi.WriteShort(self - g_edicts);
 	gi.WriteByte(flashtype);
 	gi.multicast(start, MULTICAST_PVS);
 }
@@ -56,7 +56,7 @@ void monster_fire_blaster (edict_t *self, vec3_t start, vec3_t dir, int damage, 
 	fire_blaster (self, start, dir, damage, speed, effect, false);
 
 	gi.WriteByte(svc_muzzleflash2);
-	gi.WriteShort (self - g_edicts);
+	gi.WriteShort(self - g_edicts);
 	gi.WriteByte(flashtype);
 	gi.multicast(start, MULTICAST_PVS);
 }
@@ -72,7 +72,7 @@ void monster_fire_grenade (edict_t *self, vec3_t start, vec3_t aimdir, int damag
 	fire_grenade (self, start, aimdir, damage, speed, 2.5, damage+40);
 
 	gi.WriteByte(svc_muzzleflash2);
-	gi.WriteShort (self - g_edicts);
+	gi.WriteShort(self - g_edicts);
 	gi.WriteByte(flashtype);
 	gi.multicast(start, MULTICAST_PVS);
 }
@@ -94,7 +94,7 @@ void monster_fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, i
 	fire_rocket (self, start, dir, damage, speed, damage+20, damage);
 
 	gi.WriteByte(svc_muzzleflash2);
-	gi.WriteShort (self - g_edicts);
+	gi.WriteShort(self - g_edicts);
 	gi.WriteByte(flashtype);
 	gi.multicast(start, MULTICAST_PVS);
 }
@@ -116,7 +116,7 @@ void monster_fire_railgun (edict_t *self, vec3_t start, vec3_t aimdir, int damag
 	fire_rail (self, start, aimdir, damage, kick);
 
 	gi.WriteByte(svc_muzzleflash2);
-	gi.WriteShort (self - g_edicts);
+	gi.WriteShort(self - g_edicts);
 	gi.WriteByte(flashtype);
 	gi.multicast(start, MULTICAST_PVS);
 }
@@ -138,7 +138,7 @@ void monster_fire_bfg (edict_t *self, vec3_t start, vec3_t aimdir, int damage, i
 	fire_bfg (self, start, aimdir, damage, speed, damage_radius);
 
 	gi.WriteByte(svc_muzzleflash2);
-	gi.WriteShort (self - g_edicts);
+	gi.WriteShort(self - g_edicts);
 	gi.WriteByte(flashtype);
 	gi.multicast(start, MULTICAST_PVS);
 }
@@ -269,7 +269,7 @@ void M_CatagorizePosition (edict_t *ent)
 	point[0] = ent->s.origin[0];
 	point[1] = ent->s.origin[1];
 	point[2] = ent->s.origin[2] + ent->mins[2] + 1;
-	cont = gi.pointcontents (point);
+	cont = gi.pointcontents(point);
 
 	if (!(cont & MASK_WATER))
 	{
@@ -281,13 +281,13 @@ void M_CatagorizePosition (edict_t *ent)
 	ent->watertype = cont;
 	ent->waterlevel = 1;
 	point[2] += 26;
-	cont = gi.pointcontents (point);
+	cont = gi.pointcontents(point);
 	if (!(cont & MASK_WATER))
 		return;
 
 	ent->waterlevel = 2;
 	point[2] += 22;
-	cont = gi.pointcontents (point);
+	cont = gi.pointcontents(point);
 	if (cont & MASK_WATER)
 		ent->waterlevel = 3;
 }
@@ -689,7 +689,7 @@ void monster_death_use (edict_t *self)
 
 	if (self->item)
 	{
-		Drop_Item (self, self->item);
+		Drop_Item(self, self->item);
 		self->item = NULL;
 	}
 
@@ -751,7 +751,7 @@ qboolean monster_start (edict_t *self)
 
 	if (st.item)
 	{
-		self->item = FindItemByClassname (st.item);
+		self->item = FindItemByClassname(st.item);
 		if (!self->item)
 			gi.dprintf("%s at %s has bad item: %s\n", self->classname, vtos(self->s.origin), st.item);
 	}

@@ -163,7 +163,7 @@ int ClipVelocity (vec3_t in, vec3_t normal, vec3_t out, float overbounce)
 	if (!normal[2])
 		blocked |= 2;		// step
 
-	backoff = DotProduct (in, normal) * overbounce;
+	backoff = DotProduct(in, normal) * overbounce;
 
 	for (i=0 ; i<3 ; i++)
 	{
@@ -287,7 +287,7 @@ int SV_FlyMove (edict_t *ent, float time, int mask)
 			for (j=0 ; j<numplanes ; j++)
 				if ((j != i) && !VectorCompare (planes[i], planes[j]))
 				{
-					if (DotProduct (new_velocity, planes[j]) < 0)
+					if (DotProduct(new_velocity, planes[j]) < 0)
 						break;	// not ok
 				}
 			if (j == numplanes)
@@ -306,7 +306,7 @@ int SV_FlyMove (edict_t *ent, float time, int mask)
 				return 7;
 			}
 			CrossProduct (planes[0], planes[1], dir);
-			d = DotProduct (dir, ent->velocity);
+			d = DotProduct(dir, ent->velocity);
 			VectorScale(dir, d, ent->velocity);
 		}
 
@@ -314,7 +314,7 @@ int SV_FlyMove (edict_t *ent, float time, int mask)
 		// if original velocity is against the original velocity, stop dead
 		// to avoid tiny occilations in sloping corners
 		//
-		if (DotProduct (ent->velocity, primal_velocity) <= 0)
+		if (DotProduct(ent->velocity, primal_velocity) <= 0)
 		{
 			VectorCopy(vec3_origin, ent->velocity);
 			return blocked;
@@ -636,9 +636,9 @@ qboolean SV_Push (edict_t *pusher, vec3_t move, vec3_t amove)
 
 			// figure movement due to the pusher's amove
 			VectorSubtract(check->s.origin, pusher->s.origin, org);
-			org2[0] = DotProduct (org, forward);
-			org2[1] = -DotProduct (org, right);
-			org2[2] = DotProduct (org, up);
+			org2[0] = DotProduct(org, forward);
+			org2[1] = -DotProduct(org, right);
+			org2[2] = DotProduct(org, up);
 			VectorSubtract(org2, org, move2);
 			VectorAdd(check->s.origin, move2, check->s.origin);
 
@@ -912,7 +912,7 @@ void SV_Physics_Toss (edict_t *ent)
 
 	// check for water transition
 	wasinwater = (ent->watertype & MASK_WATER);
-	ent->watertype = gi.pointcontents (ent->s.origin);
+	ent->watertype = gi.pointcontents(ent->s.origin);
 	isinwater = ent->watertype & MASK_WATER;
 
 	if (isinwater)
@@ -1190,7 +1190,7 @@ void SV_Physics_FallFloat (edict_t *ent)
 
 			VectorAdd(ent->s.origin, ent->mins, midpoint);
 			VectorMA(midpoint, i, ent->maxs, midpoint);
-			watertype = gi.pointcontents (midpoint);
+			watertype = gi.pointcontents(midpoint);
 
 			if (!(watertype & MASK_WATER))
 			{
@@ -1228,7 +1228,7 @@ void SV_Physics_FallFloat (edict_t *ent)
 
 		// check for water transition
 		wasinwater = (ent->watertype & MASK_WATER);
-		ent->watertype = gi.pointcontents (ent->s.origin);
+		ent->watertype = gi.pointcontents(ent->s.origin);
 		isinwater = ent->watertype & MASK_WATER;
 
 		if (isinwater)

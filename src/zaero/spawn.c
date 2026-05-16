@@ -9,7 +9,7 @@ edict_t *FindZSpawn(int i)
 
 	while(i)
 	{
-		spot = G_Find (oldSpot, FOFS(classname), "info_player_deathmatch");
+		spot = G_Find(oldSpot, FOFS(classname), "info_player_deathmatch");
 		if (spot != NULL)
 		{
 			i--;

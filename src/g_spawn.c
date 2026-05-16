@@ -914,10 +914,10 @@ void SP_worldspawn (edict_t *ent)
 
 
 	// help icon for statusbar
-	gi.imageindex ("i_help");
-	level.pic_health = gi.imageindex ("i_health");
-	gi.imageindex ("help");
-	gi.imageindex ("field_3");
+	gi.imageindex("i_help");
+	level.pic_health = gi.imageindex("i_health");
+	gi.imageindex("help");
+	gi.imageindex("field_3");
 
 	if (!st.gravity)
 		gi.cvar_set("sv_gravity", "800");
@@ -926,7 +926,7 @@ void SP_worldspawn (edict_t *ent)
 
 	snd_fry = gi.soundindex("player/fry.wav");	// standing in lava / slime
 
-	PrecacheItem (FindItem ("Blaster"));
+	PrecacheItem (FindItem("Blaster"));
 
 	gi.soundindex("player/lava1.wav");
 	gi.soundindex("player/lava2.wav");

@@ -10,7 +10,7 @@ void Weapon_Generic (edict_t *ent,
 					 int *pause_frames,
 					 int *fire_frames,
 					 void (*fire)(edict_t *ent));
-void P_ProjectSource (edict_t *ent, vec3_t distance, vec3_t forward, vec3_t right, vec3_t result);
+void P_ProjectSource(edict_t *ent, vec3_t distance, vec3_t forward, vec3_t right, vec3_t result);
 
 static char testItem_className[256];
 static char testItem_gModel[256];
@@ -56,7 +56,7 @@ void Weapon_LineDraw_Fire (edict_t *ent)
 	AngleVectors(ent->client->v_angle, forward, right, NULL);
 
 	VectorSet(offset, 0, 7,  ent->viewheight - 8);
-	P_ProjectSource (ent, offset, forward, right, start);
+	P_ProjectSource(ent, offset, forward, right, start);
 
 	if(!ent->client->lineDraw)
 	{
@@ -204,7 +204,7 @@ void InitTestWeapon(void)
   FILE *wCfgFile;
   char fname[256];
 
-  testWeapon = FindItemByClassname ("weapon_test");
+  testWeapon = FindItemByClassname("weapon_test");
   if(!testWeapon)
   {
     return;
@@ -426,7 +426,7 @@ void InitTestItem(void)
   FILE *wCfgFile;
   char fname[256];
 
-  testItem = FindItemByClassname ("item_test");
+  testItem = FindItemByClassname("item_test");
   if(!testItem)
   {
     return;

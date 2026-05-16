@@ -191,7 +191,7 @@ void EndDMLevel (void)
 	}
 	else
 	{	// search for a changeleve
-		ent = G_Find (NULL, FOFS(classname), "target_changelevel");
+		ent = G_Find(NULL, FOFS(classname), "target_changelevel");
 		if (!ent)
 		{	// the map designer didn't include a changelevel,
 			// so create a fake ent that goes back to the same level
@@ -225,7 +225,7 @@ void CheckDMRules (void)
 	{
 		if (level.time >= timelimit->value*60)
 		{
-			gi.bprintf (PRINT_HIGH, "Timelimit hit.\n");
+			gi.bprintf(PRINT_HIGH, "Timelimit hit.\n");
 			EndDMLevel ();
 			return;
 		}
@@ -241,7 +241,7 @@ void CheckDMRules (void)
 
 			if (cl->resp.score >= fraglimit->value)
 			{
-				gi.bprintf (PRINT_HIGH, "Fraglimit hit.\n");
+				gi.bprintf(PRINT_HIGH, "Fraglimit hit.\n");
 				EndDMLevel ();
 				return;
 			}

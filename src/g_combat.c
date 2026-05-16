@@ -253,7 +253,7 @@ CheckPowerArmor(edict_t *ent, const vec3_t point, const vec3_t normal,
 		AngleVectors(ent->s.angles, forward, NULL, NULL);
 		VectorSubtract(point, ent->s.origin, vec);
 		VectorNormalize(vec);
-		dot = DotProduct (vec, forward);
+		dot = DotProduct(vec, forward);
 		if (dot <= 0.3)
 			return 0;
 
@@ -325,11 +325,11 @@ CheckArmor(edict_t *ent, vec3_t point, const vec3_t normal, int damage, int te_s
 	if (dflags & DAMAGE_NO_ARMOR)
 		return 0;
 
-	index = ArmorIndex (ent);
+	index = ArmorIndex(ent);
 	if (!index)
 		return 0;
 
-	armor = GetItemByIndex (index);
+	armor = GetItemByIndex(index);
 
 	if (dflags & DAMAGE_ENERGY)
 		save = ceil(((gitem_armor_t *)armor->info)->energy_protection*damage);

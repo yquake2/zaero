@@ -31,7 +31,7 @@ static int	quad_drop_timeout_hack;
 GetItemByIndex
 ===============
 */
-gitem_t	*GetItemByIndex (int index)
+gitem_t	*GetItemByIndex(int index)
 {
 	if (index <= 0 || index >= itemlist_len)
 		return NULL;
@@ -61,7 +61,7 @@ FindItemByClassname
 
 ===============
 */
-gitem_t	*FindItemByClassname (const char *classname)
+gitem_t	*FindItemByClassname(const char *classname)
 {
 	int		i;
 	gitem_t	*it;
@@ -84,7 +84,7 @@ FindItem
 
 ===============
 */
-gitem_t	*FindItem (const char *pickup_name)
+gitem_t	*FindItem(const char *pickup_name)
 {
 	int		i;
 	gitem_t	*it;
@@ -205,7 +205,7 @@ qboolean Pickup_Powerup (edict_t *ent, edict_t *other)
 void
 Drop_General(edict_t *ent, const gitem_t *item)
 {
-	Drop_Item (ent, item);
+	Drop_Item(ent, item);
 	ent->client->pers.inventory[ITEM_INDEX(item)]--;
 	ValidateSelectedItem (ent->client);
 }
@@ -691,7 +691,7 @@ Drop_Ammo(edict_t *ent, const gitem_t *item)
 	}
 
 	index = ITEM_INDEX(item);
-	dropped = Drop_Item (ent, item);
+	dropped = Drop_Item(ent, item);
 	if (ent->client->pers.inventory[index] >= item->quantity)
 		dropped->count = item->quantity;
 	else
@@ -798,7 +798,7 @@ Pickup_Health(edict_t *ent, edict_t *other)
 
 //======================================================================
 
-int ArmorIndex (const edict_t *ent)
+int ArmorIndex(const edict_t *ent)
 {
 	if (!ent)
 	{
@@ -1090,7 +1090,7 @@ Drop_Visor(edict_t *ent, const gitem_t *item)
 		return;
 	}
 
-	edict_t *visor = Drop_Item (ent, item);
+	edict_t *visor = Drop_Item(ent, item);
 	ent->client->pers.inventory[ITEM_INDEX(item)] = 0;
 	ValidateSelectedItem (ent->client);
 	visor->visorFrames = ent->client->pers.visorFrames;
@@ -2909,7 +2909,7 @@ void SP_item_health (edict_t *self)
 
 	self->model = "models/items/healing/medium/tris.md2";
 	self->count = 10;
-	SpawnItem (self, FindItem ("Health"));
+	SpawnItem (self, FindItem("Health"));
 	gi.soundindex("items/n_health.wav");
 }
 
@@ -2977,7 +2977,7 @@ void SP_item_health_mega (edict_t *self)
 
 	self->model = "models/items/mega_h/tris.md2";
 	self->count = 100;
-	SpawnItem (self, FindItem ("Health"));
+	SpawnItem (self, FindItem("Health"));
 	gi.soundindex("items/m_health.wav");
 	self->style = HEALTH_IGNORE_MAX|HEALTH_TIMED;
 }

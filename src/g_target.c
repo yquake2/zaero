@@ -473,7 +473,7 @@ void use_target_changelevel (edict_t *self, edict_t *other, edict_t *activator)
 	if (deathmatch->value)
 	{
 		if (activator && activator->client)
-			gi.bprintf (PRINT_HIGH, "%s exited the level.\n", activator->client->pers.netname);
+			gi.bprintf(PRINT_HIGH, "%s exited the level.\n", activator->client->pers.netname);
 	}
 
 	// if going to a new unit, clear cross triggers
@@ -905,7 +905,7 @@ void target_laser_start (edict_t *self)
 	{
 		if (self->target)
 		{
-			ent = G_Find (NULL, FOFS(targetname), self->target);
+			ent = G_Find(NULL, FOFS(targetname), self->target);
 			if (!ent)
 				gi.dprintf ("%s at %s: %s is a bad target\n", self->classname, vtos(self->s.origin), self->target);
 			self->enemy = ent;
@@ -996,7 +996,7 @@ void target_lightramp_use (edict_t *self, edict_t *other, edict_t *activator)
 		e = NULL;
 		while (1)
 		{
-			e = G_Find (e, FOFS(targetname), self->target);
+			e = G_Find(e, FOFS(targetname), self->target);
 			if (!e)
 				break;
 			if (strcmp(e->classname, "light") != 0)

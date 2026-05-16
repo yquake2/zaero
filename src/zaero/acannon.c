@@ -224,14 +224,14 @@ void monster_autocannon_fire(edict_t *self)
 	default:
 		fire_bullet(self, start, forward, AC_BULLET_DMG, AC_BULLET_KICK, DEFAULT_BULLET_HSPREAD, DEFAULT_BULLET_VSPREAD, MOD_AUTOCANNON);
 		gi.WriteByte(svc_muzzleflash);
-		gi.WriteShort (self - g_edicts);
+		gi.WriteShort(self - g_edicts);
 		gi.WriteByte(MZ_CHAINGUN2);
 		gi.multicast(self->s.origin, MULTICAST_PVS);
 		break;
 	case 2:
 		fire_rocket(self, start, forward, AC_ROCKET_DMG, AC_ROCKET_SPEED, AC_ROCKET_RADIUS_DMG, AC_ROCKET_DMG_RADIUS);
 		gi.WriteByte(svc_muzzleflash);
-		gi.WriteShort (self - g_edicts);
+		gi.WriteShort(self - g_edicts);
 		gi.WriteByte(MZ_ROCKET);
 		gi.multicast(self->s.origin, MULTICAST_PVS);
 		break;
@@ -239,7 +239,7 @@ void monster_autocannon_fire(edict_t *self)
 	case 4:
 		fire_blaster (self, start, forward, AC_BLASTER_DMG, AC_BLASTER_SPEED, EF_HYPERBLASTER, true);
 		gi.WriteByte(svc_muzzleflash);
-		gi.WriteShort (self - g_edicts);
+		gi.WriteShort(self - g_edicts);
 		gi.WriteByte(MZ_HYPERBLASTER);
 		gi.multicast(self->s.origin, MULTICAST_PVS);
 		break;

@@ -16,7 +16,7 @@ void NoAmmoWeaponChange (edict_t *ent);
 void check_dodge (edict_t *self, vec3_t start, vec3_t dir, int speed);
 
 void Grenade_Explode(edict_t *ent);
-void P_ProjectSource (edict_t *ent, vec3_t distance, vec3_t forward, vec3_t right, vec3_t result);
+void P_ProjectSource(edict_t *ent, vec3_t distance, vec3_t forward, vec3_t right, vec3_t result);
 
 void zCam_TrackEntity(struct edict_s *player, struct edict_s *track, qboolean playerVisiable, qboolean playerOffset);
 void zCam_Stop(struct edict_s *player);
@@ -401,7 +401,7 @@ EMPNukeCheck(const edict_t *ent, const vec3_t pos)
 		return false;
 	}
 
-	while ((check = G_Find (check, FOFS(classname), "EMPNukeCenter")) != NULL)
+	while ((check = G_Find(check, FOFS(classname), "EMPNukeCenter")) != NULL)
 	{
 		vec3_t	v;
 

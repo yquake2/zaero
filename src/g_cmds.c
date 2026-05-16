@@ -23,7 +23,7 @@ ClientTeam (const edict_t *ent, char* value)
 	if (!ent->client)
 		return value;
 
-	strcpy(value, Info_ValueForKey (ent->client->pers.userinfo, "skin"));
+	strcpy(value, Info_ValueForKey(ent->client->pers.userinfo, "skin"));
 	p = strchr(value, '/');
 	if (!p)
 		return value;
@@ -322,14 +322,14 @@ void Cmd_Give_f (edict_t *ent)
 		return;
 	}
 
-	it = FindItem (name);
+	it = FindItem(name);
 	if (!it)
 	{
 		tryname[0] = 0;
 		for(numargs = 1; numargs < gi.argc(); numargs++)
 		{
 			strcat(tryname, gi.argv(numargs));
-			it = FindItem (tryname);
+			it = FindItem(tryname);
 
 			if(it)
 			{
@@ -620,7 +620,7 @@ void Cmd_Use_f (edict_t *ent)
 	}
 
 	s = gi.args();
-	it = FindItem (s);
+	it = FindItem(s);
 	if (!it)
 	{
 		gi.cprintf (ent, PRINT_HIGH, "unknown item: %s\n", s);
@@ -719,7 +719,7 @@ void Cmd_Inven_f (edict_t *ent)
 		// this is a hack and will work as long as
 		// the client continues to hide items that
 		// the user has none of
-		gi.WriteShort ((it->hideFlags & HIDE_FROM_INVENTORY) ?
+		gi.WriteShort((it->hideFlags & HIDE_FROM_INVENTORY) ?
 			0 : cl->pers.inventory[i]);
 	}
 

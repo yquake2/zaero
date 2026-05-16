@@ -1843,7 +1843,7 @@ void misc_viper_bomb_use (edict_t *self, edict_t *other, edict_t *activator)
 	self->touch = misc_viper_bomb_touch;
 	self->activator = activator;
 
-	viper = G_Find (NULL, FOFS(classname), "misc_viper");
+	viper = G_Find(NULL, FOFS(classname), "misc_viper");
 	VectorScale(viper->moveinfo.dir, viper->moveinfo.speed, self->velocity);
 
 	self->timestamp = level.time;
@@ -2460,7 +2460,7 @@ void teleporter_touch (edict_t *self, edict_t *other, const cplane_t *plane, con
 
 	if (!other->client)
 		return;
-	dest = G_Find (NULL, FOFS(targetname), self->target);
+	dest = G_Find(NULL, FOFS(targetname), self->target);
 	if (!dest)
 	{
 		gi.dprintf ("Couldn't find destination\n");

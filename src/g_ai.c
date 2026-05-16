@@ -383,7 +383,7 @@ qboolean inweaponLineOfSight (edict_t *self, edict_t *other)
 	AngleVectors(self->s.angles, forward, NULL, NULL);
 	VectorSubtract(other->s.origin, self->s.origin, vec);
 	VectorNormalize(vec);
-	dot = DotProduct (vec, forward);
+	dot = DotProduct(vec, forward);
 
 	if (dot > 0.8)
 		return true;
