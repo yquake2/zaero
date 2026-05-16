@@ -1766,23 +1766,6 @@ void ClientCommand (edict_t *ent)
 		Cmd_Wave_f (ent);
 	else if (Q_stricmp(cmd, "teleport") == 0)
 		Cmd_Teleport_f(ent);
-#if defined(_DEBUG) && defined(_Z_TESTMODE)
-  else if(Q_stricmp (cmd, "linesize") == 0)
-  {
-    extern float lineSize;
-    float ls = atof(gi.argv(1));
-
-    if(ls <= 0.0)
-    {
-      gi.cprintf(ent, PRINT_HIGH, "LineSize must be greater than 0\n");
-      return;
-    }
-
-    lineSize = ls;
-  }
-	else if (Q_stricmp (cmd, "testitem") == 0)
-		Cmd_TestItem (ent);
-#endif
 	else if (Q_stricmp(cmd, "showorigin") == 0)
 	{
 		ent->client->showOrigin = !ent->client->showOrigin;
@@ -1792,8 +1775,10 @@ void ClientCommand (edict_t *ent)
 			gi.cprintf(ent, PRINT_HIGH, "Show origin OFF\n");
 	}
 #if defined(_DEBUG) && defined(_Z_TESTMODE)
-   else if(Q_stricmp (cmd, "anim") == 0)
-      anim_player_cmd(ent);
+	else if(Q_stricmp(cmd, "anim") == 0)
+	{
+		anim_player_cmd(ent);
+	}
 #endif
 	else if (Q_stricmp(cmd, "listentities") == 0)
 	{

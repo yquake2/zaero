@@ -93,7 +93,6 @@ set(Zaero-Source
 	src/zaero/camera.c
 	src/zaero/frames.c
 	src/zaero/item.c
-	src/zaero/mtest.c
 	src/zaero/spawn.c
 	src/zaero/trigger.c
 	src/zaero/weapon.c

@@ -379,7 +379,6 @@ ZAERO_OBJS_ = \
 	src/zaero/camera.o \
 	src/zaero/frames.o \
 	src/zaero/item.o \
-	src/zaero/mtest.o \
 	src/zaero/spawn.o \
 	src/zaero/trigger.o \
 	src/zaero/weapon.o
