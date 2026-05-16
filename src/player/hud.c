@@ -180,7 +180,7 @@ BeginIntermission(const edict_t *targ)
 }
 
 void
-DeathmatchScoreboardMessage(edict_t *ent, edict_t *killer /* can be NULL */)
+DeathmatchScoreboardMessage(const edict_t *ent, const edict_t *killer /* can be NULL */)
 {
 	char entry[1024];
 	char string[1400];
@@ -411,7 +411,7 @@ Cmd_Help_f
 Display the current help message
 ==================
 */
-void 
+void
 Cmd_Help_f(edict_t *ent)
 {
 	if (!ent)

@@ -304,10 +304,10 @@ CheckPowerArmor(edict_t *ent, const vec3_t point, const vec3_t normal,
 int
 CheckArmor(edict_t *ent, vec3_t point, const vec3_t normal, int damage, int te_sparks, int dflags)
 {
-	gclient_t	*client;
-	int			save;
-	int			index;
-	gitem_t		*armor;
+	gclient_t *client;
+	int save;
+	int index;
+	const gitem_t *armor;
 
 	if (!ent)
 	{
@@ -424,8 +424,8 @@ void M_ReactToDamage (edict_t *targ, edict_t *attacker)
 	}
 }
 
-qboolean
-CheckTeamDamage(edict_t *targ, edict_t *attacker)
+static qboolean
+CheckTeamDamage(const edict_t *targ, const edict_t *attacker)
 {
 	return false;
 }

@@ -28,7 +28,8 @@ edict_t *FindZSpawn(int i)
 	return spot;
 }
 
-qboolean SpawnZ(gitem_t *item, edict_t *spot)
+static qboolean
+SpawnZ(const gitem_t *item, edict_t *spot)
 {
 	edict_t	*ent;
 	vec3_t	forward;
@@ -78,7 +79,7 @@ qboolean SpawnZ(gitem_t *item, edict_t *spot)
 	return false;
 }
 
-char *items[] = 
+char *items[] =
 {
 	"weapon_soniccannon",
 	"weapon_sniperrifle",
@@ -96,7 +97,7 @@ void Z_SpawnDMItems(void)
 	char **ptr = NULL;
 	int added = 0;
 	int count = 1;
-	
+
 	// only in deathmatch
 	if (!deathmatch->value)
 		return;
@@ -115,7 +116,7 @@ void Z_SpawnDMItems(void)
 
 		ptr++;
 	}
-	
+
 	// try to spawn 1 of each item near a deathmatch spot
 	ptr = &items[0];
 	while(*ptr != NULL)

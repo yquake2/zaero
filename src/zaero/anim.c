@@ -103,7 +103,8 @@ edict_t *find_client(void)
 /**************************************************************************
    Exported aim correction routine.
   **************************************************************************/
-anim_data_t *find_monster_animator(edict_t *monster)
+anim_data_t *
+find_monster_animator(const edict_t *monster)
 {
 	anim_data_t *anim;
 	int i;
@@ -124,7 +125,8 @@ anim_data_t *find_monster_animator(edict_t *monster)
 	return NULL;
 }
 
-qboolean anim_player_correct_aim(edict_t *self, vec3_t aim)
+qboolean
+anim_player_correct_aim(const edict_t *self, vec3_t aim)
 {
 	anim_data_t *anim;
 
@@ -691,7 +693,8 @@ qboolean anim_player_capture(char *targetname)
 /*=========================================================================
    Toggles current monster stationary.
   =========================================================================*/
-void anim_player_set_active(char *targetname, qboolean active)
+void
+anim_player_set_active(const char *targetname, qboolean active)
 {
 	anim_data_t *anim;
 	int i;
@@ -710,7 +713,8 @@ void anim_player_set_active(char *targetname, qboolean active)
    Animation player command entry point.
    Called in g_cmds.c
   =========================================================================*/
-void anim_player_cmd(edict_t *ent)
+void
+anim_player_cmd(const edict_t *ent)
 {
 	char *args, *arg1=NULL, *arg2=NULL;
 

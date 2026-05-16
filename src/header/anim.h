@@ -42,7 +42,7 @@ typedef struct
 } anim_data_t;
 
 //for aim correction during animation playback
-qboolean anim_player_correct_aim(edict_t *self, vec3_t aim);
+qboolean anim_player_correct_aim(const edict_t *self, vec3_t aim);
 
 //for console commands
 void anim_player_cmd(edict_t *ent);
@@ -51,7 +51,7 @@ void anim_player_cmd(edict_t *ent);
 
 #else
 
-#define ANIM_AIM(x, y) 
+#define ANIM_AIM(x, y)
 
 #endif
 

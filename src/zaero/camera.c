@@ -6,20 +6,21 @@
 
 void zCam_SetLocalCopy(struct edict_s *player, char *s);
 
-void zCam_TrackEntity(struct edict_s *player, struct edict_s *track, qboolean playerVisiable, qboolean playerOffset)
+void
+zCam_TrackEntity(struct edict_s *player, struct edict_s *track, qboolean playerVisiable, qboolean playerOffset)
 {
 	if(player->client == NULL)
 		return;  // not a true player
-	
+
 	player->client->zCameraTrack = track;
-	
+
 	// set the player view stuff...
 	player->movetype = MOVETYPE_FREEZE;
 	player->client->ps.gunindex = 0;
 	player->client->ps.fov = 90;
 
 	VectorSet(player->client->zCameraOffset, 0, 0, 0);
-	
+
 	// if invisible, turn off model, etc
 	if(playerVisiable)
 	{
@@ -50,13 +51,14 @@ void zCam_TrackEntity(struct edict_s *player, struct edict_s *track, qboolean pl
 	}
 }
 
-void zCam_Stop(struct edict_s *player)
+void
+zCam_Stop(struct edict_s *player)
 {
 	if(player->client == NULL)
 	{
 		return;  // not a true player
 	}
-  
+
 	player->client->zCameraTrack = NULL;
 
 	// set the player view stuff...
@@ -76,39 +78,11 @@ void zCam_Stop(struct edict_s *player)
 	}
 }
 
-char *getSkinModel(char *s, char *buffer)
+void
+zCam_SetLocalCopy(struct edict_s *player, char *s)
 {
-  char *cp;
-
-
-  strcpy(buffer, "players/");
-  cp = buffer + strlen(buffer);
-
-  while(*s && *s != '/')
-  {
-    *cp = *s;
-    cp++;
-    s++;
-  }
-
-  strcpy(cp, "/tris.md2");
-
-  return buffer;
-}
-
-char *getSkinName(char *s, char *buffer)
-{
-  strcpy(buffer, "players/");
-  strcat(buffer, s);
-  strcat(buffer, ".pcx");
-
-  return buffer;
-}
-
-void zCam_SetLocalCopy(struct edict_s *player, char *s)
-{
-  if(player->client->zCameraLocalEntity)
-  {
-    player->client->zCameraLocalEntity->s.modelindex = gi.modelindex("models/objects/gibs/head2/tris.md2");
-  }
+	if(player->client->zCameraLocalEntity)
+	{
+		player->client->zCameraLocalEntity->s.modelindex = gi.modelindex("models/objects/gibs/head2/tris.md2");
+	}
 }

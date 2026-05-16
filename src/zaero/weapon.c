@@ -359,7 +359,8 @@ void tripbomb_think(edict_t *self)
 	self->nextthink = level.time + FRAMETIME;
 }
 
-void setupBomb(edict_t *bomb, char *classname, float damage, float damage_radius)
+static void
+setupBomb(edict_t *bomb, const char *classname, float damage, float damage_radius)
 {
 	if (!bomb)
 	{

@@ -816,8 +816,8 @@ void fire_bfg(edict_t *self, vec3_t start, vec3_t dir, int damage,
 void PlayerTrail_Init(void);
 void PlayerTrail_Add(vec3_t spot);
 void PlayerTrail_New(vec3_t spot);
-edict_t *PlayerTrail_PickFirst(edict_t *self);
-edict_t *PlayerTrail_PickNext(edict_t *self);
+edict_t *PlayerTrail_PickFirst(const edict_t *self);
+edict_t *PlayerTrail_PickNext(const edict_t *self);
 edict_t *PlayerTrail_LastSpot(void);
 
 /* g_client.c */
@@ -845,7 +845,7 @@ void ClientEndServerFrame(edict_t *ent);
 void MoveClientToIntermission(edict_t *ent);
 void G_SetStats(edict_t *ent);
 void ValidateSelectedItem(gclient_t *cl);
-void DeathmatchScoreboardMessage(edict_t *ent, edict_t *killer);
+void DeathmatchScoreboardMessage(const edict_t *ent, const edict_t *killer);
 
 /* g_pweapon.c */
 void PlayerNoise(edict_t *who, vec3_t where, int type);

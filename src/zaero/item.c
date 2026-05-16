@@ -144,7 +144,8 @@ char *camera_statusbar =
 "endif "
 ;
 
-void updateVisorHud(edict_t *ent)
+void
+updateVisorHud(const edict_t *ent)
 {
 	static char buf[1024];
 

@@ -600,8 +600,8 @@ SV_NewChaseDir(edict_t *actor, edict_t *enemy, float dist)
 	}
 }
 
-qboolean
-SV_CloseEnough(edict_t *ent, edict_t *goal, float dist)
+static qboolean
+SV_CloseEnough(const edict_t *ent, const edict_t *goal, float dist)
 {
 	int i;
 

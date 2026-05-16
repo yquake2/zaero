@@ -1292,7 +1292,7 @@ newanim:
 }
 
 
-void updateVisorHud(edict_t *ent);
+void updateVisorHud(const edict_t *ent);
 void startVisorStatic(edict_t *ent);
 void stopCamera(edict_t *self);
 

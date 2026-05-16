@@ -191,8 +191,8 @@ player_pain(edict_t *self /* unsued */, edict_t *other /* unused */,
 	}
 }
 
-qboolean
-IsFemale(edict_t *ent)
+static qboolean
+IsFemale(const edict_t *ent)
 {
 	char *info;
 
@@ -216,8 +216,8 @@ IsFemale(edict_t *ent)
 	return false;
 }
 
-qboolean
-IsNeutral(edict_t *ent)
+static qboolean
+IsNeutral(const edict_t *ent)
 {
 	char *info;
 

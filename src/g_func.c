@@ -1264,8 +1264,8 @@ void SP_func_button (edict_t *ent)
  *    4)	heavy
  */
 
-void
-door_use_areaportals(edict_t *self, qboolean open)
+static void
+door_use_areaportals(const edict_t *self, qboolean open)
 {
 	edict_t *t = NULL;
 
@@ -1393,7 +1393,7 @@ void door_go_up (edict_t *self, edict_t *activator)
 		AngleMove_Calc (self, door_hit_top);
 
 	G_UseTargets(self, activator);
-	door_use_areaportals (self, true);
+	door_use_areaportals(self, true);
 }
 
 void door_openclose (edict_t *self, edict_t *other, edict_t *activator)
@@ -1597,7 +1597,7 @@ void Think_SpawnDoorTrigger (edict_t *ent)
 	gi.linkentity(other);
 
 	if (ent->spawnflags & DOOR_START_OPEN)
-		door_use_areaportals (ent, true);
+		door_use_areaportals(ent, true);
 
 	Think_CalcMoveSpeed (ent);
 }
@@ -2655,7 +2655,7 @@ void door_secret_use (edict_t *self, edict_t *other, edict_t *activator)
 		return;
 
 	Move_Calc (self, self->pos1, door_secret_move1, false);
-	door_use_areaportals (self, true);
+	door_use_areaportals(self, true);
 }
 
 void

@@ -505,18 +505,6 @@ void InitTestItem(void)
   testItem->pickup_name = testItem_name;
 }
 
-qboolean Pickup_TestItem (edict_t *ent, edict_t *other)
-{
-	if (!ent)
-	{
-		return false;
-	}
-
-	other->client->pers.inventory[ITEM_INDEX(ent->item)]++;
-
-	return true;
-}
-
 void drop_temp_touch (edict_t *ent, edict_t *other, const cplane_t *plane, const csurface_t *surf);
 
 void Drop_TestItem (edict_t *ent, const gitem_t *item)
