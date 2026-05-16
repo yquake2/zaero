@@ -59,9 +59,9 @@ int internalSoundIndex(char *name)
 	int i = 0;
 
 	// convert name to lowercase
-	for (i = 0; i < strlen(name); i++) 
+	for (i = 0; i < strlen(name); i++)
 		name[i] = tolower(name[i]);
-	
+
 	// do we already have this sound?
 	for (i = 0; i < numSounds; i++)
 	{
@@ -81,7 +81,7 @@ int internalSoundIndex(char *name)
 			gi.dprintf("%s precache rejected\n", name);
 		return 0;
 	}
-	
+
 	idx = (*actual_soundindex)(name);
 	if (idx == 0)
 		return 0;
@@ -89,7 +89,7 @@ int internalSoundIndex(char *name)
 	sound = gi.TagMalloc (sizeof(modelsound), TAG_LEVEL);
 	sound->name = gi.TagMalloc (strlen(name) + 1, TAG_LEVEL);
 	strcpy(sound->name, name);
-	
+
 	addTail(soundList, sound);
 	//gi.dprintf("numSounds = %i\n", listLength(&soundList));
 
@@ -122,10 +122,9 @@ void trigger_laser_on (edict_t *self);
 
 void trigger_laser_think (edict_t *self)
 {
-	vec3_t	start;
-	vec3_t	end;
-	trace_t	tr;
-	int		count = 8;
+	vec3_t start;
+	vec3_t end;
+	trace_t tr;
 
 	if (!self)
 	{
@@ -133,7 +132,7 @@ void trigger_laser_think (edict_t *self)
 	}
 
 	self->nextthink = level.time + FRAMETIME;
-	
+
 	VectorCopy(self->s.origin, start);
 	VectorMA(start, 2048, self->movedir, end);
 	tr = gi.trace(start, NULL, NULL, end, self, CONTENTS_SOLID|CONTENTS_MONSTER|CONTENTS_DEADMONSTER);
@@ -146,6 +145,8 @@ void trigger_laser_think (edict_t *self)
 	{
 		if (self->spawnflags & 0x80000000)
 		{
+			int count = 8;
+
 			self->spawnflags &= ~0x80000000;
 			gi.WriteByte(svc_temp_entity);
 			gi.WriteByte(TE_LASER_SPARKS);

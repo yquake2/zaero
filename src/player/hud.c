@@ -191,7 +191,7 @@ DeathmatchScoreboardMessage(const edict_t *ent, const edict_t *killer /* can be 
 	int score, total;
 	int x, y;
 	gclient_t *cl;
-	edict_t *cl_ent;
+	const edict_t *cl_ent;
 	char *tag;
 
 	if (!ent || !killer)
@@ -622,7 +622,7 @@ G_SetStats(edict_t *ent)
 	else if ((ent->client->pers.hand == CENTER_HANDED || ent->client->ps.fov > 91)
 		&& ent->client->pers.weapon)
 	{
-		cvar_t *gun;
+		const cvar_t *gun;
 		gun = gi.cvar("cl_gun", "2", 0);
 
 		if (gun->value != 2)

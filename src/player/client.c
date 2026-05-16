@@ -194,7 +194,7 @@ player_pain(edict_t *self /* unsued */, edict_t *other /* unused */,
 static qboolean
 IsFemale(const edict_t *ent)
 {
-	char *info;
+	const char *info;
 
 	if (!ent)
 	{
@@ -219,7 +219,7 @@ IsFemale(const edict_t *ent)
 static qboolean
 IsNeutral(const edict_t *ent)
 {
-	char *info;
+	const char *info;
 
 	if (!ent)
 	{
@@ -801,7 +801,7 @@ player_die(edict_t *self, edict_t *inflictor, edict_t *attacker,
 void
 InitClientPersistant(gclient_t *client)
 {
-	gitem_t *item;
+	const gitem_t *item;
 
 	if (!client)
 	{
@@ -1747,7 +1747,7 @@ ClientUserinfoChanged(edict_t *ent, char *userinfo)
 qboolean
 ClientConnect(edict_t *ent, char *userinfo)
 {
-	char *value;
+	const char *value;
 	int hc, ghc;
 
 	if (!ent || !userinfo)

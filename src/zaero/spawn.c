@@ -36,7 +36,6 @@ SpawnZ(const gitem_t *item, edict_t *spot)
 	vec3_t  angles;
 	vec3_t start;
 	vec3_t end;
-	trace_t tr;
 	int ang = 0;
 	int startAng = 0;
 
@@ -60,6 +59,8 @@ SpawnZ(const gitem_t *item, edict_t *spot)
 
 	for (ang = startAng; ang < startAng + 360; ang += 15)
 	{
+		trace_t tr;
+
 		angles[0] = 0;
 		angles[1] = ang;
 		angles[2] = 0;
@@ -110,7 +111,7 @@ void Z_SpawnDMItems(void)
 	ptr = items;
 	while (*ptr != NULL)
 	{
-		edict_t *e = G_Find(NULL, FOFS(classname), *ptr);
+		const edict_t *e = G_Find(NULL, FOFS(classname), *ptr);
 		if (e != NULL)
 			return;
 
@@ -122,8 +123,7 @@ void Z_SpawnDMItems(void)
 	while(*ptr != NULL)
 	{
 		int j = 0;
-		gitem_t *i = NULL;
-		edict_t *spot = NULL;
+		const gitem_t *i = NULL;
 
 		i = FindItemByClassname(*ptr);
 		ptr++;
@@ -132,6 +132,8 @@ void Z_SpawnDMItems(void)
 
 		for (j = 0; j < 4; j++)
 		{
+			edict_t *spot = NULL;
+
 			spot = FindZSpawn(count++);
 			if (spot == NULL)
 				break;

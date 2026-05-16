@@ -164,13 +164,13 @@ void TripBomb_Explode (edict_t *ent)
 	G_FreeEdict(ent);
 }
 
-void tripbomb_laser_think (edict_t *self)
+void
+tripbomb_laser_think(edict_t *self)
 {
 	vec3_t start;
 	vec3_t end;
 	vec3_t delta;
-	trace_t	tr;
-	int		count = 8;
+	trace_t tr;
 
 	if (!self)
 	{
@@ -210,6 +210,8 @@ void tripbomb_laser_think (edict_t *self)
 		VectorCopy(tr.endpos, self->move_origin);
 		if (self->spawnflags & 0x80000000)
 		{
+			int count = 8;
+
 			self->spawnflags &= ~0x80000000;
 			gi.WriteByte(svc_temp_entity);
 			gi.WriteByte(TE_LASER_SPARKS);

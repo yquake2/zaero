@@ -285,7 +285,7 @@ Pickup_AncientHead(edict_t *ent, edict_t *other)
 qboolean
 Pickup_Bandolier(edict_t *ent, edict_t *other)
 {
-	gitem_t *item;
+	const gitem_t *item;
 	int index;
 
 	if (!ent || !other)
@@ -354,7 +354,7 @@ Pickup_Bandolier(edict_t *ent, edict_t *other)
 qboolean
 Pickup_Pack(edict_t *ent, edict_t *other)
 {
-	gitem_t *item;
+	const gitem_t *item;
 	int index;
 
 	if (!ent || !other)
@@ -866,7 +866,7 @@ Drop_Ammo(edict_t *ent, const gitem_t *item)
 	ValidateSelectedItem(ent->client);
 }
 
-qboolean 
+qboolean
 Pickup_A2k(edict_t *ent, edict_t *other)
 {
 	if (!ent || !other)
@@ -1000,11 +1000,8 @@ qboolean
 Pickup_Armor(edict_t *ent, edict_t *other)
 {
 	int old_armor_index;
-	gitem_armor_t *oldinfo;
-	gitem_armor_t *newinfo;
-	int newcount;
-	float salvage;
-	int salvagecount;
+	const gitem_armor_t *oldinfo;
+	const gitem_armor_t *newinfo;
 
 	if (!ent || !other)
 	{
@@ -1055,6 +1052,8 @@ Pickup_Armor(edict_t *ent, edict_t *other)
 
 		if (newinfo->normal_protection > oldinfo->normal_protection)
 		{
+			int salvagecount, salvage, newcount;
+
 			/* calc new armor values */
 			salvage = oldinfo->normal_protection / newinfo->normal_protection;
 			salvagecount = salvage * other->client->pers.inventory[old_armor_index];
@@ -1073,6 +1072,8 @@ Pickup_Armor(edict_t *ent, edict_t *other)
 		}
 		else
 		{
+			int salvagecount, salvage, newcount;
+
 			/* calc new armor values */
 			salvage = newinfo->normal_protection / oldinfo->normal_protection;
 			salvagecount = salvage * newinfo->base_count;
@@ -1139,8 +1140,6 @@ PowerArmorType(const edict_t *ent)
 void
 Use_PowerArmor(edict_t *ent, const gitem_t *item)
 {
-	int index;
-
 	if (!ent || !item)
 	{
 		return;
@@ -1153,6 +1152,8 @@ Use_PowerArmor(edict_t *ent, const gitem_t *item)
 	}
 	else
 	{
+		int index;
+
 		index = ITEM_INDEX(FindItem("cells"));
 
 		if (!ent->client->pers.inventory[index])
@@ -1430,7 +1431,6 @@ Drop_Item(edict_t *ent, const gitem_t *item)
 {
 	edict_t *dropped;
 	vec3_t forward, right;
-	vec3_t offset;
 
 	if (!ent || !item)
 	{
@@ -1455,6 +1455,7 @@ Drop_Item(edict_t *ent, const gitem_t *item)
 	if (ent->client)
 	{
 		trace_t trace;
+		vec3_t offset;
 
 		AngleVectors(ent->client->v_angle, forward, right, NULL);
 		VectorSet(offset, 24, 0, -16);
@@ -1513,7 +1514,7 @@ droptofloor(edict_t *ent)
 {
 	trace_t tr;
 	vec3_t dest;
-	float *v;
+	const float *v;
 
 	if (!ent)
 	{
@@ -3221,10 +3222,11 @@ void
 SetItemNames(void)
 {
 	int i;
-	gitem_t *it;
 
 	for (i = 0; i < itemlist_len; i++)
 	{
+		gitem_t *it;
+
 		it = &itemlist[i];
 		gi.configstring(CS_ITEMS + i, it->pickup_name);
 	}

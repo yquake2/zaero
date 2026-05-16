@@ -342,9 +342,10 @@ void testitem_think (edict_t *ent)
 	ent->nextthink = level.time + (FRAMETIME * animSpeed);
 }
 
-void Cmd_TestItem (edict_t *ent)
+void
+Cmd_TestItem(edict_t *ent)
 {
-	char *cmd;
+	const char *cmd;
 
 	if (!ent)
 	{
@@ -510,7 +511,6 @@ void drop_temp_touch (edict_t *ent, edict_t *other, const cplane_t *plane, const
 void Drop_TestItem (edict_t *ent, const gitem_t *item)
 {
 	vec3_t	forward, right;
-	vec3_t	offset;
 
 	if (!ent || !item)
 	{
@@ -537,7 +537,8 @@ void Drop_TestItem (edict_t *ent, const gitem_t *item)
 
 	if (ent->client)
 	{
-		trace_t	trace;
+		trace_t trace;
+		vec3_t offset;
 
 		AngleVectors(ent->client->v_angle, forward, right, NULL);
 		VectorSet(offset, 24, 0, -16);

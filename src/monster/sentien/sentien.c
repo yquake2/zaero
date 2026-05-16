@@ -1160,8 +1160,6 @@ void sentien_dead(edict_t *self)
 
 void sentien_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
-	int n;
-
 	if (!self)
 	{
 		return;
@@ -1172,11 +1170,20 @@ void sentien_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int dama
 	//gib code to go here
 	if (self->health <= self->gib_health)
 	{
+		int n;
+
 		gi.sound(self, CHAN_VOICE, gi.soundindex("misc/udeath.wav"), 1, ATTN_NORM, 0);
-		for (n= 0; n < 1 /*4*/; n++)
+
+		for (n = 0; n < 1 /*4*/; n++)
+		{
 			ThrowGib(self, "models/objects/gibs/sm_meat/tris.md2", damage, GIB_ORGANIC);
-		for (n= 0; n < 4; n++)
+		}
+
+		for (n = 0; n < 4; n++)
+		{
 			ThrowGib(self, "models/objects/gibs/sm_metal/tris.md2", damage, GIB_METALLIC);
+		}
+
 		ThrowGib(self, "models/objects/gibs/chest/tris.md2", damage, GIB_ORGANIC);
 		ThrowHead(self, "models/objects/gibs/gear/tris.md2", damage, GIB_METALLIC);
 		self->deadflag = DEAD_DEAD;
@@ -1184,16 +1191,22 @@ void sentien_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int dama
 	}
 
 	if (self->deadflag == DEAD_DEAD)
+	{
 		return;
+	}
 
 	self->deadflag = DEAD_DEAD;
 	self->takedamage = DAMAGE_YES;
 	self->s.skinnum |= 1;
 
 	if (random() < 0.80)
+	{
 		self->monsterinfo.currentmove = &sentien_move_death1;
+	}
 	else
+	{
 		self->monsterinfo.currentmove = &sentien_move_death2;
+	}
 }
 
 

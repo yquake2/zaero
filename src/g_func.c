@@ -1501,9 +1501,6 @@ Think_CalcMoveSpeed(edict_t *self)
 	edict_t *ent;
 	float min;
 	float time;
-	float newspeed;
-	float ratio;
-	float dist;
 
 	if (!self)
 	{
@@ -1520,6 +1517,8 @@ Think_CalcMoveSpeed(edict_t *self)
 
 	for (ent = self->teamchain; ent; ent = ent->teamchain)
 	{
+		float dist;
+
 		dist = fabs(ent->moveinfo.distance);
 
 		if (dist < min)
@@ -1533,6 +1532,8 @@ Think_CalcMoveSpeed(edict_t *self)
 	/* adjust speeds so they will all complete at the same time */
 	for (ent = self; ent; ent = ent->teamchain)
 	{
+		float ratio, newspeed;
+
 		newspeed = fabs(ent->moveinfo.distance) / time;
 		ratio = newspeed / ent->moveinfo.speed;
 

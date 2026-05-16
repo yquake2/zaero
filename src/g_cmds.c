@@ -192,15 +192,16 @@ Cmd_Give_f
 Give items to a client
 ==================
 */
-void Cmd_Give_f (edict_t *ent)
+void
+Cmd_Give_f(edict_t *ent)
 {
-	char		*name;
-	gitem_t		*it;
-	int			index;
-	int			i;
-	qboolean	give_all;
-	edict_t		*it_ent;
-	int     numargs;
+	const char *name;
+	gitem_t *it;
+	int index;
+	int i;
+	qboolean give_all;
+	edict_t *it_ent;
+	int numargs;
 	char tryname[256];
 
 	if (!ent)
@@ -264,7 +265,7 @@ void Cmd_Give_f (edict_t *ent)
 
 	if (give_all || Q_stricmp(name, "armor") == 0)
 	{
-		gitem_armor_t	*info;
+		const gitem_armor_t *info;
 
 		it = FindItem("Jacket Armor");
 		ent->client->pers.inventory[ITEM_INDEX(it)] = 0;
@@ -277,7 +278,9 @@ void Cmd_Give_f (edict_t *ent)
 		ent->client->pers.inventory[ITEM_INDEX(it)] = info->max_count;
 
 		if (!give_all)
+		{
 			return;
+		}
 	}
 
 	if (give_all || Q_stricmp(name, "Visor") == 0)
@@ -552,7 +555,6 @@ void altSelect(edict_t *ent, int num)
 	int offset = -1;
 	int i = 0;
 	struct altsel_s *ptr = NULL;
-	gitem_t *it = NULL;
 
 	if (!ent)
 	{
@@ -571,6 +573,8 @@ void altSelect(edict_t *ent, int num)
 	// is our current weapon in this list?
 	for (i = 0; i < ptr->num; i++)
 	{
+		const gitem_t *it = NULL;
+
 		it = FindItem(ptr->weapon[i]);
 		if (it == ent->client->pers.weapon)
 		{
@@ -767,10 +771,10 @@ Cmd_WeapPrev_f
 */
 void Cmd_WeapPrev_f (edict_t *ent)
 {
-	gclient_t	*cl;
-	int			i, index;
+	gclient_t *cl;
+	int i;
 	const gitem_t *it;
-	int			selected_weapon;
+	int selected_weapon;
 
 	if (!ent)
 	{
@@ -797,6 +801,8 @@ void Cmd_WeapPrev_f (edict_t *ent)
 	// scan for the next valid one
 	for (i = 1; i <= itemlist_len; i++)
 	{
+		int index;
+
 		index = (selected_weapon + itemlist_len - i) % itemlist_len;
 		if (!cl->pers.inventory[index])
 		{
@@ -829,12 +835,13 @@ void Cmd_WeapPrev_f (edict_t *ent)
 Cmd_WeapNext_f
 =================
 */
-void Cmd_WeapNext_f (edict_t *ent)
+void
+Cmd_WeapNext_f(edict_t *ent)
 {
-	gclient_t	*cl;
-	int			i, index;
-	const gitem_t		*it;
-	int			selected_weapon;
+	gclient_t *cl;
+	int i;
+	const gitem_t *it;
+	int selected_weapon;
 
 	if (!ent)
 	{
@@ -861,6 +868,8 @@ void Cmd_WeapNext_f (edict_t *ent)
 	// scan for the next valid one
 	for (i = 1; i <= itemlist_len; i++)
 	{
+		int index;
+
 		index = (selected_weapon + i) % itemlist_len;
 		if (!cl->pers.inventory[index])
 		{
@@ -1133,10 +1142,8 @@ Cmd_Say_f
 */
 void Cmd_Say_f (edict_t *ent, qboolean team, qboolean arg0)
 {
-	int		j;
-	edict_t	*other;
-	char	*p;
-	char	text[2048];
+	int j;
+	char text[2048];
 
 	if (!ent)
 	{
@@ -1162,6 +1169,8 @@ void Cmd_Say_f (edict_t *ent, qboolean team, qboolean arg0)
 	}
 	else
 	{
+		char *p;
+
 		p = gi.args();
 
 		if (*p == '"')
@@ -1183,6 +1192,8 @@ void Cmd_Say_f (edict_t *ent, qboolean team, qboolean arg0)
 
 	for (j = 1; j <= game.maxclients; j++)
 	{
+		edict_t *other;
+
 		other = &g_edicts[j];
 		if (!other->inuse)
 			continue;
@@ -1380,7 +1391,6 @@ cycle_weapon(edict_t *ent)
 	gitem_t *noammo_fallback;
 	gitem_t *noweap_fallback;
 	gitem_t *weap;
-	gitem_t *ammo;
 	int i;
 	int start;
 	int num_weaps;
@@ -1447,6 +1457,8 @@ cycle_weapon(edict_t *ent)
 			{
 				if (weap->ammo)
 				{
+					const gitem_t *ammo;
+
 					ammo = FindItem(weap->ammo);
 					if (ammo)
 					{
@@ -1533,11 +1545,10 @@ Cmd_CycleWeap_f(edict_t *ent)
 static gitem_t *
 preferred_weapon(edict_t *ent)
 {
-	gclient_t *cl;
+	const gclient_t *cl;
 	gitem_t *noammo_fallback;
 	gitem_t *noweap_fallback;
 	gitem_t *weap;
-	gitem_t *ammo;
 	int i;
 	int num_weaps;
 
@@ -1568,6 +1579,8 @@ preferred_weapon(edict_t *ent)
 			{
 				if (weap->ammo)
 				{
+					const gitem_t *ammo;
+
 					ammo = FindItem(weap->ammo);
 					if (ammo)
 					{
@@ -1644,7 +1657,7 @@ ClientCommand
 */
 void ClientCommand (edict_t *ent)
 {
-	char	*cmd;
+	const char *cmd;
 
 	if (!ent)
 	{

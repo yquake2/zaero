@@ -106,7 +106,6 @@ edict_t *find_client(void)
 anim_data_t *
 find_monster_animator(const edict_t *monster)
 {
-	anim_data_t *anim;
 	int i;
 
 	if (!monster)
@@ -116,6 +115,8 @@ find_monster_animator(const edict_t *monster)
 
 	for(i=0;i<animations_count;i++)
 	{
+		anim_data_t *anim;
+
 		anim = animations[i];
 
 		if(anim->monster == monster)
@@ -255,10 +256,9 @@ anim_data_t *anim_player_create(edict_t *monster)
 /*=========================================================================
    Animation player behaviour routines.
   =========================================================================*/
-void advance_anim_frame(anim_data_t *anim, int count)
+void
+advance_anim_frame(anim_data_t *anim, int count)
 {
-	mmove_t *seq;
-
 	if (!anim)
 	{
 		return;
@@ -267,8 +267,10 @@ void advance_anim_frame(anim_data_t *anim, int count)
 	anim->moving_forward = (count < 0)? false : true;
 
 	anim->current_frame += count;
-	if(anim->current_sequence)
+	if (anim->current_sequence)
 	{
+		const mmove_t *seq;
+
 		seq = anim->monster_sequences[anim->current_sequence - 1];
 		anim->current_frame += seq->lastframe - seq->firstframe + 1;
 		anim->current_frame %= seq->lastframe - seq->firstframe + 1;
@@ -432,8 +434,6 @@ int get_total_frame_count(anim_data_t *data)
   =========================================================================*/
 void calculate_buffer_actuals(anim_data_t *data)
 {
-	int seq_frames, idx;
-
 	if (!data)
 	{
 		return;
@@ -446,6 +446,8 @@ void calculate_buffer_actuals(anim_data_t *data)
 	}
 	else
 	{
+		int seq_frames, idx;
+
 		data->current_frame %= get_total_frame_count(data);
 		data->actual_sequence_idx = data->current_frame;
 
@@ -464,7 +466,7 @@ void calculate_buffer_actuals(anim_data_t *data)
 	}
 
 	data->actual_frame = data->actual_sequence->firstframe +
-	data->actual_sequence_idx;
+		data->actual_sequence_idx;
 }
 
 /**************************************************************************
@@ -485,11 +487,12 @@ void anim_player_report(char *targetname, char *description, qboolean on)
   =========================================================================*/
 void anim_player_advance_frame(int count)
 {
-	anim_data_t *anim;
 	int i;
 
 	for(i=0;i<animations_count;i++)
 	{
+		anim_data_t *anim;
+
 		anim = animations[i];
 		if(!anim->active)
 		continue;
@@ -503,11 +506,12 @@ void anim_player_advance_frame(int count)
   =========================================================================*/
 void anim_player_advance_sequence(int count)
 {
-	anim_data_t *anim;
 	int i, tcount;
 
 	for(i=0;i<animations_count;i++)
 	{
+		anim_data_t *anim;
+
 		anim = animations[i];
 		if(!anim->active)
 		continue;
@@ -540,9 +544,9 @@ void anim_player_advance_sequence(int count)
 /*=========================================================================
    Set facing flag.
   =========================================================================*/
-void anim_player_set_facing(anim_dir_t facing)
+void
+anim_player_set_facing(anim_dir_t facing)
 {
-	anim_data_t *anim;
 	int i;
 
 	if (!facing)
@@ -552,6 +556,8 @@ void anim_player_set_facing(anim_dir_t facing)
 
 	for(i=0;i<animations_count;i++)
 	{
+		anim_data_t *anim;
+
 		anim = animations[i];
 		if(!anim->active)
 			continue;
@@ -565,7 +571,6 @@ void anim_player_set_facing(anim_dir_t facing)
   =========================================================================*/
 void anim_player_set_aim(anim_dir_t aim)
 {
-	anim_data_t *anim;
 	int i;
 
 	if (!aim)
@@ -575,6 +580,8 @@ void anim_player_set_aim(anim_dir_t aim)
 
 	for(i=0;i<animations_count;i++)
 	{
+		anim_data_t *anim;
+
 		anim = animations[i];
 		if(!anim->active)
 			continue;
@@ -696,16 +703,19 @@ qboolean anim_player_capture(char *targetname)
 void
 anim_player_set_active(const char *targetname, qboolean active)
 {
-	anim_data_t *anim;
 	int i;
 
-	for(i=0;i<animations_count;i++)
+	for(i = 0;i < animations_count; i++)
 	{
+		anim_data_t *anim;
+
 		anim = animations[i];
 
 		if((Q_stricmp(anim->monster->targetname, targetname) == 0) ||
 			(Q_stricmp("all", targetname) == 0))
+		{
 			anim->active = active;
+		}
 	}
 }
 

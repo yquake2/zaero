@@ -1141,7 +1141,6 @@ Info_ValueForKey(const char *s, const char *key)
 	static char value[2][512]; /* use two buffers so compares
 							     work without stomping on each other */
 	static int valueindex;
-	char *o;
 
 	valueindex ^= 1;
 
@@ -1152,6 +1151,8 @@ Info_ValueForKey(const char *s, const char *key)
 
 	while (1)
 	{
+		char *o;
+
 		o = pkey;
 
 		while (*s != '\\')
@@ -1198,10 +1199,8 @@ Info_ValueForKey(const char *s, const char *key)
 void
 Info_RemoveKey(char *s, const char *key)
 {
-	char *start;
 	char pkey[512];
 	char value[512];
-	char *o;
 
 	if (strstr(key, "\\"))
 	{
@@ -1210,6 +1209,8 @@ Info_RemoveKey(char *s, const char *key)
 
 	while (1)
 	{
+		char *start, *o;
+
 		start = s;
 
 		if (*s == '\\')
@@ -1282,8 +1283,8 @@ Info_Validate(const char *s)
 void
 Info_SetValueForKey(char *s, const char *key, const char *value)
 {
-	char newi[MAX_INFO_STRING], *v;
-	int c;
+	char newi[MAX_INFO_STRING];
+	const char *v;
 	int maxsize = MAX_INFO_STRING;
 
 	if (!value || !strlen(value))
@@ -1331,6 +1332,8 @@ Info_SetValueForKey(char *s, const char *key, const char *value)
 
 	while (*v)
 	{
+		int c;
+
 		c = *v++;
 		c &= 127; /* strip high bits */
 

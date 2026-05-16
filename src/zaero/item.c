@@ -404,10 +404,10 @@ EMPNukeCheck(const edict_t *ent, const vec3_t pos)
 
 	while ((check = G_Find(check, FOFS(classname), "EMPNukeCenter")) != NULL)
 	{
-		vec3_t	v;
-
 		if(check->owner != ent)
 		{
+			vec3_t v;
+
 			VectorSubtract(check->s.origin, pos, v);
 			if(VectorLength(v) <= check->dmg)
 			{
@@ -588,9 +588,9 @@ void SP_misc_crate_small(edict_t *self)
 	setupCrate(self);
 }
 
-qboolean thruBarrier(edict_t *targ, edict_t *inflictor)
+qboolean
+thruBarrier(edict_t *targ, edict_t *inflictor)
 {
-	trace_t tr;
 	edict_t *e = inflictor;
 
 	if (!targ || !inflictor)
@@ -598,8 +598,10 @@ qboolean thruBarrier(edict_t *targ, edict_t *inflictor)
 		return false;
 	}
 
-	while(e)
+	while (e)
 	{
+		trace_t tr;
+
 		tr = gi.trace(e->s.origin, NULL, NULL, targ->s.origin, e, MASK_SHOT);
 		if (!tr.ent || tr.fraction >= 1.0)
 			return false;

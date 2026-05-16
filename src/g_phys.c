@@ -539,10 +539,12 @@ Objects need to be moved back on a failed push,
 otherwise riders would continue to slide.
 ============
 */
-qboolean SV_Push (edict_t *pusher, vec3_t move, vec3_t amove)
+qboolean
+SV_Push(edict_t *pusher, vec3_t move, vec3_t amove)
 {
 	int			i, e;
-	edict_t		*check, *block;
+	edict_t		*check;
+	const edict_t *block;
 	pushed_t	*p;
 	vec3_t		org, org2, move2, forward, right, up;
 	vec3_t		realmins, realmaxs;
@@ -999,7 +1001,7 @@ void SV_Physics_Step (edict_t *ent)
 	float		*vel;
 	float		speed, newspeed, control;
 	float		friction;
-	edict_t		*groundentity;
+	const edict_t		*groundentity;
 	int			mask;
 
 	if (!ent)

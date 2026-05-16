@@ -90,8 +90,6 @@ Distance is for slight position adjustments needed by the animations
 */
 void ai_stand (edict_t *self, float dist)
 {
-	vec3_t	v;
-
 	if (!self)
 	{
 		return;
@@ -104,6 +102,8 @@ void ai_stand (edict_t *self, float dist)
 	{
 		if (self->enemy)
 		{
+			vec3_t v;
+
 			VectorSubtract(self->enemy->s.origin, self->s.origin, v);
 			self->ideal_yaw = vectoyaw(v);
 			if (self->s.angles[YAW] != self->ideal_yaw && self->monsterinfo.aiflags & AI_TEMP_STAND_GROUND)
@@ -495,9 +495,8 @@ slower noticing monsters.
 */
 qboolean FindTarget (edict_t *self)
 {
-	edict_t		*client;
-	qboolean	heardit;
-	int			r;
+	edict_t *client;
+	qboolean heardit;
 
 	if (!self)
 	{
@@ -580,6 +579,8 @@ qboolean FindTarget (edict_t *self)
 
 	if (!heardit)
 	{
+		int r;
+
 		r = ai_range (self, client);
 
 		if (r == RANGE_FAR)
@@ -700,11 +701,10 @@ FacingIdeal(const edict_t *self)
 
 //=============================================================================
 
-qboolean M_CheckAttack (edict_t *self)
+qboolean
+M_CheckAttack(edict_t *self)
 {
-	vec3_t	spot1, spot2;
 	float	chance;
-	trace_t	tr;
 
 	if (!self || !self->enemy || !self->enemy->inuse)
 	{
@@ -713,7 +713,10 @@ qboolean M_CheckAttack (edict_t *self)
 
 	if (self->enemy->health > 0)
 	{
-	// see if any entities are in the way of the shot
+		vec3_t spot1, spot2;
+		trace_t tr;
+
+		// see if any entities are in the way of the shot
 		VectorCopy(self->s.origin, spot1);
 		spot1[2] += self->viewheight;
 		VectorCopy(self->enemy->s.origin, spot2);
@@ -1057,16 +1060,13 @@ The monster has an enemy it is trying to kill
 */
 void ai_run (edict_t *self, float dist)
 {
-	vec3_t		v;
-	edict_t		*tempgoal;
-	edict_t		*save;
-	qboolean	new;
-	edict_t		*marker;
-	float		d1, d2;
-	trace_t		tr;
-	vec3_t		v_forward, v_right;
-	float		left, center, right;
-	vec3_t		left_target, right_target;
+	vec3_t v;
+	edict_t *tempgoal;
+	edict_t *save;
+	qboolean new;
+	edict_t *marker;
+	float d1;
+	vec3_t left_target, right_target;
 
 	if (!self)
 	{
@@ -1192,9 +1192,14 @@ void ai_run (edict_t *self, float dist)
 
 	if (new)
 	{
+		trace_t tr;
+
 		tr = gi.trace(self->s.origin, self->mins, self->maxs, self->monsterinfo.last_sighting, self, MASK_PLAYERSOLID);
 		if (tr.fraction < 1)
 		{
+			float left, center, right, d2;
+			vec3_t v_forward, v_right;
+
 			VectorSubtract(self->goalentity->s.origin, self->s.origin, v);
 			d1 = VectorLength(v);
 			center = tr.fraction;

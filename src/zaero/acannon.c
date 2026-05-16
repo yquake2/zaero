@@ -543,7 +543,7 @@ void monster_autocannon_think(edict_t *self)
 	ac_anim_frame_t frame;
 	ac_anim_t anim;
 	int lefty = 0;
-	edict_t *old_enemy;
+	const edict_t *old_enemy;
 
 	if (!self)
 	{

@@ -37,7 +37,7 @@ void
 P_ProjectSource(edict_t *ent, vec3_t distance,
 		vec3_t forward, vec3_t right, vec3_t result)
 {
-	gclient_t *client = ent->client;
+	const gclient_t *client = ent->client;
 	float     *point  = ent->s.origin;
 	vec3_t     _distance;
 
@@ -155,7 +155,7 @@ qboolean
 Pickup_Weapon(edict_t *ent, edict_t *other)
 {
 	int index;
-	gitem_t *ammo;
+	const gitem_t *ammo;
 
 	if (!ent || !other)
 	{
@@ -393,9 +393,6 @@ stuffcmd(edict_t *e, char *s)
 void
 Use_Weapon(edict_t *ent, const gitem_t *item)
 {
-	int ammo_index;
-	gitem_t *ammo_item;
-
 	if (!ent || !item)
 	{
 		return;
@@ -409,9 +406,13 @@ Use_Weapon(edict_t *ent, const gitem_t *item)
 
 	if (item->ammo && !g_select_empty->value && !(item->flags & IT_AMMO))
 	{
+		gitem_t *ammo_item;
+
 		ammo_item = FindItem(item->ammo);
 		if (ammo_item != NULL)
 		{
+			int ammo_index;
+
 			ammo_index = ITEM_INDEX(ammo_item);
 
 			if (!ent->client->pers.inventory[ammo_index])
@@ -425,10 +426,6 @@ Use_Weapon(edict_t *ent, const gitem_t *item)
 				gi.cprintf(ent, PRINT_HIGH, "Not enough %s for %s.\n", ammo_item->pickup_name, item->pickup_name);
 				return;
 			}
-		}
-		else
-		{
-			ammo_index = 0;
 		}
 	}
 
@@ -1109,11 +1106,6 @@ Weapon_Blaster(edict_t *ent)
 void
 Weapon_HyperBlaster_Fire(edict_t *ent)
 {
-	float rotation;
-	vec3_t offset;
-	int effect;
-	int damage;
-
 	if (!ent)
 	{
 		return;
@@ -1140,6 +1132,10 @@ Weapon_HyperBlaster_Fire(edict_t *ent)
 		}
 		else
 		{
+			int damage, effect;
+			float rotation;
+			vec3_t offset;
+
 			rotation = (ent->client->ps.gunframe - 5) * 2 * M_PI / 6;
 			offset[0] = -4 * sin(rotation);
 			offset[1] = 0;
@@ -1325,7 +1321,6 @@ Chaingun_Fire(edict_t *ent)
 	int shots;
 	vec3_t start;
 	vec3_t forward, right, up;
-	float r, u;
 	vec3_t offset;
 	int damage;
 	int kick = 2;
@@ -1440,6 +1435,8 @@ Chaingun_Fire(edict_t *ent)
 
 	for (i = 0; i < shots; i++)
 	{
+		float r, u;
+
 		/* get start / end positions */
 		AngleVectors(ent->client->v_angle, forward, right, up);
 		r = 7 + crandom() * 4;

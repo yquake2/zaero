@@ -29,14 +29,19 @@ NULL will be returned if the end of the list is reached.
 
 =============
 */
-edict_t *G_Find(edict_t *from, int fieldofs, const char *match)
+edict_t *
+G_Find(edict_t *from, int fieldofs, const char *match)
 {
-	char	*s;
+	const char *s;
 
 	if (!from)
+	{
 		from = g_edicts;
+	}
 	else
+	{
 		from++;
+	}
 
 	if (!match)
 	{

@@ -198,7 +198,7 @@ void EndDMLevel (void)
 			ent = G_Spawn ();
 			ent->classname = "target_changelevel";
 			ent->map = level.mapname;
-      ent->spawnflags2 = 0;
+			ent->spawnflags2 = 0;
 		}
 	}
 
@@ -210,10 +210,11 @@ void EndDMLevel (void)
 CheckDMRules
 =================
 */
-void CheckDMRules (void)
+void
+CheckDMRules(void)
 {
-	int			i;
-	gclient_t	*cl;
+	int i;
+	const gclient_t *cl;
 
 	if (level.intermissiontime)
 		return;

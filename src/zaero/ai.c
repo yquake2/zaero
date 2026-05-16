@@ -98,7 +98,7 @@ Check direction moving in does not hit a wall... if it does change direction.
 */
 int zFindRoamYaw(edict_t *self, float distcheck)
 {
-	vec3_t	forward, end, angles;
+	vec3_t	forward, end;
 	trace_t	tr;
 	float current;
 
@@ -133,6 +133,7 @@ int zFindRoamYaw(edict_t *self, float distcheck)
 		{
 			float dir = random() > 0.5 ? -45 : 45;
 			float maxtrys = 100;
+			vec3_t angles;
 
 			VectorCopy(self->s.angles, angles);
 
@@ -181,7 +182,7 @@ int zSchoolMonsters(edict_t *self, float dist, int runStyle, float *currentSpeed
 	{
 		float totalSpeed;
 		float totalBearing;
-		float distanceToNearest, distanceToLeader, dist;
+		float distanceToNearest, distanceToLeader;
 		edict_t *nearestEntity = 0, *list;
 		vec3_t vec;
 
@@ -193,6 +194,8 @@ int zSchoolMonsters(edict_t *self, float dist, int runStyle, float *currentSpeed
 
 		while(list)
 		{
+			float dist;
+
 			// Gather data on those you see
 			totalSpeed += list->speed;
 			totalBearing += anglemod(list->s.angles[YAW]);
