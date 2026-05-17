@@ -33,6 +33,6 @@
 #define FRAME_die1Start		    220
 #define FRAME_die1End		      231
 
-#define MODEL_SCALE	1.000
+#define MODEL_SCALE 1.000000
 
 #endif

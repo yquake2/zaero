@@ -50,7 +50,7 @@ void zboss_walksound (edict_t *self)
 		return;
 	}
 
-	gi.sound (self, CHAN_BODY, sound_walk, 1, ATTN_NORM, 0);
+	gi.sound(self, CHAN_BODY, sound_walk, 1, ATTN_NORM, 0);
 }
 
 
@@ -61,7 +61,7 @@ void zboss_sight (edict_t *self, edict_t *other)
 		return;
 	}
 
-	gi.sound (self, CHAN_VOICE, sound_sight, 1, ATTN_NORM, 0);
+	gi.sound(self, CHAN_VOICE, sound_sight, 1, ATTN_NORM, 0);
 }
 
 
@@ -78,15 +78,15 @@ void possibleBossTaunt(edict_t *self)
 	{
 		if(r < 0.33)
 		{
-			gi.sound (self, CHAN_VOICE, sound_taunt1, 1, ATTN_NORM, 0);
+			gi.sound(self, CHAN_VOICE, sound_taunt1, 1, ATTN_NORM, 0);
 		}
 		else if(r < 0.66)
 		{
-			gi.sound (self, CHAN_VOICE, sound_taunt2, 1, ATTN_NORM, 0);
+			gi.sound(self, CHAN_VOICE, sound_taunt2, 1, ATTN_NORM, 0);
 		}
 		else
 		{
-			gi.sound (self, CHAN_VOICE, sound_taunt3, 1, ATTN_NORM, 0);
+			gi.sound(self, CHAN_VOICE, sound_taunt3, 1, ATTN_NORM, 0);
 		}
 	}
 }
@@ -177,13 +177,13 @@ void zboss_standidle (edict_t *self)
 
 	if (random() < 0.8)
   {
-		gi.sound (self, CHAN_VOICE, sound_idle1, 1, ATTN_NORM, 0);
-  	self->monsterinfo.currentmove = &zboss_stand1;
+		gi.sound(self, CHAN_VOICE, sound_idle1, 1, ATTN_NORM, 0);
+	self->monsterinfo.currentmove = &zboss_stand1;
   }
   else
   {
-		gi.sound (self, CHAN_VOICE, sound_idle2, 1, ATTN_NORM, 0);
-  	self->monsterinfo.currentmove = &zboss_stand2;
+		gi.sound(self, CHAN_VOICE, sound_idle2, 1, ATTN_NORM, 0);
+	self->monsterinfo.currentmove = &zboss_stand2;
   }
 }
 
@@ -441,27 +441,27 @@ void zboss_pain (edict_t *self, edict_t *other, float kick, int damage)
 	r = random();
 	if(r < 0.125)
 	{
-		gi.sound (self, CHAN_VOICE, sound_pain1, 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_VOICE, sound_pain1, 1, ATTN_NORM, 0);
 	}
 	else if(r < 0.25)
 	{
-		gi.sound (self, CHAN_VOICE, sound_pain2, 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_VOICE, sound_pain2, 1, ATTN_NORM, 0);
 	}
 	else if(r < 0.375)
 	{
-		gi.sound (self, CHAN_VOICE, sound_pain3, 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_VOICE, sound_pain3, 1, ATTN_NORM, 0);
 	}
 	else if(r < 0.5)
 	{
-		gi.sound (self, CHAN_VOICE, sound_taunt1, 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_VOICE, sound_taunt1, 1, ATTN_NORM, 0);
 	}
 	else if(r < 0.625)
 	{
-		gi.sound (self, CHAN_VOICE, sound_taunt2, 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_VOICE, sound_taunt2, 1, ATTN_NORM, 0);
 	}
 	else if(r < 0.75)
 	{
-		gi.sound (self, CHAN_VOICE, sound_taunt3, 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_VOICE, sound_taunt3, 1, ATTN_NORM, 0);
 	}
 
 	if(self->bossFireCount && self->bossFireTimeout < level.time)
@@ -557,7 +557,7 @@ void zboss_melee2 (edict_t *self)
 	}
 
 	self->monsterinfo.currentmove = &zboss_move_attack2c;
-	gi.sound (self, CHAN_WEAPON, sound_swing, 1, ATTN_NORM, 0);
+	gi.sound(self, CHAN_WEAPON, sound_swing, 1, ATTN_NORM, 0);
 }
 
 mframe_t zboss_frames_premelee [] =
@@ -582,7 +582,7 @@ void zboss_melee (edict_t *self)
 		return;
 	}
 
-	gi.sound (self, CHAN_BODY, sound_raisegun, 1, ATTN_NORM, 0);
+	gi.sound(self, CHAN_BODY, sound_raisegun, 1, ATTN_NORM, 0);
 	self->monsterinfo.currentmove = &zboss_move_premelee;
 }
 
@@ -617,8 +617,7 @@ void zboss_reloadRockets(edict_t *self)
 	self->monsterinfo.currentmove = &zboss_move_attack1b;
 }
 
-
-static vec3_t	rocketoffset[]	=
+static const vec3_t rocketoffsets[] =
 {
 	{-5, -50, 33},
 	{-5, -39, 27},
@@ -643,9 +642,9 @@ void FireFlare(edict_t *self)
 
 	int offset = (self->s.frame - 71) / 3;
 
-	AngleVectors (self->s.angles, forward, right, NULL);
+	AngleVectors(self->s.angles, forward, right, NULL);
 
-	G_ProjectSource (self->s.origin, rocketoffset[offset], forward, right, start);
+	G_ProjectSource(self->s.origin, rocketoffsets[offset], forward, right, start);
 
 	if(self->monsterinfo.aiflags & AI_ONESHOTTARGET)
 	{
@@ -653,12 +652,12 @@ void FireFlare(edict_t *self)
 	}
 	else
 	{
-		VectorCopy (self->enemy->s.origin, vec);
+		VectorCopy(self->enemy->s.origin, vec);
 		vec[2] += self->enemy->viewheight;
 	}
 
-	VectorSubtract (vec, start, dir);
-	VectorNormalize (dir);
+	VectorSubtract(vec, start, dir);
+	VectorNormalize(dir);
 
 	if(!(self->monsterinfo.aiflags & AI_ONESHOTTARGET))
 	{
@@ -684,9 +683,9 @@ void FireRocket(edict_t *self)
 
 	int offset = (self->s.frame - 71) / 3;
 
-	AngleVectors (self->s.angles, forward, right, NULL);
+	AngleVectors(self->s.angles, forward, right, NULL);
 
-	G_ProjectSource (self->s.origin, rocketoffset[offset], forward, right, start);
+	G_ProjectSource(self->s.origin, rocketoffsets[offset], forward, right, start);
 
 	if(self->monsterinfo.aiflags & AI_ONESHOTTARGET)
 	{
@@ -694,22 +693,22 @@ void FireRocket(edict_t *self)
 	}
 	else
 	{
-		VectorCopy (self->enemy->s.origin, vec);
+		VectorCopy(self->enemy->s.origin, vec);
 		vec[2] += self->enemy->viewheight;
 	}
 
 	vec[0] += (100 - (200 * random()));
 	vec[1] += (100 - (200 * random()));
 	vec[2] += (40 - (80 * random()));
-	VectorSubtract (vec, start, dir);
-	VectorNormalize (dir);
+	VectorSubtract(vec, start, dir);
+	VectorNormalize(dir);
 
 	fire_rocket (self, start, dir, 70, 500, 70+20, 70);
 
-	gi.WriteByte (svc_muzzleflash2);
-	gi.WriteShort (self - g_edicts);
-	gi.WriteByte (MZ2_BOSS2_ROCKET_1);
-	gi.multicast (start, MULTICAST_PVS);
+	gi.WriteByte(svc_muzzleflash2);
+	gi.WriteShort(self - g_edicts);
+	gi.WriteByte(MZ2_BOSS2_ROCKET_1);
+	gi.multicast(start, MULTICAST_PVS);
 }
 
 mframe_t zboss_frames_attack1a [] =
@@ -755,17 +754,17 @@ void zboss_reelInGraaple2(edict_t *self)
 
 	enemy = self->laser->enemy;
 
-	AngleVectors (self->s.angles, forward, right, NULL);
+	AngleVectors(self->s.angles, forward, right, NULL);
 	G_ProjectSource(self->s.origin, hookoffset, forward, right, vec);
-	VectorSubtract (vec, self->laser->s.origin, dir);
-	length = VectorLength (dir);
+	VectorSubtract(vec, self->laser->s.origin, dir);
+	length = VectorLength(dir);
 
 	if(length <= 80 || (self->laser->think == HookDragThink && self->laser->powerarmor_time < level.time))
 	{
 		G_FreeEdict(self->laser);
 		self->laser = NULL;
 
-		self->s.modelindex3 = gi.modelindex ("models/monsters/bossz/grapple/tris.md2");
+		self->s.modelindex3 = gi.modelindex("models/monsters/bossz/grapple/tris.md2");
 
 		if(enemy)
 		{
@@ -791,7 +790,8 @@ mframe_t zboss_frames_attack2b [] =
 };
 mmove_t zboss_move_attack2b = {FRAME_attack2bStart, FRAME_attack2bEnd, zboss_frames_attack2b, zboss_reelInGraaple2 };
 
-void HookDragThink (edict_t *self)
+void
+HookDragThink(edict_t *self)
 {
 	vec3_t	dir, vec;
 	float	speed;
@@ -805,33 +805,32 @@ void HookDragThink (edict_t *self)
 
 	if(self->enemy && self->enemy->health > 0)
 	{
-		VectorCopy (self->enemy->s.origin, self->s.origin);
+		VectorCopy(self->enemy->s.origin, self->s.origin);
 	}
 
-	VectorSubtract (self->owner->s.origin, self->s.origin, dir);
+	VectorSubtract(self->owner->s.origin, self->s.origin, dir);
 
-	AngleVectors (self->owner->s.angles, forward, right, NULL);
+	AngleVectors(self->owner->s.angles, forward, right, NULL);
 	G_ProjectSource(self->owner->s.origin, hookoffset, forward, right, vec);
 
-	VectorSubtract (vec, self->s.origin, dir);
-	speed = VectorLength (dir);
-	VectorNormalize (dir);
+	VectorSubtract(vec, self->s.origin, dir);
+	VectorNormalize(dir);
 
 	speed = 1000;
-	VectorScale (dir, speed, self->velocity);
+	VectorScale(dir, speed, self->velocity);
 
 	if(self->enemy && self->enemy->health > 0)
 	{
-		VectorCopy (self->velocity, self->enemy->velocity);
+		VectorCopy(self->velocity, self->enemy->velocity);
 		self->enemy->velocity[2] *= 1.3;
 	}
 
-	gi.WriteByte (svc_temp_entity);
-	gi.WriteByte (TE_MEDIC_CABLE_ATTACK);
-	gi.WriteShort (self - g_edicts);
-	gi.WritePosition (self->s.origin);
-	gi.WritePosition (vec);
-	gi.multicast (self->s.origin, MULTICAST_PVS);
+	gi.WriteByte(svc_temp_entity);
+	gi.WriteByte(TE_MEDIC_CABLE_ATTACK);
+	gi.WriteShort(self - g_edicts);
+	gi.WritePosition(self->s.origin);
+	gi.WritePosition(vec);
+	gi.multicast(self->s.origin, MULTICAST_PVS);
 
 	self->nextthink = level.time + FRAMETIME;
 }
@@ -844,8 +843,8 @@ void HookTouch (edict_t *ent, edict_t *other, const cplane_t *plane, const csurf
 
 	if (other->takedamage)
 	{
-		gi.sound (ent, CHAN_WEAPON, sound_hookimpact, 1, ATTN_NORM, 0);
-		T_Damage (other, ent, ent->owner, ent->velocity, ent->s.origin, plane->normal, 10, 0, 0, MOD_ROCKET);
+		gi.sound(ent, CHAN_WEAPON, sound_hookimpact, 1, ATTN_NORM, 0);
+		T_Damage(other, ent, ent->owner, ent->velocity, ent->s.origin, plane->normal, 10, 0, 0, MOD_ROCKET);
 	}
 
 	if(other->client && other->health > 0)
@@ -882,15 +881,15 @@ void HookThink(edict_t *self)
 	}
 
 
-	AngleVectors (self->owner->s.angles, forward, right, NULL);
+	AngleVectors(self->owner->s.angles, forward, right, NULL);
 	G_ProjectSource(self->owner->s.origin, hookoffset, forward, right, vec);
 
-	gi.WriteByte (svc_temp_entity);
-	gi.WriteByte (TE_MEDIC_CABLE_ATTACK);
-	gi.WriteShort (self - g_edicts);
-	gi.WritePosition (self->s.origin);
-	gi.WritePosition (vec);
-	gi.multicast (self->s.origin, MULTICAST_PVS);
+	gi.WriteByte(svc_temp_entity);
+	gi.WriteByte(TE_MEDIC_CABLE_ATTACK);
+	gi.WriteShort(self - g_edicts);
+	gi.WritePosition(self->s.origin);
+	gi.WritePosition(vec);
+	gi.multicast(self->s.origin, MULTICAST_PVS);
 
 	self->nextthink = level.time + FRAMETIME;
 }
@@ -910,13 +909,13 @@ void FireHook(edict_t *self)
 		return;
 	}
 
-	AngleVectors (self->s.angles, forward, right, NULL);
+	AngleVectors(self->s.angles, forward, right, NULL);
 
-	G_ProjectSource (self->s.origin, hookoffset, forward, right, start);
-	VectorCopy (self->enemy->s.origin, vec);
+	G_ProjectSource(self->s.origin, hookoffset, forward, right, start);
+	VectorCopy(self->enemy->s.origin, vec);
 	vec[2] += self->enemy->viewheight;
-	VectorSubtract (vec, start, dir);
-	VectorNormalize (dir);
+	VectorSubtract(vec, start, dir);
+	VectorNormalize(dir);
 
   ANIM_AIM(self, dir);
 
@@ -924,19 +923,19 @@ void FireHook(edict_t *self)
 
 	speed = 1000;
 
-	gi.sound (self, CHAN_WEAPON, sound_hooklaunch, 1, ATTN_NORM, 0);
+	gi.sound(self, CHAN_WEAPON, sound_hooklaunch, 1, ATTN_NORM, 0);
 
 	self->laser = hook = G_Spawn();
-	VectorCopy (start, hook->s.origin);
-	VectorCopy (dir, hook->movedir);
-	vectoangles (dir, hook->s.angles);
-	VectorScale (dir, speed, hook->velocity);
+	VectorCopy(start, hook->s.origin);
+	VectorCopy(dir, hook->movedir);
+	vectoangles(dir, hook->s.angles);
+	VectorScale(dir, speed, hook->velocity);
 	hook->movetype = MOVETYPE_FLYMISSILE;
 	hook->clipmask = MASK_SHOT;
 	hook->solid = SOLID_BBOX;
-	VectorClear (hook->mins);
-	VectorClear (hook->maxs);
-	hook->s.modelindex = gi.modelindex ("models/monsters/bossz/grapple/tris.md2");
+	VectorClear(hook->mins);
+	VectorClear(hook->maxs);
+	hook->s.modelindex = gi.modelindex("models/monsters/bossz/grapple/tris.md2");
 	hook->s.frame = 282;
 	hook->owner = self;
 	hook->touch = HookTouch;
@@ -946,7 +945,7 @@ void FireHook(edict_t *self)
 	hook->s.sound = sound_hookfly; // replace...
 	hook->classname = "bosshook";
 
-	gi.linkentity (hook);
+	gi.linkentity(hook);
 }
 
 void zboss_reelInGraaple(edict_t *self)
@@ -1062,17 +1061,17 @@ void Plasmaball_Explode (edict_t *ent)
 		vec3_t	v;
 		vec3_t	dir;
 
-		VectorAdd (ent->enemy->mins, ent->enemy->maxs, v);
-		VectorMA (ent->enemy->s.origin, 0.5, v, v);
-		VectorSubtract (ent->s.origin, v, v);
-		points = ent->dmg - 0.5 * VectorLength (v);
-		VectorSubtract (ent->enemy->s.origin, ent->s.origin, dir);
-		T_Damage (ent->enemy, ent, ent->owner, dir, ent->s.origin, vec3_origin, (int)points, (int)points, DAMAGE_RADIUS, MOD_UNKNOWN);
+		VectorAdd(ent->enemy->mins, ent->enemy->maxs, v);
+		VectorMA(ent->enemy->s.origin, 0.5, v, v);
+		VectorSubtract(ent->s.origin, v, v);
+		points = ent->dmg - 0.5 * VectorLength(v);
+		VectorSubtract(ent->enemy->s.origin, ent->s.origin, dir);
+		T_Damage(ent->enemy, ent, ent->owner, dir, ent->s.origin, vec3_origin, (int)points, (int)points, DAMAGE_RADIUS, MOD_UNKNOWN);
 	}
 
 	T_RadiusDamage(ent, ent->owner, ent->dmg, ent->enemy, ent->dmg_radius, MOD_UNKNOWN);
 
-	VectorMA (ent->s.origin, -0.02, ent->velocity, ent->s.origin);
+	VectorMA(ent->s.origin, -0.02, ent->velocity, ent->s.origin);
 	VectorClear(ent->velocity);
 
 	ent->movetype = MOVETYPE_NONE;
@@ -1081,7 +1080,7 @@ void Plasmaball_Explode (edict_t *ent)
 	ent->s.frame = 0;
 	ent->s.skinnum = 6;
 
-	gi.sound (ent, CHAN_AUTO, sound_plamsaballexplode, 1, ATTN_NORM, 0);
+	gi.sound(ent, CHAN_AUTO, sound_plamsaballexplode, 1, ATTN_NORM, 0);
 
 	ent->think = PlasmaballBlastAnim;
 	ent->nextthink = level.time + FRAMETIME;
@@ -1099,7 +1098,7 @@ void Plasmaball_Touch (edict_t *ent, edict_t *other, const cplane_t *plane, cons
 
 	if (surf && (surf->flags & SURF_SKY))
 	{
-		G_FreeEdict (ent);
+		G_FreeEdict(ent);
 		return;
 	}
 
@@ -1118,21 +1117,21 @@ void fire_plasmaCannon (edict_t *self, vec3_t start, vec3_t aimdir, int damage, 
 		return;
 	}
 
-	vectoangles (aimdir, dir);
-	AngleVectors (dir, forward, right, up);
+	vectoangles(aimdir, dir);
+	AngleVectors(dir, forward, right, up);
 
 	plasmaball = G_Spawn();
-	VectorCopy (start, plasmaball->s.origin);
-	VectorScale (aimdir, speed, plasmaball->velocity);
-	VectorMA (plasmaball->velocity, (distance - 500) + crandom() * 10.0, up, plasmaball->velocity);
-	VectorMA (plasmaball->velocity, crandom() * 10.0, right, plasmaball->velocity);
-	VectorSet (plasmaball->avelocity, 300, 300, 300);
+	VectorCopy(start, plasmaball->s.origin);
+	VectorScale(aimdir, speed, plasmaball->velocity);
+	VectorMA(plasmaball->velocity, (distance - 500) + crandom() * 10.0, up, plasmaball->velocity);
+	VectorMA(plasmaball->velocity, crandom() * 10.0, right, plasmaball->velocity);
+	VectorSet(plasmaball->avelocity, 300, 300, 300);
 	plasmaball->movetype = MOVETYPE_BOUNCE;
 	plasmaball->clipmask = MASK_SHOT;
 	plasmaball->solid = SOLID_BBOX;
-	VectorClear (plasmaball->mins);
-	VectorClear (plasmaball->maxs);
-	plasmaball->s.modelindex = gi.modelindex ("sprites/plasma1.sp2");
+	VectorClear(plasmaball->mins);
+	VectorClear(plasmaball->maxs);
+	plasmaball->s.modelindex = gi.modelindex("sprites/plasma1.sp2");
 	plasmaball->s.effects = EF_BFG | EF_ANIM_ALLFAST;
 	plasmaball->owner = self;
 	plasmaball->touch = Plasmaball_Touch;
@@ -1143,21 +1142,9 @@ void fire_plasmaCannon (edict_t *self, vec3_t start, vec3_t aimdir, int damage, 
 	plasmaball->classname = "plasmaball";
 	plasmaball->s.sound = sound_plamsaballfly;
 
-	gi.sound (self, CHAN_AUTO, sound_plamsaballfire, 1, ATTN_NORM, 0);
-	gi.linkentity (plasmaball);
+	gi.sound(self, CHAN_AUTO, sound_plamsaballfire, 1, ATTN_NORM, 0);
+	gi.linkentity(plasmaball);
 }
-
-
-static vec3_t cannonoffset[]	=
-{
-	{-19, -44, 30},
-	{-14, -33, 32},
-	{-4 , -45, 32},
-	{-2 , -34, 32},
-	{  7, -49, 32},
-	{  6, -36, 34},
-	{  6, -36, 34},
-};
 
 void FireCannon(edict_t *self)
 {
@@ -1167,6 +1154,17 @@ void FireCannon(edict_t *self)
 	vec3_t	vec;
 	float distance;
 
+	static const vec3_t cannonoffset[] =
+	{
+		{-19, -44, 30},
+		{-14, -33, 32},
+		{-4 , -45, 32},
+		{-2 , -34, 32},
+		{  7, -49, 32},
+		{  6, -36, 34},
+		{  6, -36, 34},
+	};
+
 	if (!self)
 	{
 		return;
@@ -1174,9 +1172,9 @@ void FireCannon(edict_t *self)
 
 	int offset = (self->s.frame - 119) / 2;
 
-	AngleVectors (self->s.angles, forward, right, NULL);
+	AngleVectors(self->s.angles, forward, right, NULL);
 
-	G_ProjectSource (self->s.origin, cannonoffset[offset], forward, right, start);
+	G_ProjectSource(self->s.origin, cannonoffset[offset], forward, right, start);
 
 	if(self->monsterinfo.aiflags & AI_ONESHOTTARGET)
 	{
@@ -1184,7 +1182,7 @@ void FireCannon(edict_t *self)
 	}
 	else
 	{
-		VectorCopy (self->enemy->s.origin, vec);
+		VectorCopy(self->enemy->s.origin, vec);
 		vec[2] += self->enemy->viewheight;
 	}
 
@@ -1194,15 +1192,15 @@ void FireCannon(edict_t *self)
 		{
 			VectorNegate(right, right);
 		}
-		VectorMA (vec, self->timeout, right, vec);
+		VectorMA(vec, self->timeout, right, vec);
 	}
 	self->timeout -= 50;
 
-	VectorSubtract (vec, start, dir);
-	VectorNormalize (dir);
+	VectorSubtract(vec, start, dir);
+	VectorNormalize(dir);
 
-	VectorSubtract (self->enemy->s.origin, self->s.origin, vec);
-	distance = VectorLength (vec);
+	VectorSubtract(self->enemy->s.origin, self->s.origin, vec);
+	distance = VectorLength(vec);
 
 	if(distance < 700)
 	{
@@ -1327,7 +1325,7 @@ void zboss_chooseNextAttack(edict_t *self)
 		{
 			if(self->monsterinfo.currentmove == &zboss_move_attack3)
 			{
-				gi.sound (self, CHAN_BODY, sound_switchattacks, 1, ATTN_NORM, 0);
+				gi.sound(self, CHAN_BODY, sound_switchattacks, 1, ATTN_NORM, 0);
 				self->monsterinfo.currentmove = &zboss_move_c2h;
 			}
 			else
@@ -1343,14 +1341,14 @@ void zboss_chooseNextAttack(edict_t *self)
 			}
 			else
 			{
-				gi.sound (self, CHAN_BODY, sound_switchattacks, 1, ATTN_NORM, 0);
+				gi.sound(self, CHAN_BODY, sound_switchattacks, 1, ATTN_NORM, 0);
 				self->monsterinfo.currentmove = &zboss_move_h2c;
 			}
 		}
 	}
 	else
 	{
-		gi.sound (self, CHAN_BODY, sound_lowergun, 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_BODY, sound_lowergun, 1, ATTN_NORM, 0);
 
 		if(self->monsterinfo.currentmove == &zboss_move_attack3)
 		{
@@ -1374,7 +1372,7 @@ void zboss_attack (edict_t *self)
 	if (self->enemy == NULL)
 		return;
 
-	gi.sound (self, CHAN_BODY, sound_raisegun, 1, ATTN_NORM, 0);
+	gi.sound(self, CHAN_BODY, sound_raisegun, 1, ATTN_NORM, 0);
 
 	if(random() < 0.4)
 	{
@@ -1399,12 +1397,12 @@ void zboss_dead (edict_t *self)
 		return;
 	}
 
-	VectorSet (self->mins, -32, -74, -30);
-	VectorSet (self->maxs, 32, 40, 12);
+	VectorSet(self->mins, -32, -74, -30);
+	VectorSet(self->maxs, 32, 40, 12);
 	self->movetype = MOVETYPE_TOSS;
 	self->svflags |= SVF_DEADMONSTER;
 	self->nextthink = 0;
-	gi.linkentity (self);
+	gi.linkentity(self);
 }
 
 mframe_t zboss_frames_death1 [] =
@@ -1443,16 +1441,16 @@ void FireDeadRocket1(edict_t *self)
 		return;
 	}
 
-	AngleVectors (self->s.angles, forward, right, NULL);
+	AngleVectors(self->s.angles, forward, right, NULL);
 
-	G_ProjectSource (self->s.origin, rocketoffset, forward, right, start);
+	G_ProjectSource(self->s.origin, rocketoffset, forward, right, start);
 
 	fire_rocket (self, start, forward, 70, 500, 70+20, 70);
 
-	gi.WriteByte (svc_muzzleflash2);
-	gi.WriteShort (self - g_edicts);
-	gi.WriteByte (MZ2_BOSS2_ROCKET_1);
-	gi.multicast (start, MULTICAST_PVS);
+	gi.WriteByte(svc_muzzleflash2);
+	gi.WriteShort(self - g_edicts);
+	gi.WriteByte(MZ2_BOSS2_ROCKET_1);
+	gi.multicast(start, MULTICAST_PVS);
 }
 
 void FireDeadRocket2(edict_t *self)
@@ -1466,17 +1464,17 @@ void FireDeadRocket2(edict_t *self)
 		return;
 	}
 
-	AngleVectors (self->s.angles, forward, right, NULL);
+	AngleVectors(self->s.angles, forward, right, NULL);
 
-	G_ProjectSource (self->s.origin, rocketoffset, forward, right, start);
+	G_ProjectSource(self->s.origin, rocketoffset, forward, right, start);
 
 	forward[1] += 10;
 	fire_rocket (self, start, forward, 70, 500, 70+20, 70);
 
-	gi.WriteByte (svc_muzzleflash2);
-	gi.WriteShort (self - g_edicts);
-	gi.WriteByte (MZ2_BOSS2_ROCKET_1);
-	gi.multicast (start, MULTICAST_PVS);
+	gi.WriteByte(svc_muzzleflash2);
+	gi.WriteShort(self - g_edicts);
+	gi.WriteByte(MZ2_BOSS2_ROCKET_1);
+	gi.multicast(start, MULTICAST_PVS);
 }
 
 void FireDeadRocket3(edict_t *self)
@@ -1490,16 +1488,16 @@ void FireDeadRocket3(edict_t *self)
 		return;
 	}
 
-	AngleVectors (self->s.angles, forward, right, up);
+	AngleVectors(self->s.angles, forward, right, up);
 
-	G_ProjectSource (self->s.origin, rocketoffset, forward, right, start);
+	G_ProjectSource(self->s.origin, rocketoffset, forward, right, start);
 
 	fire_rocket (self, start, up, 70, 500, 70+20, 70);
 
-	gi.WriteByte (svc_muzzleflash2);
-	gi.WriteShort (self - g_edicts);
-	gi.WriteByte (MZ2_BOSS2_ROCKET_1);
-	gi.multicast (start, MULTICAST_PVS);
+	gi.WriteByte(svc_muzzleflash2);
+	gi.WriteShort(self - g_edicts);
+	gi.WriteByte(MZ2_BOSS2_ROCKET_1);
+	gi.multicast(start, MULTICAST_PVS);
 }
 
 void FireDeadRocket4(edict_t *self)
@@ -1513,16 +1511,16 @@ void FireDeadRocket4(edict_t *self)
 	{
 		return;
 	}
-	AngleVectors (self->s.angles, forward, right, up);
+	AngleVectors(self->s.angles, forward, right, up);
 
-	G_ProjectSource (self->s.origin, rocketoffset, forward, right, start);
+	G_ProjectSource(self->s.origin, rocketoffset, forward, right, start);
 
 	fire_rocket (self, start, up, 70, 500, 70+20, 70);
 
-	gi.WriteByte (svc_muzzleflash2);
-	gi.WriteShort (self - g_edicts);
-	gi.WriteByte (MZ2_BOSS2_ROCKET_1);
-	gi.multicast (start, MULTICAST_PVS);
+	gi.WriteByte(svc_muzzleflash2);
+	gi.WriteShort(self - g_edicts);
+	gi.WriteByte(MZ2_BOSS2_ROCKET_1);
+	gi.multicast(start, MULTICAST_PVS);
 }
 
 void FireDeadRocket5(edict_t *self)
@@ -1536,17 +1534,17 @@ void FireDeadRocket5(edict_t *self)
 		return;
 	}
 
-	AngleVectors (self->s.angles, forward, right, up);
+	AngleVectors(self->s.angles, forward, right, up);
 
-	G_ProjectSource (self->s.origin, rocketoffset, forward, right, start);
+	G_ProjectSource(self->s.origin, rocketoffset, forward, right, start);
 	VectorNegate(forward, forward);
 
 	fire_rocket (self, start, forward, 70, 500, 70+20, 70);
 
-	gi.WriteByte (svc_muzzleflash2);
-	gi.WriteShort (self - g_edicts);
-	gi.WriteByte (MZ2_BOSS2_ROCKET_1);
-	gi.multicast (start, MULTICAST_PVS);
+	gi.WriteByte(svc_muzzleflash2);
+	gi.WriteShort(self - g_edicts);
+	gi.WriteByte(MZ2_BOSS2_ROCKET_1);
+	gi.multicast(start, MULTICAST_PVS);
 }
 
 void FireDeadRocket6(edict_t *self)
@@ -1560,43 +1558,43 @@ void FireDeadRocket6(edict_t *self)
 		return;
 	}
 
-	AngleVectors (self->s.angles, forward, right, up);
+	AngleVectors(self->s.angles, forward, right, up);
 
-	G_ProjectSource (self->s.origin, rocketoffset, forward, right, start);
+	G_ProjectSource(self->s.origin, rocketoffset, forward, right, start);
 	VectorNegate(forward, forward);
 	forward[1]  -= 10;
 
 	fire_rocket (self, start, forward, 70, 500, 70+20, 70);
 
-	gi.WriteByte (svc_muzzleflash2);
-	gi.WriteShort (self - g_edicts);
-	gi.WriteByte (MZ2_BOSS2_ROCKET_1);
-	gi.multicast (start, MULTICAST_PVS);
+	gi.WriteByte(svc_muzzleflash2);
+	gi.WriteShort(self - g_edicts);
+	gi.WriteByte(MZ2_BOSS2_ROCKET_1);
+	gi.multicast(start, MULTICAST_PVS);
 }
 
 void FireDeadRocket7(edict_t *self)
 {
 	vec3_t	forward, right, up;
 	vec3_t	start;
-	vec3_t	rocketoffset	= {17, -27, 30};
+	vec3_t rocketoffset = {17, -27, 30};
 
 	if (!self)
 	{
 		return;
 	}
 
-	AngleVectors (self->s.angles, forward, right, up);
+	AngleVectors(self->s.angles, forward, right, up);
 
-	G_ProjectSource (self->s.origin, rocketoffset, forward, right, start);
+	G_ProjectSource(self->s.origin, rocketoffset, forward, right, start);
 	VectorNegate(forward, forward);
 	forward[1]  -= 10;
 
 	fire_rocket (self, start, forward, 70, 500, 70+20, 70);
 
-	gi.WriteByte (svc_muzzleflash2);
-	gi.WriteShort (self - g_edicts);
-	gi.WriteByte (MZ2_BOSS2_ROCKET_1);
-	gi.multicast (start, MULTICAST_PVS);
+	gi.WriteByte(svc_muzzleflash2);
+	gi.WriteShort(self - g_edicts);
+	gi.WriteByte(MZ2_BOSS2_ROCKET_1);
+	gi.multicast(start, MULTICAST_PVS);
 }
 
 void FireDeadCannon1(edict_t *self)
@@ -1610,16 +1608,16 @@ void FireDeadCannon1(edict_t *self)
 		return;
 	}
 
-	AngleVectors (self->s.angles, forward, right, NULL);
+	AngleVectors(self->s.angles, forward, right, NULL);
 
-	G_ProjectSource (self->s.origin, cannonoffset, forward, right, start);
+	G_ProjectSource(self->s.origin, cannonoffset, forward, right, start);
 
 	fire_plasmaCannon (self, start, forward, 90, 700, 2.5, 90+40, 700);
 
-	gi.WriteByte (svc_muzzleflash2);
-	gi.WriteShort (self - g_edicts);
-	gi.WriteByte (MZ2_GUNNER_GRENADE_1);
-	gi.multicast (start, MULTICAST_PVS);
+	gi.WriteByte(svc_muzzleflash2);
+	gi.WriteShort(self - g_edicts);
+	gi.WriteByte(MZ2_GUNNER_GRENADE_1);
+	gi.multicast(start, MULTICAST_PVS);
 }
 
 void FireDeadCannon2(edict_t *self)
@@ -1633,16 +1631,16 @@ void FireDeadCannon2(edict_t *self)
 		return;
 	}
 
-	AngleVectors (self->s.angles, forward, right, NULL);
+	AngleVectors(self->s.angles, forward, right, NULL);
 
-	G_ProjectSource (self->s.origin, cannonoffset, forward, right, start);
+	G_ProjectSource(self->s.origin, cannonoffset, forward, right, start);
 
 	fire_plasmaCannon (self, start, forward, 90, 700, 2.5, 90+40, 700);
 
-	gi.WriteByte (svc_muzzleflash2);
-	gi.WriteShort (self - g_edicts);
-	gi.WriteByte (MZ2_GUNNER_GRENADE_1);
-	gi.multicast (start, MULTICAST_PVS);
+	gi.WriteByte(svc_muzzleflash2);
+	gi.WriteShort(self - g_edicts);
+	gi.WriteByte(MZ2_GUNNER_GRENADE_1);
+	gi.multicast(start, MULTICAST_PVS);
 }
 
 void FireDeadCannon3(edict_t *self)
@@ -1656,16 +1654,16 @@ void FireDeadCannon3(edict_t *self)
 		return;
 	}
 
-	AngleVectors (self->s.angles, forward, right, NULL);
+	AngleVectors(self->s.angles, forward, right, NULL);
 
-	G_ProjectSource (self->s.origin, cannonoffset, forward, right, start);
+	G_ProjectSource(self->s.origin, cannonoffset, forward, right, start);
 
 	fire_plasmaCannon (self, start, forward, 90, 700, 2.5, 90+40, 700);
 
-	gi.WriteByte (svc_muzzleflash2);
-	gi.WriteShort (self - g_edicts);
-	gi.WriteByte (MZ2_GUNNER_GRENADE_1);
-	gi.multicast (start, MULTICAST_PVS);
+	gi.WriteByte(svc_muzzleflash2);
+	gi.WriteShort(self - g_edicts);
+	gi.WriteByte(MZ2_GUNNER_GRENADE_1);
+	gi.multicast(start, MULTICAST_PVS);
 }
 
 void DeadHookTouch (edict_t *ent, edict_t *other, const cplane_t *plane, const csurface_t *surf)
@@ -1680,8 +1678,8 @@ void DeadHookTouch (edict_t *ent, edict_t *other, const cplane_t *plane, const c
 
 	if (other->takedamage)
 	{
-		gi.sound (ent, CHAN_WEAPON, sound_hookimpact, 1, ATTN_NORM, 0);
-		T_Damage (other, ent, ent->owner, ent->velocity, ent->s.origin, plane->normal, 10, 0, 0, MOD_ROCKET);
+		gi.sound(ent, CHAN_WEAPON, sound_hookimpact, 1, ATTN_NORM, 0);
+		T_Damage(other, ent, ent->owner, ent->velocity, ent->s.origin, plane->normal, 10, 0, 0, MOD_ROCKET);
 	}
 
 	G_FreeEdict(ent);
@@ -1703,27 +1701,27 @@ void FireDeadGrapple(edict_t *self)
 	if(self->s.modelindex3 == 0)  // hook already out...
 		return;
 
-	AngleVectors (self->s.angles, forward, right, up);
+	AngleVectors(self->s.angles, forward, right, up);
 
-	G_ProjectSource (self->s.origin, hookoffset, forward, right, start);
+	G_ProjectSource(self->s.origin, hookoffset, forward, right, start);
 
 	self->s.modelindex3 = 0;
 
 	speed = 500;
 
-	gi.sound (self, CHAN_WEAPON, sound_hooklaunch, 1, ATTN_NORM, 0);
+	gi.sound(self, CHAN_WEAPON, sound_hooklaunch, 1, ATTN_NORM, 0);
 
 	hook = G_Spawn();
-	VectorCopy (start, hook->s.origin);
-	VectorCopy (up, hook->movedir);
-	vectoangles (up, hook->s.angles);
-	VectorScale (up, speed, hook->velocity);
+	VectorCopy(start, hook->s.origin);
+	VectorCopy(up, hook->movedir);
+	vectoangles(up, hook->s.angles);
+	VectorScale(up, speed, hook->velocity);
 	hook->movetype = MOVETYPE_FLYMISSILE;
 	hook->clipmask = MASK_SHOT;
 	hook->solid = SOLID_BBOX;
-	VectorClear (hook->mins);
-	VectorClear (hook->maxs);
-	hook->s.modelindex = gi.modelindex ("models/monsters/bossz/grapple/tris.md2");
+	VectorClear(hook->mins);
+	VectorClear(hook->maxs);
+	hook->s.modelindex = gi.modelindex("models/monsters/bossz/grapple/tris.md2");
 	hook->s.frame = 282;
 	hook->owner = self;
 	hook->touch = DeadHookTouch;
@@ -1732,7 +1730,7 @@ void FireDeadGrapple(edict_t *self)
 	hook->s.sound = sound_hookfly; // replace...
 	hook->classname = "bosshook";
 
-	gi.linkentity (hook);
+	gi.linkentity(hook);
 }
 
 mframe_t zboss_frames_death2 [] =
@@ -1791,8 +1789,6 @@ mmove_t zboss_move_death2 = {FRAME_die2Start, FRAME_die2End, zboss_frames_death2
 
 void zboss_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
-	int		n;
-
 	if (!self)
 	{
 		return;
@@ -1806,15 +1802,23 @@ void zboss_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage
 
 	if (self->health <= self->gib_health)
 	{
+		int n;
+
 		self->s.modelindex2 = 0;
 		self->s.modelindex3 = 0;
 
-		gi.sound (self, CHAN_VOICE, gi.soundindex ("misc/udeath.wav"), 1, ATTN_NORM, 0);
-		for (n= 0; n < 2; n++)
-			ThrowGib (self, "models/objects/gibs/bone/tris.md2", damage, GIB_ORGANIC);
+		gi.sound(self, CHAN_VOICE, gi.soundindex("misc/udeath.wav"), 1, ATTN_NORM, 0);
+		for (n = 0; n < 2; n++)
+		{
+			ThrowGib(self, "models/objects/gibs/bone/tris.md2", damage, GIB_ORGANIC);
+		}
+
 		for (n= 0; n < 4; n++)
-			ThrowGib (self, "models/objects/gibs/sm_meat/tris.md2", damage, GIB_ORGANIC);
-		ThrowHead (self, "models/objects/gibs/head2/tris.md2", damage, GIB_ORGANIC);
+		{
+			ThrowGib(self, "models/objects/gibs/sm_meat/tris.md2", damage, GIB_ORGANIC);
+		}
+
+		ThrowHead(self, "models/objects/gibs/head2/tris.md2", damage, GIB_ORGANIC);
 		self->deadflag = DEAD_DEAD;
 		return;
 	}
@@ -1828,12 +1832,12 @@ void zboss_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage
 	// todo
 	if (random() < 0.5)
 	{
-		gi.sound (self, CHAN_VOICE, sound_die1, 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_VOICE, sound_die1, 1, ATTN_NORM, 0);
 		self->monsterinfo.currentmove = &zboss_move_death1;
 	}
 	else
 	{
-		gi.sound (self, CHAN_VOICE, sound_die2, 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_VOICE, sound_die2, 1, ATTN_NORM, 0);
 		self->monsterinfo.currentmove = &zboss_move_death2;
 	}
 }
@@ -1846,11 +1850,11 @@ End Death Stuff
 */
 void SP_monster_zboss_precache(void)
 {
-	sound_pain1 = gi.soundindex ("monsters/bossz/bpain1.wav");
-	sound_pain2 = gi.soundindex ("monsters/bossz/bpain2.wav");
-	sound_pain3 = gi.soundindex ("monsters/bossz/bpain3.wav");
-	sound_die1 = gi.soundindex ("monsters/bossz/bdeth1.wav");
-	sound_die2 = gi.soundindex ("monsters/bossz/bdeth2.wav");
+	sound_pain1 = gi.soundindex("monsters/bossz/bpain1.wav");
+	sound_pain2 = gi.soundindex("monsters/bossz/bpain2.wav");
+	sound_pain3 = gi.soundindex("monsters/bossz/bpain3.wav");
+	sound_die1 = gi.soundindex("monsters/bossz/bdeth1.wav");
+	sound_die2 = gi.soundindex("monsters/bossz/bdeth2.wav");
 	sound_hooklaunch = gi.soundindex("monsters/bossz/bhlaunch.wav");
 	sound_hookimpact = gi.soundindex("monsters/bossz/bhimpact.wav");
 	sound_hookfly	= gi.soundindex("monsters/bossz/bhfly.wav");
@@ -1881,7 +1885,7 @@ void SP_monster_zboss (edict_t *self)
 
 	if (deathmatch->value)
 	{
-		G_FreeEdict (self);
+		G_FreeEdict(self);
 		return;
 	}
 
@@ -1892,11 +1896,11 @@ void SP_monster_zboss (edict_t *self)
 	gi.modelindex("models/objects/b_explode/tris.md2");
 	gi.soundindex("items/empnuke/emp_trg.wav");
 
-	self->s.modelindex = gi.modelindex ("models/monsters/bossz/mech/tris.md2");
-	self->s.modelindex2 = gi.modelindex ("models/monsters/bossz/pilot/tris.md2");
-	self->s.modelindex3 = gi.modelindex ("models/monsters/bossz/grapple/tris.md2");
-	VectorSet (self->mins, -32, -74, -30);
-	VectorSet (self->maxs, 32, 50, 74);
+	self->s.modelindex = gi.modelindex("models/monsters/bossz/mech/tris.md2");
+	self->s.modelindex2 = gi.modelindex("models/monsters/bossz/pilot/tris.md2");
+	self->s.modelindex3 = gi.modelindex("models/monsters/bossz/grapple/tris.md2");
+	VectorSet(self->mins, -32, -74, -30);
+	VectorSet(self->maxs, 32, 50, 74);
 	self->movetype = MOVETYPE_STEP;
 	self->solid = SOLID_BBOX;
 	self->monsterinfo.aiflags = AI_MONREDUCEDDAMAGE;
@@ -1933,7 +1937,7 @@ void SP_monster_zboss (edict_t *self)
 	self->monsterinfo.sight = zboss_sight;
 	self->monsterinfo.idle = possibleBossTaunt;
 
-	gi.linkentity (self);
+	gi.linkentity(self);
 
 	self->monsterinfo.currentmove = &zboss_stand1;
 	self->monsterinfo.scale = MODEL_SCALE;
@@ -1953,7 +1957,7 @@ void trigger_zboss (edict_t *self, edict_t *other, edict_t *activator)
 
 	edict_t	*boss = NULL;
 
-	while ((boss = G_Find (boss, FOFS(targetname), self->target)) != NULL)
+	while ((boss = G_Find(boss, FOFS(targetname), self->target)) != NULL)
 	{
 		if(boss->health > 0)
 		{
@@ -1974,7 +1978,7 @@ void SP_target_zboss_target(edict_t *self)
 	if(!self->target)
 	{
 		gi.dprintf("target_zboss_target does not have a target");
-		G_FreeEdict (self);
+		G_FreeEdict(self);
 		return;
 	}
 
@@ -1984,6 +1988,6 @@ void SP_target_zboss_target(edict_t *self)
 	self->solid = SOLID_NOT;
 	self->use = trigger_zboss;
 
-	gi.linkentity (self);
+	gi.linkentity(self);
 }
 

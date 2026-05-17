@@ -484,4 +484,4 @@
 #define FRAME_crbl_w06        	479
 #define FRAME_crbl_w07        	480
 
-#define MODEL_SCALE		1.000000
+#define MODEL_SCALE 1.000000000

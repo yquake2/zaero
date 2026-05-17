@@ -32,79 +32,6 @@ void SP_load_mirrorlevel (edict_t *self)
 	G_FreeEdict(self);
 }
 
-#ifdef CACHE_SOUND
-int	(*actual_soundindex) (char *name);
-
-list_t *soundList;
-unsigned int soundNumRejected;
-
-typedef struct
-{
-  char *name;
-
-} modelsound;
-
-void initSoundList()
-{
-	soundList = gi.TagMalloc (sizeof(list_t), TAG_LEVEL);
-	initializeList(soundList);
-	soundNumRejected = 0;
-}
-
-int internalSoundIndex(char *name)
-{
-	int idx = 0;
-	int numSounds = listLength(soundList);
-	modelsound *sound;
-	int i = 0;
-
-	// convert name to lowercase
-	for (i = 0; i < strlen(name); i++) 
-		name[i] = tolower(name[i]);
-	
-	// do we already have this sound?
-	for (i = 0; i < numSounds; i++)
-	{
-		sound = (modelsound *)getItem(soundList, i);
-		if(strcmp(sound->name, name) == 0)
-		{
-			return (*actual_soundindex)(name);
-		}
-	}
-
-	// ok, do we have too many sounds?
-	if (numSounds >= MAX_SOUNDS-1)
-	{
-		soundNumRejected++;
-		// ok, we cannot precache anymore
-		if (printSoundRejects->value)
-			gi.dprintf("%s precache rejected\n", name);
-		return 0;
-	}
-	
-	idx = (*actual_soundindex)(name);
-	if (idx == 0)
-		return 0;
-
-	sound = gi.TagMalloc (sizeof(modelsound), TAG_LEVEL);
-	sound->name = gi.TagMalloc (strlen(name) + 1, TAG_LEVEL);
-	strcpy(sound->name, name);
-	
-	addTail(soundList, sound);
-	//gi.dprintf("numSounds = %i\n", listLength(&soundList));
-
-	return idx;
-}
-
-void printSoundNum()
-{
-	int numSounds = listLength(soundList);
-	gi.dprintf("%i precached sounds\n", numSounds);
-	if (printSoundRejects->value)
-		gi.dprintf("%i sounds rejected\n", soundNumRejected);
-}
-#endif
-
 /********************************************
 	trigger_laser
 */
@@ -122,10 +49,9 @@ void trigger_laser_on (edict_t *self);
 
 void trigger_laser_think (edict_t *self)
 {
-	vec3_t	start;
-	vec3_t	end;
-	trace_t	tr;
-	int		count = 8;
+	vec3_t start;
+	vec3_t end;
+	trace_t tr;
 
 	if (!self)
 	{
@@ -133,10 +59,10 @@ void trigger_laser_think (edict_t *self)
 	}
 
 	self->nextthink = level.time + FRAMETIME;
-	
-	VectorCopy (self->s.origin, start);
-	VectorMA (start, 2048, self->movedir, end);
-	tr = gi.trace (start, NULL, NULL, end, self, CONTENTS_SOLID|CONTENTS_MONSTER|CONTENTS_DEADMONSTER);
+
+	VectorCopy(self->s.origin, start);
+	VectorMA(start, 2048, self->movedir, end);
+	tr = gi.trace(start, NULL, NULL, end, self, CONTENTS_SOLID|CONTENTS_MONSTER|CONTENTS_DEADMONSTER);
 
 	if (!tr.ent)
 		return;
@@ -146,20 +72,22 @@ void trigger_laser_think (edict_t *self)
 	{
 		if (self->spawnflags & 0x80000000)
 		{
+			int count = 8;
+
 			self->spawnflags &= ~0x80000000;
-			gi.WriteByte (svc_temp_entity);
-			gi.WriteByte (TE_LASER_SPARKS);
-			gi.WriteByte (count);
-			gi.WritePosition (tr.endpos);
-			gi.WriteDir (tr.plane.normal);
-			gi.WriteByte (self->s.skinnum);
-			gi.multicast (tr.endpos, MULTICAST_PVS);
+			gi.WriteByte(svc_temp_entity);
+			gi.WriteByte(TE_LASER_SPARKS);
+			gi.WriteByte(count);
+			gi.WritePosition(tr.endpos);
+			gi.WriteDir(tr.plane.normal);
+			gi.WriteByte(self->s.skinnum);
+			gi.multicast(tr.endpos, MULTICAST_PVS);
 		}
 	}
 	else
 	{
 		// trigger
-		G_UseTargets (self, tr.ent);
+		G_UseTargets(self, tr.ent);
 
 		if (self->spawnflags & TRIGGER_MULTIPLE)
 		{
@@ -175,7 +103,7 @@ void trigger_laser_think (edict_t *self)
 		}
 	}
 
-	VectorCopy (tr.endpos, self->s.old_origin);
+	VectorCopy(tr.endpos, self->s.old_origin);
 }
 
 void trigger_laser_on (edict_t *self)
@@ -222,7 +150,7 @@ void SP_trigger_laser(edict_t *self)
 	self->think = trigger_laser_on;
 	self->nextthink = level.time + 0.1;
 	self->svflags |= SVF_NOCLIENT;
-	gi.linkentity (self);
+	gi.linkentity(self);
 }
 
 /*QUAKED misc_commdish (0 .5 .8) (-16 -16 0) (16 16 40)
@@ -256,7 +184,7 @@ void Use_CommDish (edict_t *ent, edict_t *other, edict_t *activator)
 	ent->nextthink = level.time + FRAMETIME;
 	ent->think = Anim_CommDish;
 	ent->use = NULL;
-	gi.sound (ent, CHAN_AUTO, gi.soundindex ("misc/commdish.wav"), 1, ATTN_NORM, 0);
+	gi.sound(ent, CHAN_AUTO, gi.soundindex("misc/commdish.wav"), 1, ATTN_NORM, 0);
 }
 
 void SP_misc_commdish (edict_t *self)
@@ -268,7 +196,7 @@ void SP_misc_commdish (edict_t *self)
 
 	if (deathmatch->value)
 	{	// auto-remove for deathmatch
-		G_FreeEdict (self);
+		G_FreeEdict(self);
 		return;
 	}
 
@@ -276,9 +204,9 @@ void SP_misc_commdish (edict_t *self)
 	self->movetype = MOVETYPE_STEP;
 
 	self->model = "models/objects/satdish/tris.md2";
-	self->s.modelindex = gi.modelindex (self->model);
-	VectorSet (self->mins, -100, -100, 0);
-	VectorSet (self->maxs, 100, 100, 275);
+	self->s.modelindex = gi.modelindex(self->model);
+	VectorSet(self->mins, -100, -100, 0);
+	VectorSet(self->maxs, 100, 100, 275);
 
 	self->monsterinfo.aiflags = AI_NOSTEP;
 
@@ -286,6 +214,6 @@ void SP_misc_commdish (edict_t *self)
 	self->nextthink = level.time + 2 * FRAMETIME;
 	self->use = Use_CommDish;
 
-	gi.linkentity (self);
+	gi.linkentity(self);
 }
 

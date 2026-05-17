@@ -33,7 +33,7 @@ void hound_launch (edict_t *self)
 		return;
 	}
 
-	gi.sound (self, CHAN_WEAPON, sound_launch, 1, ATTN_NORM, 0);
+	gi.sound(self, CHAN_WEAPON, sound_launch, 1, ATTN_NORM, 0);
 }
 
 void hound_sight (edict_t *self, edict_t *other)
@@ -43,7 +43,7 @@ void hound_sight (edict_t *self, edict_t *other)
 		return;
 	}
 
-	gi.sound (self, CHAN_WEAPON, sound_sight, 1, ATTN_NORM, 0);
+	gi.sound(self, CHAN_WEAPON, sound_sight, 1, ATTN_NORM, 0);
 }
 
 //
@@ -225,9 +225,9 @@ void hound_pain (edict_t *self, edict_t *other, float kick, int damage)
 		self->s.skinnum = 1;
 
 	if (random() < 0.5)
-		gi.sound (self, CHAN_VOICE, sound_pain1, 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_VOICE, sound_pain1, 1, ATTN_NORM, 0);
 	else
-		gi.sound (self, CHAN_VOICE, sound_pain2, 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_VOICE, sound_pain2, 1, ATTN_NORM, 0);
 
 	if (level.time < self->pain_debounce_time)
 		return;
@@ -257,11 +257,11 @@ void hound_bite (edict_t *self)
 		return;
 	}
 
-	VectorSet (aim, MELEE_DISTANCE, self->mins[0], 8);
+	VectorSet(aim, MELEE_DISTANCE, self->mins[0], 8);
 	if (fire_hit (self, aim, (30 + (randk() %5)), 100))
-		gi.sound (self, CHAN_WEAPON, sound_bite, 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_WEAPON, sound_bite, 1, ATTN_NORM, 0);
 	else
-		gi.sound (self, CHAN_WEAPON, sound_bitemiss, 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_WEAPON, sound_bitemiss, 1, ATTN_NORM, 0);
 }
 
 void hound_bite2 (edict_t *self)
@@ -273,7 +273,7 @@ void hound_bite2 (edict_t *self)
 		return;
 	}
 
-	VectorSet (aim, MELEE_DISTANCE, self->mins[0], 8);
+	VectorSet(aim, MELEE_DISTANCE, self->mins[0], 8);
 	fire_hit (self, aim, (30 + (randk() %5)), 100);
 }
 
@@ -349,11 +349,11 @@ void hound_jump_touch (edict_t *self, edict_t *other, const cplane_t *plane, con
 			vec3_t	normal;
 			int		damage;
 
-			VectorCopy (self->velocity, normal);
+			VectorCopy(self->velocity, normal);
 			VectorNormalize(normal);
-			VectorMA (self->s.origin, self->maxs[0], normal, point);
+			VectorMA(self->s.origin, self->maxs[0], normal, point);
 			damage = 40 + 10 * random();
-			T_Damage (other, self, self, self->velocity, point, normal, damage, damage, 0, MOD_UNKNOWN);
+			T_Damage(other, self, self, self->velocity, point, normal, damage, damage, 0, MOD_UNKNOWN);
 		}
 	}
 
@@ -379,10 +379,10 @@ void hound_jump_takeoff (edict_t *self)
 		return;
 	}
 
-	gi.sound (self, CHAN_VOICE, sound_jump, 1, ATTN_NORM, 0);
-	AngleVectors (self->s.angles, forward, NULL, NULL);
+	gi.sound(self, CHAN_VOICE, sound_jump, 1, ATTN_NORM, 0);
+	AngleVectors(self->s.angles, forward, NULL, NULL);
 	self->s.origin[2] += 1;
-	VectorScale (forward, 400, self->velocity);
+	VectorScale(forward, 400, self->velocity);
 	self->velocity[2] = 200;
 	self->groundentity = NULL;
 	self->monsterinfo.aiflags |= AI_JUMPING;
@@ -399,7 +399,7 @@ void hound_check_landing (edict_t *self)
 
 	if (self->groundentity)
 	{
-		gi.sound (self, CHAN_WEAPON, sound_impact, 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_WEAPON, sound_impact, 1, ATTN_NORM, 0);
 		self->monsterinfo.attack_finished = 0;
 		self->monsterinfo.aiflags &= ~AI_JUMPING;
 		return;
@@ -422,7 +422,7 @@ void hound_check_landing2 (edict_t *self)
 
 	if (self->groundentity)
 	{
-		gi.sound (self, CHAN_WEAPON, sound_impact, 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_WEAPON, sound_impact, 1, ATTN_NORM, 0);
 		self->monsterinfo.attack_finished = 0;
 		self->monsterinfo.aiflags &= ~AI_JUMPING;
 		return;
@@ -485,7 +485,7 @@ qboolean hound_check_melee (edict_t *self)
 		return false;
 	}
 
-	if (ai_range (self, self->enemy) == RANGE_MELEE)
+	if (ai_range(self, self->enemy) == RANGE_MELEE)
 		return true;
 	return false;
 }
@@ -561,12 +561,12 @@ void hound_dead (edict_t *self)
 		return;
 	}
 
-	VectorSet (self->mins, -16, -16, -24);
-	VectorSet (self->maxs, 16, 16, -8);
+	VectorSet(self->mins, -16, -16, -24);
+	VectorSet(self->maxs, 16, 16, -8);
 	self->movetype = MOVETYPE_TOSS;
 	self->svflags |= SVF_DEADMONSTER;
 	self->nextthink = 0;
-	gi.linkentity (self);
+	gi.linkentity(self);
 }
 
 mframe_t hound_frames_death [] =
@@ -588,8 +588,6 @@ mmove_t hound_move_death = {FRAME_die1Start, FRAME_die1End, hound_frames_death, 
 
 void hound_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point)
 {
-	int		n;
-
 	if (!self)
 	{
 		return;
@@ -598,21 +596,31 @@ void hound_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage
 	// check for gib
 	if (self->health <= self->gib_health)
 	{
-		gi.sound (self, CHAN_VOICE, gi.soundindex ("misc/udeath.wav"), 1, ATTN_NORM, 0);
-		for (n= 0; n < 2; n++)
-			ThrowGib (self, "models/objects/gibs/bone/tris.md2", damage, GIB_ORGANIC);
-		for (n= 0; n < 4; n++)
-			ThrowGib (self, "models/objects/gibs/sm_meat/tris.md2", damage, GIB_ORGANIC);
-		ThrowHead (self, "models/objects/gibs/head2/tris.md2", damage, GIB_ORGANIC);
+		int n;
+
+		gi.sound(self, CHAN_VOICE, gi.soundindex("misc/udeath.wav"), 1, ATTN_NORM, 0);
+		for (n =  0; n < 2; n++)
+		{
+			ThrowGib(self, "models/objects/gibs/bone/tris.md2", damage, GIB_ORGANIC);
+		}
+
+		for (n = 0; n < 4; n++)
+		{
+			ThrowGib(self, "models/objects/gibs/sm_meat/tris.md2", damage, GIB_ORGANIC);
+		}
+
+		ThrowHead(self, "models/objects/gibs/head2/tris.md2", damage, GIB_ORGANIC);
 		self->deadflag = DEAD_DEAD;
 		return;
 	}
 
 	if (self->deadflag == DEAD_DEAD)
+	{
 		return;
+	}
 
 	// regular death
-	gi.sound (self, CHAN_VOICE, sound_die, 1, ATTN_NORM, 0);
+	gi.sound(self, CHAN_VOICE, sound_die, 1, ATTN_NORM, 0);
 	self->deadflag = DEAD_DEAD;
 	self->takedamage = DAMAGE_YES;
 	self->monsterinfo.currentmove = &hound_move_death;
@@ -625,11 +633,12 @@ End Death Stuff
 ===
 */
 
-void SP_monster_hound_precache(void)
+void
+SP_monster_hound_precache(void)
 {
-	sound_pain1 = gi.soundindex ("monsters/hound/hpain1.wav");
-	sound_pain2 = gi.soundindex ("monsters/hound/hpain2.wav");
-	sound_die = gi.soundindex ("monsters/hound/hdeth1.wav");
+	sound_pain1 = gi.soundindex("monsters/hound/hpain1.wav");
+	sound_pain2 = gi.soundindex("monsters/hound/hpain2.wav");
+	sound_die = gi.soundindex("monsters/hound/hdeth1.wav");
 	sound_launch = gi.soundindex("monsters/hound/hlaunch.wav");
 	sound_impact = gi.soundindex("monsters/hound/himpact.wav");
 	sound_sight = gi.soundindex("monsters/hound/hsight1.wav");
@@ -639,9 +648,11 @@ void SP_monster_hound_precache(void)
 }
 
 
-/*QUAKED monster_hound (1 .5 0) (-16 -16 -24) (16 16 32) Ambush Trigger_Spawn Sight
-*/
-void SP_monster_hound (edict_t *self)
+/*
+ * QUAKED monster_hound (1 .5 0) (-16 -16 -24) (16 16 32) Ambush Trigger_Spawn Sight
+ */
+void
+SP_monster_hound(edict_t *self)
 {
 	if (!self)
 	{
@@ -650,15 +661,15 @@ void SP_monster_hound (edict_t *self)
 
 	if (deathmatch->value)
 	{
-		G_FreeEdict (self);
+		G_FreeEdict(self);
 		return;
 	}
 
 	SP_monster_hound_precache();
 
-	self->s.modelindex = gi.modelindex ("models/monsters/guard/hound/tris.md2");
-	VectorSet (self->mins, -16, -16, -24);
-	VectorSet (self->maxs, 16, 16, 24);
+	self->s.modelindex = gi.modelindex("models/monsters/guard/hound/tris.md2");
+	VectorSet(self->mins, -16, -16, -24);
+	VectorSet(self->maxs, 16, 16, 24);
 	self->movetype = MOVETYPE_STEP;
 	self->solid = SOLID_BBOX;
 	self->yaw_speed = 30;
@@ -692,7 +703,7 @@ void SP_monster_hound (edict_t *self)
 	self->monsterinfo.idle = hound_stand;
 	self->monsterinfo.checkattack = hound_checkattack;
 
-	gi.linkentity (self);
+	gi.linkentity(self);
 
 	self->monsterinfo.currentmove = &hound_stand1;
 	self->monsterinfo.scale = MODEL_SCALE;
@@ -700,10 +711,11 @@ void SP_monster_hound (edict_t *self)
 	walkmonster_start (self);
 }
 
-
 void monster_think (edict_t *self);
 qboolean monster_start (edict_t *self);
-void hound_createHound(edict_t *self, float healthPercent)
+
+void
+hound_createHound(edict_t *self, float healthPercent)
 {
 	edict_t *hound;
 
@@ -714,9 +726,9 @@ void hound_createHound(edict_t *self, float healthPercent)
 
 	hound = G_Spawn();
 
-	hound->s.modelindex = gi.modelindex ("models/monsters/guard/hound/tris.md2");
-	VectorSet (hound->mins, -16, -16, -24);
-	VectorSet (hound->maxs, 16, 16, 24);
+	hound->s.modelindex = gi.modelindex("models/monsters/guard/hound/tris.md2");
+	VectorSet(hound->mins, -16, -16, -24);
+	VectorSet(hound->maxs, 16, 16, 24);
 	VectorCopy(self->s.origin, hound->s.origin);
 	VectorCopy(self->s.old_origin, hound->s.old_origin);
 	VectorCopy(self->s.angles, hound->s.angles);
@@ -755,10 +767,8 @@ void hound_createHound(edict_t *self, float healthPercent)
 	hound->think = monster_think;
 	hound->nextthink = level.time + FRAMETIME;
 
-	gi.linkentity (hound);
+	gi.linkentity(hound);
 
 	// move the fucker now!!!
 	ai_move (hound, 20);
 }
-
-
