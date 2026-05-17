@@ -307,7 +307,7 @@ InitGame(void)
 
 	memset(&game, 0, sizeof(game));
 
-	InitItems ();
+	InitItems();
 
 	/* initialize entities and clients arrays */
 	InitAllocations();
@@ -461,7 +461,7 @@ static void
 WriteField1(FILE *f, const field_t *field, byte *base)
 {
 	void *p;
-	int len;
+	size_t len;
 	int index;
 
 	if (field->flags & FFL_SPAWNTEMP)
@@ -541,7 +541,7 @@ WriteField1(FILE *f, const field_t *field, byte *base)
 			break;
 		default:
 			fclose(f);
-			gi.error("WriteEdict: unknown field type");
+			gi.error("%s: unknown field type", __func__);
 	}
 }
 
@@ -601,7 +601,7 @@ WriteField2(FILE *f, const field_t *field, byte *base)
 
 			if (*(char **)p)
 			{
-				int len;
+				size_t len;
 
 				len = strlen(*(char **)p) + 1;
 				sg_fwrite(*(char **)p, len, f);
@@ -801,7 +801,7 @@ ReadField(FILE *f, const field_t *field, byte *base)
 			break;
 		default:
 			fclose(f);
-			gi.error("ReadEdict: unknown field type");
+			gi.error("%s: unknown field type", __func__);
 	}
 }
 
@@ -882,10 +882,10 @@ ReadClient(FILE *f, gclient_t *client, short save_ver)
 
 /*
  * Writes the game struct into
- * a file. This is called when
- * ever the games goes to e new
- * level or the user saves the
- * game. Saved informations are:
+ * a file. This is called whenever
+ * the game goes to a new level or
+ * the user saves the game. The saved
+ * information consists of:
  * - cross level data
  * - client states
  * - help computer info
@@ -936,7 +936,8 @@ WriteGame(const char *filename, qboolean autosave)
 
 	if (!f)
 	{
-		gi.error("Couldn't open %s", filename);
+		gi.error("%s: Couldn't open %s", __func__, filename);
+		return;
 	}
 
 	WriteSaveHeader(f);
@@ -970,7 +971,7 @@ GetSaveVersion(const char *ver)
 		{"YQ2-4", 4},
 	};
 
-	for (i=0; i < sizeof(version_mappings)/sizeof(version_mappings[0]); ++i)
+	for (i=0; i < ARRLEN(version_mappings); ++i)
 	{
 		if (strcmp(version_mappings[i].verstr, ver) == 0)
 		{
@@ -1076,7 +1077,8 @@ ReadGame(const char *filename)
 
 	if (!f)
 	{
-		gi.error("Couldn't open %s", filename);
+		gi.error("%s: Couldn't open %s", __func__, filename);
+		return;
 	}
 
 	/* Sanity checks */
@@ -1142,7 +1144,7 @@ WriteEdict(FILE *f, edict_t *ent)
 }
 
 /*
- * Helper fcuntion to write the
+ * Helper function to write the
  * level local data into a file.
  * Called by WriteLevel.
  */
@@ -1185,7 +1187,8 @@ WriteLevel(const char *filename)
 
 	if (!f)
 	{
-		gi.error("Couldn't open %s", filename);
+		gi.error("%s: Couldn't open %s", __func__, filename);
+		return;
 	}
 
 	/* write out edict size for checking */
@@ -1274,10 +1277,10 @@ ReadLevelLocals(FILE *f)
 
 /*
  * Reads a level back into the memory.
- * SpawnEntities were allready called
+ * SpawnEntities were already called
  * in the same way when the level was
  * saved. All world links were cleared
- * befor this function was called. When
+ * before this function was called. When
  * this function is called, no clients
  * are connected to the server.
  */
@@ -1293,7 +1296,8 @@ ReadLevel(const char *filename)
 
 	if (!f)
 	{
-		gi.error("Couldn't open %s", filename);
+		gi.error("%s: Couldn't open %s", __func__, filename);
+		return;
 	}
 
 	/* free any dynamic memory allocated by
@@ -1310,7 +1314,8 @@ ReadLevel(const char *filename)
 	if (i != sizeof(edict_t))
 	{
 		fclose(f);
-		gi.error("ReadLevel: mismatched edict size");
+		gi.error("%s: mismatched edict size", __func__);
+		return;
 	}
 
 	/* load the level locals */
