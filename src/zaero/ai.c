@@ -2,7 +2,7 @@
 
 #define Z_RADUISLISTSIZE	2000
 
-qboolean FindTarget (edict_t *self);
+qboolean FindTarget(edict_t *self);
 qboolean SV_StepDirection (edict_t *ent, float yaw, float dist);
 
 /*
@@ -352,18 +352,18 @@ void ai_schoolStand (edict_t *self, float dist)
 		switch(zSchoolMonsters(self, 0, &speed))
 		{
 			case 1:
-				self->monsterinfo.walk (self);
+				self->monsterinfo.walk(self);
 				break;
 
 			case 2:
-				self->monsterinfo.run (self);
+				self->monsterinfo.run(self);
 				break;
 		}
 	}
 
 	// do the normal stand stuff
 	if (dist)
-	M_walkmove (self, self->ideal_yaw, dist);
+	M_walkmove(self, self->ideal_yaw, dist);
 }
 
 /*
@@ -402,11 +402,11 @@ void ai_schoolRun (edict_t *self, float dist)
 		switch(zSchoolMonsters(self, 2, &speed))
 		{
 			case 0:
-				self->monsterinfo.stand (self);
+				self->monsterinfo.stand(self);
 				break;
 
 			case 1:
-				self->monsterinfo.walk (self);
+				self->monsterinfo.walk(self);
 				break;
 		}
 	}
@@ -451,11 +451,11 @@ void ai_schoolWalk (edict_t *self, float dist)
 		switch(zSchoolMonsters(self, 1, &speed))
 		{
 			case 0:
-				self->monsterinfo.stand (self);
+				self->monsterinfo.stand(self);
 				break;
 
 			case 2:
-				self->monsterinfo.run (self);
+				self->monsterinfo.run(self);
 				break;
 		}
 	}

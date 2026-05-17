@@ -436,13 +436,13 @@ void actor_use (edict_t *self, edict_t *other, edict_t *activator)
 		gi.dprintf ("%s has bad target %s at %s\n", self->classname, self->target, vtos(self->s.origin));
 		self->target = NULL;
 		self->monsterinfo.pausetime = 100000000;
-		self->monsterinfo.stand (self);
+		self->monsterinfo.stand(self);
 		return;
 	}
 
 	VectorSubtract(self->goalentity->s.origin, self->s.origin, v);
 	self->ideal_yaw = self->s.angles[YAW] = vectoyaw(v);
-	self->monsterinfo.walk (self);
+	self->monsterinfo.walk(self);
 	self->target = NULL;
 }
 
@@ -613,7 +613,7 @@ void target_actor_touch (edict_t *self, edict_t *other, const cplane_t *plane, c
 	if (!other->movetarget && !other->enemy)
 	{
 		other->monsterinfo.pausetime = level.time + 100000000;
-		other->monsterinfo.stand (other);
+		other->monsterinfo.stand(other);
 	}
 	else if (other->movetarget == other->goalentity)
 	{

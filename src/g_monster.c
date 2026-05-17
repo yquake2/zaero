@@ -483,7 +483,7 @@ void M_SetEffects (edict_t *ent)
 	}
 }
 
-qboolean FindTarget (edict_t *self);
+qboolean FindTarget(edict_t *self);
 void M_MoveFrame (edict_t *self)
 {
 	mmove_t	*move;
@@ -600,7 +600,7 @@ void monster_use (edict_t *self, edict_t *other, edict_t *activator)
 
 	// delay reaction so if the monster is teleported, its sound is still heard
 	self->enemy = activator;
-	FoundTarget (self);
+	FoundTarget(self);
 }
 
 
@@ -627,7 +627,7 @@ void monster_triggered_spawn (edict_t *self)
 
 	if (self->enemy && !(self->spawnflags & 1) && !(self->enemy->flags & FL_NOTARGET))
 	{
-		FoundTarget (self);
+		FoundTarget(self);
 	}
 	else
 	{
@@ -887,7 +887,7 @@ void walkmonster_start_go (edict_t *self)
 		M_droptofloor (self);
 
 		if (self->groundentity)
-			if (!M_walkmove (self, 0, 0))
+			if (!M_walkmove(self, 0, 0))
 				gi.dprintf ("%s in solid at %s\n", self->classname, vtos(self->s.origin));
 	}
 
@@ -922,7 +922,7 @@ void flymonster_start_go (edict_t *self)
 		return;
 	}
 
-	if (!M_walkmove (self, 0, 0))
+	if (!M_walkmove(self, 0, 0))
 		gi.dprintf ("%s in solid at %s\n", self->classname, vtos(self->s.origin));
 
 	if (!self->yaw_speed)

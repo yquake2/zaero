@@ -485,7 +485,7 @@ qboolean hound_check_melee (edict_t *self)
 		return false;
 	}
 
-	if (ai_range (self, self->enemy) == RANGE_MELEE)
+	if (ai_range(self, self->enemy) == RANGE_MELEE)
 		return true;
 	return false;
 }

@@ -479,14 +479,14 @@ void path_corner_touch (edict_t *self, edict_t *other, const cplane_t *plane, co
 		}
 
 		other->monsterinfo.pausetime = level.time + self->wait;
-		other->monsterinfo.stand (other);
+		other->monsterinfo.stand(other);
 		return;
 	}
 
 	if (!other->movetarget)
 	{
 		other->monsterinfo.pausetime = level.time + 100000000;
-		other->monsterinfo.stand (other);
+		other->monsterinfo.stand(other);
 	}
 	else
 	{
@@ -552,7 +552,7 @@ void point_combat_touch (edict_t *self, edict_t *other, const cplane_t *plane, c
 	{
 		other->monsterinfo.pausetime = level.time + 100000000;
 		other->monsterinfo.aiflags |= AI_STAND_GROUND;
-		other->monsterinfo.stand (other);
+		other->monsterinfo.stand(other);
 	}
 
 	if (other->movetarget == self)

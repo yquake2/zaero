@@ -351,7 +351,7 @@ void ai_animator(edict_t *self, float dist)
 	}
 
 	if(dist != 0.0)
-		M_walkmove (self, self->s.angles[YAW], dist);
+		M_walkmove(self, self->s.angles[YAW], dist);
 
 	M_ChangeYaw(self);
 }

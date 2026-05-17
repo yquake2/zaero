@@ -404,7 +404,7 @@ void turret_driver_die (edict_t *self, edict_t *inflictor, edict_t *attacker, in
 	infantry_die (self, inflictor, attacker, damage, point);
 }
 
-qboolean FindTarget (edict_t *self);
+qboolean FindTarget(edict_t *self);
 
 void turret_driver_think (edict_t *self)
 {
@@ -424,14 +424,14 @@ void turret_driver_think (edict_t *self)
 
 	if (!self->enemy)
 	{
-		if (!FindTarget (self))
+		if (!FindTarget(self))
 			return;
 		self->monsterinfo.trail_time = level.time;
 		self->monsterinfo.aiflags &= ~AI_LOST_SIGHT;
 	}
 	else
 	{
-		if (visible (self, self->enemy))
+		if (visible(self, self->enemy))
 		{
 			if (self->monsterinfo.aiflags & AI_LOST_SIGHT)
 			{

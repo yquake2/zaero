@@ -727,7 +727,7 @@ chick_rerocket(edict_t *self)
 
 	if (self->enemy->health > 0)
 	{
-		if (ai_range (self, self->enemy) > RANGE_MELEE)
+		if (ai_range(self, self->enemy) > RANGE_MELEE)
 		{
 			if (visible(self, self->enemy))
 			{
@@ -797,7 +797,7 @@ chick_reslash(edict_t *self)
 
 	if (self->enemy->health > 0)
 	{
-		if (ai_range (self, self->enemy) == RANGE_MELEE)
+		if (ai_range(self, self->enemy) == RANGE_MELEE)
 		{
 			if (random() <= 0.9)
 			{

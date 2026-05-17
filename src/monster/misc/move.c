@@ -686,7 +686,7 @@ M_walkmove(edict_t *ent, float yaw, float dist)
 	return SV_movestep(ent, move, true);
 }
 
-qboolean ai_checkattack (edict_t *self, float dist);
+qboolean ai_checkattack(edict_t *self, float dist);
 /*
 ====================
 M_MoveAwayFromFlare

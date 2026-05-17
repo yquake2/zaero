@@ -827,7 +827,7 @@ void sentien_attack(edict_t *self)
 	//return;
 
 	VectorSubtract(self->enemy->s.origin, self->s.origin, vec);
-	range = VectorLength (vec);
+	range = VectorLength(vec);
 
 	r = random();
 

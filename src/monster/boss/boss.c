@@ -757,7 +757,7 @@ void zboss_reelInGraaple2(edict_t *self)
 	AngleVectors(self->s.angles, forward, right, NULL);
 	G_ProjectSource(self->s.origin, hookoffset, forward, right, vec);
 	VectorSubtract(vec, self->laser->s.origin, dir);
-	length = VectorLength (dir);
+	length = VectorLength(dir);
 
 	if(length <= 80 || (self->laser->think == HookDragThink && self->laser->powerarmor_time < level.time))
 	{
@@ -1064,7 +1064,7 @@ void Plasmaball_Explode (edict_t *ent)
 		VectorAdd(ent->enemy->mins, ent->enemy->maxs, v);
 		VectorMA(ent->enemy->s.origin, 0.5, v, v);
 		VectorSubtract(ent->s.origin, v, v);
-		points = ent->dmg - 0.5 * VectorLength (v);
+		points = ent->dmg - 0.5 * VectorLength(v);
 		VectorSubtract(ent->enemy->s.origin, ent->s.origin, dir);
 		T_Damage(ent->enemy, ent, ent->owner, dir, ent->s.origin, vec3_origin, (int)points, (int)points, DAMAGE_RADIUS, MOD_UNKNOWN);
 	}
@@ -1200,7 +1200,7 @@ void FireCannon(edict_t *self)
 	VectorNormalize(dir);
 
 	VectorSubtract(self->enemy->s.origin, self->s.origin, vec);
-	distance = VectorLength (vec);
+	distance = VectorLength(vec);
 
 	if(distance < 700)
 	{
