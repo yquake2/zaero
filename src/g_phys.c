@@ -154,7 +154,6 @@ returns the blocked flags (1 = floor, 2 = step / wall)
 int ClipVelocity (vec3_t in, vec3_t normal, vec3_t out, float overbounce)
 {
 	float	backoff;
-	float	change;
 	int		i, blocked;
 
 	blocked = 0;
@@ -165,8 +164,10 @@ int ClipVelocity (vec3_t in, vec3_t normal, vec3_t out, float overbounce)
 
 	backoff = DotProduct(in, normal) * overbounce;
 
-	for (i=0 ; i<3 ; i++)
+	for (i = 0; i < 3 ; i++)
 	{
+		float change;
+
 		change = normal[i]*backoff;
 		out[i] = in[i] - change;
 		if (out[i] > -STOP_EPSILON && out[i] < STOP_EPSILON)
@@ -194,7 +195,6 @@ int SV_FlyMove (edict_t *ent, float time, int mask)
 	edict_t		*hit;
 	int			bumpcount, numbumps;
 	vec3_t		dir;
-	float		d;
 	int			numplanes;
 	vec3_t		planes[MAX_CLIP_PLANES];
 	vec3_t		primal_velocity, original_velocity, new_velocity;
@@ -299,12 +299,16 @@ int SV_FlyMove (edict_t *ent, float time, int mask)
 			VectorCopy(new_velocity, ent->velocity);
 		}
 		else
-		{	// go along the crease
+		{
+			float d;
+
+			// go along the crease
 			if (numplanes != 2)
 			{
 				VectorCopy(vec3_origin, ent->velocity);
 				return 7;
 			}
+
 			CrossProduct (planes[0], planes[1], dir);
 			d = DotProduct(dir, ent->velocity);
 			VectorScale(dir, d, ent->velocity);
@@ -350,7 +354,7 @@ RealBoundingBox(edict_t *ent, vec3_t mins, vec3_t maxs)
 {
 	vec3_t forward, left, up, f1, l1, u1;
 	vec3_t p[8];
-	int i, j, k, j2, k4;
+	int i, k;
 
 	if (!ent)
 	{
@@ -359,6 +363,8 @@ RealBoundingBox(edict_t *ent, vec3_t mins, vec3_t maxs)
 
 	for (k = 0; k < 2; k++)
 	{
+		int k4, j;
+
 		k4 = k * 4;
 
 		if (k)
@@ -376,6 +382,8 @@ RealBoundingBox(edict_t *ent, vec3_t mins, vec3_t maxs)
 
 		for (j = 0; j < 2; j++)
 		{
+			int j2;
+
 			j2 = j * 2;
 
 			if (j)
@@ -822,12 +830,10 @@ void SV_Physics_Toss (edict_t *ent)
 {
 	trace_t		trace;
 	vec3_t		move;
-	float		backoff;
 	edict_t		*slave;
 	qboolean	wasinwater;
 	qboolean	isinwater;
 	vec3_t		old_origin;
-	float		speed = 0;
 
 	if (!ent)
 	{
@@ -878,6 +884,9 @@ void SV_Physics_Toss (edict_t *ent)
 
 	if (trace.fraction < 1)
 	{
+		float speed = 0;
+		float backoff;
+
 		if (ent->movetype == MOVETYPE_BOUNCE)
 			backoff = 1.5;
 		else if(ent->movetype == MOVETYPE_BOUNCEFLY)
@@ -998,11 +1007,9 @@ void SV_Physics_Step (edict_t *ent)
 {
 	qboolean	wasonground;
 	qboolean	hitsound = false;
-	float		*vel;
 	float		speed, newspeed, control;
 	float		friction;
 	const edict_t		*groundentity;
-	int			mask;
 
 	if (!ent)
 	{
@@ -1011,11 +1018,13 @@ void SV_Physics_Step (edict_t *ent)
 
 	// airborn monsters should always check for ground
 	if (!ent->groundentity)
+	{
 		M_CheckGround (ent);
+	}
 
 	groundentity = ent->groundentity;
 
-	SV_CheckVelocity (ent);
+	SV_CheckVelocity(ent);
 
 	if (groundentity)
 		wasonground = true;
@@ -1065,11 +1074,15 @@ void SV_Physics_Step (edict_t *ent)
 
 	if (ent->velocity[2] || ent->velocity[1] || ent->velocity[0])
 	{
+		int mask;
+
 		// apply friction
 		// let dead monsters who aren't completely onground slide
 		if ((wasonground) || (ent->flags & (FL_SWIM|FL_FLY)))
 			if (!(ent->health <= 0.0 && !M_CheckBottom(ent)))
 			{
+				float *vel;
+
 				vel = ent->velocity;
 				speed = sqrt(vel[0]*vel[0] +vel[1]*vel[1]);
 				if (speed)
@@ -1134,8 +1147,6 @@ void SV_Physics_FallFloat (edict_t *ent)
 		vec3_t min, max;
 		trace_t tr;
 		vec3_t end;
-		vec3_t normal;
-		vec3_t gravity;
 
 		VectorCopy(ent->mins, min);
 		VectorCopy(ent->maxs, max);
@@ -1152,6 +1163,8 @@ void SV_Physics_FallFloat (edict_t *ent)
 		}
 		else if (tr.fraction < 1.0 && tr.plane.normal[2] <= 0.7) // on steep slope
 		{
+			vec3_t gravity, normal;
+
 			VectorCopy(tr.plane.normal, normal);
 			VectorSet(gravity, 0, 0, -gravVal);
 			VectorMA(gravity, gravVal, normal, ent->velocity);

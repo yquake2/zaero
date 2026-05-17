@@ -40,8 +40,8 @@ ClientTeam (const edict_t *ent, char* value)
 qboolean
 OnSameTeam(const edict_t *ent1, const edict_t *ent2)
 {
-	char	ent1Team [512];
-	char	ent2Team [512];
+	char	ent1Team [512] = {0};
+	char	ent2Team [512] = {0};
 
 	if (!ent1 || !ent2)
 	{
@@ -1036,13 +1036,14 @@ int PlayerSort (void const *a, void const *b)
 Cmd_Players_f
 =================
 */
-void Cmd_Players_f (edict_t *ent)
+void
+Cmd_Players_f(edict_t *ent)
 {
 	int		i;
 	int		count;
 	char	small[64];
 	char	large[1280];
-	int		index[256];
+	int		index[256] = {0};
 
 	if (!ent)
 	{
@@ -1051,11 +1052,13 @@ void Cmd_Players_f (edict_t *ent)
 
 	count = 0;
 	for (i = 0 ; i < maxclients->value ; i++)
+	{
 		if (game.clients[i].pers.connected)
 		{
 			index[count] = i;
 			count++;
 		}
+	}
 
 	// sort by frags
 	qsort (index, count, sizeof(index[0]), PlayerSort);

@@ -17,9 +17,7 @@ void
 check_dodge(edict_t *self, vec3_t start, vec3_t dir, int speed)
 {
 	vec3_t end;
-	vec3_t v;
 	trace_t tr;
-	float eta;
 
 	if (!self)
 	{
@@ -43,6 +41,8 @@ check_dodge(edict_t *self, vec3_t start, vec3_t dir, int speed)
 			&& (!(tr.ent->monsterinfo.aiflags & AI_DODGETIMEOUT) || level.time > tr.ent->monsterinfo.dodgetimeout))
 	{
 		int skilllevel;
+		float eta;
+		vec3_t v;
 
 		VectorSubtract(tr.endpos, start, v);
 		eta = (VectorLength(v) - tr.ent->maxs[0]) / speed;
@@ -184,10 +184,7 @@ fire_lead(edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick,
 {
 	trace_t tr;
 	vec3_t dir;
-	vec3_t forward, right, up;
 	vec3_t end;
-	float r;
-	float u;
 	vec3_t water_start;
 	qboolean water = false;
 	int content_mask = MASK_SHOT | MASK_WATER;
@@ -201,6 +198,9 @@ fire_lead(edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick,
 
 	if (!(tr.fraction < 1.0))
 	{
+		vec3_t forward, right, up;
+		float r, u;
+
 		vectoangles(aimdir, dir);
 		AngleVectors(dir, forward, right, up);
 
@@ -222,13 +222,13 @@ fire_lead(edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick,
 		/* see if we hit water */
 		if (tr.contents & MASK_WATER)
 		{
-			int color;
-
 			water = true;
 			VectorCopy(tr.endpos, water_start);
 
 			if (!VectorCompare(start, tr.endpos))
 			{
+				int color;
+
 				if (tr.contents & CONTENTS_WATER)
 				{
 					if (strcmp(tr.surface->name, "*brwater") == 0)

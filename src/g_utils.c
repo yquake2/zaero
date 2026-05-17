@@ -193,8 +193,6 @@ void G_UseTargets(edict_t *ent, edict_t *activator)
 		t->nextthink = level.time + ent->delay;
 		t->think = Think_Delay;
 		t->activator = activator;
-		if (!activator)
-			gi.dprintf ("Think_Delay with no activator\n");
 		t->message = ent->message;
 		t->target = ent->target;
 		t->killtarget = ent->killtarget;
@@ -372,7 +370,6 @@ vectoyaw(vec3_t vec)
 void
 vectoangles(const vec3_t value, vec3_t angles)
 {
-	float	forward;
 	float	yaw, pitch;
 
 	if (value[1] == 0 && value[0] == 0)
@@ -385,6 +382,8 @@ vectoangles(const vec3_t value, vec3_t angles)
 	}
 	else
 	{
+		float	forward;
+
 		if (value[0])
 			yaw = (int) (atan2(value[1], value[0]) * 180 / M_PI);
 		else if (value[1] > 0)
@@ -502,8 +501,8 @@ G_TouchTriggers
 */
 void	G_TouchTriggers (edict_t *ent)
 {
-	int			i, num;
-	edict_t		*touch[MAX_EDICTS], *hit;
+	int i, num;
+	edict_t *touch[MAX_EDICTS];
 
 	if (!ent)
 	{
@@ -521,6 +520,8 @@ void	G_TouchTriggers (edict_t *ent)
 	// list removed before we get to it (killtriggered)
 	for (i=0 ; i<num ; i++)
 	{
+		edict_t *hit;
+
 		hit = touch[i];
 		if (!hit->inuse)
 			continue;
@@ -540,8 +541,8 @@ to force all entities it covers to immediately touch it
 */
 void	G_TouchSolids (edict_t *ent)
 {
-	int			i, num;
-	edict_t		*touch[MAX_EDICTS], *hit;
+	int i, num;
+	edict_t *touch[MAX_EDICTS];
 
 	if (!ent)
 	{
@@ -555,6 +556,8 @@ void	G_TouchSolids (edict_t *ent)
 	// list removed before we get to it (killtriggered)
 	for (i=0 ; i<num ; i++)
 	{
+		edict_t *hit;
+
 		hit = touch[i];
 		if (!hit->inuse)
 			continue;
@@ -572,8 +575,6 @@ void	G_TouchSolids (edict_t *ent)
 qboolean
 KillBox(edict_t *ent)
 {
-	trace_t tr;
-
 	if (!ent)
 	{
 		return false;
@@ -581,6 +582,8 @@ KillBox(edict_t *ent)
 
 	while (1)
 	{
+		trace_t tr;
+
 		tr = gi.trace(ent->s.origin, ent->mins, ent->maxs, ent->s.origin,
 				NULL, MASK_PLAYERSOLID);
 
@@ -613,8 +616,6 @@ positioning of ent.  Ent should be unlinked before calling this!
 */
 qboolean MonsterKillBox (edict_t *ent)
 {
-	trace_t		tr;
-
 	if (!ent)
 	{
 		return false;
@@ -622,6 +623,8 @@ qboolean MonsterKillBox (edict_t *ent)
 
 	while (1)
 	{
+		trace_t tr;
+
 		tr = gi.trace(ent->s.origin, ent->mins, ent->maxs, ent->s.origin, NULL, MASK_PLAYERSOLID);
 		if (!tr.ent)
 			break;
@@ -650,8 +653,6 @@ positioning of ent.  Ent should be unlinked before calling this!
 */
 qboolean MonsterPlayerKillBox (edict_t *ent)
 {
-	trace_t		tr;
-
 	if (!ent)
 	{
 		return false;
@@ -659,6 +660,8 @@ qboolean MonsterPlayerKillBox (edict_t *ent)
 
 	while (1)
 	{
+		trace_t		tr;
+
 		tr = gi.trace(ent->s.origin, ent->mins, ent->maxs, ent->s.origin, ent, MASK_PLAYERSOLID);
 		if (!tr.ent)
 			break;

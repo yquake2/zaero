@@ -57,8 +57,6 @@ Multiple identical looping sounds will just increase volume without any speed co
 */
 void Use_Target_Speaker (edict_t *ent, edict_t *other, edict_t *activator)
 {
-	int		chan;
-
 	if (!ent)
 	{
 		return;
@@ -72,7 +70,10 @@ void Use_Target_Speaker (edict_t *ent, edict_t *other, edict_t *activator)
 			ent->s.sound = ent->noise_index;	// start it
 	}
 	else
-	{	// normal sound
+	{
+		int chan;
+
+		// normal sound
 		if (ent->spawnflags & 4)
 			chan = CHAN_VOICE|CHAN_RELIABLE;
 		else
@@ -761,7 +762,6 @@ void target_laser_think (edict_t *self)
 	vec3_t	end;
 	trace_t	tr;
 	vec3_t	point;
-	vec3_t	last_movedir;
 	int		count;
 
 	if (!self)
@@ -776,6 +776,8 @@ void target_laser_think (edict_t *self)
 
 	if (self->enemy)
 	{
+		vec3_t last_movedir;
+
 		VectorCopy(self->movedir, last_movedir);
 		VectorMA(self->enemy->absmin, 0.5, self->enemy->size, point);
 		VectorSubtract(point, self->s.origin, self->movedir);

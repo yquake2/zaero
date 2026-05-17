@@ -6,6 +6,8 @@
  * =======================================================================
  */
 
+#include <ctype.h>
+
 #include "../header/shared.h"
 
 #define DEG2RAD(a) (a * M_PI) / 180.0F
@@ -55,7 +57,7 @@ RotatePointAroundVector(vec3_t dst, const vec3_t dir,
 	im[2][1] = m[1][2];
 
 	memset(zrot, 0, sizeof(zrot));
-	zrot[0][0] = zrot[1][1] = zrot[2][2] = 1.0F;
+	zrot[2][2] = 1.0F;
 
 	zrot[0][0] = (float)cos(DEG2RAD(degrees));
 	zrot[0][1] = (float)sin(DEG2RAD(degrees));
@@ -631,28 +633,14 @@ COM_StripExtension(const char *in, char *out)
 const char *
 COM_FileExtension(const char *in)
 {
-	static char exten[8];
-	int i;
+	const char *ext = strrchr(in, '.');
 
-	while (*in && *in != '.')
-	{
-		in++;
-	}
-
-	if (!*in)
+	if (!ext || ext == in)
 	{
 		return "";
 	}
 
-	in++;
-
-	for (i = 0; i < 7 && *in; i++, in++)
-	{
-		exten[i] = *in;
-	}
-
-	exten[i] = 0;
-	return exten;
+	return ext + 1;
 }
 
 void
@@ -691,12 +679,6 @@ COM_FilePath(const char *in, char *out)
 {
 	const char *s;
 
-	if(!in[0])
-	{
-		out[0] = '\0';
-		return;
-	}
-
 	s = in + strlen(in) - 1;
 
 	while (s != in && *s != '/')
@@ -712,11 +694,6 @@ void
 COM_DefaultExtension(char *path, const char *extension)
 {
 	char *src;
-
-	if(!path[0])
-	{
-		return;
-	}
 
 	/* */
 	/* if path doesn't have a .EXT, append extension */
@@ -866,6 +843,7 @@ Swap_Init(void)
 		_LittleLong = LongNoSwap;
 		_BigFloat = FloatSwap;
 		_LittleFloat = FloatNoSwap;
+		Com_Printf("Byte ordering: little endian\n\n");
 	}
 	else
 	{
@@ -876,7 +854,11 @@ Swap_Init(void)
 		_LittleLong = LongSwap;
 		_BigFloat = FloatNoSwap;
 		_LittleFloat = FloatSwap;
+		Com_Printf("Byte ordering: big endian\n\n");
 	}
+
+	if (LittleShort(*(short *)swaptest) != 1)
+		assert("Error in the endian conversion!");
 }
 
 /*
@@ -1013,6 +995,12 @@ Com_PageInMemory(const byte *buffer, int size)
  */
 
 int
+Q_stricmp(const char *s1, const char *s2)
+{
+	return strcasecmp(s1, s2);
+}
+
+int
 Q_strncasecmp(const char *s1, const char *s2, int n)
 {
 	int c1;
@@ -1058,12 +1046,6 @@ Q_strcasecmp(const char *s1, const char *s2)
 	return Q_strncasecmp(s1, s2, 99999);
 }
 
-int
-Q_stricmp(const char *s1, const char *s2)
-{
-	return Q_strcasecmp(s1, s2);
-}
-
 void
 Com_sprintf(char *dest, int size, const char *fmt, ...)
 {
@@ -1078,10 +1060,27 @@ Com_sprintf(char *dest, int size, const char *fmt, ...)
 	if (len >= size)
 	{
 		Com_Printf("Com_sprintf: overflow\n");
+
+		dest = NULL;
+		return;
 	}
 
 	bigbuffer[size - 1] = '\0';
 	strcpy(dest, bigbuffer);
+}
+
+char *
+strlwr ( char *s )
+{
+	char *p = s;
+
+	while ( *s )
+	{
+		*s = tolower( *s );
+		s++;
+	}
+
+	return ( p );
 }
 
 int
@@ -1319,7 +1318,7 @@ Info_SetValueForKey(char *s, const char *key, const char *value)
 
 	Com_sprintf(newi, sizeof(newi), "\\%s\\%s", key, value);
 
-	if (strlen(newi) + strlen(s) > maxsize)
+	if (strlen(newi) + strlen(s) >= maxsize)
 	{
 		Com_Printf("Info string length exceeded\n");
 		return;
