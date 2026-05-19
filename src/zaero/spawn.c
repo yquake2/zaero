@@ -9,7 +9,7 @@ edict_t *FindZSpawn(int i)
 
 	while(i)
 	{
-		spot = G_Find (oldSpot, FOFS(classname), "info_player_deathmatch");
+		spot = G_Find(oldSpot, FOFS(classname), "info_player_deathmatch");
 		if (spot != NULL)
 		{
 			i--;
@@ -28,14 +28,14 @@ edict_t *FindZSpawn(int i)
 	return spot;
 }
 
-qboolean SpawnZ(gitem_t *item, edict_t *spot)
+static qboolean
+SpawnZ(const gitem_t *item, edict_t *spot)
 {
 	edict_t	*ent;
 	vec3_t	forward;
 	vec3_t  angles;
 	vec3_t start;
 	vec3_t end;
-	trace_t tr;
 	int ang = 0;
 	int startAng = 0;
 
@@ -47,8 +47,8 @@ qboolean SpawnZ(gitem_t *item, edict_t *spot)
 	ent = G_Spawn();
 
 	ent->classname = item->classname;
-	VectorSet (ent->mins, -15, -15, -15);
-	VectorSet (ent->maxs, 15, 15, 15);
+	VectorSet(ent->mins, -15, -15, -15);
+	VectorSet(ent->maxs, 15, 15, 15);
 	ent->solid = SOLID_TRIGGER;
 	ent->movetype = MOVETYPE_BOUNCE;
 	ED_CallSpawn(ent);
@@ -59,11 +59,13 @@ qboolean SpawnZ(gitem_t *item, edict_t *spot)
 
 	for (ang = startAng; ang < startAng + 360; ang += 15)
 	{
+		trace_t tr;
+
 		angles[0] = 0;
 		angles[1] = ang;
 		angles[2] = 0;
 
-		AngleVectors (angles, forward, NULL, NULL);
+		AngleVectors(angles, forward, NULL, NULL);
 		VectorMA(start, 128, forward, end);
 
 		tr = gi.trace(start, ent->mins, ent->maxs, end, NULL, MASK_SHOT);
@@ -78,7 +80,7 @@ qboolean SpawnZ(gitem_t *item, edict_t *spot)
 	return false;
 }
 
-char *items[] = 
+char *items[] =
 {
 	"weapon_soniccannon",
 	"weapon_sniperrifle",
@@ -96,7 +98,7 @@ void Z_SpawnDMItems(void)
 	char **ptr = NULL;
 	int added = 0;
 	int count = 1;
-	
+
 	// only in deathmatch
 	if (!deathmatch->value)
 		return;
@@ -109,20 +111,19 @@ void Z_SpawnDMItems(void)
 	ptr = items;
 	while (*ptr != NULL)
 	{
-		edict_t *e = G_Find(NULL, FOFS(classname), *ptr);
+		const edict_t *e = G_Find(NULL, FOFS(classname), *ptr);
 		if (e != NULL)
 			return;
 
 		ptr++;
 	}
-	
+
 	// try to spawn 1 of each item near a deathmatch spot
 	ptr = &items[0];
 	while(*ptr != NULL)
 	{
 		int j = 0;
-		gitem_t *i = NULL;
-		edict_t *spot = NULL;
+		const gitem_t *i = NULL;
 
 		i = FindItemByClassname(*ptr);
 		ptr++;
@@ -131,6 +132,8 @@ void Z_SpawnDMItems(void)
 
 		for (j = 0; j < 4; j++)
 		{
+			edict_t *spot = NULL;
+
 			spot = FindZSpawn(count++);
 			if (spot == NULL)
 				break;

@@ -1,45 +1,54 @@
+/*
+ * =======================================================================
+ *
+ * Jump in into the game.so and support functions.
+ *
+ * =======================================================================
+ */
 
 #include "header/local.h"
 
-game_locals_t	game;
-level_locals_t	level;
-game_import_t	gi;
-game_export_t	globals;
-spawn_temp_t	st;
+game_locals_t game;
+level_locals_t level;
+game_import_t gi;
+game_export_t globals;
+spawn_temp_t st;
 
-int	sm_meat_index;
-int	snd_fry;
+int sm_meat_index;
+int snd_fry;
 int meansOfDeath;
 
-edict_t		*g_edicts;
+edict_t *g_edicts;
 
-cvar_t	*deathmatch;
-cvar_t	*coop;
-cvar_t	*dmflags;
-cvar_t	*zdmflags;
-cvar_t	*skill;
-cvar_t	*fraglimit;
-cvar_t	*timelimit;
-cvar_t	*password;
-cvar_t	*maxclients;
-cvar_t	*maxentities;
-cvar_t	*g_select_empty;
-cvar_t	*dedicated;
+cvar_t *deathmatch;
+cvar_t *coop;
+cvar_t *dmflags;
+cvar_t *zdmflags;
+cvar_t *skill;
+cvar_t *fraglimit;
+cvar_t *timelimit;
+cvar_t *password;
+cvar_t *maxclients;
+cvar_t *maxentities;
+cvar_t *g_select_empty;
+cvar_t *dedicated;
 
-cvar_t	*sv_maxvelocity;
-cvar_t	*sv_gravity;
+cvar_t *filterban;
 
-cvar_t	*sv_rollspeed;
-cvar_t	*sv_rollangle;
-cvar_t	*gun_x;
-cvar_t	*gun_y;
-cvar_t	*gun_z;
+cvar_t *sv_maxvelocity;
+cvar_t *sv_gravity;
 
-cvar_t	*run_pitch;
-cvar_t	*run_roll;
-cvar_t	*bob_up;
-cvar_t	*bob_pitch;
-cvar_t	*bob_roll;
+cvar_t *sv_rollspeed;
+cvar_t *sv_rollangle;
+cvar_t *gun_x;
+cvar_t *gun_y;
+cvar_t *gun_z;
+
+cvar_t *run_pitch;
+cvar_t *run_roll;
+cvar_t *bob_up;
+cvar_t *bob_pitch;
+cvar_t *bob_roll;
 
 cvar_t  *gamedir;
 
@@ -106,7 +115,7 @@ GetGameAPI(const game_import_t *import)
 }
 
 void
-Sys_Error(char *error, ...)
+Sys_Error(const char *error, ...)
 {
 	va_list argptr;
 	char text[1024];
@@ -119,7 +128,7 @@ Sys_Error(char *error, ...)
 }
 
 void
-Com_Printf(char *msg, ...)
+Com_Printf(const char *msg, ...)
 {
 	va_list		argptr;
 	char		text[1024];
@@ -141,19 +150,22 @@ ClientEndServerFrames
 */
 void ClientEndServerFrames (void)
 {
-	int		i;
-	edict_t	*ent;
+	int i;
 
 	// calc the player views now that all pushing
 	// and damage has been added
-	for (i=0 ; i<maxclients->value ; i++)
+	for (i = 0 ; i < maxclients->value ; i++)
 	{
+		edict_t *ent;
+
 		ent = g_edicts + 1 + i;
 		if (!ent->inuse || !ent->client)
+		{
 			continue;
+		}
+
 		ClientEndServerFrame (ent);
 	}
-
 }
 
 /*
@@ -163,7 +175,8 @@ EndDMLevel
 The timelimit or fraglimit has been exceeded
 =================
 */
-void EndDMLevel (void)
+void
+EndDMLevel(void)
 {
 	edict_t		*ent;
 
@@ -184,14 +197,14 @@ void EndDMLevel (void)
 	}
 	else
 	{	// search for a changeleve
-		ent = G_Find (NULL, FOFS(classname), "target_changelevel");
+		ent = G_Find(NULL, FOFS(classname), "target_changelevel");
 		if (!ent)
 		{	// the map designer didn't include a changelevel,
 			// so create a fake ent that goes back to the same level
 			ent = G_Spawn ();
 			ent->classname = "target_changelevel";
 			ent->map = level.mapname;
-      ent->spawnflags2 = 0;
+			ent->spawnflags2 = 0;
 		}
 	}
 
@@ -203,22 +216,24 @@ void EndDMLevel (void)
 CheckDMRules
 =================
 */
-void CheckDMRules (void)
+void
+CheckDMRules(void)
 {
-	int			i;
-	gclient_t	*cl;
-
 	if (level.intermissiontime)
+	{
 		return;
+	}
 
 	if (!deathmatch->value)
+	{
 		return;
+	}
 
 	if (timelimit->value)
 	{
 		if (level.time >= timelimit->value*60)
 		{
-			gi.bprintf (PRINT_HIGH, "Timelimit hit.\n");
+			gi.bprintf(PRINT_HIGH, "Timelimit hit.\n");
 			EndDMLevel ();
 			return;
 		}
@@ -226,15 +241,19 @@ void CheckDMRules (void)
 
 	if (fraglimit->value)
 	{
-		for (i=0 ; i<maxclients->value ; i++)
+		int i;
+
+		for (i = 0 ; i < maxclients->value; i++)
 		{
+			const gclient_t *cl;
+
 			cl = game.clients + i;
 			if (!g_edicts[i+1].inuse)
 				continue;
 
 			if (cl->resp.score >= fraglimit->value)
 			{
-				gi.bprintf (PRINT_HIGH, "Fraglimit hit.\n");
+				gi.bprintf(PRINT_HIGH, "Fraglimit hit.\n");
 				EndDMLevel ();
 				return;
 			}
@@ -319,7 +338,7 @@ void G_RunFrame (void)
 
     if(!(ent->flags & FL_DONTSETOLDORIGIN))
     {
-		  VectorCopy (ent->s.origin, ent->s.old_origin);
+		  VectorCopy(ent->s.origin, ent->s.old_origin);
     }
 
 		// if the ground entity moved, make sure we are still on it
@@ -347,3 +366,4 @@ void G_RunFrame (void)
 	// build the playerstate_t structures for all players
 	ClientEndServerFrames ();
 }
+

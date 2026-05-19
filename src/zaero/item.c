@@ -16,7 +16,7 @@ void NoAmmoWeaponChange (edict_t *ent);
 void check_dodge (edict_t *self, vec3_t start, vec3_t dir, int speed);
 
 void Grenade_Explode(edict_t *ent);
-void P_ProjectSource (edict_t *ent, vec3_t distance, vec3_t forward, vec3_t right, vec3_t result);
+void P_ProjectSource(edict_t *ent, vec3_t distance, vec3_t forward, vec3_t right, vec3_t result);
 
 void zCam_TrackEntity(struct edict_s *player, struct edict_s *track, qboolean playerVisiable, qboolean playerOffset);
 void zCam_Stop(struct edict_s *player);
@@ -144,7 +144,8 @@ char *camera_statusbar =
 "endif "
 ;
 
-void updateVisorHud(edict_t *ent)
+void
+updateVisorHud(const edict_t *ent)
 {
 	static char buf[1024];
 
@@ -153,7 +154,7 @@ void updateVisorHud(edict_t *ent)
 		return;
 	}
 
-	gi.WriteByte (svc_layout);
+	gi.WriteByte(svc_layout);
 	sprintf(buf, camera_statusbar, ent->client->zCameraTrack->message);
 	gi.WriteString(buf);
 }
@@ -388,7 +389,7 @@ void fire_empnuke(edict_t *ent, vec3_t center, int radius)
 
 	empnuke->think = empBlastAnim;
 	empnuke->nextthink = level.time + FRAMETIME;
-	gi.linkentity (empnuke);
+	gi.linkentity(empnuke);
 }
 
 qboolean
@@ -401,13 +402,13 @@ EMPNukeCheck(const edict_t *ent, const vec3_t pos)
 		return false;
 	}
 
-	while ((check = G_Find (check, FOFS(classname), "EMPNukeCenter")) != NULL)
+	while ((check = G_Find(check, FOFS(classname), "EMPNukeCenter")) != NULL)
 	{
-		vec3_t	v;
-
 		if(check->owner != ent)
 		{
-			VectorSubtract (check->s.origin, pos, v);
+			vec3_t v;
+
+			VectorSubtract(check->s.origin, pos, v);
 			if(VectorLength(v) <= check->dmg)
 			{
 				return true;
@@ -466,7 +467,7 @@ Use_PlasmaShield(edict_t *ent, const gitem_t *item)
 
 	if(EMPNukeCheck(ent, ent->s.origin))
 	{
-		gi.sound (ent, CHAN_AUTO, gi.soundindex("items/empnuke/emp_missfire.wav"), 1, ATTN_NORM, 0);
+		gi.sound(ent, CHAN_AUTO, gi.soundindex("items/empnuke/emp_missfire.wav"), 1, ATTN_NORM, 0);
 		return;
 	}
 
@@ -484,12 +485,12 @@ Use_PlasmaShield(edict_t *ent, const gitem_t *item)
 	PlasmaShield->solid = SOLID_BBOX;
 	PlasmaShield->s.modelindex = gi.modelindex("sprites/plasmashield.sp2");
 	PlasmaShield->s.effects |= EF_POWERSCREEN;
-	PlasmaShield->s.sound = gi.soundindex ("items/plasmashield/psactive.wav");
+	PlasmaShield->s.sound = gi.soundindex("items/plasmashield/psactive.wav");
 
-	AngleVectors (ent->client->v_angle, forward, right, up);
-	vectoangles (forward, PlasmaShield->s.angles);
+	AngleVectors(ent->client->v_angle, forward, right, up);
+	vectoangles(forward, PlasmaShield->s.angles);
 
-	VectorMA (ent->s.origin, 50, forward, PlasmaShield->s.origin);
+	VectorMA(ent->s.origin, 50, forward, PlasmaShield->s.origin);
 
 	VectorScale(forward, 10, frontbottomleft);
 	VectorMA(frontbottomleft, -30, right, frontbottomleft);
@@ -511,7 +512,7 @@ Use_PlasmaShield(edict_t *ent, const gitem_t *item)
 	PlasmaShield->think = PlasmaShield_die;
 	PlasmaShield->nextthink = level.time + 10;
 
-	gi.linkentity (PlasmaShield);
+	gi.linkentity(PlasmaShield);
 }
 
 /*
@@ -548,8 +549,8 @@ void SP_misc_crate(edict_t *self)
 
 	// setup specific to this size
 	self->s.modelindex = gi.modelindex("models/objects/crate/crate64.md2");
-	VectorSet (self->mins, -32, -32, 0);
-	VectorSet (self->maxs, 32, 32, 64);
+	VectorSet(self->mins, -32, -32, 0);
+	VectorSet(self->maxs, 32, 32, 64);
 
 	// generic crate setup
 	setupCrate(self);
@@ -564,8 +565,8 @@ void SP_misc_crate_medium(edict_t *self)
 
 	// setup specific to this size
 	self->s.modelindex = gi.modelindex("models/objects/crate/crate48.md2");
-	VectorSet (self->mins, -24, -24, 0);
-	VectorSet (self->maxs, 24, 24, 48);
+	VectorSet(self->mins, -24, -24, 0);
+	VectorSet(self->maxs, 24, 24, 48);
 
 	// generic crate setup
 	setupCrate(self);
@@ -580,16 +581,16 @@ void SP_misc_crate_small(edict_t *self)
 
 	// setup specific to this size
 	self->s.modelindex = gi.modelindex("models/objects/crate/crate32.md2");
-	VectorSet (self->mins, -16, -16, 0);
-	VectorSet (self->maxs, 16, 16, 32);
+	VectorSet(self->mins, -16, -16, 0);
+	VectorSet(self->maxs, 16, 16, 32);
 
 	// generic crate setup
 	setupCrate(self);
 }
 
-qboolean thruBarrier(edict_t *targ, edict_t *inflictor)
+qboolean
+thruBarrier(edict_t *targ, edict_t *inflictor)
 {
-	trace_t tr;
 	edict_t *e = inflictor;
 
 	if (!targ || !inflictor)
@@ -597,8 +598,10 @@ qboolean thruBarrier(edict_t *targ, edict_t *inflictor)
 		return false;
 	}
 
-	while(e)
+	while (e)
 	{
+		trace_t tr;
+
 		tr = gi.trace(e->s.origin, NULL, NULL, targ->s.origin, e, MASK_SHOT);
 		if (!tr.ent || tr.fraction >= 1.0)
 			return false;
@@ -646,7 +649,7 @@ void barrier_pain(edict_t *self, edict_t *other, float kick, int damage)
 	self->timeout = level.time + FRAMETIME * 2;
 	if (self->damage_debounce_time < level.time)
 	{
-		gi.sound (self, CHAN_AUTO, gi.soundindex("weapons/lashit.wav"), 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_AUTO, gi.soundindex("weapons/lashit.wav"), 1, ATTN_NORM, 0);
 		self->damage_debounce_time = level.time + FRAMETIME * 2;
 	}
 }
@@ -664,7 +667,7 @@ void barrier_touch (edict_t *self, edict_t *other, const cplane_t *plane, const 
 	self->timeout = level.time + FRAMETIME * 2;
 	if (self->touch_debounce_time < level.time)
 	{
-		gi.sound (self, CHAN_AUTO, gi.soundindex("weapons/lashit.wav"), 1, ATTN_NORM, 0);
+		gi.sound(self, CHAN_AUTO, gi.soundindex("weapons/lashit.wav"), 1, ATTN_NORM, 0);
 		self->touch_debounce_time = level.time + FRAMETIME * 2;
 	}
 

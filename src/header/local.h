@@ -1,3 +1,10 @@
+/* =======================================================================
+ *
+ * Main header file for the game module.
+ *
+ * =======================================================================
+ */
+
 #ifndef ZAERO_LOCAL_H
 #define ZAERO_LOCAL_H
 
@@ -570,8 +577,10 @@ extern	cvar_t	*password;
 extern	cvar_t	*g_select_empty;
 extern	cvar_t	*dedicated;
 
-extern	cvar_t	*sv_gravity;
-extern	cvar_t	*sv_maxvelocity;
+extern cvar_t *filterban;
+
+extern cvar_t *sv_gravity;
+extern cvar_t *sv_maxvelocity;
 
 extern	cvar_t	*gun_x, *gun_y, *gun_z;
 extern	cvar_t	*sv_rollspeed;
@@ -809,8 +818,8 @@ void fire_bfg(edict_t *self, vec3_t start, vec3_t dir, int damage,
 void PlayerTrail_Init(void);
 void PlayerTrail_Add(vec3_t spot);
 void PlayerTrail_New(vec3_t spot);
-edict_t *PlayerTrail_PickFirst(edict_t *self);
-edict_t *PlayerTrail_PickNext(edict_t *self);
+edict_t *PlayerTrail_PickFirst(const edict_t *self);
+edict_t *PlayerTrail_PickNext(const edict_t *self);
 edict_t *PlayerTrail_LastSpot(void);
 
 /* g_client.c */
@@ -829,7 +838,7 @@ void player_die(edict_t *self, edict_t *inflictor, edict_t *attacker,
 
 /* g_svcmds.c */
 void ServerCommand(void);
-qboolean SV_FilterPacket(char *from);
+qboolean SV_FilterPacket(const char *from);
 
 /* p_view.c */
 void ClientEndServerFrame(edict_t *ent);
@@ -838,7 +847,7 @@ void ClientEndServerFrame(edict_t *ent);
 void MoveClientToIntermission(edict_t *ent);
 void G_SetStats(edict_t *ent);
 void ValidateSelectedItem(gclient_t *cl);
-void DeathmatchScoreboardMessage(edict_t *ent, edict_t *killer);
+void DeathmatchScoreboardMessage(const edict_t *ent, const edict_t *killer);
 
 /* g_pweapon.c */
 void PlayerNoise(edict_t *who, vec3_t where, int type);
@@ -899,7 +908,7 @@ void SpawnEntities(const char *mapname, char *entities, const char *spawnpoint);
 //
 void fire_bb(edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, float timer, float damage_radius);
 void fire_flare(edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius, int radius_damage);
-
+qboolean thruBarrier(edict_t *targ, edict_t *inflictor);
 
 //
 // z_ai.c
