@@ -200,6 +200,13 @@ static const mmoveList_t mmoveList[] = {
 };
 
 /*
+ * Spawntemp fields for entity spawning
+ */
+static const field_t stfields[] = {
+	#include "tables/stfields.h"
+};
+
+/*
  * Entity fields to be saved
  */
 static const fplist_entry_t fpentries_ent[] =
@@ -296,6 +303,22 @@ sg_fwrite(const void *src, size_t n, FILE *f)
 		fclose(f);
 		gi.error("Error writing %u bytes to save file", (unsigned int)n);
 	}
+}
+
+const field_t *
+FindSpawntempField(const char *key)
+{
+	const field_t *f;
+
+	for (f = stfields; f < ARREND(stfields); f++)
+	{
+		if (!Q_strcasecmp(f->name, key))
+		{
+			return f;
+		}
+	}
+
+	return NULL;
 }
 
 const field_t *
@@ -585,11 +608,6 @@ WriteField1(FILE *f, const field_t *field, void *base, const fptrList_t *fpl)
 	size_t len;
 	int index;
 
-	if (field->flags & FFL_SPAWNTEMP)
-	{
-		return;
-	}
-
 	p = (byte *)base + field->ofs;
 
 	switch (field->type)
@@ -708,11 +726,6 @@ static void
 WriteField2(FILE *f, const field_t *field, const void *base, const fptrList_t *fpl)
 {
 	const void *p;
-
-	if (field->flags & FFL_SPAWNTEMP)
-	{
-		return;
-	}
 
 	p = (const byte *)base + field->ofs;
 
@@ -882,11 +895,6 @@ ReadField(FILE *f, const field_t *field, void *base, const fptrList_t *fpl)
 	void *p;
 	int len;
 	int index;
-
-	if (field->flags & FFL_SPAWNTEMP)
-	{
-		return;
-	}
 
 	p = (byte *)base + field->ofs;
 

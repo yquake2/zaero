@@ -110,6 +110,7 @@ set(Zaero-Header
 	src/savegame/tables/entfields.h
 	src/savegame/tables/clientfields.h
 	src/savegame/tables/levelfields.h
+	src/savegame/tables/stfields.h
 	src/savegame/tables/gamemmove_decs.h
 	src/monster/boss3/boss32.h
 	src/monster/boss3/boss31.h

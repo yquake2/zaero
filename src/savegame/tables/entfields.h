@@ -121,25 +121,6 @@
 {"mteam", FOFS(mteam), F_LSTRING},
 {"mirrortarget", 0, F_IGNORE}, // FIXME: ??
 {"mirrorlevelsave", 0, F_IGNORE}, // FIXME: ??
+{"item", FOFS(item), F_ITEM}, // DG: NOTE: this is down here because the "item" read from a level in ED_ParseField() must be the spawn_temp_t one!
 // targets, numTargets?
 // onFloor, bossFireTimeout, bossFireCount?
-
-// spawn_temp_t stuff
-{"sky", STOFS(sky), F_LSTRING, FFL_SPAWNTEMP},
-{"skyrotate", STOFS(skyrotate), F_FLOAT, FFL_SPAWNTEMP},
-{"skyaxis", STOFS(skyaxis), F_VECTOR, FFL_SPAWNTEMP},
-{"nextmap", STOFS(nextmap), F_LSTRING, FFL_SPAWNTEMP},
-{"lip", STOFS(lip), F_INT, FFL_SPAWNTEMP},
-{"distance", STOFS(distance), F_INT, FFL_SPAWNTEMP},
-{"height", STOFS(height), F_INT, FFL_SPAWNTEMP},
-{"noise", STOFS(noise), F_LSTRING, FFL_SPAWNTEMP},
-{"pausetime", STOFS(pausetime), F_FLOAT, FFL_SPAWNTEMP},
-{"item", STOFS(item), F_LSTRING, FFL_SPAWNTEMP},
-{"item", FOFS(item), F_ITEM}, // DG: NOTE: this is down here because the "item" read from a level in ED_ParseField() must be the spawn_temp_t one!
-{"gravity", STOFS(gravity), F_LSTRING, FFL_SPAWNTEMP},
-{"minyaw", STOFS(minyaw), F_FLOAT, FFL_SPAWNTEMP},
-{"maxyaw", STOFS(maxyaw), F_FLOAT, FFL_SPAWNTEMP},
-{"minpitch", STOFS(minpitch), F_FLOAT, FFL_SPAWNTEMP},
-{"maxpitch", STOFS(maxpitch), F_FLOAT, FFL_SPAWNTEMP},
-{"mins", STOFS(mins), F_VECTOR, FFL_SPAWNTEMP},
-{"maxs", STOFS(maxs), F_VECTOR, FFL_SPAWNTEMP},

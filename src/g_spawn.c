@@ -405,17 +405,22 @@ void ED_ParseField (const char *key, const char *value, edict_t *ent)
 		return;
 	}
 
-	f = FindSpawnfield(key);
-	if (!f)
+	f = FindSpawntempField(key);
+	if (f)
 	{
-		gi.dprintf ("'%s' is not a field\n", key);
-		return;
-	}
-
-	if (f->flags & FFL_SPAWNTEMP)
 		b = (byte *)&st + f->ofs;
+	}
 	else
+	{
+		f = FindSpawnfield(key);
+		if (!f)
+		{
+			gi.dprintf("'%s' is not a field. Value is '%s'\n", key, value);
+			return;
+		}
+
 		b = (byte *)ent + f->ofs;
+	}
 
 	switch (f->type)
 	{
