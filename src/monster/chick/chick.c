@@ -198,6 +198,17 @@ mmove_t chick_move_run = {
 	NULL
 };
 
+void
+chick_search(edict_t *self)
+{
+	if (!self)
+	{
+		return;
+	}
+
+	gi.sound(self, CHAN_WEAPON, sound_search, 1, ATTN_NORM, 0);
+}
+
 mframe_t chick_frames_walk[] = {
 	{ai_walk, 6, NULL},
 	{ai_walk, 8, NULL},
@@ -925,6 +936,7 @@ SP_monster_chick(edict_t *self)
 	self->monsterinfo.attack = chick_attack;
 	self->monsterinfo.melee = chick_melee;
 	self->monsterinfo.sight = chick_sight;
+	self->monsterinfo.search = chick_search;
 
 	gi.linkentity(self);
 
