@@ -403,6 +403,7 @@ extern void soldier_dodge (edict_t *, edict_t *, float);
 // monsterinfo.idle
 extern void possibleBossTaunt (edict_t *);
 extern void brain_idle (edict_t *);
+extern void flipper_idle (edict_t *);
 extern void floater_idle (edict_t *);
 extern void flyer_idle (edict_t *);
 extern void gladiator_idle (edict_t *);
