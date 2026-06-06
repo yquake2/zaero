@@ -524,7 +524,6 @@ typedef struct
 	edict_t	*ent;
 	vec3_t	origin;
 	vec3_t	angles;
-	float	deltayaw;
 } pushed_t;
 
 static pushed_t	pushed[MAX_EDICTS], *pushed_p;
@@ -546,9 +545,6 @@ Pushed_Append(edict_t *e)
 	pushed_p->ent = e;
 	VectorCopy (e->s.origin, pushed_p->origin);
 	VectorCopy (e->s.angles, pushed_p->angles);
-
-	if (e->client)
-		pushed_p->deltayaw = e->client->ps.pmove.delta_angles[YAW];
 
 	pushed_p++;
 
@@ -577,11 +573,6 @@ Pushed_Undo(void)
 
 		VectorCopy (p->origin, e->s.origin);
 		VectorCopy (p->angles, e->s.angles);
-
-		if (e->client)
-		{
-			e->client->ps.pmove.delta_angles[YAW] = p->deltayaw;
-		}
 
 		gi.linkentity (e);
 	}
