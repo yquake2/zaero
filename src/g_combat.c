@@ -789,8 +789,7 @@ void T_RadiusDamagePosition (vec3_t origin, edict_t *inflictor, edict_t *attacke
 	vec3_t	v;
 	vec3_t	dir;
 
-
-	if (!inflictor || !ignore)
+	if (!inflictor || !attacker)
 	{
 		return;
 	}
