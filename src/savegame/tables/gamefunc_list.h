@@ -515,6 +515,7 @@ static const fnlist_entry_t fnentries_mi_idle[] =
 {
 	{"possibleBossTaunt", (byte *)possibleBossTaunt},
 	{"brain_idle", (byte *)brain_idle},
+	{"flipper_idle", (byte *)flipper_idle},
 	{"floater_idle", (byte *)floater_idle},
 	{"flyer_idle", (byte *)flyer_idle},
 	{"gladiator_idle", (byte *)gladiator_idle},
@@ -537,11 +538,15 @@ static const fnlist_entry_t fnentries_mi_search[] =
 	{"boss2_search", (byte *)boss2_search},
 	{"jorg_search", (byte *)jorg_search},
 	{"brain_search", (byte *)brain_search},
+	{"chick_search", (byte *)chick_search},
+	{"flipper_search", (byte *)flipper_search},
 	{"gladiator_search", (byte *)gladiator_search},
 	{"gunner_search", (byte *)gunner_search},
 	{"hover_search", (byte *)hover_search},
+	{"infantry_search", (byte *)infantry_search},
 	{"medic_search", (byte *)medic_search},
 	{"mutant_search", (byte *)mutant_search},
+	{"parasite_search", (byte *)parasite_search},
 	{"supertank_search", (byte *)supertank_search},
 };
 static const functionList_t fnlist_mi_search =
