@@ -11,7 +11,7 @@
 void ClientUserinfoChanged(edict_t *ent, char *userinfo);
 void SP_misc_teleporter_dest(edict_t *ent);
 void Touch_Item(edict_t *ent, edict_t *other, const cplane_t *plane, const csurface_t *surf);
-void zCam_SetLocalCopy(struct edict_s *player, char *s);
+void zCam_SetLocalCopy(struct edict_s *player);
 void stopCamera(edict_t *ent);
 
 //
@@ -1437,6 +1437,7 @@ PutClientInServer(edict_t *ent)
 	else
 	{
 		memset(&resp, 0, sizeof(resp));
+		ClientUserinfoChanged(ent, NULL);
 
 		// avoid redundant help icon flashing on level transitions
 		resp.helpchanged = client->resp.helpchanged;
@@ -1678,12 +1679,17 @@ ClientBegin(edict_t *ent)
 void
 ClientUserinfoChanged(edict_t *ent, char *userinfo)
 {
-	char *s;
+	const char *s;
 	int playernum;
 
-	if (!ent || !userinfo)
+	if (!ent)
 	{
 		return;
+	}
+
+	if (!userinfo)
+	{
+		userinfo = ent->client->pers.userinfo;
 	}
 
 	/* check for malformed or illegal info strings */
@@ -1699,7 +1705,7 @@ ClientUserinfoChanged(edict_t *ent, char *userinfo)
 	/* set skin */
 	s = Info_ValueForKey(userinfo, "skin");
 
-	zCam_SetLocalCopy(ent, s);
+	zCam_SetLocalCopy(ent);
 
 	playernum = ent - g_edicts - 1;
 
@@ -1742,7 +1748,10 @@ ClientUserinfoChanged(edict_t *ent, char *userinfo)
 	}
 
 	// save off the userinfo in case we want to check something later
-	Q_strlcpy(ent->client->pers.userinfo, userinfo, sizeof(ent->client->pers.userinfo));
+	if (userinfo != ent->client->pers.userinfo)
+	{
+		Q_strlcpy(ent->client->pers.userinfo, userinfo, sizeof(ent->client->pers.userinfo));
+	}
 }
 
 /*
