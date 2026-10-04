@@ -4,8 +4,6 @@
 
 #include "../header/local.h"
 
-void zCam_SetLocalCopy(struct edict_s *player, char *s);
-
 void
 zCam_TrackEntity(struct edict_s *player, struct edict_s *track, qboolean playerVisiable, qboolean playerOffset)
 {
@@ -79,7 +77,7 @@ zCam_Stop(struct edict_s *player)
 }
 
 void
-zCam_SetLocalCopy(struct edict_s *player, char *s)
+zCam_SetLocalCopy(struct edict_s *player)
 {
 	if(player->client->zCameraLocalEntity)
 	{
